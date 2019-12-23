@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -29,6 +30,8 @@ namespace GreekHealthcareNetwork.Models
         public string LastName { get; set; }
 
         [Required]
+        [Column(TypeName = "date")]
+        [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime DoB { get; set; }
 
@@ -38,10 +41,12 @@ namespace GreekHealthcareNetwork.Models
         [Required]
         [RegularExpression(@"^[0-9]{11}$",
          ErrorMessage = "AMKA should be 11 digits.")]
-        public int AMKA { get; set; }
+        public long AMKA { get; set; }
 
         public bool IsActive;
 
+        [DataType(DataType.Date)]
+        [Column(TypeName="date")]
         public DateTime SubscriptionEndDate { get; set; }
 
         public virtual ICollection<Message> Messages { get; set; }

@@ -196,6 +196,14 @@
     <Compile Include="Migrations\201912232039215_Initial - Entities ApplicationUser, Message, Appointment.Designer.cs">
       <DependentUpon>201912232039215_Initial - Entities ApplicationUser, Message, Appointment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912232139262_Update type of AMKA, datatype of DoB and SubscriptionEndDate.cs" />
+    <Compile Include="Migrations\201912232139262_Update type of AMKA, datatype of DoB and SubscriptionEndDate.Designer.cs">
+      <DependentUpon>201912232139262_Update type of AMKA, datatype of DoB and SubscriptionEndDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912232157096_FixDateTimeAnnotations.cs" />
+    <Compile Include="Migrations\201912232157096_FixDateTimeAnnotations.Designer.cs">
+      <DependentUpon>201912232157096_FixDateTimeAnnotations.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -390,6 +398,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912232039215_Initial - Entities ApplicationUser, Message, Appointment.resx">
       <DependentUpon>201912232039215_Initial - Entities ApplicationUser, Message, Appointment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912232139262_Update type of AMKA, datatype of DoB and SubscriptionEndDate.resx">
+      <DependentUpon>201912232139262_Update type of AMKA, datatype of DoB and SubscriptionEndDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912232157096_FixDateTimeAnnotations.resx">
+      <DependentUpon>201912232157096_FixDateTimeAnnotations.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -54,7 +54,9 @@ namespace GreekHealthcareNetwork.Migrations
                     Email = "admin@ghn.gr",
                     FirstName = "John",
                     LastName = "Smith",
-                    PhoneNumber = "+30 6924771994"
+                    PhoneNumber = "+30 6924771994",
+                    DoB = new DateTime(1992,1,24).Date,
+                    AMKA = 24019201979
                 }, "!Admin123");
 
                 if (result.Succeeded)
