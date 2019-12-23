@@ -188,6 +188,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912201005367_InitialCreate.cs" />
+    <Compile Include="Migrations\201912201005367_InitialCreate.Designer.cs">
+      <DependentUpon>201912201005367_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912232039215_Initial - Entities ApplicationUser, Message, Appointment.cs" />
+    <Compile Include="Migrations\201912232039215_Initial - Entities ApplicationUser, Message, Appointment.Designer.cs">
+      <DependentUpon>201912232039215_Initial - Entities ApplicationUser, Message, Appointment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
@@ -374,6 +383,14 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201912201005367_InitialCreate.resx">
+      <DependentUpon>201912201005367_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912232039215_Initial - Entities ApplicationUser, Message, Appointment.resx">
+      <DependentUpon>201912232039215_Initial - Entities ApplicationUser, Message, Appointment.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
