@@ -190,7 +190,9 @@
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\Appointment.cs" />
+    <Compile Include="Models\Doctor.cs" />
     <Compile Include="Models\Enums\AppointmentStatus.cs" />
+    <Compile Include="Models\Insured.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Enums\MessageStatus.cs" />
