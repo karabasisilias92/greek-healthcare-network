@@ -14,12 +14,12 @@ namespace GreekHealthcareNetwork.Models
 
         public int ConversationId { get; set; }
 
-        public int SenderId { get; set; }
+        public string SenderId { get; set; }
 
-        public int RecipientId { get; set; }
+        public string RecipientId { get; set; }
 
         [ForeignKey("SenderId")]
-        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationUser Sender { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime SentDate { get; set; }
