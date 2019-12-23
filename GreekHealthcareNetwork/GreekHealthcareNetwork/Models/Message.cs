@@ -21,11 +21,14 @@ namespace GreekHealthcareNetwork.Models
         [ForeignKey("SenderId")]
         public virtual ApplicationUser Sender { get; set; }
 
+        [Column(TypeName = "date")]
         [DataType(DataType.Date)]
         public DateTime SentDate { get; set; }
 
+        
+        [Column(TypeName = "time")]
         [DataType(DataType.Time)]
-        public DateTime SentTime { get; set; }
+        public TimeSpan SentTime { get; set; }
 
         public MessageStatus MessageStatus { get; set; }
     }

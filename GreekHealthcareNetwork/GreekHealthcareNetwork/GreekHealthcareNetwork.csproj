@@ -204,6 +204,10 @@
     <Compile Include="Migrations\201912232157096_FixDateTimeAnnotations.Designer.cs">
       <DependentUpon>201912232157096_FixDateTimeAnnotations.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912232239518_Fix type annotations for time and date.cs" />
+    <Compile Include="Migrations\201912232239518_Fix type annotations for time and date.Designer.cs">
+      <DependentUpon>201912232239518_Fix type annotations for time and date.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -404,6 +408,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912232157096_FixDateTimeAnnotations.resx">
       <DependentUpon>201912232157096_FixDateTimeAnnotations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912232239518_Fix type annotations for time and date.resx">
+      <DependentUpon>201912232239518_Fix type annotations for time and date.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

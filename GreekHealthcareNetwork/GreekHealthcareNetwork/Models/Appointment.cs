@@ -23,14 +23,17 @@ namespace GreekHealthcareNetwork.Models
         [ForeignKey("InsuredId")]
         public virtual Insured Insured { get; set; }
 
+        [Column(TypeName = "date")]
         [DataType(DataType.Date)]
         public DateTime AppointmentDate { get; set; }
 
+        [Column(TypeName = "time")]
         [DataType(DataType.Time)]
-        public DateTime AppointmentStartTime { get; set; }
+        public TimeSpan AppointmentStartTime { get; set; }
 
+        [Column(TypeName = "time")]
         [DataType(DataType.Time)]
-        public DateTime AppointmentEndTime { get; set; }
+        public TimeSpan AppointmentEndTime { get; set; }
 
         public AppointmentStatus AppointmentStatus { get; set; }
 
