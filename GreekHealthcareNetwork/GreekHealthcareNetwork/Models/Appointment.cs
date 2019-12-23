@@ -18,7 +18,7 @@ namespace GreekHealthcareNetwork.Models
         [ForeignKey("DoctorId")]
         public virtual Doctor Doctor { get; set; }
 
-        public int InsuredId;
+        public int InsuredId { get; set; }
 
         [ForeignKey("InsuredId")]
         public virtual Insured Insured { get; set; }
