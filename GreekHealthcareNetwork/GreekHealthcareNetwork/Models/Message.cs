@@ -25,11 +25,17 @@ namespace GreekHealthcareNetwork.Models
         [DataType(DataType.Date)]
         public DateTime SentDate { get; set; }
 
-        
         [Column(TypeName = "time")]
         [DataType(DataType.Time)]
         public TimeSpan SentTime { get; set; }
 
         public MessageStatus MessageStatus { get; set; }
+
+        [Required]
+        public string Subject { get; set; }
+
+        [Required]
+        public string MessageText { get; set; }
+
     }
 }
