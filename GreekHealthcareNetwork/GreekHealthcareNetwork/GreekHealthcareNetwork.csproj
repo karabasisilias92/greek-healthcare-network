@@ -208,17 +208,25 @@
     <Compile Include="Migrations\201912232239518_Fix type annotations for time and date.Designer.cs">
       <DependentUpon>201912232239518_Fix type annotations for time and date.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912240020379_Update DbSets.cs" />
+    <Compile Include="Migrations\201912240020379_Update DbSets.Designer.cs">
+      <DependentUpon>201912240020379_Update DbSets.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\Appointment.cs" />
     <Compile Include="Models\Doctor.cs" />
+    <Compile Include="Models\DoctorPlan.cs" />
+    <Compile Include="Models\DoctorsUnavailability.cs" />
     <Compile Include="Models\Enums\AppointmentStatus.cs" />
+    <Compile Include="Models\Enums\MedicalSpecialty.cs" />
     <Compile Include="Models\Insured.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Enums\MessageStatus.cs" />
+    <Compile Include="Models\WorkingHours.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -411,6 +419,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912232239518_Fix type annotations for time and date.resx">
       <DependentUpon>201912232239518_Fix type annotations for time and date.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912240020379_Update DbSets.resx">
+      <DependentUpon>201912240020379_Update DbSets.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

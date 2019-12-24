@@ -11,6 +11,9 @@ namespace GreekHealthcareNetwork.Models
     {
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<WorkingHours> WorkingHours { get; set; }
+        public DbSet<DoctorsUnavailability> DoctorsUnavailabilities { get; set; }
 
         public ApplicationDbContext()
             : base("GCNConnection", throwIfV1Schema: false)
