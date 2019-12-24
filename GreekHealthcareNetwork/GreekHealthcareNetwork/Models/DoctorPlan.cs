@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GreekHealthcareNetwork.Models
 {
@@ -10,5 +8,14 @@ namespace GreekHealthcareNetwork.Models
     {
         [Key]
         public int Id { get; set; }
+
+        [Required]
+        public MedicalSpecialty MedicalSpecialty { get; set; }
+
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "money")]
+        [RegularExpression(@"^(([1-9]\d+)|\d)(\.(\d{2}))?$")]
+        public decimal Fee { get; set; }
     }
+
 }

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace GreekHealthcareNetwork.Models
 {
@@ -12,7 +10,24 @@ namespace GreekHealthcareNetwork.Models
         [Key]
         public string UserId { get; set; }
 
+
         [ForeignKey("UserId")]
         public virtual ApplicationUser User { get; set; }
+
+        [Display(Name = "InsuredPlan")]
+        public int InsuredPlanId { get; set; }
+
+        [ForeignKey("InsuredPlanId")]
+        public virtual InsuredPlan InsuredPlan { get; set; }
+
+        [Required]
+        [MaxLength(100)]
+        public string HomeAddress { get; set; }
+
+        public int BookedAppointments { get; set; }
+
+        public virtual ICollection<Appointment> Appointments { get; set; }
+
+
     }
 }

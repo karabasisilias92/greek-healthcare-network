@@ -2,7 +2,7 @@
 
 namespace GreekHealthcareNetwork.Models
 {
-    public enum MedicalSpecialty
+    public enum Specility
     { 
 
        Allergists, Cardiologists,
