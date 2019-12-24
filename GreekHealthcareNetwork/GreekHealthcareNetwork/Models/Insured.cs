@@ -9,21 +9,21 @@ namespace GreekHealthcareNetwork.Models
 
 
         [ForeignKey("UserId")]
-        [Column(Order=2)]
-        public virtual ApplicationUser ApplicationUser { get; set; }
+        public virtual ApplicationUser User { get; set; }
 
         [Display(Name = "InsuredPlan")]
         public int InsuredPlanId { get; set; }
 
+        [ForeignKey("InsuredPlanId")]
         public virtual InsuredPlan InsuredPlan { get; set; }
 
         [Required]
         [MaxLength(100)]
-        [RegularExpression(@"^[A-Z][a-z]*$|^[Α-Ω][α-ωάήίόέύώϊϋΐΰ]*$",
-         ErrorMessage = "HomeAddress must start with capital letter and then contain only small letters of the same language.")]
         public string HomeAddress { get; set; }
 
-        public int BookAppointments { get; set; }
+        public int BookedAppointments { get; set; }
+
+        public virtual ICollection<Appointment> Appointments { get; set; }
 
 
     }
