@@ -220,6 +220,10 @@
     <Compile Include="Migrations\201912241553256_VisitorMessage &amp; MessageStatus-Replied.Designer.cs">
       <DependentUpon>201912241553256_VisitorMessage &amp; MessageStatus-Replied.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912241641247_Update Message and VisitorMessage Entities.cs" />
+    <Compile Include="Migrations\201912241641247_Update Message and VisitorMessage Entities.Designer.cs">
+      <DependentUpon>201912241641247_Update Message and VisitorMessage Entities.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -438,6 +442,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912241553256_VisitorMessage &amp; MessageStatus-Replied.resx">
       <DependentUpon>201912241553256_VisitorMessage &amp; MessageStatus-Replied.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912241641247_Update Message and VisitorMessage Entities.resx">
+      <DependentUpon>201912241641247_Update Message and VisitorMessage Entities.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

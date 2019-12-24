@@ -31,8 +31,10 @@ namespace GreekHealthcareNetwork.Models
 
         public MessageStatus MessageStatus { get; set; }
 
+        [Required]
         public string Subject { get; set; }
 
+        [Required]
         public string MessageText { get; set; }
 
     }
