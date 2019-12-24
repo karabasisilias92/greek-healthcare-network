@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GreekHealthcareNetwork.Models
 {
-    class InsuredPlan
+    public class InsuredPlan
     {
         [Key]
         public int Id { get; set; }
