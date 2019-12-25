@@ -1,0 +1,43 @@
+﻿@using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+       @Html.AntiForgeryToken()
+    <header id="header">
+        <div class="container">
+
+            <div id="logo" class="float-left">
+                <!--<a href="#hero"><img src="@Url.Content("~/Content/img/logo.png")" alt="GHN" title="" /></a>-->
+                <!-- Uncomment below if you prefer to use a text logo -->
+                <h1><a href="#hero">GHN</a></h1>
+            </div>
+            <div id="nav-menu-container" class="align-self-center">
+                <ul class="nav-menu">
+                    <li>@Html.ActionLink("Home", "Index", "Doctor")</li>
+                    <li>@Html.ActionLink("Appointments", "Appointments", "Doctor")</li>
+                </ul>
+            </div>
+
+            <div id="profilePic" class="float-right">
+                <ul class="nav-menu">
+                    <li class="menu-has-children">
+                        <a href="">
+                            <img src="@Url.Content("~/Content/img/doctor1.jpg")" alt="User" title="" />
+                        </a>
+                        <ul>
+                            <li>@Html.ActionLink("Profile", "Profile", "Doctor")</li>
+                            <li>@Html.ActionLink("Messaeges", "Messages", "Doctor")</li>
+                            <li>@Html.ActionLink("Appointments History", "AppointmentsHistory", "Doctor")</li>
+                            <li>
+                                <a href="javascript:document.getElementById('logoutForm').submit()">
+                                    Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+ }
+
+
+
