@@ -9,6 +9,7 @@
 # General
 --------------------------------------------------------------*/
 
+@import url('Site.css');
 body {
     font-size: 14px;
     line-height: 1.42857143;
@@ -1070,37 +1071,4 @@ doctors section
         padding-top: 15px;
     }
 
-}
-#headerDoctor {
-    background-color: #343b40;
-    padding: 30px 0;
-    height: 92px;
-    transition: all 0.5s;
-    z-index: 997;
-}
-#headerDoctor #logo h1 {
-    font-size: 36px;
-    margin: 0;
-    line-height: 1;
-    font-family: "Roboto", sans-serif;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-}
-
-#headerDoctor #logo h1 a,
-#headerDoctor #logo h1 a:hover {
-    color: #fff;
-}
-
-#headerDoctor #logo img {
-    padding: 0;
-    margin: 0;
-}
-
-#headerDoctor.header-fixed {
-    background: rgba(52, 59, 64, 0.9);
-    padding: 20px 0;
-    height: 72px;
-    transition: all 0.5s;
 }

@@ -21,6 +21,10 @@
     {
         @Html.Partial("_DoctorNavBarPartial")
     }
+    @if(User.IsInRole("Insured"))
+    {
+        @Html.Partial("_InsuredNavBarPartial")
+    }
     @RenderBody()
 
     <!--==========================
