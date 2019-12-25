@@ -432,8 +432,8 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Shared\_DoctorNavBarPartial.cshtml" />
-    <Content Include="Views\Shared\_VisitorNavbar.cshtml" />
     <Content Include="Views\Doctors\Index.cshtml" />
+    <Content Include="Views\Shared\_VisitorNavbarPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
