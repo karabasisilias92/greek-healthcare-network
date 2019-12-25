@@ -1,22 +1,22 @@
-﻿@using (Html.BeginForm("Logout", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+﻿@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
        @Html.AntiForgeryToken()
-    <header id="header">
-        <div class="container">
+    <header id="headerDoctor">
+        <div class="container d-flex flex-row justify-content-between">
 
-            <div id="logo" class="float-left">
+            <div id="logo">
                 <!--<a href="#hero"><img src="@Url.Content("~/Content/img/logo.png")" alt="GHN" title="" /></a>-->
                 <!-- Uncomment below if you prefer to use a text logo -->
                 <h1><a href="#hero">GHN</a></h1>
             </div>
-            <div id="nav-menu-container" class="align-self-center">
+            <div id="nav-menu-container">
                 <ul class="nav-menu">
                     <li>@Html.ActionLink("Home", "Index", "Doctor")</li>
                     <li>@Html.ActionLink("Appointments", "Appointments", "Doctor")</li>
                 </ul>
             </div>
 
-            <div id="profilePic" class="float-right">
+            <div id="profilePic">
                 <ul class="nav-menu">
                     <li class="menu-has-children">
                         <a href="">
@@ -24,7 +24,7 @@
                         </a>
                         <ul>
                             <li>@Html.ActionLink("Profile", "Profile", "Doctor")</li>
-                            <li>@Html.ActionLink("Messaeges", "Messages", "Doctor")</li>
+                            <li>@Html.ActionLink("Messages", "Messages", "Doctor")</li>
                             <li>@Html.ActionLink("Appointments History", "AppointmentsHistory", "Doctor")</li>
                             <li>
                                 <a href="javascript:document.getElementById('logoutForm').submit()">

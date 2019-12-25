@@ -66,6 +66,39 @@ namespace GreekHealthcareNetwork.Migrations
                 }
 
             }
+            if(context.Doctors.Count()==0)
+            {
+                context.DoctorPlans.Add(new DoctorPlan()
+                {   MedicalSpecialty=MedicalSpecialty.Allergists,
+                    Fee=50
+                });
+                var result = userManager.Create(new ApplicationUser
+                {
+                    UserName = "Doctor1",
+                    Email = "doctor1@ghn.gr",
+                    FirstName = "Hlias",
+                    LastName = "Karabasis",
+                    PhoneNumber = "+30 6924771233",
+                    DoB = new DateTime(1992, 1, 24).Date,
+                    AMKA = 24019201979
+                }, "!Doctor123");
+
+                if (result.Succeeded)
+                {
+                    var u = userManager.FindByName("Doctor1");
+                    userManager.AddToRole(u.Id, "Doctor");
+                    context.Doctors.Add(new Doctor() { 
+                        UserId=u.Id,
+                        MedicalSpecialty=MedicalSpecialty.Allergists,
+                        OfficeAddress="Arx. Makariou 14",
+                        PaypalAccount="456878900785634",
+                        DoctorPlanId=context.DoctorPlans.SingleOrDefault(i=>i.MedicalSpecialty==MedicalSpecialty.Allergists).Id
+
+                    });
+
+                    
+                }
+            }
 
 
         }

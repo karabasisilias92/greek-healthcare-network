@@ -183,6 +183,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\DoctorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProfileController.cs" />
@@ -258,6 +259,10 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\img\apple-touch-icon.png" />
+    <Content Include="Content\img\Doctors\doctor1.jpg" />
+    <Content Include="Content\img\Doctors\doctor2.jpg" />
+    <Content Include="Content\img\Doctors\doctor3.jpg" />
+    <Content Include="Content\img\Doctors\doctor4.jpg" />
     <Content Include="Content\img\employees-885338_1920-e1565727877609-1500x630.jpg" />
     <Content Include="Content\img\favicon.png" />
     <Content Include="Content\img\Healthcare-Background-Pics.jpg" />
@@ -428,7 +433,8 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Shared\_DoctorNavBarPartial.cshtml" />
-    <Content Include="Views\Shared\_VisitorNavbar.cshtml" />
+    <Content Include="Views\Doctors\Index.cshtml" />
+    <Content Include="Views\Shared\_VisitorNavbarPartial.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -15,7 +15,7 @@
 <body>
     @if(!Request.IsAuthenticated)
     {
-        @Html.Partial("_VisitorNavbar");
+        @Html.Partial("_VisitorNavbarPartial");
     }
     @if (User.IsInRole("Doctor"))
     {
