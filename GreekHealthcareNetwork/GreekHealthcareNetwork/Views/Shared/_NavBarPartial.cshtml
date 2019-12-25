@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <header id="header">
+        <div class="container">
+
+            <div id="logo" class="pull-left">
+                <a href="#hero"><img src="img/logo.png" alt="" title="GHN" /></a>
+                <!-- Uncomment below if you prefer to use a text logo -->
+                <!--<h1><a href="#hero">Regna</a></h1>-->
+            </div>
+
+            <div class="navbar navbar-expand-md navbar-dark navbar-fixed-top bg-dark">
+                <div class="container">
+
+                    <div id="logo" class="pull-left">
+                        <a href="#hero"><img src="img/logo.png" alt="" title="" /></a>
+                        <!-- Uncomment below if you prefer to use a text logo -->
+                        <!--<h1><a href="#hero">Regna</a></h1>-->
+                    </div>
+                    <div id="nav-menu-container">
+                        <div class="nav-menu">
+                            <a class="menu-active"> href="#hero">HOME</a>
+                            <a href="#about">ABOUT</a>
+                            <a href="#services">SERVICES</a>
+                            <a href="#doctors">DOCTORS</a>
+                            <a href="#insuranceplans">INSURANCE PLANS</a>
+                            <a href="#contact">CONTACT US</a>
+                            <a href="#Profile">USER</a>                          
+                            <select>
+                                <option value="DropDown1">Profile</option>
+                                <option value="DropDown2">Messages</option>
+                                <option value="DropDown3">Appointment History</option>
+                                <option value="DropDown4">Logout</option>
+                            </select>
+                        </div>
+
+                    </div><!-- #nav-menu-container -->
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </div>
+        </div>
+    </header>
+</body>
+</html>
+
