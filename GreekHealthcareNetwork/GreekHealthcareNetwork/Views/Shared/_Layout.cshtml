@@ -9,9 +9,11 @@
 
 </head>
 <body>
-    <div class="navbar navbar-expand-md navbar-dark navbar-fixed-top bg-dark">
-        @Html.Partial("_NavBarPartial")
-    </div>
+    @if (User.IsInRole("Doctor"))
+    {
+        @Html.Partial("_DoctorNavBarPartial")
+    }
+
     <div class="container body-content">
         @RenderBody()
         <hr />
