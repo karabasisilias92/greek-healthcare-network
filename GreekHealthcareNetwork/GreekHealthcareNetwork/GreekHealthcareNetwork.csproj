@@ -216,6 +216,14 @@
     <Compile Include="Migrations\201912241117469_Add Insured, InsuredPlans, DoctorPlans DbSets.Designer.cs">
       <DependentUpon>201912241117469_Add Insured, InsuredPlans, DoctorPlans DbSets.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912241553256_VisitorMessage &amp; MessageStatus-Replied.cs" />
+    <Compile Include="Migrations\201912241553256_VisitorMessage &amp; MessageStatus-Replied.Designer.cs">
+      <DependentUpon>201912241553256_VisitorMessage &amp; MessageStatus-Replied.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912241641247_Update Message and VisitorMessage Entities.cs" />
+    <Compile Include="Migrations\201912241641247_Update Message and VisitorMessage Entities.Designer.cs">
+      <DependentUpon>201912241641247_Update Message and VisitorMessage Entities.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -231,6 +239,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Enums\MessageStatus.cs" />
+    <Compile Include="Models\VisitorMessage.cs" />
     <Compile Include="Models\WorkingHours.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -430,6 +439,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912241117469_Add Insured, InsuredPlans, DoctorPlans DbSets.resx">
       <DependentUpon>201912241117469_Add Insured, InsuredPlans, DoctorPlans DbSets.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912241553256_VisitorMessage &amp; MessageStatus-Replied.resx">
+      <DependentUpon>201912241553256_VisitorMessage &amp; MessageStatus-Replied.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912241641247_Update Message and VisitorMessage Entities.resx">
+      <DependentUpon>201912241641247_Update Message and VisitorMessage Entities.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

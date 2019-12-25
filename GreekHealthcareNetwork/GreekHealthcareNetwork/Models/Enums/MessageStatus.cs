@@ -8,6 +8,7 @@ namespace GreekHealthcareNetwork.Models
     public enum MessageStatus
     {
         Read,
-        Unread
+        Unread,
+        Replied
     }
 }
