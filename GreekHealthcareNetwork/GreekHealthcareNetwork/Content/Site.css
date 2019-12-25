@@ -834,17 +834,44 @@ body.mobile-nav-active {
 /***************************************
 doctors section
 ***************************************/
+#doctors {
+    background: #fff;
+    background-size: cover;
+    padding: 80px 0 60px 0;
+}
+
 .img-thumbnail {
     border-radius: 0px;
 }
 
 .img-thumbnail h3 {
+    margin-top: 20px;
     padding-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .img-thumbnail p {
     padding-bottom: 10px;
-    }
+    margin: 0 0 10px;
+    font-size: 16px;
+}
+
+.img-thumbnail img {
+    max-width: 100%;
+    height: auto;
+}
+
+.img-thumbnail a {
+    color: #337ab7;
+}
+
+.img-thumbnail a:hover {
+    color: #999;
+}
+
+.caption {
+    padding: 6px;
+}
 
 /* Contact Section
 --------------------------------*/
@@ -1007,7 +1034,7 @@ doctors section
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 991px) {
     .back-to-top {
         bottom: 15px;
     }
