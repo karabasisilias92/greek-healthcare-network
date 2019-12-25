@@ -22,23 +22,29 @@
                 <div class="container">
 
                     <div id="logo" class="pull-left">
-                        <a href="LOGO"><img src="img/logo.png" alt="LOGO" title="" /></a>
+                        <a href="#hero"><img src="img/logo.png" alt="GHN" title="" /></a>
                         <!-- Uncomment below if you prefer to use a text logo -->
                         <!--<h1><a href="#hero">Regna</a></h1>-->
                     </div>
-                    <div id="nav-menu-container">
+                    <div id="nav-menu-container" >
                         <div class="nav-menu">
-                            <a class="menu-active"> href="#hero">HOME</a>
-                            <a href="#about">ABOUT</a>
-                            <a href="#services">SERVICES</a>
-                            <a href="#doctors">DOCTORS</a>
-                            <a href="#insuranceplans">INSURANCE PLANS</a>
-                            <a href="#contact">CONTACT US</a>
-                        </div><!-- #nav-menu-container -->
+                            <a href="home">HOME</a>
+                            <a href="#appointment">APPOINTMENT</a>
+                        </div>
 
+                    <div id="logo" class="pull-right">
+                        <a href="#Profile"><img src="img/logo.png" alt="USER" title="" />USER</a>
+                            <select>
+                                <option value="DropDown1">Profile</option>
+                                <option value="DropDown2">Messages</option>
+                                <option value="DropDown3">Appointment History</option>
+                                <option value="DropDown4">Logout</option>
+                            </select>                            
                     </div>
-                    @Html.Partial("_LoginPartial")
+
+                    </div><!-- #nav-menu-container -->
                 </div>
+            </div>
         </div>
     </header>
 </body>
