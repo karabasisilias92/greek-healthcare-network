@@ -1,4 +1,5 @@
 ﻿@model GreekHealthcareNetwork.Models.DoctorSearchViewModel
+@using GreekHealthcareNetwork.Models
 @{
     ViewBag.Title = "Home Page";
 }
@@ -161,7 +162,7 @@
                 <div class="col-12">
                     @Html.Partial("_SearchDoctorsPartial")
                 </div>
-                <div id="doctorsList" class="row">
+                <div id="doctorsList" class="row col-md-12">
                     
                 </div>
             </div>
@@ -253,12 +254,17 @@
                     url: '/api/SearchDoctors/SearchResults?doctorsFirstName=' + firstName + '&doctorsLastName=' +lastName + '&doctorsSpecialty=' + specialty,
                     success: function (data) {
                         $('#doctorsList').empty();
-                        data.forEach(function (doctor) {
+                        if (data.length == 0) {
+                            $("#doctorsList").append('<p> There are no doctors matching these criteria. </p>')
+                        }
+                        else {
+                            data.forEach(function (doctor) {
                             $('#doctorsList').append('<div class="col-md-3 col-sm-6 col-xs-12"><div class="img-thumbnail">' + 
                                 '<img src="@Url.Content("~/Content/img/Doctors/")' + doctor.User.ProfilePicture + '" alt="' + doctor.User.ProfilePicture + '">' +
                                 '<div><h3>' + doctor.User.FirstName + ' ' + doctor.User.LastName + '</h3>' +
                                 '<p>' + doctor.MedicalSpecialty + '</p></div></div></div>');
-                        });
+                            });
+                        }
                     },
                     error: function (error) {
                         $('#doctorsList').empty();
@@ -269,7 +275,7 @@
             ListDoctors('','',-1);
             $('#searchDoctors').on('submit', function (e) {
                 e.preventDefault();
-                ListDoctors(e.target[1].value, e.target[2].value, e.target[3].value);
+                ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value);
             })
             //getArtistByName(e);
         })

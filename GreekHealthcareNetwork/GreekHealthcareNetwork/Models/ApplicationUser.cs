@@ -36,15 +36,14 @@ namespace GreekHealthcareNetwork.Models
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime DoB { get; set; }
 
-        [DefaultValue("Picturename")]
-        public string ProfilePicture;
+        public string ProfilePicture { get; set; }
 
         [Required]
         [RegularExpression(@"^[0-9]{11}$",
          ErrorMessage = "AMKA should be 11 digits.")]
         public long AMKA { get; set; }
 
-        public bool IsActive;
+        public bool IsActive { get; set; }
 
         [DataType(DataType.Date)]
         [Column(TypeName="date")]
