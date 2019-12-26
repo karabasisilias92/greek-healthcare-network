@@ -55,7 +55,7 @@ namespace GreekHealthcareNetwork.Migrations
                     FirstName = "John",
                     LastName = "Smith",
                     PhoneNumber = "+30 6924771994",
-                    DoB = new DateTime(1992,1,24).Date,
+                    DoB = new DateTime(1992, 1, 24).Date,
                     AMKA = 24019201979
                 }, "!Admin123");
 
@@ -66,11 +66,12 @@ namespace GreekHealthcareNetwork.Migrations
                 }
 
             }
-            if(context.Doctors.Count()==0)
+            if (context.Doctors.Count() == 0)
             {
                 context.DoctorPlans.Add(new DoctorPlan()
-                {   MedicalSpecialty=MedicalSpecialty.Allergists,
-                    Fee=50
+                {
+                    MedicalSpecialty = MedicalSpecialty.Allergists,
+                    Fee = 50
                 });
                 var result = userManager.Create(new ApplicationUser
                 {
@@ -87,20 +88,56 @@ namespace GreekHealthcareNetwork.Migrations
                 {
                     var u = userManager.FindByName("Doctor1");
                     userManager.AddToRole(u.Id, "Doctor");
-                    context.Doctors.Add(new Doctor() { 
-                        UserId=u.Id,
-                        MedicalSpecialty=MedicalSpecialty.Allergists,
-                        OfficeAddress="Arx. Makariou 14",
-                        PaypalAccount="456878900785634",
-                        DoctorPlanId=context.DoctorPlans.SingleOrDefault(i=>i.MedicalSpecialty==MedicalSpecialty.Allergists).Id
+                    context.Doctors.Add(new Doctor()
+                    {
+                        UserId = u.Id,
+                        MedicalSpecialty = MedicalSpecialty.Allergists,
+                        OfficeAddress = "Arx. Makariou 14",
+                        PaypalAccount = "456878900785634",
+                        DoctorPlanId = context.DoctorPlans.SingleOrDefault(i => i.MedicalSpecialty == MedicalSpecialty.Allergists).Id
 
                     });
 
-                    
+
                 }
             }
+            //
+            if (context.Insureds.Count() == 0)
+            {
+                context.InsuredPlans.Add(new InsuredPlan()
+                {
+                    Name = "Bronze",
+                    PlanFee = 250,
+                    AppointmentRate = 100,
+                    ExceededAppointmentRate = 30,
+                    PlanDuration = 3
+                });
+                var result = userManager.Create(new ApplicationUser
+                {
+                    UserName = "insured1@ghn.gr",
+                    Email = "insured1@ghn.gr",
+                    FirstName = "Hlias",
+                    LastName = "Karabasis",
+                    PhoneNumber = "+30 6924771234",
+                    DoB = new DateTime(1992, 1, 24).Date,
+                    AMKA = 24019201979
+                }, "!Insured123");
+
+                if (result.Succeeded)
+                {
+                    var u = userManager.FindByName("insured1@ghn.gr");
+                    userManager.AddToRole(u.Id, "Insured");
+                    context.Insureds.Add(new Insured()
+                    {
+                        UserId = u.Id,
+                        HomeAddress = "Arx. Makariou 14"
+                    });
+                }
 
 
+            }
         }
     }
 }
+
+

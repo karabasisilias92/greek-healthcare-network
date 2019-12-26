@@ -11,7 +11,6 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("cssScripts", required: false)
-
 </head>
 <body>
     @if(!Request.IsAuthenticated)
@@ -21,6 +20,10 @@
     @if (User.IsInRole("Doctor"))
     {
         @Html.Partial("_DoctorNavBarPartial")
+    }
+    @if(User.IsInRole("Insured"))
+    {
+        @Html.Partial("_InsuredNavBarPartial")
     }
     @RenderBody()
 
