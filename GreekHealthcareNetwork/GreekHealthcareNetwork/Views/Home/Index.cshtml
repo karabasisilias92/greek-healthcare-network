@@ -1,5 +1,4 @@
 ﻿@model GreekHealthcareNetwork.Models.DoctorSearchViewModel
-@using GreekHealthcareNetwork.Models
 @{
     ViewBag.Title = "Home Page";
 }
@@ -251,7 +250,7 @@
                 $.ajax({
                     dataType: 'json',
                     type: 'get',
-                    url: '/api/Search/SearchResults?doctorsFirstName=' + firstName + '&doctorsLastName=' +lastName + '&doctorsSpecialty=' + specialty,
+                    url: '/api/Search/SearchDoctorResults?doctorsFirstName=' + firstName + '&doctorsLastName=' +lastName + '&doctorsSpecialty=' + specialty,
                     success: function (data) {
                         $('#doctorsList').empty();
                         if (data.length == 0) {
