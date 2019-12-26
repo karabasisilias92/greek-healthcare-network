@@ -36,9 +36,6 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                  // so we cannot json ignore it in general
                                                                                                  .Include("User.Messages") 
                                                                                                  .Include("WorkingHours")
-                                                                                                 // Needs to be lazy loaded even though we do not need it here. We may implement searching for appointments, 
-                                                                                                 // so we cannot json ignore it in general
-                                                                                                 .Include("Appointments")
                                                                                                  .ToList();
 
                 if (doctorsSpecialty >= 0 && doctorsSpecialty < Enum.GetNames(typeof(MedicalSpecialty)).Length)

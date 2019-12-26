@@ -44,7 +44,7 @@ namespace GreekHealthcareNetwork.Models
         [JsonIgnore]
         public virtual ICollection<DoctorsUnavailability> DoctorsUnavailability { get; set; }
 
-        //[JsonIgnore]
+        [JsonIgnore]
         public virtual ICollection<Appointment> Appointments { get; set; }
     }
 }
