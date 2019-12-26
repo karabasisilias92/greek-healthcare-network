@@ -447,6 +447,7 @@
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\User\AppointmentsHistory.cshtml" />
     <Content Include="Views\Shared\_SearchDoctorsPartial.cshtml" />
+    <Content Include="Views\Doctors\Appointments.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

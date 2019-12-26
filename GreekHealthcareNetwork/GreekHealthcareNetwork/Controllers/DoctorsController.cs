@@ -13,5 +13,9 @@ namespace GreekHealthcareNetwork.Controllers
         {
             return View();
         }
+        public ActionResult Appointments()
+        {
+            return View();
+        }
     }
 }
