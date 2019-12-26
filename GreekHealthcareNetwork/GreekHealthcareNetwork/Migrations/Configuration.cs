@@ -217,6 +217,65 @@ namespace GreekHealthcareNetwork.Migrations
 
 
             }
+
+            if (context.Appointments.Count() == 0)
+            {
+                context.Appointments.Add(new Appointment
+                {
+                    AppointmentDate = new DateTime(2020, 2, 2, 14, 00, 00).Date,
+                    AppointmentStartTime = new DateTime(2020, 2, 2, 14, 00, 00).TimeOfDay,
+                    AppointmentEndTime = new DateTime(2020, 2, 2, 14, 30, 00).TimeOfDay,
+                    DoctorId = "0618d0d9-7fff-49ac-9ac5-6f1c87cb8d53",
+                    InsuredId = "e326ebc4-6dd4-4390-9ced-a2676cf399ef",
+                    AppointmentStatus = Models.Enums.AppointmentStatus.Upcoming,
+                    InsuredComments = "My leg broke"
+                });
+
+                context.Appointments.Add(new Appointment
+                {
+                    AppointmentDate = new DateTime(2019, 2, 2, 16, 30, 00).Date,
+                    AppointmentStartTime = new DateTime(2019, 2, 2, 16, 30, 00).TimeOfDay,
+                    AppointmentEndTime = new DateTime(2019, 2, 2, 17, 00, 00).TimeOfDay,
+                    DoctorId = "3b4d5d50-664f-4979-8353-99147fe645ce",
+                    InsuredId = "e326ebc4-6dd4-4390-9ced-a2676cf399ef",
+                    AppointmentStatus = Models.Enums.AppointmentStatus.Completed,
+                    InsuredComments = "Fever"
+                });
+
+                context.Appointments.Add(new Appointment
+                {
+                    AppointmentDate = new DateTime(2019, 10, 10, 15, 00, 00).Date,
+                    AppointmentStartTime = new DateTime(2019, 10, 10, 15, 00, 00).TimeOfDay,
+                    AppointmentEndTime = new DateTime(2019, 10, 10, 15, 30, 00).TimeOfDay,
+                    DoctorId = "63e2d557-dc7c-467e-9b89-d6794e4a3876",
+                    InsuredId = "e326ebc4-6dd4-4390-9ced-a2676cf399ef",
+                    AppointmentStatus = Models.Enums.AppointmentStatus.Canceled,
+                    InsuredComments = "Heart attack"
+                });
+
+                context.Appointments.Add(new Appointment
+                {
+                    AppointmentDate = new DateTime(2020, 1, 12, 09, 00, 00).Date,
+                    AppointmentStartTime = new DateTime(2020, 1, 12, 09, 00, 00).TimeOfDay,
+                    AppointmentEndTime = new DateTime(2020, 1, 12, 09, 30, 00).TimeOfDay,
+                    DoctorId = "b9211f10-5322-4b83-808c-72a9a67d2937",
+                    InsuredId = "e326ebc4-6dd4-4390-9ced-a2676cf399ef",
+                    AppointmentStatus = Models.Enums.AppointmentStatus.Upcoming,
+                    InsuredComments = "Vomit"
+                });
+
+                context.Appointments.Add(new Appointment
+                {
+                    AppointmentDate = new DateTime(2019, 08, 22, 12, 00, 00).Date,
+                    AppointmentStartTime = new DateTime(2019, 08, 22, 12, 00, 00).TimeOfDay,
+                    AppointmentEndTime = new DateTime(2019, 08, 22, 12, 30, 00).TimeOfDay,
+                    DoctorId = "8cb05f95-5cd1-48cf-a234-b9636aefd2d9",
+                    InsuredId = "e326ebc4-6dd4-4390-9ced-a2676cf399ef",
+                    AppointmentStatus = Models.Enums.AppointmentStatus.Completed,
+                    InsuredComments = "Nothing"
+                });
+
+            }
         }
     }
 }
