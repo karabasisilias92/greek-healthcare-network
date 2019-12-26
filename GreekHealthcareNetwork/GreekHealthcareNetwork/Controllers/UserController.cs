@@ -10,7 +10,7 @@ namespace GreekHealthcareNetwork.Controllers
     public class UserController : Controller
     {
         // GET: Profile
-        public ActionResult Profile()
+        public new ActionResult Profile()
         {
             //var userId = User.Identity.GetUserId();
             return View();

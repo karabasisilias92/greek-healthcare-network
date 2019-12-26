@@ -37,20 +37,22 @@
         <div>
             <table class="table mt-4">
                 <thead>
-                <th scope="col"></th>
-                @if (Request.IsAuthenticated && User.IsInRole("Doctor"))
-                {
-                    <th scope="col">Patient</th>
-                }
-                @if (Request.IsAuthenticated && User.IsInRole("Insured"))
-                {
-                    <th scope="col">Doctor</th>
-                    <th scope="col">Specialty</th>
-                }
-                <th scope="col">Date</th>
-                <th scope="col">Time</th>
-                <th scope="col">Status</th>
-                <th scope="col">Actions</th>
+                    <tr>
+                        <th scope="col"></th>
+                        @if (Request.IsAuthenticated && User.IsInRole("Doctor"))
+                        {
+                            <th scope="col">Patient</th>
+                        }
+                        @if (Request.IsAuthenticated && User.IsInRole("Insured"))
+                        {
+                            <th scope="col">Doctor</th>
+                            <th scope="col">Specialty</th>
+                        }
+                        <th scope="col">Date</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Actions</th>
+                    </tr>
                 </thead>
                 <tbody>
                     <tr>
@@ -81,7 +83,6 @@
                 </tbody>
             </table>
         </div>
-    </div>
     </div>
 </main>
 
