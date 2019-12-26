@@ -70,12 +70,12 @@ namespace GreekHealthcareNetwork.Migrations
             {
                 context.DoctorPlans.Add(new DoctorPlan()
                 {
-                    MedicalSpecialty = MedicalSpecialty.Cardiologists,
+                    MedicalSpecialty = MedicalSpecialty.Cardiologist,
                     Fee = 100
                 });
                 context.DoctorPlans.Add(new DoctorPlan()
                 {
-                    MedicalSpecialty = MedicalSpecialty.Pathologists,
+                    MedicalSpecialty = MedicalSpecialty.Pathologist,
                     Fee = 60
                 });
                 var result = userManager.Create(new ApplicationUser
@@ -97,10 +97,10 @@ namespace GreekHealthcareNetwork.Migrations
                     context.Doctors.Add(new Doctor()
                     {
                         UserId = u.Id,
-                        MedicalSpecialty = MedicalSpecialty.Pathologists,
+                        MedicalSpecialty = MedicalSpecialty.Pathologist,
                         OfficeAddress = "Arx. Makariou 14",
                         PaypalAccount = "456878900785634",
-                        DoctorPlanId = context.DoctorPlans.SingleOrDefault(i => i.MedicalSpecialty == MedicalSpecialty.Pathologists).Id
+                        DoctorPlanId = context.DoctorPlans.SingleOrDefault(i => i.MedicalSpecialty == MedicalSpecialty.Pathologist).Id
                     });
                 }
 
@@ -123,10 +123,10 @@ namespace GreekHealthcareNetwork.Migrations
                     context.Doctors.Add(new Doctor()
                     {
                         UserId = u.Id,
-                        MedicalSpecialty = MedicalSpecialty.Cardiologists,
+                        MedicalSpecialty = MedicalSpecialty.Cardiologist,
                         OfficeAddress = "Arx. Makariou 14",
                         PaypalAccount = "456878900785634",
-                        DoctorPlanId = context.DoctorPlans.SingleOrDefault(i => i.MedicalSpecialty == MedicalSpecialty.Cardiologists).Id
+                        DoctorPlanId = context.DoctorPlans.SingleOrDefault(i => i.MedicalSpecialty == MedicalSpecialty.Cardiologist).Id
                     });
                 }
 
@@ -149,10 +149,10 @@ namespace GreekHealthcareNetwork.Migrations
                     context.Doctors.Add(new Doctor()
                     {
                         UserId = u.Id,
-                        MedicalSpecialty = MedicalSpecialty.Allergists,
+                        MedicalSpecialty = MedicalSpecialty.Allergist,
                         OfficeAddress = "Arx. Makariou 14",
                         PaypalAccount = "456878900785634",
-                        DoctorPlanId = context.DoctorPlans.SingleOrDefault(i => i.MedicalSpecialty == MedicalSpecialty.Allergists).Id
+                        DoctorPlanId = context.DoctorPlans.SingleOrDefault(i => i.MedicalSpecialty == MedicalSpecialty.Allergist).Id
                     });
                 }
 
@@ -175,10 +175,10 @@ namespace GreekHealthcareNetwork.Migrations
                     context.Doctors.Add(new Doctor()
                     {
                         UserId = u.Id,
-                        MedicalSpecialty = MedicalSpecialty.Pathologists,
+                        MedicalSpecialty = MedicalSpecialty.Pathologist,
                         OfficeAddress = "Arx. Makariou 14",
                         PaypalAccount = "456878900785634",
-                        DoctorPlanId = context.DoctorPlans.SingleOrDefault(i => i.MedicalSpecialty == MedicalSpecialty.Pathologists).Id
+                        DoctorPlanId = context.DoctorPlans.SingleOrDefault(i => i.MedicalSpecialty == MedicalSpecialty.Pathologist).Id
                     });
                 }
             }

@@ -250,22 +250,23 @@
                 $.ajax({
                     dataType: 'json',
                     type: 'get',
-                    url: '/api/SearchDoctors/SearchResults/' + firstName + '/' +lastName + '/' + specialty,
+                    url: '/api/SearchDoctors/SearchResults?doctorsFirstName=' + firstName + '&doctorsLastName=' +lastName + '&doctorsSpecialty=' + specialty,
                     success: function (data) {
                         $('#doctorsList').empty();
                         data.forEach(function (doctor) {
                             $('#doctorsList').append('<div class="col-md-3 col-sm-6 col-xs-12"><div class="img-thumbnail">' + 
-                                '<img src="' + @Url.Content("~/Content/img/Doctors/") + doctor.User.ProfilePicture + '" alt="' + doctor.User.ProfilePicture + '">' +
+                                '<img src="@Url.Content("~/Content/img/Doctors/")' + doctor.User.ProfilePicture + '" alt="' + doctor.User.ProfilePicture + '">' +
                                 '<div><h3>' + doctor.User.FirstName + ' ' + doctor.User.LastName + '</h3>' +
                                 '<p>' + doctor.MedicalSpecialty + '</p></div></div></div>');
                         });
                     },
-                    error: function(error) {
+                    error: function (error) {
+                        $('#doctorsList').empty();
                         $("#doctorsList").append('<p> Something went wrong. Please try again later. </p>')
                     }
                 })
             }
-            ListDoctors("","",-1);
+            ListDoctors('','',-1);
             $('#searchDoctors').on('submit', function (e) {
                 e.preventDefault();
                 ListDoctors(e.target[1].value, e.target[2].value, e.target[3].value);

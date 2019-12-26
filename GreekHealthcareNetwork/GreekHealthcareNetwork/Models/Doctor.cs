@@ -1,4 +1,5 @@
 ﻿using GreekHealthcareNetwork.Models.Enums;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -33,14 +34,15 @@ namespace GreekHealthcareNetwork.Models
         public int DoctorPlanId { get; set; }
 
         [ForeignKey("DoctorPlanId")]
+        [JsonIgnore]
         public virtual DoctorPlan DoctorPlan { get; set; }
 
         public virtual ICollection<WorkingHours> WorkingHours { get; set; }
-
+        
+        [JsonIgnore]
         public virtual ICollection<DoctorsUnavailability> DoctorsUnavailability { get; set; }
 
+        //[JsonIgnore]
         public virtual ICollection<Appointment> Appointments { get; set; }
-
-
     }
 }

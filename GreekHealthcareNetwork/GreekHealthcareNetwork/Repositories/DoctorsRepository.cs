@@ -15,15 +15,15 @@ namespace GreekHealthcareNetwork.Repositories
             IEnumerable<ApplicationUser> users;
             using (var db = new ApplicationDbContext())
             {
-                if (!doctorsFirstName.Equals("") && !doctorsLastName.Equals(""))
+                if (!string.IsNullOrWhiteSpace(doctorsFirstName) && !string.IsNullOrWhiteSpace(doctorsLastName))
                 {
                     users = db.Users.Where(user => user.FirstName.Contains(doctorsFirstName) && user.LastName.Contains(doctorsLastName));
                 } 
-                else if (!doctorsFirstName.Equals(""))
+                else if (!string.IsNullOrWhiteSpace(doctorsFirstName))
                 {
                     users = db.Users.Where(user => user.FirstName.Contains(doctorsFirstName));
                 }
-                else if (!doctorsLastName.Equals(""))
+                else if (!string.IsNullOrWhiteSpace(doctorsLastName))
                 {
                     users = db.Users.Where(user => user.LastName.Contains(doctorsLastName));
                 }
@@ -31,10 +31,19 @@ namespace GreekHealthcareNetwork.Repositories
                 {
                     users = db.Users;
                 }
-                doctors = db.Doctors.Where(doctor => users.Any(user => user.Id == doctor.UserId)).Include("User").ToList();
-                if (doctorsSpecialty != -1)
+                doctors = db.Doctors.Where(doctor => users.Any(user => user.Id == doctor.UserId)).Include("User")
+                                                                                                 // Needs to be lazy loaded even though we do not need it here. We may implement searching for messages, 
+                                                                                                 // so we cannot json ignore it in general
+                                                                                                 .Include("User.Messages") 
+                                                                                                 .Include("WorkingHours")
+                                                                                                 // Needs to be lazy loaded even though we do not need it here. We may implement searching for appointments, 
+                                                                                                 // so we cannot json ignore it in general
+                                                                                                 .Include("Appointments")
+                                                                                                 .ToList();
+
+                if (doctorsSpecialty >= 0 && doctorsSpecialty < Enum.GetNames(typeof(MedicalSpecialty)).Length)
                 {
-                    doctors = doctors.Where(doctor => (int)doctor.MedicalSpecialty == doctorsSpecialty);
+                    doctors = doctors.Where(doctor => (int)doctor.MedicalSpecialty == doctorsSpecialty).ToList();
                 }
             }
 

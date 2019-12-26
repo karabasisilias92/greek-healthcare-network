@@ -14,7 +14,7 @@ namespace GreekHealthcareNetwork.Controllers
         private readonly DoctorsRepository _doctors = new DoctorsRepository();
 
         [HttpGet]
-        [Route("api/SearchDoctors/SearchResults/{doctorsFirstName}/{doctorsLastName}/{doctorsSpecialty}")]
+        [Route("api/SearchDoctors/SearchResults")]
         public IHttpActionResult SearchResults(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty)
         {
             return Ok(_doctors.GetFilteredDoctors(doctorsFirstName, doctorsLastName, doctorsSpecialty));

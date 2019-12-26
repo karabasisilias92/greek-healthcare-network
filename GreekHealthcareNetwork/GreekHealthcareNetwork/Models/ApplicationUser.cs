@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -49,7 +50,19 @@ namespace GreekHealthcareNetwork.Models
         [Column(TypeName="date")]
         public DateTime SubscriptionEndDate { get; set; }
 
+        //[JsonIgnore]
         public virtual ICollection<Message> Messages { get; set; }
+
+        // The three below are inherited from IdentityUser but we need to ignore them when serializing for JSON, 
+        // so we hide them with new operator
+        [JsonIgnore]
+        public new virtual ICollection<IdentityUserClaim> Claims { get; set; }
+
+        [JsonIgnore]
+        public new virtual ICollection<IdentityUserRole> Roles { get; set; }
+
+        [JsonIgnore]
+        public new virtual ICollection<IdentityUserLogin> Logins { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
