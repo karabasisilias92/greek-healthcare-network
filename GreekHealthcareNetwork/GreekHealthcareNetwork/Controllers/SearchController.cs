@@ -9,12 +9,12 @@ using System.Web.Http;
 
 namespace GreekHealthcareNetwork.Controllers
 {
-    public class SearchDoctorsController : ApiController
+    public class SearchController : ApiController
     {
         private readonly DoctorsRepository _doctors = new DoctorsRepository();
 
         [HttpGet]
-        [Route("api/SearchDoctors/SearchResults")]
+        [Route("api/Search/SearchResults")]
         public IHttpActionResult SearchResults(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty)
         {
             return Ok(_doctors.GetFilteredDoctors(doctorsFirstName, doctorsLastName, doctorsSpecialty));

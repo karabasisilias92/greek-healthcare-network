@@ -251,7 +251,7 @@
                 $.ajax({
                     dataType: 'json',
                     type: 'get',
-                    url: '/api/SearchDoctors/SearchResults?doctorsFirstName=' + firstName + '&doctorsLastName=' +lastName + '&doctorsSpecialty=' + specialty,
+                    url: '/api/Search/SearchResults?doctorsFirstName=' + firstName + '&doctorsLastName=' +lastName + '&doctorsSpecialty=' + specialty,
                     success: function (data) {
                         $('#doctorsList').empty();
                         if (data.length == 0) {
