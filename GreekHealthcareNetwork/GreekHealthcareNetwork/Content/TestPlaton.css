@@ -10,32 +10,9 @@
 --------------------------------------------------------------*/
 
 body {
-    font-size: 14px;
-    line-height: 1.42857143;
-    background-color: #fff;
+    background: #fff;
     color: #666666;
-    font-family: "Roboto", sans-serif;
-}
-
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
-.dl-horizontal dt {
-    white-space: normal;
-}
-
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
-}
-
-.nav > li > a {
-    color: white;
-    position: relative;
-    display: block;
-    padding: 10px 15px;
+    font-family: "Open Sans", sans-serif;
 }
 
 a {
@@ -55,25 +32,29 @@ p {
     margin: 0 0 30px 0;
 }
 
-hr.botm-line {
-    height: 3px;
-    width: 60px;
-    background: #ffb737;
-    position: relative;
-    border: 0;
-    margin: 20px 0 20px 0;
-}
-
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-    font-family: "Roboto", sans-serif;
+    font-family: "Poppins", sans-serif;
     font-weight: 400;
     margin: 0 0 20px 0;
     padding: 0;
+}
+
+/* Prelaoder */
+
+#preloader {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 999;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    background: #fff url("../img/preloader.svg") no-repeat center center;
 }
 
 /* Back to top button */
@@ -91,16 +72,16 @@ h6 {
     transition: background 0.5s;
 }
 
-.back-to-top:focus {
-    background: rgba(0, 0, 0, 0.2);
-    color: #fff;
-    outline: none;
-}
+    .back-to-top:focus {
+        background: rgba(0, 0, 0, 0.2);
+        color: #fff;
+        outline: none;
+    }
 
-.back-to-top:hover {
-    background: #2dc997;
-    color: #fff;
-}
+    .back-to-top:hover {
+        background: #2dc997;
+        color: #fff;
+    }
 
 /*--------------------------------------------------------------
 # Header
@@ -109,127 +90,125 @@ h6 {
 #header {
     padding: 30px 0;
     height: 92px;
-    position: fixed;
-    left: 0;
-    top: 0;
-    right: 0;
+    position: static;
     transition: all 0.5s;
     z-index: 997;
 }
 
-#header #logo {
-    float: left;
-}
+    #header #logo {
+        float: left;
+    }
 
-#header #logo h1 {
-    font-size: 36px;
-    margin: 0;
-    line-height: 1;
-    font-family: "Roboto", sans-serif;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-}
+        #header #logo h1 {
+            font-size: 36px;
+            margin: 0;
+            padding: 6px 0;
+            line-height: 1;
+            font-family: "Poppins", sans-serif;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
 
-#header #logo h1 a,
-#header #logo h1 a:hover {
-    color: #fff;
-}
+            #header #logo h1 a,
+            #header #logo h1 a:hover {
+                color: #fff;
+            }
 
-#header #logo img {
-    padding: 0;
-    margin: 0;
-}
+        #header #logo img {
+            padding: 0;
+            margin: 0;
+        }
 
-#header.header-fixed {
-    background: rgba(52, 59, 64, 0.9);
-    padding: 20px 0;
-    height: 72px;
-    transition: all 0.5s;
-}
+    #header.header-fixed {
+        background: rgba(52, 59, 64, 0.9);
+        padding: 20px 0;
+        height: 72px;
+        transition: all 0.5s;
+    }
 
 /*--------------------------------------------------------------
-# home Section
+# Hero Section
 --------------------------------------------------------------*/
 
-#home {
+#hero {
     width: 100%;
     height: 100vh;
-    background: url(./img/Healthcare-Background-Pics.jpg) top center;
+    background: url(../img/hero-bg.jpg) top center;
     background-size: cover;
     position: relative;
 }
 
-#home:before {
-    content: "";
-    background: rgba(0, 0, 0, 0.6);
-    position: absolute;
-    bottom: 0;
-    top: 0;
-    left: 0;
-    right: 0;
-}
+    #hero:before {
+        content: "";
+        background: rgba(0, 0, 0, 0.6);
+        position: absolute;
+        bottom: 0;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
 
-#home .home-container {
-    position: absolute;
-    bottom: 0;
-    top: 0;
-    left: 0;
-    right: 0;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: center;
-    -webkit-justify-content: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    text-align: center;
-}
+    #hero .hero-container {
+        position: absolute;
+        bottom: 0;
+        top: 0;
+        left: 0;
+        right: 0;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        text-align: center;
+    }
 
-#home h1 {
-    margin: 30px 0 10px 0;
-    font-size: 48px;
-    font-weight: bold;
-    line-height: 56px;
-    text-transform: uppercase;
-    color: #fff;
-}
+    #hero h1 {
+        margin: 30px 0 10px 0;
+        font-size: 48px;
+        font-weight: 700;
+        line-height: 56px;
+        text-transform: uppercase;
+        color: #fff;
+    }
 
-#home h2 {
-    color: #eee;
-    margin-bottom: 50px;
-    font-size: 24px;
-}
+    #hero h2 {
+        color: #eee;
+        margin-bottom: 50px;
+        font-size: 24px;
+    }
 
-#home .btn-get-started {
-    font-family: "Roboto", sans-serif;
-    text-transform: uppercase;
-    font-weight: 500;
-    font-size: 16px;
-    letter-spacing: 1px;
-    display: inline-block;
-    padding: 8px 28px;
-    border-radius: 50px;
-    transition: 0.5s;
-    margin: 10px;
-    border: 2px solid #fff;
-    color: #fff;
-}
+    #hero .btn-get-started {
+        font-family: "Poppins", sans-serif;
+        text-transform: uppercase;
+        font-weight: 500;
+        font-size: 16px;
+        letter-spacing: 1px;
+        display: inline-block;
+        padding: 8px 28px;
+        border-radius: 50px;
+        transition: 0.5s;
+        margin: 10px;
+        border: 2px solid #fff;
+        color: #fff;
+    }
 
-#home .btn-get-started:hover {
-    background: #2dc997;
-    border: 2px solid #2dc997;
-}
+        #hero .btn-get-started:hover {
+            background: #2dc997;
+            border: 2px solid #2dc997;
+        }
 
 /*--------------------------------------------------------------
 # Navigation Menu
@@ -244,36 +223,36 @@ h6 {
     list-style: none;
 }
 
-.nav-menu ul {
-    position: absolute;
-    display: none;
-    top: 100%;
-    left: 0;
-    z-index: 99;
-}
+    .nav-menu ul {
+        position: absolute;
+        display: none;
+        top: 100%;
+        left: 0;
+        z-index: 99;
+    }
 
-.nav-menu li {
-    position: relative;
-    white-space: nowrap;
-}
+    .nav-menu li {
+        position: relative;
+        white-space: nowrap;
+    }
 
-.nav-menu > li {
-    float: left;
-}
+    .nav-menu > li {
+        float: left;
+    }
 
-.nav-menu li:hover > ul,
-.nav-menu li.sfHover > ul {
-    display: block;
-}
+    .nav-menu li:hover > ul,
+    .nav-menu li.sfHover > ul {
+        display: block;
+    }
 
-.nav-menu ul ul {
-    top: 0;
-    left: 100%;
-}
+    .nav-menu ul ul {
+        top: 0;
+        left: 100%;
+    }
 
-.nav-menu ul li {
-    min-width: 180px;
-}
+    .nav-menu ul li {
+        min-width: 180px;
+    }
 
 /* Nav Menu Arrows */
 
@@ -281,14 +260,14 @@ h6 {
     padding-right: 30px;
 }
 
-.sf-arrows .sf-with-ul:after {
-    content: "\f107";
-    position: absolute;
-    right: 15px;
-    font-family: FontAwesome;
-    font-style: normal;
-    font-weight: normal;
-}
+    .sf-arrows .sf-with-ul:after {
+        content: "\f107";
+        position: absolute;
+        right: 15px;
+        font-family: FontAwesome;
+        font-style: normal;
+        font-weight: normal;
+    }
 
 .sf-arrows ul .sf-with-ul:after {
     content: "\f105";
@@ -307,8 +286,8 @@ h6 {
     padding: 0 8px 10px 8px;
     text-decoration: none;
     display: inline-block;
-    color: #fff;
-    font-family: "Roboto", sans-serif;
+    color: #000000;
+    font-family: "Poppins", sans-serif;
     font-weight: 400;
     text-transform: uppercase;
     font-size: 13px;
@@ -510,85 +489,85 @@ body.mobile-nav-active {
     padding: 80px 0;
 }
 
-#about .about-container .background {
-    min-height: 300px;
-    background: url(./img/employees-885338_1920-e1565727877609-1500x630.jpg) center top no-repeat;
-    margin-bottom: 10px;
-}
+    #about .about-container .background {
+        min-height: 300px;
+        background: url(../img/about-img.jpg) center top no-repeat;
+        margin-bottom: 10px;
+    }
 
-#about .about-container .content {
-    background: #fff;
-}
+    #about .about-container .content {
+        background: #fff;
+    }
 
-#about .about-container .title {
-    color: #333;
-    font-weight: 700;
-    font-size: 32px;
-}
+    #about .about-container .title {
+        color: #333;
+        font-weight: 700;
+        font-size: 32px;
+    }
 
-#about .about-container p {
-    line-height: 26px;
-}
+    #about .about-container p {
+        line-height: 26px;
+    }
 
-#about .about-container p:last-child {
-    margin-bottom: 0;
-}
+        #about .about-container p:last-child {
+            margin-bottom: 0;
+        }
 
-#about .about-container .icon-box {
-    background: #fff;
-    background-size: cover;
-    padding: 0 0 30px 0;
-}
+    #about .about-container .icon-box {
+        background: #fff;
+        background-size: cover;
+        padding: 0 0 30px 0;
+    }
 
-#about .about-container .icon-box .icon {
-    float: left;
-    background: #fff;
-    width: 64px;
-    height: 64px;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: center;
-    -webkit-justify-content: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: column;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    text-align: center;
-    border-radius: 50%;
-    border: 2px solid #2dc997;
-}
+        #about .about-container .icon-box .icon {
+            float: left;
+            background: #fff;
+            width: 64px;
+            height: 64px;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            text-align: center;
+            border-radius: 50%;
+            border: 2px solid #2dc997;
+        }
 
-#about .about-container .icon-box .icon i {
-    color: #2dc997;
-    font-size: 24px;
-}
+            #about .about-container .icon-box .icon i {
+                color: #2dc997;
+                font-size: 24px;
+            }
 
-#about .about-container .icon-box .title {
-    margin-left: 80px;
-    font-weight: 500;
-    margin-bottom: 5px;
-    font-size: 18px;
-    text-transform: uppercase;
-}
+        #about .about-container .icon-box .title {
+            margin-left: 80px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            font-size: 18px;
+            text-transform: uppercase;
+        }
 
-#about .about-container .icon-box .title a {
-    color: #111;
-}
+            #about .about-container .icon-box .title a {
+                color: #111;
+            }
 
-#about .about-container .icon-box .description {
-    margin-left: 80px;
-    line-height: 24px;
-    font-size: 14px;
-}
+        #about .about-container .icon-box .description {
+            margin-left: 80px;
+            line-height: 24px;
+            font-size: 14px;
+        }
 
 /* Facts Section
 --------------------------------*/
@@ -607,7 +586,7 @@ body.mobile-nav-active {
     #facts .counters p {
         padding: 0;
         margin: 0 0 20px 0;
-        font-family: "Roboto", sans-serif;
+        font-family: "Poppins", sans-serif;
         font-size: 14px;
     }
 
@@ -718,7 +697,7 @@ body.mobile-nav-active {
     }
 
     #call-to-action .cta-btn {
-        font-family: "Roboto", sans-serif;
+        font-family: "Poppins", sans-serif;
         text-transform: uppercase;
         font-weight: 500;
         font-size: 16px;
@@ -831,20 +810,57 @@ body.mobile-nav-active {
             top: -30px;
         }
 
-/***************************************
-doctors section
-***************************************/
-.img-thumbnail {
-    border-radius: 0px;
+/* Team Section
+--------------------------------*/
+
+#team {
+    background: #fff;
+    padding: 80px 0 60px 0;
 }
 
-.img-thumbnail h3 {
-    padding-bottom: 5px;
-}
-
-.img-thumbnail p {
-    padding-bottom: 10px;
+    #team .member {
+        text-align: center;
+        margin-bottom: 20px;
     }
+
+        #team .member .pic {
+            margin-bottom: 15px;
+            overflow: hidden;
+            height: 260px;
+        }
+
+            #team .member .pic img {
+                max-width: 100%;
+            }
+
+        #team .member h4 {
+            font-weight: 700;
+            margin-bottom: 2px;
+            font-size: 18px;
+        }
+
+        #team .member span {
+            font-style: italic;
+            display: block;
+            font-size: 13px;
+        }
+
+        #team .member .social {
+            margin-top: 15px;
+        }
+
+            #team .member .social a {
+                color: #b3b3b3;
+            }
+
+                #team .member .social a:hover {
+                    color: #2dc997;
+                }
+
+            #team .member .social i {
+                font-size: 18px;
+                margin: 0 2px;
+            }
 
 /* Contact Section
 --------------------------------*/
@@ -965,18 +981,21 @@ doctors section
     padding: 30px 0;
     color: #fff;
     font-size: 14px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 
-#footer .copyright {
-    text-align: center;
-}
+    #footer .copyright {
+        text-align: center;
+    }
 
-#footer .credits {
-    padding-top: 10px;
-    text-align: center;
-    font-size: 13px;
-    color: #ccc;
-}
+    #footer .credits {
+        padding-top: 10px;
+        text-align: center;
+        font-size: 13px;
+        color: #ccc;
+    }
 
 @media (min-width: 769px) {
     #call-to-action .cta-btn-container {
@@ -996,7 +1015,7 @@ doctors section
 }
 
 @media (min-width: 1024px) {
-    #home {
+    #hero {
         background-attachment: fixed;
     }
 }
@@ -1020,12 +1039,12 @@ doctors section
         max-height: 40px;
     }
 
-    #home h1 {
+    #hero h1 {
         font-size: 28px;
         line-height: 36px;
     }
 
-    #home h2 {
+    #hero h2 {
         font-size: 18px;
         line-height: 24px;
         margin-bottom: 30px;
@@ -1042,38 +1061,16 @@ doctors section
     #about .about-container .title {
         padding-top: 15px;
     }
-
-}
-#headerDoctor {
-    background-color: #343b40;
-    padding: 30px 0;
-    height: 92px;
-    transition: all 0.5s;
-    z-index: 997;
-}
-#headerDoctor #logo h1 {
-    font-size: 36px;
-    margin: 0;
-    line-height: 1;
-    font-family: "Roboto", sans-serif;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
 }
 
-#headerDoctor #logo h1 a,
-#headerDoctor #logo h1 a:hover {
-    color: #fff;
-}
-
-#headerDoctor #logo img {
-    padding: 0;
+#profileSection h1, h2, h3, h4, h5, p {
     margin: 0;
 }
 
-#headerDoctor.header-fixed {
-    background: rgba(52, 59, 64, 0.9);
-    padding: 20px 0;
-    height: 72px;
-    transition: all 0.5s;
+#profileSection img {
+    max-width: 150px;
+}
+
+.table th, .table td {
+    vertical-align: middle;
 }

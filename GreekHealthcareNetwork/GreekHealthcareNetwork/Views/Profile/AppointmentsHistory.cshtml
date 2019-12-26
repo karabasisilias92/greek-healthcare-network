@@ -1,0 +1,81 @@
+﻿
+@{
+    ViewBag.Title = "Appointments History";
+}
+
+@section cssScripts{
+    <link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
+}
+
+<main id="main">
+    <div>
+    </div>
+    <div class="col-8 offset-2 mt-5">
+        <div class="page-header">
+            <h1>
+                Appointments History
+            </h1>
+        </div>
+        <!-- Search bar -->
+        <div class="mt-4">
+            <form class="row">
+                <div class="col">
+                    <input type="text" class="form-control" id="SearchName" placeholder="Name">
+                </div>
+                <div class="col">
+                    <select class="custom-select" id="SearchSpecialty">
+                        <option selected>Specialty</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <input type="date" class="form-control" id="SearchDate" placeholder="DD/MM/YYYY">
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+        <!-- Appointments -->
+        <div>
+            <table class="table mt-4">
+                <thead>
+                <th scope="col"></th>
+                <th scope="col">Doctor</th>
+                <th scope="col">Specialty</th>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><img src="https://via.placeholder.com/20" class="rounded-circle w-100 h-100" alt=""></td>
+                        <td>Michael Johanson</td>
+                        <td>Oncologist</td>
+                        <td>12/12/2019</td>
+                        <td>10:00 - 10:30</td>
+                        <td>Completed</td>
+                        <td>
+                            <button class="btn btn-light">View</button>
+                            <button class="btn btn-danger">Cancel</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><img src="https://via.placeholder.com/20" class="rounded-circle w-100 h-100" alt=""></td>
+                        <td>Michael Johanson</td>
+                        <td>Oncologist</td>
+                        <td>12/12/2019</td>
+                        <td>10:00 - 10:30</td>
+                        <td>Completed</td>
+                        <td>
+                            <button class="btn btn-light">View</button>
+                            <button class="btn btn-danger">Cancel</button>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+</main>
+
+

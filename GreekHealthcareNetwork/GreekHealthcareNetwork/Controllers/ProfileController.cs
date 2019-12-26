@@ -12,7 +12,12 @@ namespace GreekHealthcareNetwork.Controllers
         // GET: Profile
         public ActionResult Index()
         {
-            var userId = User.Identity.GetUserId();
+            //var userId = User.Identity.GetUserId();
+            return View();
+        }
+
+        public ActionResult AppointmentsHistory()
+        {
             return View();
         }
     }
