@@ -66,27 +66,85 @@ namespace GreekHealthcareNetwork.Migrations
                 }
 
             }
-            if (context.Doctors.Count() == 0)
+            if (context.Doctors.Count() == 1)
             {
                 context.DoctorPlans.Add(new DoctorPlan()
                 {
-                    MedicalSpecialty = MedicalSpecialty.Allergists,
-                    Fee = 50
+                    MedicalSpecialty = MedicalSpecialty.Cardiologists,
+                    Fee = 100
+                });
+                context.DoctorPlans.Add(new DoctorPlan()
+                {
+                    MedicalSpecialty = MedicalSpecialty.Pathologists,
+                    Fee = 60
                 });
                 var result = userManager.Create(new ApplicationUser
                 {
-                    UserName = "Doctor1",
-                    Email = "doctor1@ghn.gr",
-                    FirstName = "Hlias",
-                    LastName = "Karabasis",
-                    PhoneNumber = "+30 6924771233",
-                    DoB = new DateTime(1992, 1, 24).Date,
-                    AMKA = 24019201979
+                    UserName = "doctor2@ghn.gr",
+                    Email = "doctor2@ghn.gr",
+                    FirstName = "Jessica",
+                    LastName = "Wally",
+                    PhoneNumber = "+30 6946540329",
+                    DoB = new DateTime(1992, 1, 20).Date,
+                    AMKA = 24019201978,
+                    ProfilePicture = "doctor1.jpg"
                 }, "!Doctor123");
 
                 if (result.Succeeded)
                 {
-                    var u = userManager.FindByName("Doctor1");
+                    var u = userManager.FindByName("doctor2@ghn.gr");
+                    userManager.AddToRole(u.Id, "Doctor");
+                    context.Doctors.Add(new Doctor()
+                    {
+                        UserId = u.Id,
+                        MedicalSpecialty = MedicalSpecialty.Pathologists,
+                        OfficeAddress = "Arx. Makariou 14",
+                        PaypalAccount = "456878900785634",
+                        DoctorPlanId = context.DoctorPlans.SingleOrDefault(i => i.MedicalSpecialty == MedicalSpecialty.Pathologists).Id
+                    });
+                }
+
+                result = userManager.Create(new ApplicationUser
+                {
+                    UserName = "doctor3@ghn.gr",
+                    Email = "doctor3@ghn.gr",
+                    FirstName = "Iai",
+                    LastName = "Donas",
+                    PhoneNumber = "+30 6946540329",
+                    DoB = new DateTime(1992, 1, 20).Date,
+                    AMKA = 24019201978,
+                    ProfilePicture = "doctor2.jpg"
+                }, "!Doctor123");
+
+                if (result.Succeeded)
+                {
+                    var u = userManager.FindByName("doctor3@ghn.gr");
+                    userManager.AddToRole(u.Id, "Doctor");
+                    context.Doctors.Add(new Doctor()
+                    {
+                        UserId = u.Id,
+                        MedicalSpecialty = MedicalSpecialty.Cardiologists,
+                        OfficeAddress = "Arx. Makariou 14",
+                        PaypalAccount = "456878900785634",
+                        DoctorPlanId = context.DoctorPlans.SingleOrDefault(i => i.MedicalSpecialty == MedicalSpecialty.Cardiologists).Id
+                    });
+                }
+
+                result = userManager.Create(new ApplicationUser
+                {
+                    UserName = "doctor4@ghn.gr",
+                    Email = "doctor4@ghn.gr",
+                    FirstName = "Amanda",
+                    LastName = "Denyl",
+                    PhoneNumber = "+30 6946540329",
+                    DoB = new DateTime(1992, 1, 20).Date,
+                    AMKA = 24019201978,
+                    ProfilePicture = "doctor3.jpg"
+                }, "!Doctor123");
+
+                if (result.Succeeded)
+                {
+                    var u = userManager.FindByName("doctor4@ghn.gr");
                     userManager.AddToRole(u.Id, "Doctor");
                     context.Doctors.Add(new Doctor()
                     {
@@ -95,10 +153,33 @@ namespace GreekHealthcareNetwork.Migrations
                         OfficeAddress = "Arx. Makariou 14",
                         PaypalAccount = "456878900785634",
                         DoctorPlanId = context.DoctorPlans.SingleOrDefault(i => i.MedicalSpecialty == MedicalSpecialty.Allergists).Id
-
                     });
+                }
 
+                result = userManager.Create(new ApplicationUser
+                {
+                    UserName = "doctor5@ghn.gr",
+                    Email = "doctor5@ghn.gr",
+                    FirstName = "Jason",
+                    LastName = "Davis",
+                    PhoneNumber = "+30 6946540329",
+                    DoB = new DateTime(1992, 1, 20).Date,
+                    AMKA = 24019201978,
+                    ProfilePicture = "doctor4.jpg"
+                }, "!Doctor123");
 
+                if (result.Succeeded)
+                {
+                    var u = userManager.FindByName("doctor5@ghn.gr");
+                    userManager.AddToRole(u.Id, "Doctor");
+                    context.Doctors.Add(new Doctor()
+                    {
+                        UserId = u.Id,
+                        MedicalSpecialty = MedicalSpecialty.Pathologists,
+                        OfficeAddress = "Arx. Makariou 14",
+                        PaypalAccount = "456878900785634",
+                        DoctorPlanId = context.DoctorPlans.SingleOrDefault(i => i.MedicalSpecialty == MedicalSpecialty.Pathologists).Id
+                    });
                 }
             }
             //

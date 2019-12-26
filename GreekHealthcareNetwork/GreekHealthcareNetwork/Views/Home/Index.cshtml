@@ -1,4 +1,5 @@
-﻿@{
+﻿@model GreekHealthcareNetwork.Models.DoctorSearchViewModel
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -157,61 +158,11 @@
                     <h3 class="section-title">Meet Our Doctors!</h3>
                     <p class="section-description">Here you can find some of the most highly qualified doctors across a wide range of medical specialties</p>
                 </div>
-                <div class="col-md-3 col-sm-3 col-xs-6">
-                    <div class="img-thumbnail">
-                        <img src="@Url.Content("~/Content/img/Doctors/doctor1.jpg")" alt="doctor1">
-                        <div>
-                            <h3>Jessica Wally</h3>
-                            <p>Doctor</p>
-                            <ul class="list-inline">
-                                <li class="list-inline-item"><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                <li class="list-inline-item"><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li class="list-inline-item"><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
+                <div class="col-12">
+                    @Html.Partial("_SearchDoctorsPartial")
                 </div>
-                <div class="col-md-3 col-sm-3 col-xs-6">
-                    <div class="img-thumbnail">
-                        <img src="@Url.Content("~/Content/img/Doctors/doctor2.jpg")" alt="doctor2">
-                        <div>
-                            <h3>Iai Donas</h3>
-                            <p>Doctor</p>
-                            <ul class="list-inline">
-                                <li class="list-inline-item"><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                <li class="list-inline-item"><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li class="list-inline-item"><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-3 col-xs-6">
-                    <div class="img-thumbnail">
-                        <img src="@Url.Content("~/Content/img/Doctors/doctor3.jpg")" alt="doctor3">
-                        <div>
-                            <h3>Amanda Denyl</h3>
-                            <p>Doctor</p>
-                            <ul class="list-inline">
-                                <li class="list-inline-item"><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                <li class="list-inline-item"><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li class="list-inline-item"><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-3 col-xs-6">
-                    <div class="img-thumbnail">
-                        <img src="@Url.Content("~/Content/img/Doctors/doctor4.jpg")" alt="doctor4">
-                        <div>
-                            <h3>Jason Davis</h3>
-                            <p>Doctor</p>
-                            <ul class="list-inline">
-                                <li class="list-inline-item"><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                <li class="list-inline-item"><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li class="list-inline-item"><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
+                <div id="doctorsList" class="row">
+                    
                 </div>
             </div>
         </div>
@@ -291,3 +242,35 @@
     </section><!-- #contact -->
 
 </main>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            function ListDoctors(firstName, lastName, specialty) {
+                $.ajax({
+                    dataType: 'json',
+                    type: 'get',
+                    url: '/api/SearchDoctors/SearchResults/' + firstName + '/' +lastName + '/' + specialty,
+                    success: function (data) {
+                        $('#doctorsList').empty();
+                        data.forEach(function (doctor) {
+                            $('#doctorsList').append('<div class="col-md-3 col-sm-6 col-xs-12"><div class="img-thumbnail">' + 
+                                '<img src="' + @Url.Content("~/Content/img/Doctors/") + doctor.User.ProfilePicture + '" alt="' + doctor.User.ProfilePicture + '">' +
+                                '<div><h3>' + doctor.User.FirstName + ' ' + doctor.User.LastName + '</h3>' +
+                                '<p>' + doctor.MedicalSpecialty + '</p></div></div></div>');
+                        });
+                    },
+                    error: function(error) {
+                        $("#doctorsList").append('<p> Something went wrong. Please try again later. </p>')
+                    }
+                })
+            }
+            ListDoctors("","",-1);
+            $('#searchDoctors').on('submit', function (e) {
+                e.preventDefault();
+                ListDoctors(e.target[1].value, e.target[2].value, e.target[3].value);
+            })
+            //getArtistByName(e);
+        })
+    </script>
+}
