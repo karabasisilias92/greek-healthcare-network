@@ -187,6 +187,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InsuredsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
     <Compile Include="Controllers\SearchDoctorsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -271,6 +272,7 @@
     <Content Include="Content\img\favicon.png" />
     <Content Include="Content\img\Healthcare-Background-Pics.jpg" />
     <Content Include="Content\insuredsCSS.css" />
+    <Content Include="Content\TestPlaton.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -442,6 +444,8 @@
     <Content Include="Views\Shared\_VisitorNavbarPartial.cshtml" />
     <Content Include="Views\Shared\_InsuredNavBarPartial.cshtml" />
     <Content Include="Views\Insureds\Index.cshtml" />
+    <Content Include="Views\Profile\Index.cshtml" />
+    <Content Include="Views\Profile\AppointmentsHistory.cshtml" />
     <Content Include="Views\Shared\_SearchDoctorsPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
