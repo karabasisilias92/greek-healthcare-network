@@ -450,9 +450,10 @@
     <Content Include="Views\Shared\_VisitorNavbarPartial.cshtml" />
     <Content Include="Views\Shared\_InsuredNavBarPartial.cshtml" />
     <Content Include="Views\Insureds\Index.cshtml" />
-    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\Profile.cshtml" />
     <Content Include="Views\User\AppointmentsHistory.cshtml" />
     <Content Include="Views\Shared\_SearchDoctorsPartial.cshtml" />
+    <Content Include="Views\Doctors\Appointments.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
