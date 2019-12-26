@@ -228,6 +228,10 @@
     <Compile Include="Migrations\201912241641247_Update Message and VisitorMessage Entities.Designer.cs">
       <DependentUpon>201912241641247_Update Message and VisitorMessage Entities.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912261753574_Fixing ProfilePicture and IsActive attributes.cs" />
+    <Compile Include="Migrations\201912261753574_Fixing ProfilePicture and IsActive attributes.Designer.cs">
+      <DependentUpon>201912261753574_Fixing ProfilePicture and IsActive attributes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -264,6 +268,8 @@
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\img\apple-touch-icon.png" />
+    <Content Include="Content\img\defaultUserImage.png" />
+    <Content Include="Content\img\Doctors\defaultUserImage.png" />
     <Content Include="Content\img\Doctors\doctor1.jpg" />
     <Content Include="Content\img\Doctors\doctor2.jpg" />
     <Content Include="Content\img\Doctors\doctor3.jpg" />
@@ -489,6 +495,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912241641247_Update Message and VisitorMessage Entities.resx">
       <DependentUpon>201912241641247_Update Message and VisitorMessage Entities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912261753574_Fixing ProfilePicture and IsActive attributes.resx">
+      <DependentUpon>201912261753574_Fixing ProfilePicture and IsActive attributes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

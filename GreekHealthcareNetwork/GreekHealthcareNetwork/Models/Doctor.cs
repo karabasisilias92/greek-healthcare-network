@@ -1,5 +1,6 @@
 ﻿using GreekHealthcareNetwork.Models.Enums;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,6 +19,7 @@ namespace GreekHealthcareNetwork.Models
         public virtual ApplicationUser User { get; set; }
 
         [Required]
+        [JsonConverter(typeof(StringEnumConverter))]
         public MedicalSpecialty MedicalSpecialty { get; set; }
 
         [Required]
