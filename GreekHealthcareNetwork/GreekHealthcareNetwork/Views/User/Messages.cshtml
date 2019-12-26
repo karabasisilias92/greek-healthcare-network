@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Appointments";
+    ViewBag.Title = "Messages";
 }
 
 @section cssScripts{
@@ -12,53 +12,39 @@
     <div class="col-8 offset-2 mt-5">
         <div class="page-header">
             <h1>
-                Appointments
+                Messages
             </h1>
-        </div>
-        <!-- Search bar -->
-        <div class="mt-4">
-            <form class="row">
-                <div class="col">
-                    <input type="text" class="form-control" id="SearchName" placeholder="Name">
-                </div>
-                <div class="col">
-                    <input type="date" class="form-control" id="SearchDate" placeholder="DD/MM/YYYY">
-                </div>
-                <button type="submit" class="btn btn-primary">Search</button>
-            </form>
         </div>
         <!-- Appointments -->
         <div>
             <table class="table mt-4">
                 <thead>
                 <th scope="col"></th>
-                <th scope="col">Patient</th>
+                <th scope="col">From/To</th>
+                <th scope="col">Status</th>
                 <th scope="col">Date</th>
                 <th scope="col">Time</th>
-                <th scope="col">AppointmentNo</th>
                 <th scope="col">Actions</th>
                 </thead>
                 <tbody>
                     <tr>
                         <td><img src="https://via.placeholder.com/20" class="rounded-circle w-100 h-100" alt=""></td>
                         <td>Michael Johanson</td>
+                        <td>Received</td>
                         <td>12/12/2019</td>
                         <td>10:00 - 10:30</td>
-                        <td>1</td>
                         <td>
                             <button class="btn btn-light">View</button>
-                            <button class="btn btn-danger">Cancel</button>
                         </td>
                     </tr>
                     <tr>
                         <td><img src="https://via.placeholder.com/20" class="rounded-circle w-100 h-100" alt=""></td>
                         <td>Michael Johanson</td>
+                        <td>Sent</td>
                         <td>12/12/2019</td>
                         <td>10:00 - 10:30</td>
-                        <td>2</td>
                         <td>
                             <button class="btn btn-light">View</button>
-                            <button class="btn btn-danger">Cancel</button>
                         </td>
                     </tr>
 
@@ -68,6 +54,5 @@
     </div>
     </div>
 </main>
-
 
 
