@@ -7,7 +7,7 @@ using Microsoft.AspNet.Identity;
 
 namespace GreekHealthcareNetwork.Controllers
 {
-    public class ProfileController : Controller
+    public class UserController : Controller
     {
         // GET: Profile
         public ActionResult Index()

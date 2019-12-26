@@ -187,7 +187,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InsuredsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SearchDoctorsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -444,8 +444,8 @@
     <Content Include="Views\Shared\_VisitorNavbarPartial.cshtml" />
     <Content Include="Views\Shared\_InsuredNavBarPartial.cshtml" />
     <Content Include="Views\Insureds\Index.cshtml" />
-    <Content Include="Views\Profile\Index.cshtml" />
-    <Content Include="Views\Profile\AppointmentsHistory.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\AppointmentsHistory.cshtml" />
     <Content Include="Views\Shared\_SearchDoctorsPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
