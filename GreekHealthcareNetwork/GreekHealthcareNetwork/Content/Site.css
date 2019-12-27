@@ -10,11 +10,11 @@
 --------------------------------------------------------------*/
 
 body {
-    font-size: 14px;
     line-height: 1.42857143;
     background-color: #fff;
     color: #666666;
     font-family: "Roboto", sans-serif;
+    font-size: 14px;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 

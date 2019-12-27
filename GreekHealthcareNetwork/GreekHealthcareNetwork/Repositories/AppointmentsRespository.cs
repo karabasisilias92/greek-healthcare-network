@@ -32,10 +32,14 @@ namespace GreekHealthcareNetwork.Repositories
                 {
                     users = db.Users;
                 }
-                appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.DoctorId) /* PREPEI NA GRAPSW SINTHIKI GIA INSUREDID */).Include("User")
+                appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.DoctorId) /* PREPEI NA GRAPSW SINTHIKI GIA INSUREDID */)
                                                                                                              .Include("Doctor")
+                                                                                                             .Include("Doctor.WorkingHours")
                                                                                                              .Include("Doctor.User")
+                                                                                                             .Include("Doctor.User.Messages")
                                                                                                              .Include("Insured")
+                                                                                                             .Include("Insured.User")
+                                                                                                             .Include("Insured.User.Messages")
                                                                                                              .ToList();
 
                 if (doctorsSpecialty >= 0 && doctorsSpecialty < Enum.GetNames(typeof(MedicalSpecialty)).Length)

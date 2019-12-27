@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GreekHealthcareNetwork.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,9 +14,14 @@ namespace GreekHealthcareNetwork.Controllers
         {
             return View();
         }
-        public ActionResult BoockAppointment()
+        public ActionResult BoockAppointment(SearchViewModel searchViewModel)
         {
-            return View();
+            searchViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
+            for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
+            {
+                searchViewModel.MedicalSpecialties.Add((MedicalSpecialty)i);
+            }
+            return View(searchViewModel);
         }
     }
 }
