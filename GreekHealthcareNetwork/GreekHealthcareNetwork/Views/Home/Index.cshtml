@@ -1,4 +1,5 @@
 ﻿@model GreekHealthcareNetwork.Models.DoctorSearchViewModel
+@using System.Text
 @{
     ViewBag.Title = "Home Page";
 }
@@ -248,7 +249,12 @@
                                 $('#doctorsList').append('<div class="col-md-3 col-sm-6 col-xs-12"><div class="img-thumbnail">' +
                                     '<img src="@Url.Content("~/Content/img/Doctors/")' + doctor.User.ProfilePicture + '" alt="' + doctor.User.ProfilePicture + '">' +
                                     '<div><h3>' + doctor.User.FirstName + ' ' + doctor.User.LastName + '</h3>' +
-                                    '<span>' + doctor.MedicalSpecialty + '</span> <button class="btn btn-outline-dark btn-sm showDoctorDetails" data-id="' + doctor.UserId + '">View Details</button></div></div></div>');
+                                    '<p>' + doctor.MedicalSpecialty + '</p> <button class="btn btn-outline-dark btn-sm showDoctorDetails" data-id="' + doctor.UserId + '">View Details</button>' +
+                                    @if (Request.IsAuthenticated && User.IsInRole("Insured")) {
+                                       @(new HtmlString("'<button class=\"btn btn-outline-dark btn-sm\">Message</button><button class=\"btn btn-outline-dark btn-sm\">Book Appointment</button></div></div></div>'"));
+                                    }else {
+                                       @(new HtmlString("'</div></div></div>'"));
+                                    });
                             });
                         }
                         $('.showDoctorDetails').click(function (e) {

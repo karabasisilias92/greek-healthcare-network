@@ -25,7 +25,7 @@ jQuery(document).ready(function ($) {
     animation: {
       opacity: 'show'
     },
-    delay: 200,
+    delay: 400,
     speed: 400
   });
 

@@ -855,8 +855,7 @@ doctors section
     margin-bottom: 10px;
 }
 
-.img-thumbnail span {
-    padding-bottom: 10px;
+.img-thumbnail p {
     margin: 0 30px 10px 0;
     font-size: 16px;
 }
@@ -880,6 +879,10 @@ doctors section
 
 #doctorDetails th {
     min-width: 160px;
+}
+
+#doctorsList .img-thumbnail button {
+    margin: 5px 20px 10px 0px;
 }
 
 /* Contact Section
