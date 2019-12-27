@@ -15,10 +15,27 @@ namespace GreekHealthcareNetwork.Controllers
         private readonly AppointmentsRespository _appointments = new AppointmentsRespository();
 
         [HttpGet]
-        [Route("api/Search/SearchResults")]
-        public IHttpActionResult SearchResults(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty)
+        [Route("api/Search/SearchDoctorResults")]
+        public IHttpActionResult SearchDoctorResults(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty)
         {
-            return Ok(_doctors.GetFilteredDoctors(doctorsFirstName, doctorsLastName, doctorsSpecialty));
+            var doctors = _doctors.GetFilteredDoctors(doctorsFirstName, doctorsLastName, doctorsSpecialty);
+            if (doctors == null)
+            {
+                return NotFound();
+            }
+            return Ok(doctors);
+        }
+
+        [HttpGet]
+        [Route("api/Search/SearchDoctorById/{doctorId}")]
+        public IHttpActionResult SearchDoctorById(string doctorId)
+        {
+            var doctor = _doctors.GetDoctorById(doctorId);
+            if(doctor == null)
+            {
+                return NotFound();
+            }
+            return Ok(doctor);
         }
 
         [HttpGet]

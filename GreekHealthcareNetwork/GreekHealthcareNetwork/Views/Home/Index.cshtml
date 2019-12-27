@@ -152,22 +152,8 @@
     <!--==========================
       Doctors Section
     ============================-->
-    <section id="doctors">
-        <div class="container">
-            <div class="row">
-                <div class="section-header col-md-12">
-                    <h3 class="section-title">Meet Our Doctors!</h3>
-                    <p class="section-description">Here you can find some of the most highly qualified doctors across a wide range of medical specialties</p>
-                </div>
-                <div class="col-12">
-                    @Html.Partial("_SearchPartial")
-                </div>
-                <div id="doctorsList" class="row col-md-12">
-                    
-                </div>
-            </div>
-        </div>
-    </section><!-- #doctors -->
+    @Html.Partial("_DoctorsListPartial")
+    <!-- #doctors -->
     <!--==========================
       Contact Section
     ============================-->
@@ -243,41 +229,3 @@
     </section><!-- #contact -->
 
 </main>
-
-@section scripts {
-    <script>
-        $(document).ready(function () {
-            function ListDoctors(firstName, lastName, specialty) {
-                $.ajax({
-                    dataType: 'json',
-                    type: 'get',
-                    url: '/api/Search/SearchResults?doctorsFirstName=' + firstName + '&doctorsLastName=' +lastName + '&doctorsSpecialty=' + specialty,
-                    success: function (data) {
-                        $('#doctorsList').empty();
-                        if (data.length == 0) {
-                            $("#doctorsList").append('<p> There are no doctors matching these criteria. </p>')
-                        }
-                        else {
-                            data.forEach(function (doctor) {
-                            $('#doctorsList').append('<div class="col-md-3 col-sm-6 col-xs-12"><div class="img-thumbnail">' + 
-                                '<img src="@Url.Content("~/Content/img/Doctors/")' + doctor.User.ProfilePicture + '" alt="' + doctor.User.ProfilePicture + '">' +
-                                '<div><h3>' + doctor.User.FirstName + ' ' + doctor.User.LastName + '</h3>' +
-                                '<p>' + doctor.MedicalSpecialty + '</p></div></div></div>');
-                            });
-                        }
-                    },
-                    error: function (error) {
-                        $('#doctorsList').empty();
-                        $("#doctorsList").append('<p> Something went wrong. Please try again later. </p>')
-                    }
-                })
-            }
-            ListDoctors('','',-1);
-            $('#searchDoctors').on('submit', function (e) {
-                e.preventDefault();
-                ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value);
-            })
-            //getArtistByName(e);
-        })
-    </script>
-}

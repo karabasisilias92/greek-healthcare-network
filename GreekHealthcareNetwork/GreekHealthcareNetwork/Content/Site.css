@@ -9,7 +9,6 @@
 # General
 --------------------------------------------------------------*/
 
-@import url('Site.css');
 body {
     font-size: 14px;
     line-height: 1.42857143;
@@ -857,8 +856,7 @@ doctors section
 }
 
 .img-thumbnail p {
-    padding-bottom: 10px;
-    margin: 0 0 10px;
+    margin: 0 30px 10px 0;
     font-size: 16px;
 }
 
@@ -877,6 +875,14 @@ doctors section
 
 .caption {
     padding: 6px;
+}
+
+#doctorDetails th {
+    min-width: 160px;
+}
+
+#doctorsList .img-thumbnail button {
+    margin: 5px 20px 10px 0px;
 }
 
 /* Contact Section
