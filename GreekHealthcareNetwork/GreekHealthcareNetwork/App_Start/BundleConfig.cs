@@ -38,7 +38,6 @@ namespace GreekHealthcareNetwork
                       "~/Content/bootstrap.css",
                       "~/Content/animate.min.css",
                       "~/Content/font-awesome.min.css",
-                      "~/Content/mdb.min.css",
                       "~/Content/site.css"));
         }
     }
