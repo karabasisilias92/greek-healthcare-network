@@ -25,8 +25,10 @@
                 <thead>
                     <tr>
                         <th scope="col"></th>
-                        @*  @if (User.IsInRole("Doctor")) { } *@
+                        @if (User.IsInRole("Doctor"))
+                        { 
                         <th scope="col">Patient</th>
+                        }
                         @*  @if (User.IsInRole("Insured")) { }  *@
                         <th scope="col">Doctor</th>
                         <th scope="col">Specialty</th>
@@ -37,18 +39,6 @@
                     </tr>
                 </thead>
                 <tbody id="appointmentsList">
-
-                    @*<tr>
-                        <td><img src="https://via.placeholder.com/20" class="rounded-circle w-100 h-100" alt=""></td>
-                        <td>Michael Johanson</td>
-                        <td>Oncologist</td>
-                        <td>12/12/2019</td>
-                        <td>10:00 - 10:30</td>
-                        <td>Completed</td>
-                        <td>
-                            <button class="btn btn-light">View</button>
-                            <button class="btn btn-danger">Cancel</button>
-                        </td>*@
 
                 </tbody>
             </table>

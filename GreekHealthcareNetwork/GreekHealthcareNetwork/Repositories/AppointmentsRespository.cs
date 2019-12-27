@@ -47,8 +47,12 @@ namespace GreekHealthcareNetwork.Repositories
                     appointments = appointments.Where(appointment => (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty).ToList();
                 }
 
-                //sINTHIKI GIA DATE DIAFORO TOY 0001-01-01
+                var appDay = appointmentDay.Date.ToString("yyyy-MM-dd");
 
+                if (appDay != "0001-01-01")
+                {
+                    appointments = appointments.Where(appointment => appointment.AppointmentDate.Date.ToString("yyyy-MM-dd") == appointmentDay.Date.ToString("yyyy-MM-dd")).ToList();
+                }
             }
 
             return appointments;
