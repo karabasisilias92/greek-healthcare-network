@@ -1,7 +1,12 @@
-﻿
+﻿@model GreekHealthcareNetwork.Models.SearchViewModel
 @{
     ViewBag.Title = "BoockAppointment";
 }
 
 <h2>BoockAppointment</h2>
+<div>
+    @{
+        Html.RenderPartial("_DoctorsListPartial");
+    }
+</div>
 
