@@ -9,7 +9,7 @@ namespace GreekHealthcareNetwork.Repositories
 {
     public class AppointmentsRespository
     {
-        public IEnumerable<Appointment> GetDoctorFilteredAppointments(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty, DateTime appointmentDay)
+        public IEnumerable<Appointment> GetDoctorFilteredAppointments(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty, DateTime appointmentDay, string userId)
         {
             IEnumerable<Appointment> appointments;
             IEnumerable<ApplicationUser> users;
@@ -32,7 +32,7 @@ namespace GreekHealthcareNetwork.Repositories
                 {
                     users = db.Users;
                 }
-                appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.DoctorId) /* PREPEI NA GRAPSW SINTHIKI GIA INSUREDID */)
+                appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.DoctorId) && appointment.InsuredId == userId)
                                                                                                              .Include("Doctor")
                                                                                                              .Include("Doctor.WorkingHours")
                                                                                                              .Include("Doctor.User")

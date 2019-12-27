@@ -1,6 +1,8 @@
 ﻿@model GreekHealthcareNetwork.Models.SearchViewModel
+@using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Appointments History";
+    var CurrentUserId = User.Identity.GetUserId();
 }
 
 @section cssScripts{
@@ -23,15 +25,11 @@
                 <thead>
                     <tr>
                         <th scope="col"></th>
-                        @*  @if (User.IsInRole("Doctor"))  *@
-                        {
+                        @*  @if (User.IsInRole("Doctor")) { } *@
                         <th scope="col">Patient</th>
-                        }
-                        @*  @if (User.IsInRole("Insured"))  *@
-                        {
+                        @*  @if (User.IsInRole("Insured")) { }  *@
                         <th scope="col">Doctor</th>
                         <th scope="col">Specialty</th>
-                        }
                         <th scope="col">Date</th>
                         <th scope="col">Time</th>
                         <th scope="col">Status</th>
@@ -40,8 +38,7 @@
                 </thead>
                 <tbody id="appointmentsList">
 
-                    @*
-                    <tr>
+                    @*<tr>
                         <td><img src="https://via.placeholder.com/20" class="rounded-circle w-100 h-100" alt=""></td>
                         <td>Michael Johanson</td>
                         <td>Oncologist</td>
@@ -51,21 +48,7 @@
                         <td>
                             <button class="btn btn-light">View</button>
                             <button class="btn btn-danger">Cancel</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><img src="https://via.placeholder.com/20" class="rounded-circle w-100 h-100" alt=""></td>
-                        <td>Michael Johanson</td>
-                        <td>Oncologist</td>
-                        <td>12/12/2019</td>
-                        <td>10:00 - 10:30</td>
-                        <td>Completed</td>
-                        <td>
-                            <button class="btn btn-light">View</button>
-                            <button class="btn btn-danger">Cancel</button>
-                        </td>
-                    </tr>
-                        *@
+                        </td>*@
 
                 </tbody>
             </table>
@@ -76,44 +59,57 @@
 @section AppointmentScripts{
 <script>
         $(document).ready(function () {
-            function ListAppointments(firstName, lastName, specialty, appointmentDate) {
+            function ListAppointments(firstName, lastName, specialty, appointmentDate, userId) {
                 if (appointmentDate == "") {
                     appointmentDate = "0001-01-01";
                 }
                 $.ajax({
                     dataType: 'json',
                     type: 'get',
-                    url: 'api/Search/api/Search/InsuredAppointmentsSearchResults?doctorsFirstName=' + firstName + '&doctorsLastName=' + lastName + '&doctorsSpecialty=' + specialty + '&appointmentDay=' + appointmentDate,
+                    url: '/api/Search/InsuredAppointmentsSearchResults?doctorsFirstName=' + firstName +
+                                                                        '&doctorsLastName=' + lastName +
+                                                                        '&doctorsSpecialty=' + specialty +
+                                                                        '&appointmentDay=' + appointmentDate +
+                                                                        '&userId=' + userId,
                     success: function (data) {
                         $('#appointmentsList').empty();
-                        if (data.length = 0) {
-                            $("#appointmentsList").append('<tr><td colspan="7">There are no appointments matching these criteria.</td></tr>')
+                        console.log('St ep1');
+                        console.log(data.length);
+                        if (data.length == 0) {
+                            $("#appointmentsList").append('<tr><td colspan="7">There are no appointments matching these criteria.</td></tr>');
                         }
                         else {
+                            console.log('Step2')
+                            console.log(data.length);
+                            console.log(data)
                             data.forEach(function (appointment) {
+                                console.log('Step3');
                                 const appointmentStart = appointment.AppointmentStartTime.split(":");
                                 const appointmentEnd = appointment.AppointmentEndTime.split(":");
+                                const appointmentDate = appointment.AppointmentDate.split("T");
                                 $('#appointmentsList').append('<tr><td>' +
-                                    '<img src="@Url.Content("~/Content/img/Doctors/")' + appointment.User.ProfilePicture + 'alt="' + appointment.User.ProfilePicture + '"' + 'class="rounded-circle w-100 h-100"></td>' +
-                                    '<td>' + appointment.User.FirstName + ' ' + appointment.User.LastName + '</td>' +
+                                    '<img src="@Url.Content("~/Content/img/Doctors/")' + appointment.Doctor.User.ProfilePicture + '" alt="' + appointment.Doctor.User.ProfilePicture + '"' + 'class="rounded-circle w-25 h-25"></td>' +
+                                    '<td>' + appointment.Doctor.User.FirstName + ' ' + appointment.Doctor.User.LastName + '</td>' +
                                     '<td>' + appointment.Doctor.MedicalSpecialty + '</td>' +
-                                    '<td>' + appointment.AppointmentDate + '</td>' +
+                                    '<td>' + appointmentDate[0] + '</td>' +
                                     '<td>' + appointmentStart[0] + ':' + appointmentStart[1] + '-' + appointmentEnd[0] + ':' + appointmentEnd[1] + '</td>' +
                                     '<td>' + appointment.AppointmentStatus + '</td>' +
-                                    '<td><button class="btn btn-light">View</button><button class="btn btn-danger">Cancel</button></td></tr>')
+                                    '<td><button class="btn btn-light">View</button><button class="btn btn-danger">Cancel</button></td></tr>');
                             });
                         }
                     },
                     error: function (error) {
+                        console.log(error);
                         $('#appointmentsList').empty();
                         $("#appointmentsList").append('<tr><td colspan="7"> Something went wrong. Please try again later. </td></tr>')
                     }
                 })
             }
-            ListAppointments('', '', -1, '0001-01-01');
+            console.log('@CurrentUserId');
+            ListAppointments('', '', -1, '0001-01-01', '@CurrentUserId');
             $('#search').on('submit', function (e) {
                 e.preventDefault();
-                ListAppointments(e.target[0].value, e.target[1].value, e.target[2].value, e.target[3].value);
+                ListAppointments(e.target[0].value, e.target[1].value, e.target[2].value, e.target[3].value, '@CurrentUserId'); // <- na perasw edw to id tou user
             })
         })
 </script>

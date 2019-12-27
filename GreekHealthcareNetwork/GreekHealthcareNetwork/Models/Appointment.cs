@@ -1,4 +1,6 @@
 ﻿using GreekHealthcareNetwork.Models.Enums;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -35,6 +37,7 @@ namespace GreekHealthcareNetwork.Models
         [DataType(DataType.Time)]
         public TimeSpan AppointmentEndTime { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public AppointmentStatus AppointmentStatus { get; set; }
 
         public string InsuredComments { get; set; }
