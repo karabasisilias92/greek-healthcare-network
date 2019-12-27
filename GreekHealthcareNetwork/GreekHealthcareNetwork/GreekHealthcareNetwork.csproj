@@ -458,6 +458,7 @@
     <Content Include="Views\User\Messages.cshtml" />
     <Content Include="Views\Shared\_DoctorsListPartial.cshtml" />
     <Content Include="Views\Shared\_CustomScriptsLayout.cshtml" />
+    <Content Include="Views\Insureds\BoockAppointment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
