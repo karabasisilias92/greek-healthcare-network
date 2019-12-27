@@ -125,26 +125,21 @@
                                     <input class="datepicker form-control" type="text" name="date" id="date">
                                 </div>
                                 <div class="form-group">
-                                    <div class="dropdown">
-                                        <a id="dLabel" role="button" data-toggle="selecttime" data-target="#" href="#">
-                                            SelectTime <span class="caret"></span>
-                                        </a>
-                                        <br>
-
-                                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                            <li>one</li>
-                                            <li>two</li>
-                                            <li>three</li>
-                                            <li>four</li>
-                                            <li>five</li>
-                                            <li>six</li>
-                                            <li>seven</li>
-                                            <li>eight</li>
-                                        </ul>
-                                    </div>
+                                    <form method="post" action="Select">
+                                        <select id="select" name="select" class="form-control">
+                                            <option value="option1">one</option>
+                                            <option value="option2">two</option>
+                                            <option value="option3">three</option>
+                                            <option value="option4">four</option>
+                                            <option value="option5">five</option>
+                                        </select>
+                                    </form>
+                                </div>
+                                <div class="form-group">
+                                    <textarea class="form-control" id='areaforinfo' style="min-width: 100%"></textarea>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-default btn-success" name="submit" value="Submit">Book</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" name="book" value="Submit">Book</button>
                         </div>
                     </div>
                 </div>
