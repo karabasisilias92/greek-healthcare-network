@@ -16,7 +16,7 @@ namespace GreekHealthcareNetwork.Controllers
 
         [HttpGet]
         [Route("api/Search/SearchDoctorResults")]
-        public IHttpActionResult SearchDoctorResults(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty)
+        public IHttpActionResult SearchResults(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty)
         {
             var doctors = _doctors.GetFilteredDoctors(doctorsFirstName, doctorsLastName, doctorsSpecialty);
             if (doctors == null)
@@ -40,7 +40,7 @@ namespace GreekHealthcareNetwork.Controllers
 
         [HttpGet]
         [Route("api/Search/InsuredAppointmentsSearchResults")]
-        public IHttpActionResult InsuredAppointmentsSearchResults(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty, DateTime appointmentDay)
+        public IHttpActionResult SearchResults(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty, DateTime appointmentDay)
         {
             return Ok(_appointments.GetDoctorFilteredAppointments(doctorsFirstName, doctorsLastName, doctorsSpecialty, appointmentDay));
         }
