@@ -9,14 +9,14 @@ namespace GreekHealthcareNetwork.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index(DoctorSearchViewModel doctorSearchViewModel)
+        public ActionResult Index(SearchViewModel searchViewModel)
         {
-            doctorSearchViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
+            searchViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
             for(int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
             {
-                doctorSearchViewModel.MedicalSpecialties.Add((MedicalSpecialty)i);
+                searchViewModel.MedicalSpecialties.Add((MedicalSpecialty)i);
             }
-            return View(doctorSearchViewModel);
+            return View(searchViewModel);
         }
     }
 }

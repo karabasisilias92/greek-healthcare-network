@@ -218,6 +218,8 @@ namespace GreekHealthcareNetwork.Migrations
 
             }
 
+            #region Appointments Seed
+
             if (context.Appointments.Count() == 0)
             {
                 context.Appointments.Add(new Appointment
@@ -276,6 +278,8 @@ namespace GreekHealthcareNetwork.Migrations
                 });
 
             }
+
+            #endregion
         }
     }
 }

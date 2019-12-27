@@ -245,12 +245,13 @@
     <Compile Include="Models\Insured.cs" />
     <Compile Include="Models\InsuredPlan.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\DoctorSearchViewModel.cs" />
+    <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Enums\MessageStatus.cs" />
     <Compile Include="Models\VisitorMessage.cs" />
     <Compile Include="Models\WorkingHours.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\AppointmentsRespository.cs" />
     <Compile Include="Repositories\DoctorsRepository.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -452,12 +453,13 @@
     <Content Include="Views\Insureds\Index.cshtml" />
     <Content Include="Views\User\Profile.cshtml" />
     <Content Include="Views\User\AppointmentsHistory.cshtml" />
-    <Content Include="Views\Shared\_SearchDoctorsPartial.cshtml" />
+    <Content Include="Views\Shared\_SearchPartial.cshtml" />
     <Content Include="Views\Doctors\Appointments.cshtml" />
     <Content Include="Views\User\Messages.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Appointments\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
