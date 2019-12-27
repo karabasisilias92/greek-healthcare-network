@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,16 +15,19 @@ namespace GreekHealthcareNetwork.Models
         public int Id { get; set; }
 
         [Required]
+        [JsonConverter(typeof(StringEnumConverter))]
         public DayOfWeek Day { get; set; }
 
         [Required]
         [Column(TypeName = "time")]
         [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true)]
         public TimeSpan WorkStartTime { get; set; }
 
         [Required]
         [Column(TypeName = "time")]
         [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true)]
         public TimeSpan WorkEndTime { get; set; }
 
         [Required]
@@ -32,6 +37,7 @@ namespace GreekHealthcareNetwork.Models
         public string DoctorId { get; set; }
 
         [ForeignKey("DoctorId")]
+        [JsonIgnore]
         public virtual Doctor Doctor { get; set; }
     }
 }

@@ -46,5 +46,18 @@ namespace GreekHealthcareNetwork.Repositories
 
             return doctors;
         }
+
+        public Doctor GetDoctorById(string doctorId)
+        {
+            Doctor doctor;
+            using (var db = new ApplicationDbContext())
+            {
+                doctor = db.Doctors.Include("User")
+                                   .Include("User.Messages")
+                                   .Include("WorkingHours")
+                                   .SingleOrDefault(d => d.UserId.Equals(doctorId));
+            }
+            return doctor;
+        }
     }
 }

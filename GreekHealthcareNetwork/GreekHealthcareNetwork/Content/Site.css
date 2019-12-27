@@ -856,9 +856,9 @@ doctors section
     margin-bottom: 10px;
 }
 
-.img-thumbnail p {
+.img-thumbnail span {
     padding-bottom: 10px;
-    margin: 0 0 10px;
+    margin: 0 30px 10px 0;
     font-size: 16px;
 }
 
