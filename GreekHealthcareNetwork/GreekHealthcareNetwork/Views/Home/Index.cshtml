@@ -152,7 +152,18 @@
     <!--==========================
       Doctors Section
     ============================-->
-    @Html.Partial("_DoctorsListPartial")
+    <section id="doctors">
+        <div class="container">
+            <div class="row">
+                <div class="section-header col-md-12">
+                    <h3 class="section-title">Meet Our Doctors!</h3>
+                    <p class="section-description">Here you can find some of the most highly qualified doctors across a wide range of medical specialties</p>
+                </div>
+                @Html.Partial("_DoctorsListPartial")
+            </div>
+        </div>
+    </section>
+    
     <!-- #doctors -->
     <!--==========================
       Contact Section
