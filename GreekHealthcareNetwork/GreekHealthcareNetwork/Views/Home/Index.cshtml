@@ -237,7 +237,7 @@
                 $.ajax({
                     dataType: 'json',
                     type: 'get',
-                    url: '/api/Search/SearchDoctorResults?doctorsFirstName=' + firstName + '&doctorsLastName=' +lastName + '&doctorsSpecialty=' + specialty,
+                    url: '/api/Search/SearchDoctorResults?doctorsFirstName=' + firstName + '&doctorsLastName=' + lastName + '&doctorsSpecialty=' + specialty,
                     success: function (data) {
                         $('#doctorsList').empty();
                         if (data.length == 0) {
@@ -245,10 +245,10 @@
                         }
                         else {
                             data.forEach(function (doctor) {
-                            $('#doctorsList').append('<div class="col-md-3 col-sm-6 col-xs-12"><div class="img-thumbnail">' + 
-                                '<img src="@Url.Content("~/Content/img/Doctors/")' + doctor.User.ProfilePicture + '" alt="' + doctor.User.ProfilePicture + '">' +
-                                '<div><h3>' + doctor.User.FirstName + ' ' + doctor.User.LastName + '</h3>' +
-                                '<span>' + doctor.MedicalSpecialty + '</span> <button class="btn btn-outline-dark btn-sm showDoctorDetails" data-id="' + doctor.UserId + '">View Details</button></div></div></div>');
+                                $('#doctorsList').append('<div class="col-md-3 col-sm-6 col-xs-12"><div class="img-thumbnail">' +
+                                    '<img src="@Url.Content("~/Content/img/Doctors/")' + doctor.User.ProfilePicture + '" alt="' + doctor.User.ProfilePicture + '">' +
+                                    '<div><h3>' + doctor.User.FirstName + ' ' + doctor.User.LastName + '</h3>' +
+                                    '<span>' + doctor.MedicalSpecialty + '</span> <button class="btn btn-outline-dark btn-sm showDoctorDetails" data-id="' + doctor.UserId + '">View Details</button></div></div></div>');
                             });
                         }
                         $('.showDoctorDetails').click(function (e) {
@@ -259,7 +259,7 @@
                                 dataType: 'json',
                                 success: function (doctor) {
                                     $('#errorContainer').hide();
-                                    $('#profileSection img').attr('src',"@Url.Content("~/Content/img/Doctors/")"+doctor.User.ProfilePicture);
+                                    $('#profileSection img').attr('src', '@Url.Content("~/Content/img/Doctors/")' + doctor.User.ProfilePicture);
                                     $('#firstName').text(doctor.User.FirstName);
                                     $('#lastName').text(doctor.User.LastName);
                                     $('#medicalSpecialty').text(doctor.MedicalSpecialty);
@@ -305,7 +305,7 @@
                     }
                 })
             }
-            ListDoctors('','',-1);
+            ListDoctors('', '', -1);
             $('#searchDoctors').on('submit', function (e) {
                 e.preventDefault();
                 ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value);
