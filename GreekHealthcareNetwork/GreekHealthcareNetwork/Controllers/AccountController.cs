@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using GreekHealthcareNetwork.Models;
+using System.Collections.Generic;
 
 namespace GreekHealthcareNetwork.Controllers
 {
@@ -55,10 +56,15 @@ namespace GreekHealthcareNetwork.Controllers
         //
         // GET: /Account/Login
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl)
+        public ActionResult Login(string returnUrl, SearchViewModel searchViewModel)
         {
             ViewBag.ReturnUrl = returnUrl;
-            return View();
+            searchViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
+            for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
+            {
+                searchViewModel.MedicalSpecialties.Add((MedicalSpecialty)i);
+            }
+            return View(searchViewModel);
         }
 
         //
@@ -70,12 +76,28 @@ namespace GreekHealthcareNetwork.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                ViewBag.ReturnUrl = returnUrl;
+                SearchViewModel searchViewModel = new SearchViewModel();
+                searchViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
+                for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
+                {
+                    searchViewModel.MedicalSpecialties.Add((MedicalSpecialty)i);
+                }
+                return View(searchViewModel);
             }
-
+            // This is in order to enable login both with email and username
+            ApplicationUser user;
+            using(ApplicationDbContext db = new ApplicationDbContext())
+            {
+                user = db.Users.SingleOrDefault(u => u.Email == model.UserName);
+            }
+            if (user != null)
+            {
+                model.UserName = user.UserName;
+            }
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -87,7 +109,14 @@ namespace GreekHealthcareNetwork.Controllers
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                    ViewBag.ReturnUrl = returnUrl;
+                    SearchViewModel searchViewModel = new SearchViewModel();
+                    searchViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
+                    for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
+                    {
+                        searchViewModel.MedicalSpecialties.Add((MedicalSpecialty)i);
+                    }
+                    return View(searchViewModel);
             }
         }
 

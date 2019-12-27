@@ -1,63 +1,342 @@
-﻿@using GreekHealthcareNetwork.Models
-@model LoginViewModel
+﻿@model GreekHealthcareNetwork.Models.SearchViewModel
+@using GreekHealthcareNetwork.Models
 @{
-    ViewBag.Title = "Log in";
+    ViewBag.Title = "Home Page";
 }
 
-<h2>@ViewBag.Title.</h2>
-<div class="row">
-    <div class="col-md-8">
-        <section id="loginForm">
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <h4>Use a local account to log in.</h4>
-                <hr />
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+<section id="home">
+    <div class="home-container">
+        <h1>Welcome to Greek Healthcare Network!</h1>
+        <h2>We offer you various health insurance plans in the most competitive prices.</h2>
+        <a href="#about" class="btn-get-started">Get Started</a>
+    </div>
+</section>
+
+<main id="main">
+    <!--==========================
+      About Us Section
+    ============================-->
+    <section id="about">
+        <div class="container">
+            <div class="row about-container">
+
+                <div class="col-lg-6 content order-lg-1 order-2">
+                    <h2 class="title">Few Words About Us</h2>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </p>
+
+                    <div class="icon-box wow fadeInUp">
+                        <div class="icon"><i class="fa fa-shopping-bag"></i></div>
+                        <h4 class="title"><a href="">Eiusmod Tempor</a></h4>
+                        <p class="description">Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi</p>
+                    </div>
+
+                    <div class="icon-box wow fadeInUp" data-wow-delay="0.2s">
+                        <div class="icon"><i class="fa fa-photo"></i></div>
+                        <h4 class="title"><a href="">Magni Dolores</a></h4>
+                        <p class="description">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                    </div>
+
+                    <div class="icon-box wow fadeInUp" data-wow-delay="0.4s">
+                        <div class="icon"><i class="fa fa-bar-chart"></i></div>
+                        <h4 class="title"><a href="">Dolor Sitema</a></h4>
+                        <p class="description">Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata</p>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-6 background order-lg-2 order-1 wow fadeInRight"></div>
+            </div>
+
+        </div>
+    </section><!-- #about -->
+    <!--==========================
+      Facts Section
+    ============================-->
+    <section id="facts">
+        <div class="container wow fadeIn">
+            <div class="section-header">
+                <h3 class="section-title">Facts</h3>
+                <p class="section-description">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque</p>
+            </div>
+            <div class="row counters">
+
+                <div class="col-lg-3 col-6 text-center">
+                    <span data-toggle="counter-up">232</span>
+                    <p>Clients</p>
+                </div>
+
+                <div class="col-lg-3 col-6 text-center">
+                    <span data-toggle="counter-up">521</span>
+                    <p>Projects</p>
+                </div>
+
+                <div class="col-lg-3 col-6 text-center">
+                    <span data-toggle="counter-up">1,463</span>
+                    <p>Hours Of Support</p>
+                </div>
+
+                <div class="col-lg-3 col-6 text-center">
+                    <span data-toggle="counter-up">15</span>
+                    <p>Hard Workers</p>
+                </div>
+
+            </div>
+
+        </div>
+    </section><!-- #facts -->
+    <!--==========================
+      Services Section
+    ============================-->
+    <section id="services">
+        <div class="container wow fadeIn">
+            <div class="section-header">
+                <h3 class="section-title">Services</h3>
+                <p class="section-description">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque</p>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="box">
+                        <div class="icon"><a href=""><i class="fa fa-desktop"></i></a></div>
+                        <h4 class="title"><a href="">Lorem Ipsum</a></h4>
+                        <p class="description">Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
+                    <div class="box">
+                        <div class="icon"><a href=""><i class="fa fa-bar-chart"></i></a></div>
+                        <h4 class="title"><a href="">Dolor Sitema</a></h4>
+                        <p class="description">Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(m => m.RememberMe)
-                            @Html.LabelFor(m => m.RememberMe)
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+                    <div class="box">
+                        <div class="icon"><a href=""><i class="fa fa-paper-plane"></i></a></div>
+                        <h4 class="title"><a href="">Sed ut perspiciatis</a></h4>
+                        <p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.2s">
+                    <div class="box">
+                        <div class="icon"><a href=""><i class="fa fa-photo"></i></a></div>
+                        <h4 class="title"><a href="">Magni Dolores</a></h4>
+                        <p class="description">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.4s">
+                    <div class="box">
+                        <div class="icon"><a href=""><i class="fa fa-road"></i></a></div>
+                        <h4 class="title"><a href="">Nemo Enim</a></h4>
+                        <p class="description">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.6s">
+                    <div class="box">
+                        <div class="icon"><a href=""><i class="fa fa-shopping-bag"></i></a></div>
+                        <h4 class="title"><a href="">Eiusmod Tempor</a></h4>
+                        <p class="description">Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section><!-- #services -->
+    <!--==========================
+      Insurance Plans Section
+    ============================-->
+    <section id="insurancePlans">
+        <p> Insurance Plans Section </p>
+    </section><!-- #insurancePlans -->
+    <!--==========================
+      Doctors Section
+    ============================-->
+    <section id="doctors">
+        <div class="container">
+            <div class="row">
+                <div class="section-header col-md-12">
+                    <h3 class="section-title">Meet Our Doctors!</h3>
+                    <p class="section-description">Here you can find some of the most highly qualified doctors across a wide range of medical specialties</p>
+                </div>
+                @Html.Partial("_DoctorsListPartial")
+            </div>
+        </div>
+    </section>
+
+    <!-- #doctors -->
+    <!--==========================
+      Contact Section
+    ============================-->
+    <section id="contact">
+        <div class="container wow fadeInUp">
+            <div class="section-header">
+                <h3 class="section-title">Contact</h3>
+                <p class="section-description">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque</p>
+            </div>
+        </div>
+
+        <div class="container wow fadeInUp mt-5">
+            <div class="row justify-content-center">
+
+                <div class="col-lg-3 col-md-4">
+
+                    <div class="info">
+                        <div>
+                            <i class="fa fa-map-marker"></i>
+                            <p>A108 Adam Street<br>New York, NY 535022</p>
+                        </div>
+
+                        <div>
+                            <i class="fa fa-envelope"></i>
+                            <p>info@example.com</p>
+                        </div>
+
+                        <div>
+                            <i class="fa fa-phone"></i>
+                            <p>+1 5589 55488 55s</p>
                         </div>
                     </div>
+
+                    <div class="social-links">
+                        <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
+                        <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
+                        <a href="#" class="instagram"><i class="fa fa-instagram"></i></a>
+                        <a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a>
+                        <a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a>
+                    </div>
+
                 </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Log in" class="btn btn-default" />
+
+                <div class="col-lg-5 col-md-8">
+                    <div class="form">
+                        <div id="sendmessage">Your message has been sent. Thank you!</div>
+                        <div id="errormessage"></div>
+                        <form action="" method="post" role="form" class="contactForm">
+                            <div class="form-group">
+                                <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
+                                <div class="validation"></div>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
+                                <div class="validation"></div>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
+                                <div class="validation"></div>
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
+                                <div class="validation"></div>
+                            </div>
+                            <div class="text-center"><button type="submit">Send Message</button></div>
+                        </form>
                     </div>
                 </div>
-                <p>
-                    @Html.ActionLink("Register as a new user", "Register")
-                </p>
-                @* Enable this once you have account confirmation enabled for password reset functionality
-                    <p>
-                        @Html.ActionLink("Forgot your password?", "ForgotPassword")
-                    </p>*@
-            }
-        </section>
-    </div>
-    <div class="col-md-4">
-        <section id="socialLoginForm">
-            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-        </section>
+
+            </div>
+
+        </div>
+    </section><!-- #contact -->
+
+</main>
+
+<!--Modal: Login / Register Form-->
+<div class="modal fade" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="modalLRFormLabel" aria-hidden="true">
+    <div class="modal-dialog cascading-modal" role="document">
+        <!--Content-->
+        <div class="modal-content">
+
+            <!--Modal cascading tabs-->
+            <div class="modal-c-tabs">
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs md-tabs tabs-3 light-blue darken-3" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Account/RegisterAsDoctor">
+                            <span>
+                                <i class="fa fa-user-plus mr-1"></i>
+                                <span>Register as Doctor</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Account/RegisterAsClient">
+                            <span>
+                                <i class="fa fa-user-plus mr-1"></i>
+                                <span>Register as Client</span>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Tab panels -->
+                <div class="tab-content">
+                    <!--Panel 7-->
+                    <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
+
+                        <!--Body-->
+                        <div class="modal-body mb-1">
+                            <h4 class="modal-title w-100 font-weight-bold"><i class="fa fa-user mr-1"></i>Login</h4>
+                            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="md-form form-sm mb-5">
+                                    <i class="fa fa-envelope prefix"></i>
+                                    <input type="text" id="UserName" name="UserName" class="form-control form-control-sm validate" data-val="true" data-val-required="The Username/Email field is required.">
+                                    <label for="UserName">Your username/email</label>
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="UserName" data-valmsg-replace="true"></span>
+                                </div>
+
+                                <div class="md-form form-sm mb-4">
+                                    <i class="fa fa-lock prefix"></i>
+                                    <input type="password" id="Password" name="Password" class="form-control form-control-sm validate" data-val="true" data-val-required="The Password field is required.">
+                                    <label for="Password">Your password</label>
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <div class="checkbox">
+                                            <input data-val="true" data-val-required="Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="true">
+                                            <input name="RememberMe" type="hidden" value="false">
+                                            <label for="RememberMe">Remember me?</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <button class="btn btn-info">Login <i class="fa fa-sign-in ml-1"></i></button>
+                                </div>
+                            }
+                        </div>
+                        <!--Footer-->
+                        <div class="modal-footer">
+                            <div class="options text-center text-md-right mt-1">
+                                <p><a href="/Account/ForgotPassword" class="blue-text">Forgot Password?</a></p>
+                            </div>
+                            <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+                    <!--/.Panel 7-->
+                </div>
+
+            </div>
+        </div>
+        <!--/.Content-->
     </div>
 </div>
+<!--Modal: Login / Register Form-->
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+@section cssScripts {
+    <link href="~/Content/mdb.css" rel="stylesheet" />
+}
+
+@section scripts {
+    <script src="~/Scripts/mdbScripts/mdb.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#modalLRForm').modal('show');
+        })
+    </script>
 }

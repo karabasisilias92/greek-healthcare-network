@@ -232,6 +232,10 @@
     <Compile Include="Migrations\201912261753574_Fixing ProfilePicture and IsActive attributes.Designer.cs">
       <DependentUpon>201912261753574_Fixing ProfilePicture and IsActive attributes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912271837411_Create unique index for email.cs" />
+    <Compile Include="Migrations\201912271837411_Create unique index for email.Designer.cs">
+      <DependentUpon>201912271837411_Create unique index for email.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -324,6 +328,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\mdbScripts\mdb.js" />
     <Content Include="Scripts\RegnaScripts\libs\counterup.min.js" />
     <Content Include="Scripts\RegnaScripts\libs\easing.js" />
     <Content Include="Scripts\RegnaScripts\libs\easing.min.js" />
@@ -507,6 +512,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912261753574_Fixing ProfilePicture and IsActive attributes.resx">
       <DependentUpon>201912261753574_Fixing ProfilePicture and IsActive attributes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912271837411_Create unique index for email.resx">
+      <DependentUpon>201912271837411_Create unique index for email.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

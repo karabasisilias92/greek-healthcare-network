@@ -11,6 +11,7 @@ namespace GreekHealthcareNetwork.Controllers
     {
         public ActionResult Index(SearchViewModel searchViewModel)
         {
+            ViewBag.ReturnUrl = string.Empty;
             searchViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
             for(int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
             {
