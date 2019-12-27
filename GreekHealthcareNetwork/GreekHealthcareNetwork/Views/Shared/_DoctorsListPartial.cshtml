@@ -173,7 +173,7 @@
                                 '<div><h3>' + doctor.User.FirstName + ' ' + doctor.User.LastName + '</h3>' +
                                 '<p>' + doctor.MedicalSpecialty + '</p> <button class="btn btn-outline-dark btn-sm showDoctorDetails" data-id="' + doctor.UserId + '">View Details</button>' +
                                 @if (User.IsInRole("Insured")) {
-                                    @(new HtmlString("'<button class=\"btn btn-outline-dark btn-sm\">Message</button><button class=\"btn btn-outline-dark btn-sm\">Book Appointment</button><button class=\"btn btn-outline-dark btn-sm\">Book</div></div></div>'"));
+                                    @(new HtmlString("'<button class=\"btn btn-outline-dark btn-sm\">Message</button><button class=\"btn btn-outline-dark btn-sm bookAppointments\" data-id=\"' + doctor.UserId + '\">Book Appointment</button></div></div></div>'"));
                                 }else {
                                     @(new HtmlString("'</div></div></div>'"));
                                 });
@@ -228,7 +228,7 @@
                     });
                     $('.showbookAppointments').click(function (e) {
                         $('#bookAppointments').modal('show');
-                    }
+                    })
                 },
                 error: function () {
                     $('#doctorsList').empty();
