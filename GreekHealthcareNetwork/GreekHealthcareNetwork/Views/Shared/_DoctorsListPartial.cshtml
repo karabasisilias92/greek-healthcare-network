@@ -1,23 +1,13 @@
-﻿@{ 
+﻿@{
     Layout = "~/Views/Shared/_CustomScriptsLayout.cshtml";
 }
 
-<section id="doctors">
-    <div class="container">
-        <div class="row">
-            <div class="section-header col-md-12">
-                <h3 class="section-title">Meet Our Doctors!</h3>
-                <p class="section-description">Here you can find some of the most highly qualified doctors across a wide range of medical specialties</p>
-            </div>
-            <div class="col-12">
-                @Html.Partial("_SearchDoctorsPartial")
-            </div>
-            <div id="doctorsList" class="row col-md-12">
+<div class="col-12">
+    @Html.Partial("_SearchPartial")
+</div>
+<div id="doctorsList" class="row col-md-12">
 
-            </div>
-        </div>
-    </div>
-</section>
+</div>
 
 <div class="modal fade" id="doctorDetails" tabindex="-1" role="dialog" aria-labelledby="doctorDetailsLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
