@@ -151,22 +151,8 @@
     <!--==========================
       Doctors Section
     ============================-->
-    <section id="doctors">
-        <div class="container">
-            <div class="row">
-                <div class="section-header col-md-12">
-                    <h3 class="section-title">Meet Our Doctors!</h3>
-                    <p class="section-description">Here you can find some of the most highly qualified doctors across a wide range of medical specialties</p>
-                </div>
-                <div class="col-12">
-                    @Html.Partial("_SearchDoctorsPartial")
-                </div>
-                <div id="doctorsList" class="row col-md-12">
-                    
-                </div>
-            </div>
-        </div>
-    </section><!-- #doctors -->
+    @Html.Partial("_DoctorsListPartial")
+    <!-- #doctors -->
     <!--==========================
       Contact Section
     ============================-->
@@ -243,62 +229,6 @@
 
 </main>
 
-<div class="modal fade" id="doctorDetails" tabindex="-1" role="dialog" aria-labelledby="doctorDetailsLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="doctorDetailsLabel">Doctor Details</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div id="errorContainer" class="container">
-                    <div class="row">
-                        <p> Something went wrong. Please try again later. </p>
-                    </div>
-                </div>
-                <div id="normalContainer" class="container">
-                    <div class="row" id="profileSection">
-                        <div class="col-md-4">
-                            <img src="" class="rounded-circle w-100 h-100" alt="">
-                        </div>
-                    </div>
-                    <div>
-                        <table class="table table-borderless mt-5">
-                            <tbody>
-                                <tr>
-                                    <th>First Name:</th>
-                                    <td id="firstName"> </td>
-                                </tr>
-                                <tr>
-                                    <th>Last Name:</th>
-                                    <td id="lastName"> </td>
-                                </tr>
-                                <tr>
-                                    <th>Medical Specialty:</th>
-                                    <td id="medicalSpecialty"> </td>
-                                </tr>
-                                <tr id="officeAddressTR">
-                                    <th>Office Address:</th>
-                                    <td id="officeAddress"> </td>
-                                </tr>
-                                <tr id="doctorEmailTR">
-                                    <th>Email:</th>
-                                    <td id="doctorEmail"> </td>
-                                </tr>
-                                <tr>
-                                    <th>Telephone:</th>
-                                    <td id="doctorTelephone"> </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 @section scripts {
     <script>

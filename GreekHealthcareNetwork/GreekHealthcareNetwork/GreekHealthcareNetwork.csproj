@@ -456,6 +456,7 @@
     <Content Include="Views\Shared\_SearchDoctorsPartial.cshtml" />
     <Content Include="Views\Doctors\Appointments.cshtml" />
     <Content Include="Views\User\Messages.cshtml" />
+    <Content Include="Views\Shared\_DoctorsListPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
