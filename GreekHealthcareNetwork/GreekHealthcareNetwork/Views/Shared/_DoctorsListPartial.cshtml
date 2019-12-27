@@ -66,91 +66,181 @@
     </div>
 </div>
 
+<div class="modal fade" id="bookAppointments" tabindex="-1" role="dialog" aria-labelledby="bookAppointmentsLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookAppointmentLabel">Book Appointment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="modal-body">
+                    <div id="errorContainer" class="container">
+                        <div class="row">
+                            <p> Something went wrong. Please try again later. </p>
+                        </div>
+                    </div>
+                    <div id="normalContainer" class="container">
+                        <div class="modal-body row" id="profilepicture">
+                            <div class="col-md-4">
+                                <img src="" class="rounded-circle w-100 h-100" alt="">
+                            </div>
+                        </div>
+                        <div class="modal-body row" id="profilesection">
+                            <div class="col-md-4">
+                                <table class="table table-borderless mt-5">
+                                    <tbody>
+                                        <tr>
+                                            <th>First Name:</th>
+                                            <td id="firstName"> </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Last Name:</th>
+                                            <td id="lastName"> </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Medical Specialty:</th>
+                                            <td id="medicalSpecialty"> </td>
+                                        </tr>
+                                        <tr id="officeAddressTR">
+                                            <th>Office Address:</th>
+                                            <td id="officeAddress"> </td>
+                                        </tr>
+                                        <tr id="doctorEmailTR">
+                                            <th>Email:</th>
+                                            <td id="doctorEmail"> </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Telephone:</th>
+                                            <td id="doctorTelephone"> </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-body row" id="bookapointmentsection">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="date">Date</label>
+                                    <input class="datepicker form-control" type="text" name="date" id="date">
+                                </div>
+                                <div class="form-group">
+                                    <div class="dropdown">
+                                        <a id="dLabel" role="button" data-toggle="selecttime" data-target="#" href="#">
+                                            SelectTime <span class="caret"></span>
+                                        </a>
+                                        <br>
+
+                                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                            <li>one</li>
+                                            <li>two</li>
+                                            <li>three</li>
+                                            <li>four</li>
+                                            <li>five</li>
+                                            <li>six</li>
+                                            <li>seven</li>
+                                            <li>eight</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-default btn-success" name="submit" value="Submit">Book</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section customScripts {
     <script>
-        $(document).ready(function () {
-            function ListDoctors(firstName, lastName, specialty) {
-                $.ajax({
-                    dataType: 'json',
-                    type: 'get',
-                    url: '/api/Search/SearchDoctorResults?doctorsFirstName=' + firstName + '&doctorsLastName=' + lastName + '&doctorsSpecialty=' + specialty,
-                    success: function (data) {
-                        $('#doctorsList').empty();
-                        if (data.length == 0) {
-                            $("#doctorsList").append('<p> There are no doctors matching these criteria. </p>')
-                        }
-                        else {
-                            data.forEach(function (doctor) {
-                                $('#doctorsList').append('<div class="col-md-3 col-sm-6 col-xs-12"><div class="img-thumbnail">' +
-                                    '<img src="@Url.Content("~/Content/img/Doctors/")' + doctor.User.ProfilePicture + '" alt="' + doctor.User.ProfilePicture + '">' +
-                                    '<div><h3>' + doctor.User.FirstName + ' ' + doctor.User.LastName + '</h3>' +
-                                    '<p>' + doctor.MedicalSpecialty + '</p> <button class="btn btn-outline-dark btn-sm showDoctorDetails" data-id="' + doctor.UserId + '">View Details</button>' +
-                                    @if (User.IsInRole("Insured")) {
-                                       @(new HtmlString("'<button class=\"btn btn-outline-dark btn-sm\">Message</button><button class=\"btn btn-outline-dark btn-sm\">Book Appointment</button></div></div></div>'"));
-                                    }else {
-                                       @(new HtmlString("'</div></div></div>'"));
-                                    });
-                            });
-                        }
-                        $('.showDoctorDetails').click(function (e) {
-                            let id = $(e.target).data('id');
-                            $.ajax({
-                                url: '/api/Search/SearchDoctorById/' + id,
-                                type: 'get',
-                                dataType: 'json',
-                                success: function (doctor) {
-                                    $('#errorContainer').hide();
-                                    $('#profileSection img').attr('src', '@Url.Content("~/Content/img/Doctors/")' + doctor.User.ProfilePicture);
-                                    $('#firstName').text(doctor.User.FirstName);
-                                    $('#lastName').text(doctor.User.LastName);
-                                    $('#medicalSpecialty').text(doctor.MedicalSpecialty);
-                                    $('#officeAddress').text(doctor.OfficeAddress);
-                                    let elem = $('#officeAddressTR');
-                                    while ($(elem).next()[0].id != 'doctorEmailTR') {
-                                        const next = $(elem).next();
-                                        $(next).remove();
-                                    }
-                                    if (doctor.WorkingHours.length == 0) {
-                                        $(elem).after('<tr><th>Working hours:</th><td> Doctor has not declared any working hours yet. </td></tr>');
-                                    }
-                                    else {
-                                        for (let i = 0; i < doctor.WorkingHours.length; i++) {
-                                            if (i == 0) {
-                                                const workStartTime = doctor.WorkingHours[i].WorkStartTime.split(':');
-                                                const workEndTime = doctor.WorkingHours[i].WorkEndTime.split(':');
-                                                $(elem).after('<tr><th>Working hours:</th><td>' + doctor.WorkingHours[i].Day + ', ' + workStartTime[0] + ':' + workStartTime[1] + '-' + workEndTime[0] + ':' + workEndTime[1] + '</td></tr>')
-                                            }
-                                            else {
-                                                const workStartTime = doctor.WorkingHours[i].WorkStartTime.split(':');
-                                                const workEndTime = doctor.WorkingHours[i].WorkEndTime.split(':');
-                                                $(elem).after('<tr><th></th><td>' + doctor.WorkingHours[i].Day + ', ' + workStartTime[0] + ':' + workStartTime[1] + '-' + workEndTime[0] + ':' + workEndTime[1] + '</td></tr>')
-                                            }
-                                            elem = $(elem).next();
-                                        }
-                                    }
-                                    $('#doctorEmail').text(doctor.User.Email);
-                                    $('#doctorTelephone').text(doctor.User.PhoneNumber);
-                                    $('#normalContainer').show();
-                                    $('#doctorDetails').modal('show');
-                                },
-                                error: function () {
-                                    $('#normalContainer').hide();
-                                    $('#errorContainer').show();
-                                }
-                            })
-                        });
-                    },
-                    error: function () {
-                        $('#doctorsList').empty();
-                        $('#doctorsList').append('<p>There are no doctors matching these criteria.</p>');
+    $(document).ready(function () {
+        function ListDoctors(firstName, lastName, specialty) {
+            $.ajax({
+                dataType: 'json',
+                type: 'get',
+                url: '/api/Search/SearchDoctorResults?doctorsFirstName=' + firstName + '&doctorsLastName=' + lastName + '&doctorsSpecialty=' + specialty,
+                success: function (data) {
+                    $('#doctorsList').empty();
+                    if (data.length == 0) {
+                        $("#doctorsList").append('<p> There are no doctors matching these criteria. </p>')
                     }
-                })
-            }
-            ListDoctors('', '', -1);
-            $('#searchDoctors').on('submit', function (e) {
-                e.preventDefault();
-                ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value);
+                    else {
+                        data.forEach(function (doctor) {
+                            $('#doctorsList').append('<div class="col-md-3 col-sm-6 col-xs-12"><div class="img-thumbnail">' +
+                                '<img src="@Url.Content("~/Content/img/Doctors/")' + doctor.User.ProfilePicture + '" alt="' + doctor.User.ProfilePicture + '">' +
+                                '<div><h3>' + doctor.User.FirstName + ' ' + doctor.User.LastName + '</h3>' +
+                                '<p>' + doctor.MedicalSpecialty + '</p> <button class="btn btn-outline-dark btn-sm showDoctorDetails" data-id="' + doctor.UserId + '">View Details</button>' +
+                                @if (User.IsInRole("Insured")) {
+                                    @(new HtmlString("'<button class=\"btn btn-outline-dark btn-sm\">Message</button><button class=\"btn btn-outline-dark btn-sm\">Book Appointment</button><button class=\"btn btn-outline-dark btn-sm\">Book</div></div></div>'"));
+                                }else {
+                                    @(new HtmlString("'</div></div></div>'"));
+                                });
+                        });
+                    }
+                    $('.showDoctorDetails').click(function (e) {
+                        let id = $(e.target).data('id');
+                        $.ajax({
+                            url: '/api/Search/SearchDoctorById/' + id,
+                            type: 'get',
+                            dataType: 'json',
+                            success: function (doctor) {
+                                $('#errorContainer').hide();
+                                $('#profileSection img').attr('src', '@Url.Content("~/Content/img/Doctors/")' + doctor.User.ProfilePicture);
+                                $('#firstName').text(doctor.User.FirstName);
+                                $('#lastName').text(doctor.User.LastName);
+                                $('#medicalSpecialty').text(doctor.MedicalSpecialty);
+                                $('#officeAddress').text(doctor.OfficeAddress);
+                                let elem = $('#officeAddressTR');
+                                while ($(elem).next()[0].id != 'doctorEmailTR') {
+                                    const next = $(elem).next();
+                                    $(next).remove();
+                                }
+                                if (doctor.WorkingHours.length == 0) {
+                                    $(elem).after('<tr><th>Working hours:</th><td> Doctor has not declared any working hours yet. </td></tr>');
+                                }
+                                else {
+                                    for (let i = 0; i < doctor.WorkingHours.length; i++) {
+                                        if (i == 0) {
+                                            const workStartTime = doctor.WorkingHours[i].WorkStartTime.split(':');
+                                            const workEndTime = doctor.WorkingHours[i].WorkEndTime.split(':');
+                                            $(elem).after('<tr><th>Working hours:</th><td>' + doctor.WorkingHours[i].Day + ', ' + workStartTime[0] + ':' + workStartTime[1] + '-' + workEndTime[0] + ':' + workEndTime[1] + '</td></tr>')
+                                        }
+                                        else {
+                                            const workStartTime = doctor.WorkingHours[i].WorkStartTime.split(':');
+                                            const workEndTime = doctor.WorkingHours[i].WorkEndTime.split(':');
+                                            $(elem).after('<tr><th></th><td>' + doctor.WorkingHours[i].Day + ', ' + workStartTime[0] + ':' + workStartTime[1] + '-' + workEndTime[0] + ':' + workEndTime[1] + '</td></tr>')
+                                        }
+                                        elem = $(elem).next();
+                                    }
+                                }
+                                $('#doctorEmail').text(doctor.User.Email);
+                                $('#doctorTelephone').text(doctor.User.PhoneNumber);
+                                $('#normalContainer').show();
+                                $('#doctorDetails').modal('show');
+                            },
+                            error: function () {
+                                $('#normalContainer').hide();
+                                $('#errorContainer').show();
+                            }
+                        })
+                    });
+                    $('.showbookAppointments').click(function (e) {
+                        $('#bookAppointments').modal('show');
+                    }
+                },
+                error: function () {
+                    $('#doctorsList').empty();
+                    $('#doctorsList').append('<p>There are no doctors matching these criteria.</p>');
+                }
             })
+        }
+        ListDoctors('', '', -1);
+        $('#searchDoctors').on('submit', function (e) {
+            e.preventDefault();
+            ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value);
         })
+    })
     </script>
 }
