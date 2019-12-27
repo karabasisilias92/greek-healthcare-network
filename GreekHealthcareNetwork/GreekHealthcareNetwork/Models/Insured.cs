@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -18,6 +19,7 @@ namespace GreekHealthcareNetwork.Models
         public int InsuredPlanId { get; set; }
 
         [ForeignKey("InsuredPlanId")]
+        [JsonIgnore]
         public virtual InsuredPlan InsuredPlan { get; set; }
 
         [Required]
@@ -26,6 +28,7 @@ namespace GreekHealthcareNetwork.Models
 
         public int BookedAppointments { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<Appointment> Appointments { get; set; }
 
 

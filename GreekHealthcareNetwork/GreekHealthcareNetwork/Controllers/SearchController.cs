@@ -42,7 +42,12 @@ namespace GreekHealthcareNetwork.Controllers
         [Route("api/Search/InsuredAppointmentsSearchResults")]
         public IHttpActionResult SearchResults(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty, DateTime appointmentDay)
         {
-            return Ok(_appointments.GetDoctorFilteredAppointments(doctorsFirstName, doctorsLastName, doctorsSpecialty, appointmentDay));
+            var appointments = _appointments.GetDoctorFilteredAppointments(doctorsFirstName, doctorsLastName, doctorsSpecialty, appointmentDay);
+            if (appointments == null)
+            {
+                return NotFound();
+            }
+            return Ok(appointments);
         }
     }
 }

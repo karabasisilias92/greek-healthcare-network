@@ -229,7 +229,7 @@
             })
         }
         ListDoctors('', '', -1);
-        $('#searchDoctors').on('submit', function (e) {
+        $('#search').on('submit', function (e) {
             e.preventDefault();
             ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value);
         })

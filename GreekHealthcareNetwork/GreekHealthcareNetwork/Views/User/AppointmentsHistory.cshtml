@@ -40,21 +40,7 @@
                 </thead>
                 <tbody id="appointmentsList">
 
-                    @*@foreach (var item in Model)
-                    {
-                    <tr>
-                        <td><img src="https://via.placeholder.com/20" class="rounded-circle w-100 h-100" alt=""></td>
-                        <td>Michael Johanson</td>
-                        <td>Oncologist</td>
-                        <td>@item.AppointmentDate</td>
-                        <td>@item.AppointmentStartTime - @item.AppointmentEndTime</td>
-                        <td>@item.AppointmentStatus</td>
-                        <td>
-                            <button class="btn btn-light">View</button>
-                            <button class="btn btn-danger">Cancel</button>
-                        </td>
-                    </tr>
-                    }
+                    @*
                     <tr>
                         <td><img src="https://via.placeholder.com/20" class="rounded-circle w-100 h-100" alt=""></td>
                         <td>Michael Johanson</td>
@@ -78,7 +64,8 @@
                             <button class="btn btn-light">View</button>
                             <button class="btn btn-danger">Cancel</button>
                         </td>
-                    </tr>*@
+                    </tr>
+                        *@
 
                 </tbody>
             </table>
@@ -100,7 +87,7 @@
                     success: function (data) {
                         $('#appointmentsList').empty();
                         if (data.length = 0) {
-                            $("#appointmentsList").append('<p> There are no appointments matching these criteria. </p>')
+                            $("#appointmentsList").append('<tr><td colspan="7">There are no appointments matching these criteria.</td></tr>')
                         }
                         else {
                             data.forEach(function (appointment) {
@@ -119,7 +106,7 @@
                     },
                     error: function (error) {
                         $('#appointmentsList').empty();
-                        $("#appointmentsList").append('<p> Something went wrong. Please try again later. </p>')
+                        $("#appointmentsList").append('<tr><td colspan="7"> Something went wrong. Please try again later. </td></tr>')
                     }
                 })
             }
