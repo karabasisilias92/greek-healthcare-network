@@ -79,6 +79,11 @@ namespace GreekHealthcareNetwork.Models
         public string ConfirmPassword { get; set; }
     }
 
+    public class DoctorRegisterViewModel : RegisterViewModel
+    {
+
+    }
+
     public class ResetPasswordViewModel
     {
         [Required]

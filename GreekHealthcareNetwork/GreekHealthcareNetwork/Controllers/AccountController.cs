@@ -166,19 +166,19 @@ namespace GreekHealthcareNetwork.Controllers
         }
 
         //
-        // GET: /Account/Register
+        // GET: /Account/DoctorRegister
         [AllowAnonymous]
-        public ActionResult Register()
+        public ActionResult DoctorRegister()
         {
             return View();
         }
 
         //
-        // POST: /Account/Register
+        // POST: /Account/DoctorRegister
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> DoctorRegister(DoctorRegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
