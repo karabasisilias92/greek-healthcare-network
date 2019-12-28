@@ -12,12 +12,14 @@ namespace GreekHealthcareNetwork.Controllers
     public class UserController : Controller
     {
         private readonly AppointmentsRespository _appointmentsRespository = new AppointmentsRespository();
+        private readonly UsersRepository _usersRepository = new UsersRepository();
 
         // GET: Profile
         public new ActionResult Profile()
         {
-            //var userId = User.Identity.GetUserId();
-            return View();
+            var userId = User.Identity.GetUserId();
+            ApplicationUser currentUser = _usersRepository.GetUserById(userId);
+            return View(currentUser);
         }
 
         public ActionResult AppointmentsHistory(SearchLoginViewModel searchLoginViewModel)

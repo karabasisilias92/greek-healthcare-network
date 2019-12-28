@@ -1,5 +1,5 @@
-﻿
-@{
+﻿@model GreekHealthcareNetwork.Models.ApplicationUser
+]
     ViewBag.Title = "Profile";
 }
 
@@ -15,11 +15,11 @@
             </div>
             <div class="row" id="profileSection">
                 <div class="col-md-4">
-                    <img src="https://via.placeholder.com/50" class="rounded-circle w-100 h-100" alt="">
+                    <img src="@Url.Content("~/Content/img/Doctors/")@Model.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
                 </div>
                 <div class="col-md-8 align-self-center">
                     <h4>Golden Member</h4>
-                    <p>Exp: 12/12/2020</p>
+                    <p>Exp: @Model.SubscriptionEndDate</p>
                     <button type="button" class="btn btn-info">Renew</button>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                         <tr>
                             <th>Name:</th>
                             <td>
-                                John
+                                @Model.FirstName
                                 <a href="#">
                                     <i class="far fa-edit"></i>
                                 </a>
@@ -37,15 +37,15 @@
                         </tr>
                         <tr>
                             <th>Last Name:</th>
-                            <td>Smith</td>
+                            <td>@Model.LastName</td>
                         </tr>
                         <tr>
                             <th>Date of birth:</th>
-                            <td>28/10/1987</td>
+                            <td>@Model.DoB</td>
                         </tr>
                         <tr>
                             <th>AMKA:</th>
-                            <td>12345678901</td>
+                            <td>@Model.AMKA</td>
                         </tr>
                         <tr>
                             <th>Address:</th>
@@ -53,11 +53,11 @@
                         </tr>
                         <tr>
                             <th>Email:</th>
-                            <td>johnsmith@mail.com</td>
+                            <td>@Model.Email</td>
                         </tr>
                         <tr>
                             <th>Tel :</th>
-                            <td>+30 123455678</td>
+                            <td>@Model.PhoneNumber</td>
                         </tr>
                     </tbody>
                 </table>
