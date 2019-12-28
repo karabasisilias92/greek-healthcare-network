@@ -9,7 +9,7 @@ namespace GreekHealthcareNetwork.Repositories
 {
     public class AppointmentsRespository
     {
-        public IEnumerable<Appointment> GetDoctorFilteredAppointments(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty, DateTime appointmentDay)
+        public IEnumerable<Appointment> GetDoctorFilteredAppointments(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty, DateTime appointmentDay, string userId)
         {
             IEnumerable<Appointment> appointments;
             IEnumerable<ApplicationUser> users;
@@ -32,7 +32,7 @@ namespace GreekHealthcareNetwork.Repositories
                 {
                     users = db.Users;
                 }
-                appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.DoctorId) /* PREPEI NA GRAPSW SINTHIKI GIA INSUREDID */)
+                appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.DoctorId) && appointment.InsuredId == userId)
                                                                                                              .Include("Doctor")
                                                                                                              .Include("Doctor.WorkingHours")
                                                                                                              .Include("Doctor.User")
@@ -47,8 +47,12 @@ namespace GreekHealthcareNetwork.Repositories
                     appointments = appointments.Where(appointment => (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty).ToList();
                 }
 
-                //sINTHIKI GIA DATE DIAFORO TOY 0001-01-01
+                var appDay = appointmentDay.Date.ToString("yyyy-MM-dd");
 
+                if (appDay != "0001-01-01")
+                {
+                    appointments = appointments.Where(appointment => appointment.AppointmentDate.Date.ToString("yyyy-MM-dd") == appointmentDay.Date.ToString("yyyy-MM-dd")).ToList();
+                }
             }
 
             return appointments;
