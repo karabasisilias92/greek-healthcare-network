@@ -466,7 +466,7 @@
     <Content Include="Views\User\Messages.cshtml" />
     <Content Include="Views\Shared\_DoctorsListPartial.cshtml" />
     <Content Include="Views\Shared\_CustomScriptsLayout.cshtml" />
-    <Content Include="Views\Insureds\BoockAppointment.cshtml" />
+    <Content Include="Views\Insureds\BookAppointment.cshtml" />
     <Content Include="Views\Shared\_IndexPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
