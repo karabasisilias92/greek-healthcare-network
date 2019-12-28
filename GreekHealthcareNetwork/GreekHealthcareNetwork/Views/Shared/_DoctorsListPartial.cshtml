@@ -74,76 +74,83 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <div class="modal-body">
-                    <div id="errorContainer" class="container">
-                        <div class="row">
-                            <p> Something went wrong. Please try again later. </p>
-                        </div>
-                    </div>
-                    <div id="normalContainer" class="container">
-                        <div class="modal-body row" id="profilepicture">
-                            <div class="col-md-4">
-                                <img src="" class="rounded-circle w-100 h-100" alt="">
-                            </div>
-                        </div>
-                        <div class="modal-body row" id="profilesection">
-                            <div class="col-md-4">
-                                <table class="table table-borderless mt-5">
-                                    <tbody>
-                                        <tr>
-                                            <th>First Name:</th>
-                                            <td id="firstName"> </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Last Name:</th>
-                                            <td id="lastName"> </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Medical Specialty:</th>
-                                            <td id="medicalSpecialty"> </td>
-                                        </tr>
-                                        <tr id="officeAddressTR">
-                                            <th>Office Address:</th>
-                                            <td id="officeAddress"> </td>
-                                        </tr>
-                                        <tr id="doctorEmailTR">
-                                            <th>Email:</th>
-                                            <td id="doctorEmail"> </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Telephone:</th>
-                                            <td id="doctorTelephone"> </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="modal-body row" id="bookapointmentsection">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="control-label" for="date">Date</label>
-                                    <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text" />
-                                </div>
-                                <div class="form-group">
-                                    <form method="post" action="Select">
-                                        <select id="select" name="select" class="form-control">
-                                            <option value="option1">one</option>
-                                            <option value="option2">two</option>
-                                            <option value="option3">three</option>
-                                            <option value="option4">four</option>
-                                            <option value="option5">five</option>
-                                        </select>
-                                    </form>
-                                </div>
-                                <div class="form-group">
-                                    <textarea class="form-control" id='areaforinfo' style="min-width: 100%"></textarea>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-default" data-dismiss="modal" name="book" value="Submit">Book</button>
-                        </div>
+            </div>
+            <div class="modal-body">
+                <div id="errorContainerBook" class="container">
+                    <div class="row">
+                        <p> Something went wrong. Please try again later. </p>
                     </div>
                 </div>
-            </div>
+                <div id="normalContainerBook" class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row" id="profilepictureBook">
+                                <div class="col-md-12">
+                                    <img src="" class="rounded-circle w-100 h-100" alt="">
+                                </div>
+                            </div>
+                            <div class="row" id="profilesectionBook">
+                                <div class="col-md-12">
+                                    <table class="table table-borderless mt-5">
+                                        <tbody>
+                                            <tr>
+                                                <th>First Name:</th>
+                                                <td id="firstNameBook"> </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Last Name:</th>
+                                                <td id="lastNameBook"> </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Medical Specialty:</th>
+                                                <td id="medicalSpecialtyBook"> </td>
+                                            </tr>
+                                            <tr id="officeAddressBookTR">
+                                                <th>Office Address:</th>
+                                                <td id="officeAddressBook"> </td>
+                                            </tr>
+                                            <tr id="doctorEmailBookTR">
+                                                <th>Email:</th>
+                                                <td id="doctorEmailBook"> </td>
+                                            </tr>
+                                            <tr>
+                                                <th>Telephone:</th>
+                                                <td id="doctorTelephoneBook"> </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row" id="bookapointmentsection">
+                                <div class="col-md-12">
+                                    <form method="post">
+                                        <div class="form-group">
+                                            <label class="control-label" for="date">Date</label>
+                                            <input class="form-control" id="date" name="date" type="date" />
+                                        </div>
+                                        <div class="form-group">
+
+                                            <select id="select" name="select" class="form-control">
+                                                <option value="option1">one</option>
+                                                <option value="option2">two</option>
+                                                <option value="option3">three</option>
+                                                <option value="option4">four</option>
+                                                <option value="option5">five</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <textarea class="form-control" id='areaforinfo' style="min-width: 100%"></textarea>
+                                        </div>
+                                        <input type="button" class="btn btn-default" data-dismiss="modal" name="book" value="Book">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                        
+                </div>
+            </div>            
         </div>
     </div>
 </div>
@@ -221,38 +228,59 @@
                             }
                         })
                     });
-                    $('.showbookAppointments').click(function (e) {
+                    $('.bookAppointments').click(function (e) {
                         let id = $(e.target).data('id');
+                        function listAvailableAppointments(date) {
+
+                        }
                         $.ajax({
-                            url: '/api/Insureds/BookAppointme/' + id,
+                            url: '/api/Search/SearchDoctorById/' + id,
                             type: 'get',
                             dataType: 'json',
                             success: function (doctor) {
-                                $('#errorContainer').hide();
-                                $('#profileSection img').attr('src', '@Url.Content("~/Content/img/Doctors/")' + doctor.User.ProfilePicture);
-                                $('#firstName').text(doctor.User.FirstName);
-                                $('#lastName').text(doctor.User.LastName);
-                                $('#medicalSpecialty').text(doctor.MedicalSpecialty);
-                                $('#officeAddress').text(doctor.OfficeAddress);
-                                let elem = $('#officeAddressTR');
-                                while ($(elem).next()[0].id != 'doctorEmailTR') {
+                                $('#errorContainerBook').hide();
+                                $('#profileSectionBook img').attr('src', '@Url.Content("~/Content/img/Doctors/")' + doctor.User.ProfilePicture);
+                                $('#firstNameBook').text(doctor.User.FirstName);
+                                $('#lastNameBook').text(doctor.User.LastName);
+                                $('#medicalSpecialtyBook').text(doctor.MedicalSpecialty);
+                                $('#officeAddressBook').text(doctor.OfficeAddress);
+                                let elem = $('#officeAddressBookTR');
+                                while ($(elem).next()[0].id != 'doctorEmailBookTR') {
                                     const next = $(elem).next();
                                     $(next).remove();
                                 }
+                                if (doctor.WorkingHours.length == 0) {
+                                    $(elem).after('<tr><th>Working hours:</th><td> Doctor has not declared any working hours yet. </td></tr>');
+                                }
+                                else {
+                                    for (let i = 0; i < doctor.WorkingHours.length; i++) {
+                                        if (i == 0) {
+                                            const workStartTime = doctor.WorkingHours[i].WorkStartTime.split(':');
+                                            const workEndTime = doctor.WorkingHours[i].WorkEndTime.split(':');
+                                            $(elem).after('<tr><th>Working hours:</th><td>' + doctor.WorkingHours[i].Day + ', ' + workStartTime[0] + ':' + workStartTime[1] + '-' + workEndTime[0] + ':' + workEndTime[1] + '</td></tr>')
+                                        }
+                                        else {
+                                            const workStartTime = doctor.WorkingHours[i].WorkStartTime.split(':');
+                                            const workEndTime = doctor.WorkingHours[i].WorkEndTime.split(':');
+                                            $(elem).after('<tr><th></th><td>' + doctor.WorkingHours[i].Day + ', ' + workStartTime[0] + ':' + workStartTime[1] + '-' + workEndTime[0] + ':' + workEndTime[1] + '</td></tr>')
+                                        }
+                                        elem = $(elem).next();
+                                    }
+                                }
+                                const appointmentDate = $('#AppointmentDate').val();
+                                $('#date').val(appointmentDate);
+                             
+                              @*implement here creation of appointment select list*@
 
-                                $('.datepicker').datetimepicker({ pickTime: false, format: "DD-MM-YYYY" });
-                                $("#bookapointmentsection #select option[value="+value+"]").attr('selected', 'selected');
 
-
-                                $('#doctorEmail').text(doctor.User.Email);
-                                $('#doctorTelephone').text(doctor.User.PhoneNumber);
-                                $('#normalContainer').show();
-                                $('#doctorDetails').modal('show');
+                                $('#doctorEmailBook').text(doctor.User.Email);
+                                $('#doctorTelephoneBook').text(doctor.User.PhoneNumber);
+                                $('#normalContainerBook').show();
                                 $('#bookAppointments').modal('show');
                             },
                             error: function () {
-                                $('#normalContainer').hide();
-                                $('#errorContainer').show();
+                                $('#normalContainerBook').hide();
+                                $('#errorContainerBook').show();
                             }
                         })
                     });
@@ -272,3 +300,4 @@
     })
     </script>
 }
+

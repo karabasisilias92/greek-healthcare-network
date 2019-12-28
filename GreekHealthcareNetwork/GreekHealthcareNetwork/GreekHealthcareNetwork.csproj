@@ -187,6 +187,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InsuredsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Global.asax.cs">
@@ -468,6 +469,7 @@
     <Content Include="Views\Shared\_CustomScriptsLayout.cshtml" />
     <Content Include="Views\Insureds\BookAppointment.cshtml" />
     <Content Include="Views\Shared\_IndexPartial.cshtml" />
+    <Content Include="Views\Shared\NewMessage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
