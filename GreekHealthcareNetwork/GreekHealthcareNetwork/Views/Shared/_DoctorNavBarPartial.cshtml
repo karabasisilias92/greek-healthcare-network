@@ -7,11 +7,11 @@
             <div id="logo">
                 <!--<a href="/Doctors/Index"><img src="@Url.Content("~/Content/img/logo.png")" alt="GHN" title="" /></a>-->
                 <!-- Uncomment below if you prefer to use a text logo -->
-                <h1><a href="/Doctors/Index">GHN</a></h1>
+                <h1><a href="/Home/Index">GHN</a></h1>
             </div>
             <div id="nav-menu-container">
                 <ul class="nav-menu">
-                    <li>@Html.ActionLink("Home", "Index", "Doctors")</li>
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Appointments", "Appointments", "Doctors")</li>
                 </ul>
             </div>
@@ -20,7 +20,7 @@
                 <ul class="nav-menu">
                     <li class="nav-menu menu-has-children">
                         <a href="#">
-                            <img src="@Url.Content("~/Content/img/doctor1.jpg")" alt="User" title="" />
+                            <img src="@Url.Content("~/Content/img/Doctors/defaultUserImage.png")" class="rounded-circle mt-2" style="max-height:40px; max-width:40px" alt="User" title="" />
                         </a>
                         <ul>
                             <li>@Html.ActionLink("Profile", "Profile", "User")</li>

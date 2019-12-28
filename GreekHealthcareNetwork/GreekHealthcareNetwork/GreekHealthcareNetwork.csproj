@@ -183,10 +183,12 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\DoctorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InsuredsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Global.asax.cs">
@@ -466,8 +468,10 @@
     <Content Include="Views\User\Messages.cshtml" />
     <Content Include="Views\Shared\_DoctorsListPartial.cshtml" />
     <Content Include="Views\Shared\_CustomScriptsLayout.cshtml" />
-    <Content Include="Views\Insureds\BoockAppointment.cshtml" />
+    <Content Include="Views\Insureds\BookAppointment.cshtml" />
     <Content Include="Views\Shared\_IndexPartial.cshtml" />
+    <Content Include="Views\Shared\NewMessage.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
