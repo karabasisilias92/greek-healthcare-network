@@ -87,6 +87,7 @@ namespace GreekHealthcareNetwork.Migrations
                     PhoneNumber = "+30 6946540329",
                     DoB = new DateTime(1992, 1, 20).Date,
                     AMKA = 24019201978,
+                    PaypalAccount = "456878900785634",
                     ProfilePicture = "doctor1.jpg"
                 }, "!Doctor123");
 
@@ -99,7 +100,6 @@ namespace GreekHealthcareNetwork.Migrations
                         UserId = u.Id,
                         MedicalSpecialty = MedicalSpecialty.Pathologist,
                         OfficeAddress = "Arx. Makariou 14",
-                        PaypalAccount = "456878900785634",
                         DoctorPlanId = context.DoctorPlans.SingleOrDefault(i => i.MedicalSpecialty == MedicalSpecialty.Pathologist).Id
                     });
                 }
@@ -113,6 +113,7 @@ namespace GreekHealthcareNetwork.Migrations
                     PhoneNumber = "+30 6946540329",
                     DoB = new DateTime(1992, 1, 20).Date,
                     AMKA = 24019201978,
+                    PaypalAccount = "456878900785634",
                     ProfilePicture = "doctor2.jpg"
                 }, "!Doctor123");
 
@@ -125,7 +126,6 @@ namespace GreekHealthcareNetwork.Migrations
                         UserId = u.Id,
                         MedicalSpecialty = MedicalSpecialty.Cardiologist,
                         OfficeAddress = "Arx. Makariou 14",
-                        PaypalAccount = "456878900785634",
                         DoctorPlanId = context.DoctorPlans.SingleOrDefault(i => i.MedicalSpecialty == MedicalSpecialty.Cardiologist).Id
                     });
                 }
@@ -139,6 +139,7 @@ namespace GreekHealthcareNetwork.Migrations
                     PhoneNumber = "+30 6946540329",
                     DoB = new DateTime(1992, 1, 20).Date,
                     AMKA = 24019201978,
+                    PaypalAccount = "456878900785634",
                     ProfilePicture = "doctor3.jpg"
                 }, "!Doctor123");
 
@@ -151,7 +152,6 @@ namespace GreekHealthcareNetwork.Migrations
                         UserId = u.Id,
                         MedicalSpecialty = MedicalSpecialty.Allergist,
                         OfficeAddress = "Arx. Makariou 14",
-                        PaypalAccount = "456878900785634",
                         DoctorPlanId = context.DoctorPlans.SingleOrDefault(i => i.MedicalSpecialty == MedicalSpecialty.Allergist).Id
                     });
                 }
@@ -165,6 +165,7 @@ namespace GreekHealthcareNetwork.Migrations
                     PhoneNumber = "+30 6946540329",
                     DoB = new DateTime(1992, 1, 20).Date,
                     AMKA = 24019201978,
+                    PaypalAccount = "456878900785634",
                     ProfilePicture = "doctor4.jpg"
                 }, "!Doctor123");
 
@@ -177,7 +178,6 @@ namespace GreekHealthcareNetwork.Migrations
                         UserId = u.Id,
                         MedicalSpecialty = MedicalSpecialty.Pathologist,
                         OfficeAddress = "Arx. Makariou 14",
-                        PaypalAccount = "456878900785634",
                         DoctorPlanId = context.DoctorPlans.SingleOrDefault(i => i.MedicalSpecialty == MedicalSpecialty.Pathologist).Id
                     });
                 }

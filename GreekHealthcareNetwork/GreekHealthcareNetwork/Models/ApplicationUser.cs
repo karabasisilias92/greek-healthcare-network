@@ -43,6 +43,9 @@ namespace GreekHealthcareNetwork.Models
          ErrorMessage = "AMKA should be 11 digits.")]
         public long AMKA { get; set; }
 
+        [Required]
+        public string PaypalAccount { get; set; }
+
         public bool IsActive { get; set; }
 
         [DataType(DataType.Date)]

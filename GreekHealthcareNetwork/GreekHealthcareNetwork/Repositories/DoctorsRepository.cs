@@ -36,6 +36,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                  // so we cannot json ignore it in general
                                                                                                  .Include("User.Messages") 
                                                                                                  .Include("WorkingHours")
+                                                                                                 .Include("AppointmentCost")
                                                                                                  .ToList();
 
                 if (doctorsSpecialty >= 0 && doctorsSpecialty < Enum.GetNames(typeof(MedicalSpecialty)).Length)
@@ -55,6 +56,7 @@ namespace GreekHealthcareNetwork.Repositories
                 doctor = db.Doctors.Include("User")
                                    .Include("User.Messages")
                                    .Include("WorkingHours")
+                                   .Include("AppointmentCost")
                                    .SingleOrDefault(d => d.UserId.Equals(doctorId));
             }
             return doctor;
