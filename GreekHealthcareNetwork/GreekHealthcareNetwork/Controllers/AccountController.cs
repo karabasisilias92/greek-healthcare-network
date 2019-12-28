@@ -56,15 +56,15 @@ namespace GreekHealthcareNetwork.Controllers
         //
         // GET: /Account/Login
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl, SearchLoginViewModel searchViewModel)
+        public ActionResult Login(string returnUrl, SearchLoginViewModel searchLoginViewModel)
         {
             ViewBag.ReturnUrl = returnUrl;
-            searchViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
+            searchLoginViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
             for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
             {
-                searchViewModel.MedicalSpecialties.Add((MedicalSpecialty)i);
+                searchLoginViewModel.MedicalSpecialties.Add((MedicalSpecialty)i);
             }
-            return View(searchViewModel);
+            return View(searchLoginViewModel);
         }
 
         //

@@ -20,14 +20,14 @@ namespace GreekHealthcareNetwork.Controllers
             return View();
         }
 
-        public ActionResult AppointmentsHistory(SearchLoginViewModel searchViewModel)
+        public ActionResult AppointmentsHistory(SearchLoginViewModel searchLoginViewModel)
         {
-            searchViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
+            searchLoginViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
             for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
             {
-                searchViewModel.MedicalSpecialties.Add((MedicalSpecialty)i);
+                searchLoginViewModel.MedicalSpecialties.Add((MedicalSpecialty)i);
             }
-            return View(searchViewModel);
+            return View(searchLoginViewModel);
         }
 
         public ActionResult Messages()
