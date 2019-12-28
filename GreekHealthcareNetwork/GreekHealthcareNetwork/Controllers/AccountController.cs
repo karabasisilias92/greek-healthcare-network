@@ -10,6 +10,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using GreekHealthcareNetwork.Models;
 using System.Collections.Generic;
+using System.Data.Entity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace GreekHealthcareNetwork.Controllers
 {
@@ -87,7 +89,7 @@ namespace GreekHealthcareNetwork.Controllers
             ApplicationUser user;
             using(ApplicationDbContext db = new ApplicationDbContext())
             {
-                user = db.Users.SingleOrDefault(u => u.Email == model.UserName);
+                user = db.Users.Include("Roles").SingleOrDefault(u => u.Email == model.UserName);
             }
             if (user != null)
             {
@@ -99,6 +101,10 @@ namespace GreekHealthcareNetwork.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    if(UserManager.IsInRole(user.Id, "Administrator"))
+                    {
+                        return RedirectToLocal("/Admin/Index");
+                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
