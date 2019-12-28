@@ -121,8 +121,8 @@
                         <div class="modal-body row" id="bookapointmentsection">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="date">Date</label>
-                                    <input class="datepicker form-control" type="text" name="date" id="date">
+                                    <label class="control-label" for="date">Date</label>
+                                    <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text" />
                                 </div>
                                 <div class="form-group">
                                     <form method="post" action="Select">
@@ -222,8 +222,41 @@
                         })
                     });
                     $('.showbookAppointments').click(function (e) {
-                        $('#bookAppointments').modal('show');
-                    })
+                        let id = $(e.target).data('id');
+                        $.ajax({
+                            url: '/api/Insureds/BookAppointme/' + id,
+                            type: 'get',
+                            dataType: 'json',
+                            success: function (doctor) {
+                                $('#errorContainer').hide();
+                                $('#profileSection img').attr('src', '@Url.Content("~/Content/img/Doctors/")' + doctor.User.ProfilePicture);
+                                $('#firstName').text(doctor.User.FirstName);
+                                $('#lastName').text(doctor.User.LastName);
+                                $('#medicalSpecialty').text(doctor.MedicalSpecialty);
+                                $('#officeAddress').text(doctor.OfficeAddress);
+                                let elem = $('#officeAddressTR');
+                                while ($(elem).next()[0].id != 'doctorEmailTR') {
+                                    const next = $(elem).next();
+                                    $(next).remove();
+                                }
+
+                                $('.datepicker').datetimepicker({ pickTime: false, format: "DD-MM-YYYY" });
+                                $("#bookapointmentsection #select option[value="+value+"]").attr('selected', 'selected');
+
+
+                                $('#doctorEmail').text(doctor.User.Email);
+                                $('#doctorTelephone').text(doctor.User.PhoneNumber);
+                                $('#normalContainer').show();
+                                $('#doctorDetails').modal('show');
+                                $('#bookAppointments').modal('show');
+                            },
+                            error: function () {
+                                $('#normalContainer').hide();
+                                $('#errorContainer').show();
+                            }
+                        })
+                    });
+ 
                 },
                 error: function () {
                     $('#doctorsList').empty();
