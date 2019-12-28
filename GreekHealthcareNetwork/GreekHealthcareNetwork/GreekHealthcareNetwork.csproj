@@ -238,10 +238,27 @@
     <Compile Include="Migrations\201912271837411_Create unique index for email.Designer.cs">
       <DependentUpon>201912271837411_Create unique index for email.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912282240343_Create Entity for AppointmentCostPerSpecialty.cs" />
+    <Compile Include="Migrations\201912282240343_Create Entity for AppointmentCostPerSpecialty.Designer.cs">
+      <DependentUpon>201912282240343_Create Entity for AppointmentCostPerSpecialty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912282245177_Relate Doctors to AppointmentPerCostSpecialty.cs" />
+    <Compile Include="Migrations\201912282245177_Relate Doctors to AppointmentPerCostSpecialty.Designer.cs">
+      <DependentUpon>201912282245177_Relate Doctors to AppointmentPerCostSpecialty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912282318547_PaypalAccount to ApplicationUser.cs" />
+    <Compile Include="Migrations\201912282318547_PaypalAccount to ApplicationUser.Designer.cs">
+      <DependentUpon>201912282318547_PaypalAccount to ApplicationUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912282322323_PaypalAccount set to required.cs" />
+    <Compile Include="Migrations\201912282322323_PaypalAccount set to required.Designer.cs">
+      <DependentUpon>201912282322323_PaypalAccount set to required.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
+    <Compile Include="Models\AppointmentCostPerSpecialty.cs" />
     <Compile Include="Models\Doctor.cs" />
     <Compile Include="Models\DoctorsUnavailability.cs" />
     <Compile Include="Models\Enums\AppointmentStatus.cs" />
@@ -521,6 +538,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912271837411_Create unique index for email.resx">
       <DependentUpon>201912271837411_Create unique index for email.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912282240343_Create Entity for AppointmentCostPerSpecialty.resx">
+      <DependentUpon>201912282240343_Create Entity for AppointmentCostPerSpecialty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912282245177_Relate Doctors to AppointmentPerCostSpecialty.resx">
+      <DependentUpon>201912282245177_Relate Doctors to AppointmentPerCostSpecialty.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912282318547_PaypalAccount to ApplicationUser.resx">
+      <DependentUpon>201912282318547_PaypalAccount to ApplicationUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912282322323_PaypalAccount set to required.resx">
+      <DependentUpon>201912282322323_PaypalAccount set to required.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -35,6 +35,7 @@ namespace GreekHealthcareNetwork.Repositories
                 appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.DoctorId) && appointment.InsuredId == userId)
                                                                                                              .Include("Doctor")
                                                                                                              .Include("Doctor.WorkingHours")
+                                                                                                             .Include("Doctor.AppointmentCost")
                                                                                                              .Include("Doctor.User")
                                                                                                              .Include("Doctor.User.Messages")
                                                                                                              .Include("Insured")
@@ -80,6 +81,7 @@ namespace GreekHealthcareNetwork.Repositories
                 //appointment = db.Appointments.SingleOrDefault(i => i.Id.Equals(appointmentId));
                 appointment = db.Appointments.Include("Doctor")
                                              .Include("Doctor.WorkingHours")
+                                             .Include("Doctor.AppointmentCost")
                                              .Include("Doctor.User")
                                              .Include("Doctor.User.Messages")
                                              .Include("Insured")
