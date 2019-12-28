@@ -10,9 +10,7 @@
 }
 
 <main id="main">
-    <div>
-    </div>
-    <div class="col-8 offset-2 mt-5">
+    <div class="col-8 offset-2">
         <div class="page-header">
             <h1>
                 Appointments History
@@ -78,7 +76,7 @@
                                 const appointmentEnd = appointment.AppointmentEndTime.split(":");
                                 const appointmentDate = appointment.AppointmentDate.split("T");
                                 $('#appointmentsList').append('<tr><td>' +
-                                    '<img src="@Url.Content("~/Content/img/Doctors/")' + appointment.Doctor.User.ProfilePicture + '" alt="' + appointment.Doctor.User.ProfilePicture + '"' + 'class="rounded-circle w-25 h-25"></td>' +
+                                    '<img src="@Url.Content("~/Content/img/Doctors/")' + appointment.Doctor.User.ProfilePicture + '" alt="' + appointment.Doctor.User.ProfilePicture + '"' + 'class="rounded-circle"></td>' +
                                     '<td>' + appointment.Doctor.User.FirstName + ' ' + appointment.Doctor.User.LastName + '</td>' +
                                     '<td>' + appointment.Doctor.MedicalSpecialty + '</td>' +
                                     '<td>' + appointmentDate[0] + '</td>' +
@@ -87,6 +85,7 @@
                                     '<td><button class="btn btn-light">View</button><button class="btn btn-danger">Cancel</button></td></tr>');
                             });
                         }
+                        fixFooterPosition(data.length);
                     },
                     error: function (error) {
                         console.log(error);

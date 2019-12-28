@@ -83,13 +83,5 @@
         var l = $('<div class="hiddendiv common"></div>');
         s.append(l)
     }
-    $(".materialize-textarea").each(a), s.on("keyup keydown", ".materialize-textarea", a);
-    var u = $('input[type="date"]');
-    u.each((function (t, e) {
-        e.type = "text"
-    })), u.on("focus", (function (t) {
-        t.target.type = "date"
-    })), u.on("blur", (function (e) {
-        e.target.type = "text", $("label[for=".concat(e.target.id, "]")).removeClass("active")
-    }))
+    $(".materialize-textarea").each(a), s.on("keyup keydown", ".materialize-textarea", a); 
 })
