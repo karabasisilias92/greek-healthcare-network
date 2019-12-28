@@ -20,7 +20,7 @@ namespace GreekHealthcareNetwork.Controllers
             return View();
         }
 
-        public ActionResult AppointmentsHistory(SearchViewModel searchViewModel)
+        public ActionResult AppointmentsHistory(SearchLoginViewModel searchViewModel)
         {
             searchViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
             for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)

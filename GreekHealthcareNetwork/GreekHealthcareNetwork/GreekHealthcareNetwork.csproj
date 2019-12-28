@@ -249,7 +249,7 @@
     <Compile Include="Models\Insured.cs" />
     <Compile Include="Models\InsuredPlan.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\SearchViewModel.cs" />
+    <Compile Include="Models\SearchLoginViewModel.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Enums\MessageStatus.cs" />
     <Compile Include="Models\VisitorMessage.cs" />
@@ -328,6 +328,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\mdbScripts\LRModal.js" />
     <Content Include="Scripts\mdbScripts\mdb.js" />
     <Content Include="Scripts\RegnaScripts\libs\counterup.min.js" />
     <Content Include="Scripts\RegnaScripts\libs\easing.js" />
@@ -466,6 +467,7 @@
     <Content Include="Views\Shared\_DoctorsListPartial.cshtml" />
     <Content Include="Views\Shared\_CustomScriptsLayout.cshtml" />
     <Content Include="Views\Insureds\BoockAppointment.cshtml" />
+    <Content Include="Views\Shared\_IndexPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

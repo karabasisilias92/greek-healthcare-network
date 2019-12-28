@@ -14,7 +14,7 @@ namespace GreekHealthcareNetwork.Controllers
         {
             return View();
         }
-        public ActionResult BoockAppointment(SearchViewModel searchViewModel)
+        public ActionResult BoockAppointment(SearchLoginViewModel searchViewModel)
         {
             searchViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
             for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)

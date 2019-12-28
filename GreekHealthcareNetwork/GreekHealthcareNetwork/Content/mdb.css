@@ -2002,7 +2002,7 @@ button.bg-light:focus {
     flex: 1
 }
 
-@font-face {
+/*@font-face {
     font-family: Roboto;
     font-weight: 200;
     src: local(Roboto Thin), url(../font/roboto/Roboto-Thin.eot);
@@ -2040,7 +2040,7 @@ button.bg-light:focus {
 body {
     font-family: "Roboto", sans-serif;
     font-weight: 300
-}
+}*/
 
 h1,
 h2,

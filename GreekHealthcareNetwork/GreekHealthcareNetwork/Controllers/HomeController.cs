@@ -9,15 +9,15 @@ namespace GreekHealthcareNetwork.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index(SearchViewModel searchViewModel)
+        public ActionResult Index(SearchLoginViewModel searchLoginViewModel)
         {
             ViewBag.ReturnUrl = string.Empty;
-            searchViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
+            searchLoginViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
             for(int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
             {
-                searchViewModel.MedicalSpecialties.Add((MedicalSpecialty)i);
+                searchLoginViewModel.MedicalSpecialties.Add((MedicalSpecialty)i);
             }
-            return View(searchViewModel);
+            return View(searchLoginViewModel);
         }
     }
 }

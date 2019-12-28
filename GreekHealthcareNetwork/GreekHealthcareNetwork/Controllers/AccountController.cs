@@ -56,7 +56,7 @@ namespace GreekHealthcareNetwork.Controllers
         //
         // GET: /Account/Login
         [AllowAnonymous]
-        public ActionResult Login(string returnUrl, SearchViewModel searchViewModel)
+        public ActionResult Login(string returnUrl, SearchLoginViewModel searchViewModel)
         {
             ViewBag.ReturnUrl = returnUrl;
             searchViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
@@ -72,18 +72,16 @@ namespace GreekHealthcareNetwork.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
+        public async Task<ActionResult> Login(SearchLoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
-            {
-                ViewBag.ReturnUrl = returnUrl;
-                SearchViewModel searchViewModel = new SearchViewModel();
-                searchViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
+            {   
+                model.MedicalSpecialties = new List<MedicalSpecialty>();
                 for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
                 {
-                    searchViewModel.MedicalSpecialties.Add((MedicalSpecialty)i);
+                    model.MedicalSpecialties.Add((MedicalSpecialty)i);
                 }
-                return View(searchViewModel);
+                return View(model);
             }
             // This is in order to enable login both with email and username
             ApplicationUser user;
@@ -109,14 +107,12 @@ namespace GreekHealthcareNetwork.Controllers
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
-                    ViewBag.ReturnUrl = returnUrl;
-                    SearchViewModel searchViewModel = new SearchViewModel();
-                    searchViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
+                    model.MedicalSpecialties = new List<MedicalSpecialty>();
                     for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
                     {
-                        searchViewModel.MedicalSpecialties.Add((MedicalSpecialty)i);
+                        model.MedicalSpecialties.Add((MedicalSpecialty)i);
                     }
-                    return View(searchViewModel);
+                    return View(model);
             }
         }
 
