@@ -71,5 +71,23 @@ namespace GreekHealthcareNetwork.Repositories
         //    return appointments_list;
 
         //}
+
+        public Appointment GetAppointmentById(int appointmentId)
+        {
+            Appointment appointment;
+            using (var db = new ApplicationDbContext())
+            {
+                //appointment = db.Appointments.SingleOrDefault(i => i.Id.Equals(appointmentId));
+                appointment = db.Appointments.Include("Doctor")
+                                             .Include("Doctor.WorkingHours")
+                                             .Include("Doctor.User")
+                                             .Include("Doctor.User.Messages")
+                                             .Include("Insured")
+                                             .Include("Insured.User")
+                                             .Include("Insured.User.Messages")
+                                             .SingleOrDefault(d => d.Id.Equals(appointmentId));
+                return appointment;
+            }
+        }
     }
 }

@@ -6,7 +6,7 @@
 }
 
 @section cssScripts{
-<link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
 }
 
 <main id="main">
@@ -24,8 +24,8 @@
                     <tr>
                         <th scope="col"></th>
                         @if (User.IsInRole("Doctor"))
-                        { 
-                        <th scope="col">Patient</th>
+                        {
+                            <th scope="col">Patient</th>
                         }
                         @*  @if (User.IsInRole("Insured")) { }  *@
                         <th scope="col">Doctor</th>
@@ -37,15 +37,60 @@
                     </tr>
                 </thead>
                 <tbody id="appointmentsList">
-
                 </tbody>
             </table>
         </div>
     </div>
 </main>
 
+<div class="modal fade" id="appointmentDetailsModal" tabindex="-1" role="dialog" aria-labelledby="appointmentDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="appointmentDetailsModalLabel">Appointment Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <h4>Doctor</h4>
+                        <div class="row mt-2">
+                            <div id="doctorsPicture" class="col-4">
+                                <img class="rounded-circle" src="">
+                            </div>
+                            <div class="col-8">
+                                <h5 id="doctorsFirstName"></h5>
+                                <h5 id="doctorsLastName"></h5>
+                                <p id="Specialty"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <h4>Details</h4>
+                        <div class="mt-2">
+                            <p id="appointmentDateTime"></p>
+                            <p id="status"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col">
+                        <h6>Your comments to Doctor:</h6>
+                        <p id="patientComments">
+                            Sed sapien nulla, pretium vitae malesuada a, semper at nunc. Suspendisse potenti. Nam posuere nibh vel feugiat fermentum. Proin tincidunt feugiat egestas. Proin ut diam blandit ipsum auctor consectetur.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section AppointmentScripts{
-<script>
+    <script>
         $(document).ready(function () {
             function ListAppointments(firstName, lastName, specialty, appointmentDate, userId) {
                 if (appointmentDate == "") {
@@ -61,7 +106,7 @@
                                                                         '&userId=' + userId,
                     success: function (data) {
                         $('#appointmentsList').empty();
-                        console.log('St ep1');
+                        console.log('Step1');
                         console.log(data.length);
                         if (data.length == 0) {
                             $("#appointmentsList").append('<tr><td colspan="7">There are no appointments matching these criteria.</td></tr>');
@@ -82,10 +127,39 @@
                                     '<td>' + appointmentDate[0] + '</td>' +
                                     '<td>' + appointmentStart[0] + ':' + appointmentStart[1] + '-' + appointmentEnd[0] + ':' + appointmentEnd[1] + '</td>' +
                                     '<td>' + appointment.AppointmentStatus + '</td>' +
-                                    '<td><button class="btn btn-light">View</button><button class="btn btn-danger">Cancel</button></td></tr>');
+                                    ((appointment.AppointmentStatus == "Upcoming") ? '<td><button type="button" class="btn btn-success" data-toggle="modal" data-target="">Edit</button><button class="btn btn-danger">Cancel</button>' : '<td><button type="button" class="btn btn-light showAppointmentDetails" data-id="' + appointment.Id + '">View</button>') +
+                                    '</td ></tr>'
+                                    );
                             });
                         }
-                        fixFooterPosition(data.length);
+                        $('.showAppointmentDetails').click(function (e) {
+                            console.log('view button clicked');
+                            let id = $(e.target).data('id');
+                            console.log('id is:' + id)
+                            $.ajax({
+                                url: '/api/Search/SearchAppointmentById/' + id,
+                                type: 'get',
+                                dataType: 'json',
+                                success: function (appointment) {
+                                    console.log('Into modal')
+                                    const appointmentStart = appointment.AppointmentStartTime.split(":");
+                                    const appointmentEnd = appointment.AppointmentEndTime.split(":");
+                                    const appointmentDate = appointment.AppointmentDate.split("T");
+                                    $('#doctorsPicture img').attr('src', '@Url.Content("~/Content/img/Doctors/")' + appointment.Doctor.User.ProfilePicture);
+                                    $('#doctorsFirstName').text(appointment.Doctor.User.FirstName);
+                                    $('#doctorsLastName').text(appointment.Doctor.User.LastName);
+
+                                    $('#Specialty').text(appointment.Doctor.MedicalSpecialty);
+                                    $('#appointmentDateTime').text(appointmentDate[0] + ' ' + appointmentStart[0] + ':' + appointmentStart[1] + '-' + appointmentEnd[0] + ':' + appointmentEnd[1]);
+                                    $('#status').text('Status: ' + appointment.AppointmentStatus);
+                                    $('#patientComments').text(appointment.InsuredComments);
+                                    $('#appointmentDetailsModal').modal('show');
+                                },
+                                error: function () {
+                                    console.log('error')
+                                }
+                            })
+                        });
                     },
                     error: function (error) {
                         console.log(error);
@@ -98,10 +172,10 @@
             ListAppointments('', '', -1, '0001-01-01', '@CurrentUserId');
             $('#search').on('submit', function (e) {
                 e.preventDefault();
-                ListAppointments(e.target[0].value, e.target[1].value, e.target[2].value, e.target[3].value, '@CurrentUserId'); // <- na perasw edw to id tou user
+                ListAppointments(e.target[0].value, e.target[1].value, e.target[2].value, e.target[3].value, '@CurrentUserId');
             })
         })
-</script>
-    }
+    </script>
+}
 
 
