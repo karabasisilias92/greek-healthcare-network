@@ -90,7 +90,7 @@
             <div class="form-group col-md-4">
                 @Html.LabelFor(m => m.MedicalSpecialty, new { @class = "col-md-6 control-label" })
                 <div class="col-md-10">
-                    <select id="MedicalSpecialty" name="MedicalSpecialty" class="form-control mr-2">
+                    <select id="MedicalSpecialty" name="MedicalSpecialty" class="form-control mr-2" data-val="true" data-val-required="The Medical Specialty field is required." required>
                         <option>Choose your specialty</option>
                         @foreach (var item in Model.MedicalSpecialties)
                         {

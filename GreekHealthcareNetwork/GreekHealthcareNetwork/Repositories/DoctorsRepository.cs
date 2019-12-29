@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
+using System.Threading.Tasks;
 
 namespace GreekHealthcareNetwork.Repositories
 {
@@ -76,6 +76,22 @@ namespace GreekHealthcareNetwork.Repositories
             {
                 db.Doctors.Add(doctor);
                 db.SaveChanges();
+            }
+        }
+
+        public void InsertWorkingHoursEntry(WorkingHours workingHoursEntry)
+        {
+            if (workingHoursEntry == null)
+            {
+                throw new ArgumentNullException("workingHoursEntry");
+            }
+
+            
+            using (var db = new ApplicationDbContext())
+            {
+                
+                    db.WorkingHours.Add(workingHoursEntry);
+                    db.SaveChanges();
             }
         }
 

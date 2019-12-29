@@ -1,0 +1,200 @@
+﻿@model GreekHealthcareNetwork.Models.RegisterDoctorWorkingHoursViewModel
+@using GreekHealthcareNetwork.Models;
+@{
+    ViewBag.Title = "Doctor Registration";
+}
+
+<section id="pageHeader" class="container my-3">
+    <img src="https://via.placeholder.com/80x80.png?text=GHNlogo" class="rounded-circle mb-3" />
+    <h2>@ViewBag.Title (2/3)</h2>
+</section>
+
+<section id="doctorInfo" class="container">
+    @if (Model.WorkingHours == null)
+    {
+        Model.WorkingHours = new List<WorkingHours>();
+        Model.WorkingHours.Add(new WorkingHours());
+    }
+    @using (Html.BeginForm("RegisterDoctorWorkingHours", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <h4>Please fill in below your working hours.</h4>
+        <hr class="thicker" />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        <div id="entriesList">
+            @for (int i = 0; i < Model.WorkingHours.Count; i++)
+            {
+                @Html.HiddenFor(m => m.WorkingHours[i].DoctorId, new { @Value = Model.DoctorId });
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        @Html.LabelFor(m => m.WorkingHours[i].Day, new { @class = "col-md-12 control-label" })
+                        <div class="col-md-10">
+                            <select id="@("WorkingHours_" + i + "__Day")" name="@("WorkingHours[" + i + "].Day")" class="form-control mr-2" data-val="true" data-val-required="The Day field is required." required>
+                                <option>Choose day</option>
+                                @foreach (var item in Model.Days)
+                                {
+                                    if (Model.WorkingHours[i].Day == item)
+                                    {
+                                        <option value="@((int)item)" selected>@item</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@((int)item)">@item</option>
+                                    }
+                                }
+                            </select>
+                            @Html.ValidationMessageFor(m => m.WorkingHours[i].Day, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        @Html.LabelFor(m => m.WorkingHours[i].WorkStartTime, new { @class = "col-md-12 control-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.WorkingHours[i].WorkStartTime, new { @class = "form-control", type = "time" })
+                            @Html.ValidationMessageFor(m => m.WorkingHours[i].WorkStartTime, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        @Html.LabelFor(m => m.WorkingHours[i].WorkEndTime, new { @class = "col-md-12 control-label" })
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(m => m.WorkingHours[i].WorkEndTime, new { @class = "form-control", type = "time" })
+                            @Html.ValidationMessageFor(m => m.WorkingHours[i].WorkStartTime, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        @Html.LabelFor(m => m.WorkingHours[i].AppointmentDuration, new { @class = "col-md-12 control-label" })
+                        <div class="col-md-10">
+                            <select id="@("WorkingHours_" + i + "__AppointmentDuration")" name="@("WorkingHours[" + i + "].AppointmentDuration")" class="form-control mr-2" data-val="true" data-val-required="The Appointment Duration field is required." required>
+                                @{
+                                    switch (Model.WorkingHours[i].AppointmentDuration)
+                                    {
+                                        case 15:
+                                            {
+                                                <option>Choose duration</option>
+                                                <option value="15" selected>15 minutes</option>
+                                                <option value="30">30 minutes</option>
+                                                <option value="45">45 minutes</option>
+                                                <option value="60">60 minutes</option>
+                                                break;
+                                            }
+                                        case 30:
+                                            {
+                                                <option>Choose duration</option>
+                                                <option value="15">15 minutes</option>
+                                                <option value="30" selected>30 minutes</option>
+                                                <option value="45">45 minutes</option>
+                                                <option value="60">60 minutes</option>
+                                                break;
+                                            }
+                                        case 45:
+                                            {
+                                                <option>Choose duration</option>
+                                                <option value="15">15 minutes</option>
+                                                <option value="30">30 minutes</option>
+                                                <option value="45" selected>45 minutes</option>
+                                                <option value="60">60 minutes</option>
+                                                break;
+                                            }
+                                        case 60:
+                                            {
+                                                <option>Choose duration</option>
+                                                <option value="15">15 minutes</option>
+                                                <option value="30">30 minutes</option>
+                                                <option value="45">45 minutes</option>
+                                                <option value="60" selected>60 minutes</option>
+                                                break;
+                                            }
+                                        default:
+                                            {
+                                                <option>Choose duration</option>
+                                                <option value="15">15 minutes</option>
+                                                <option value="30">30 minutes</option>
+                                                <option value="45">45 minutes</option>
+                                                <option value="60">60 minutes</option>
+                                                break;
+                                            }
+                                    }
+                                }
+                            </select>
+                            @Html.ValidationMessageFor(m => m.WorkingHours[i].AppointmentDuration, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>        
+
+        <button id="addNewEntry" class="btn btn-outline-primary ml-3 mb-3">Add new entry</button>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" class="btn btn-outline-dark" value="Next" />
+            </div>
+        </div>
+    }
+    @Html.ActionLink("Skip", "PayDoctorPlan", "Account", null, new { @class = "btn btn-outline-danger ml-3 mb-3" })
+</section>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+            $('#addNewEntry').click(function (e) {
+                e.preventDefault();
+                $('#entriesList').append(
+                    '@{
+                        Model.WorkingHours.Add(new WorkingHours());
+                        @Html.HiddenFor(m => m.WorkingHours[Model.WorkingHours.Count - 1].DoctorId, new { @Value = Model.DoctorId });
+                        }' + '< div class= "form-row" >' +
+                                '<div class="form-group col-md-3">' +
+                                '@Html.LabelFor(m => m.WorkingHours[Model.WorkingHours.Count - 1].Day, new { @class = "col-md-12 control-label" })' +
+                                '<div class="col-md-10">' +
+                                    '<select id="@("WorkingHours_" + (Model.WorkingHours.Count - 1) + "__Day")" name="@("WorkingHours[" + (Model.WorkingHours.Count - 1) + "].Day")" class="form-control mr-2" data-val="true" data-val-required="The Day field is required." required>' +
+                                        '<option>Choose day</option>' +
+                                        '@{ 
+                                            string result = "";
+                                            foreach (var item in Model.Days)
+                                            {
+                                                result = result + "<option value=" + (int)item + "\">" + @item + "</option>";
+                                            }
+                                        }' +
+                                '</select>' +
+                                '@Html.ValidationMessageFor(m => m.WorkingHours[Model.WorkingHours.Count-1].Day, "", new { @class = "text-danger" })' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="form-group col-md-3">' +
+                            '@Html.LabelFor(m => m.WorkingHours[Model.WorkingHours.Count-1].WorkStartTime, new { @class = "col-md-12 control-label" })' +
+                            '<div class="col-md-10">' +
+                                '@Html.TextBoxFor(m => m.WorkingHours[Model.WorkingHours.Count-1].WorkStartTime, new { @class = "form-control", type = "time" })' +
+                                '@Html.ValidationMessageFor(m => m.WorkingHours[Model.WorkingHours.Count-1].WorkStartTime, "", new { @class = "text-danger" })' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="form-group col-md-3">' +
+                            '@Html.LabelFor(m => m.WorkingHours[Model.WorkingHours.Count-1].WorkEndTime, new { @class = "col-md-12 control-label" })' +
+                            '<div class="col-md-10">'+
+                                '@Html.TextBoxFor(m => m.WorkingHours[Model.WorkingHours.Count-1].WorkEndTime, new { @class = "form-control", type = "time" })' +
+                                '@Html.ValidationMessageFor(m => m.WorkingHours[Model.WorkingHours.Count-1].WorkStartTime, "", new { @class = "text-danger" })' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="form-group col-md-3">' +
+                            '@Html.LabelFor(m => m.WorkingHours[Model.WorkingHours.Count-1].AppointmentDuration, new { @class = "col-md-12 control-label" })' +
+                            '<div class="col-md-10">' +
+                                '<select id="@("WorkingHours_" + (Model.WorkingHours.Count-1) + "__AppointmentDuration")" name="@("WorkingHours[" + (Model.WorkingHours.Count-1) + "].AppointmentDuration")" class="form-control mr-2" data-val="true" data-val-required="The Appointment Duration field is required." required>' +
+                                    '<option>Choose duration</option>' +
+                                    '<option value="15">15 minutes</option>' +
+                                    '<option value="30">30 minutes</option>' +
+                                    '<option value="45">45 minutes</option>' +
+                                    '<option value="60">60 minutes</option>' +
+                                '</select>'+ +
+                                '@Html.ValidationMessageFor(m => m.WorkingHours[Model.WorkingHours.Count-1].AppointmentDuration, "", new { @class = "text-danger" })' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<button id="@("deleteEntry" + (Model.WorkingHours.Count-1))" class="btn btn-outline-primary ml-3 mb-3" data-id="@(Model.WorkingHours.Count-1)">Delete Above Entry</button>' +
+                '}');
+            })
+    </script>
+}
+
+@section cssScripts {
+    <link href="~/Content/registration.css" rel="stylesheet" />
+}
+

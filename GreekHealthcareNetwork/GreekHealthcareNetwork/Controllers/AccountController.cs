@@ -248,14 +248,14 @@ namespace GreekHealthcareNetwork.Controllers
                         return View(model);
                     }
                     UserManager.AddToRole(userId, "Doctor");
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("RegisterDoctorWorkingHours", "Account", userId);
                 }
                 AddErrors(result);
             }
@@ -266,6 +266,127 @@ namespace GreekHealthcareNetwork.Controllers
             }
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult RegisterDoctorWorkingHours(string userId)
+        {
+            RegisterDoctorWorkingHoursViewModel model = new RegisterDoctorWorkingHoursViewModel();
+            model.DoctorId = "eeaa21c3-7575-4ffb-9b7a-f667fd25be82";
+            model.Days = new List<DayOfWeek>();
+            for (int i = 1; i < Enum.GetNames(typeof(DayOfWeek)).Length; i++)
+            {
+                model.Days.Add((DayOfWeek)i);
+            }
+            model.Days.Add((DayOfWeek)0);
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult RegisterDoctorWorkingHours(RegisterDoctorWorkingHoursViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (!CheckIfWorkingHoursEntriesAreValid(model.WorkingHours))
+                {
+                    model.DoctorId = model.WorkingHours[0].DoctorId;
+                    model.Days = new List<DayOfWeek>();
+                    for (int j = 1; j < Enum.GetNames(typeof(DayOfWeek)).Length; j++)
+                    {
+                        model.Days.Add((DayOfWeek)j);
+                    }
+                    model.Days.Add((DayOfWeek)0);
+                    return View(model);
+                }
+                if (CheckIfWorkingHourEntriesIntecept(model.WorkingHours))
+                {
+                    model.DoctorId = model.WorkingHours[0].DoctorId;
+                    model.Days = new List<DayOfWeek>();
+                    for (int j = 1; j < Enum.GetNames(typeof(DayOfWeek)).Length; j++)
+                    {
+                        model.Days.Add((DayOfWeek)j);
+                    }
+                    model.Days.Add((DayOfWeek)0);
+                    return View(model);
+                }
+                for(int i = 0; i < model.WorkingHours.Count; i++)
+                {
+                    var workingHoursEntry = new WorkingHours
+                    {
+                        Day = model.WorkingHours[i].Day,
+                        WorkStartTime = model.WorkingHours[i].WorkStartTime,
+                        WorkEndTime = model.WorkingHours[i].WorkEndTime,
+                        AppointmentDuration = model.WorkingHours[i].AppointmentDuration,
+                        DoctorId = model.WorkingHours[i].DoctorId
+                    };
+                    try
+                    {
+                        _doctors.InsertWorkingHoursEntry(workingHoursEntry);
+                    }
+                    catch (Exception e)
+                    {
+                        model.DoctorId = model.WorkingHours[i].DoctorId;
+                        model.Days = new List<DayOfWeek>();
+                        for (int j = 1; j < Enum.GetNames(typeof(DayOfWeek)).Length; j++)
+                        {
+                            model.Days.Add((DayOfWeek)j);
+                        }
+                        model.Days.Add((DayOfWeek)0);
+                        ModelState.AddModelError("", e.Message);
+                        return View(model);
+                    }
+                }
+                return RedirectToAction("PayDoctorPlan", "Account", model.DoctorId);
+            }
+
+            model.DoctorId = model.WorkingHours[0].DoctorId;
+            model.Days = new List<DayOfWeek>();
+            for (int i = 1; i < Enum.GetNames(typeof(DayOfWeek)).Length; i++)
+            {
+                model.Days.Add((DayOfWeek)i);
+            }
+            model.Days.Add((DayOfWeek)0);
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
+        public bool CheckIfWorkingHourEntriesIntecept(List<WorkingHours> workingHoursList)
+        {
+            bool result = false;
+            for (int i = 0; i < workingHoursList.Count; i++)
+            {
+                for (int j = i + 1; j < workingHoursList.Count; j++)
+                {
+                    if (workingHoursList[i].Day == workingHoursList[j].Day && ((workingHoursList[j].WorkStartTime <= workingHoursList[i].WorkStartTime && workingHoursList[j].WorkEndTime > workingHoursList[i].WorkStartTime && workingHoursList[j].WorkEndTime <= workingHoursList[i].WorkEndTime) ||
+                                                                               (workingHoursList[j].WorkStartTime <= workingHoursList[i].WorkStartTime && workingHoursList[j].WorkEndTime > workingHoursList[i].WorkEndTime) ||
+                                                                               (workingHoursList[j].WorkStartTime > workingHoursList[i].WorkStartTime && workingHoursList[j].WorkEndTime <= workingHoursList[i].WorkEndTime) ||
+                                                                               (workingHoursList[j].WorkStartTime > workingHoursList[i].WorkStartTime && workingHoursList[j].WorkStartTime < workingHoursList[i].WorkEndTime && workingHoursList[j].WorkEndTime > workingHoursList[i].WorkEndTime)))
+                    {
+                        result = true;
+                        ModelState.AddModelError("", "Entry " + (i+1) + " is identical or intercepts with entry " + (j+1) + "! Please check and fix.");
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public bool CheckIfWorkingHoursEntriesAreValid(List<WorkingHours> workingHourList)
+        {
+            bool result = true;
+            double minutes;
+            for (int i = 0; i < workingHourList.Count; i++)
+            {
+                minutes = (workingHourList[i].WorkEndTime - workingHourList[i].WorkStartTime).Value.TotalMinutes;
+                if (minutes <= 0 || minutes % workingHourList[i].AppointmentDuration != 0)
+                {
+                    result = false;
+                    ModelState.AddModelError("", "Entry " + (i+1) + ": Work End Time must be greater than Work Start Time and their difference in minutes must be divided exactly by Appointment Duration");
+                }
+            }
+            return result;
         }
 
         //
