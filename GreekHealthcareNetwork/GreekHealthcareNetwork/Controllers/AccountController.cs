@@ -12,6 +12,8 @@ using GreekHealthcareNetwork.Models;
 using System.Collections.Generic;
 using System.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.IO;
+using GreekHealthcareNetwork.Repositories;
 
 namespace GreekHealthcareNetwork.Controllers
 {
@@ -20,6 +22,7 @@ namespace GreekHealthcareNetwork.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private readonly DoctorsRepository _doctors = new DoctorsRepository();
 
         public AccountController()
         {
@@ -170,7 +173,13 @@ namespace GreekHealthcareNetwork.Controllers
         [AllowAnonymous]
         public ActionResult DoctorRegister()
         {
-            return View();
+            DoctorRegisterViewModel model = new DoctorRegisterViewModel();
+            model.MedicalSpecialties = new List<MedicalSpecialty>();
+            for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
+            {
+                model.MedicalSpecialties.Add((MedicalSpecialty)i);
+            }
+            return View(model);
         }
 
         //
@@ -182,12 +191,52 @@ namespace GreekHealthcareNetwork.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                string path = "defaultUserImage.png";
+
+                if (model.ProfilePicture != null)
+                {
+                    path = Path.Combine(Server.MapPath("~/Content/img/Doctors"),
+                    model.ProfilePicture.FileName);
+                    model.ProfilePicture.SaveAs(path);
+                }
+
+                var user = new ApplicationUser 
+                { 
+                    UserName = model.UserName, 
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    PhoneNumber = model.PhoneNumber,
+                    DoB = model.DoB,
+                    AMKA = model.AMKA,
+                    PaypalAccount = model.PaypalAccount,
+                    ProfilePicture = Path.GetFileName(path)
+                };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    string userId = UserManager.FindByName(model.UserName).Id;
+                    try
+                    {
+                        int doctorPlanId = _doctors.GetDoctorPlanId(model.MedicalSpecialty);
+                        Doctor doctor = new Doctor { UserId = userId, OfficeAddress = model.OfficeAddress, MedicalSpecialty = model.MedicalSpecialty, DoctorPlanId = doctorPlanId };
+                        _doctors.InsertDoctor(doctor);
+                    }
+                    catch (Exception)
+                    {
+                        model.MedicalSpecialties = new List<MedicalSpecialty>();
+                        for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
+                        {
+                            model.MedicalSpecialties.Add((MedicalSpecialty)i);
+                        }
+                        await UserManager.DeleteAsync(user);
+                        // If we could not create doctor for some reason, something failed, redisplay form
+
+                        ModelState.AddModelError("", "Something went wrong, please try again.");
+                        return View(model);
+                    }
+                    UserManager.AddToRole(userId, "Doctor");
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
@@ -198,7 +247,11 @@ namespace GreekHealthcareNetwork.Controllers
                 }
                 AddErrors(result);
             }
-
+            model.MedicalSpecialties = new List<MedicalSpecialty>();
+            for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
+            {
+                model.MedicalSpecialties.Add((MedicalSpecialty)i);
+            }
             // If we got this far, something failed, redisplay form
             return View(model);
         }

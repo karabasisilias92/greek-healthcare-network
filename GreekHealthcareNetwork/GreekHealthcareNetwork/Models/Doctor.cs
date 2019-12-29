@@ -20,7 +20,7 @@ namespace GreekHealthcareNetwork.Models
 
         [Required]
         [JsonConverter(typeof(StringEnumConverter))]
-        public MedicalSpecialty MedicalSpecialty { get; set; }
+        public MedicalSpecialty? MedicalSpecialty { get; set; }
 
         [ForeignKey("MedicalSpecialty")]
         public virtual AppointmentCostPerSpecialty AppointmentCost { get; set; }
