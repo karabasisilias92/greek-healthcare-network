@@ -1,0 +1,51 @@
+﻿@model GreekHealthcareNetwork.Models.Message
+
+<div class="modal-dialog">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">New Message</h4>
+        </div>
+        <div class="modal-body">
+            <div id="errorContainerMessage" class="container">
+                <div class="row">
+                    <p> Your message hasn't been sent. Please try again later. </p>
+                </div>
+            </div>
+            <div id="normalContainerBook" class="container">
+                <form id="messagearea" class="form-horizontal">
+                    <div class="form-group">
+                        <textarea class="form-control" id='areaformessage' style="min-width: 100%"></textarea>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="form-horizontal">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Send</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section messageScripts {
+    <script>
+        $(document).click(function () {
+            $ajax({
+                url: '/api/Search/SearchDoctorById/Message' + id,
+                type: 'get',
+                dataType: 'json',
+                success: function (message) {
+                    $('#errorContainerMessage').hide();
+                    $('#messagearea').text(message.show);
+                },
+                error: function () {
+                    $('#normalContainerBook').hide();
+                    $('#errorContainerMessage').show();                    
+                }
+            })
+        })
+    </script>
+ }
