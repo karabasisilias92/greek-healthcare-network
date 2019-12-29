@@ -1,5 +1,5 @@
 ﻿@model GreekHealthcareNetwork.Models.ProfileDetailsViewModel
-]
+@{ 
     ViewBag.Title = "Profile";
 }
 
@@ -18,8 +18,17 @@
                     <img src="@Url.Content("~/Content/img/Doctors/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
                 </div>
                 <div class="col-md-8 align-self-center">
-                    <h4>Golden Member</h4>
-                    <p>Exp: @Model.User.SubscriptionEndDate</p>
+                    <h4>
+                        @if (User.IsInRole("Doctor"))
+                        {
+                            <text>Doctor</text>
+                        }
+                         @if (User.IsInRole("Insured"))
+                         {
+                             @Model.Insured.InsuredPlan.Name <text> Member</text>
+                         }
+                    </h4>
+                    <p>Exp: @Model.User.SubscriptionEndDate.ToString("dd/MM/yyyy")</p>
                     <button type="button" class="btn btn-info">Renew</button>
                 </div>
             </div>
@@ -31,7 +40,7 @@
                             <td>
                                 @Model.User.FirstName
                                 <a href="#">
-                                    <i class="far fa-edit"></i>
+                                    <i class="fa fa-edit"></i>
                                 </a>
                             </td>
                         </tr>
@@ -39,14 +48,28 @@
                             <th>Last Name:</th>
                             <td>@Model.User.LastName</td>
                         </tr>
+                        @if (User.IsInRole("Doctor"))
+                        {
+                            <tr>
+                                <th>Specialty:</th>
+                                <th>@Model.Doctor.MedicalSpecialty</th>
+                            </tr>
+                        }
                         <tr>
                             <th>Date of birth:</th>
-                            <td>@Model.User.DoB</td>
+                            <td>@Model.User.DoB.ToString("dd/MM/yyyy")</td>
                         </tr>
                         <tr>
                             <th>AMKA:</th>
                             <td>@Model.User.AMKA</td>
                         </tr>
+                        @if (User.IsInRole("Doctor"))
+                        {
+                            <tr>
+                                <th>Working Hours:</th>
+                                <td> Data of working hours </td>  @*<- To be filled with doctors working hours*@
+                            </tr>
+                        }
                         <tr>
                             <th>Address:</th>
                             <td>
@@ -67,6 +90,10 @@
                         <tr>
                             <th>Tel :</th>
                             <td>@Model.User.PhoneNumber</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><button type="button" class="btn btn-danger">Edit Details</button></td>
                         </tr>
                     </tbody>
                 </table>
