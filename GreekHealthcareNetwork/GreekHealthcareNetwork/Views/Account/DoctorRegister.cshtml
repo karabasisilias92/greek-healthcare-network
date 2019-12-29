@@ -9,7 +9,7 @@
 </section>
 
 <section id="doctorInfo" class="container">
-    @using (Html.BeginForm("DoctorRegister", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    @using (Html.BeginForm("DoctorRegister", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype= "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         <h4>Please fill in below your personal information.</h4>
@@ -94,7 +94,14 @@
                         <option>Choose your specialty</option>
                         @foreach (var item in Model.MedicalSpecialties)
                         {
-                            <option value="@((int)item)">@item</option>
+                            if (Model.MedicalSpecialty == item)
+                            {
+                                <option value="@((int)item)" selected>@item</option>
+                            }
+                            else
+                            {
+                                <option value="@((int)item)">@item</option>
+                            }
                         }
                     </select>
                     @Html.ValidationMessageFor(m => m.MedicalSpecialty, "", new { @class = "text-danger" })
@@ -121,8 +128,7 @@
             <div class="form-group col-md-4">
                 @Html.LabelFor(m => m.ProfilePicture, new { @class = "col-md-6 control-label" })
                 <div class="col-md-10">
-                    @Html.TextBoxFor(m => m.ProfilePicture, new { @class = "form-control", type = "file", accept = "image/png, image/jpg, image/jpeg" })
-                    @Html.ValidationMessageFor(m => m.ProfilePicture, "", new { @class = "text-danger" })
+                    @Html.TextBoxFor(m => m.ProfilePicture, new { @class = "form-control", type = "file", accept = "image/*" })
                 </div>
             </div>
         </div>

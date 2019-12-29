@@ -254,6 +254,10 @@
     <Compile Include="Migrations\201912282322323_PaypalAccount set to required.Designer.cs">
       <DependentUpon>201912282322323_PaypalAccount set to required.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912291322148_Change AMKA type to string.cs" />
+    <Compile Include="Migrations\201912291322148_Change AMKA type to string.Designer.cs">
+      <DependentUpon>201912291322148_Change AMKA type to string.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -551,6 +555,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912282322323_PaypalAccount set to required.resx">
       <DependentUpon>201912282322323_PaypalAccount set to required.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912291322148_Change AMKA type to string.resx">
+      <DependentUpon>201912291322148_Change AMKA type to string.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

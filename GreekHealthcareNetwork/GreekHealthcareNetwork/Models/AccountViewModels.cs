@@ -113,10 +113,12 @@ namespace GreekHealthcareNetwork.Models
         public DateTime DoB { get; set; }
 
         [Required]
+        [MinLength(11, ErrorMessage = "AMKA should be 11 digits.")]
+        [MaxLength(11, ErrorMessage = "AMKA should be 11 digits.")]
         [RegularExpression(@"^[0-9]{11}$",
          ErrorMessage = "AMKA should be 11 digits.")]
         [Display(Name = "AMKA/SSN")]
-        public long? AMKA { get; set; }
+        public string AMKA { get; set; }
 
         [Display(Name = "Profile Picture")]
         public HttpPostedFileBase ProfilePicture { get; set; }

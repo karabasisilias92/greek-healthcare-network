@@ -850,6 +850,7 @@ doctors section
 }
 
 .img-thumbnail h3 {
+    word-break: break-all;
     margin-top: 20px;
     padding-bottom: 5px;
     margin-bottom: 10px;

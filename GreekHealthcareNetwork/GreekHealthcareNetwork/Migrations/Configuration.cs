@@ -56,7 +56,7 @@ namespace GreekHealthcareNetwork.Migrations
                     LastName = "Smith",
                     PhoneNumber = "+30 6924771994",
                     DoB = new DateTime(1992, 1, 24).Date,
-                    AMKA = 24019201979
+                    AMKA = "24019201979"
                 }, "!Admin123");
 
                 if (result.Succeeded)
@@ -86,7 +86,7 @@ namespace GreekHealthcareNetwork.Migrations
                     LastName = "Wally",
                     PhoneNumber = "+30 6946540329",
                     DoB = new DateTime(1992, 1, 20).Date,
-                    AMKA = 24019201978,
+                    AMKA = "24019201978",
                     PaypalAccount = "456878900785634",
                     ProfilePicture = "doctor1.jpg"
                 }, "!Doctor123");
@@ -112,7 +112,7 @@ namespace GreekHealthcareNetwork.Migrations
                     LastName = "Donas",
                     PhoneNumber = "+30 6946540329",
                     DoB = new DateTime(1992, 1, 20).Date,
-                    AMKA = 24019201978,
+                    AMKA = "24019201978",
                     PaypalAccount = "456878900785634",
                     ProfilePicture = "doctor2.jpg"
                 }, "!Doctor123");
@@ -138,7 +138,7 @@ namespace GreekHealthcareNetwork.Migrations
                     LastName = "Denyl",
                     PhoneNumber = "+30 6946540329",
                     DoB = new DateTime(1992, 1, 20).Date,
-                    AMKA = 24019201978,
+                    AMKA = "24019201978",
                     PaypalAccount = "456878900785634",
                     ProfilePicture = "doctor3.jpg"
                 }, "!Doctor123");
@@ -164,7 +164,7 @@ namespace GreekHealthcareNetwork.Migrations
                     LastName = "Davis",
                     PhoneNumber = "+30 6946540329",
                     DoB = new DateTime(1992, 1, 20).Date,
-                    AMKA = 24019201978,
+                    AMKA = "24019201978",
                     PaypalAccount = "456878900785634",
                     ProfilePicture = "doctor4.jpg"
                 }, "!Doctor123");
@@ -201,7 +201,7 @@ namespace GreekHealthcareNetwork.Migrations
                     LastName = "Karabasis",
                     PhoneNumber = "+30 6924771234",
                     DoB = new DateTime(1992, 1, 24).Date,
-                    AMKA = 24019201979
+                    AMKA = "24019201979"
                 }, "!Insured123");
 
                 if (result.Succeeded)

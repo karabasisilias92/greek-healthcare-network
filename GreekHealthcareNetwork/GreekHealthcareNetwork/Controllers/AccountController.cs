@@ -14,6 +14,7 @@ using System.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.IO;
 using GreekHealthcareNetwork.Repositories;
+using System.Drawing;
 
 namespace GreekHealthcareNetwork.Controllers
 {
@@ -195,6 +196,17 @@ namespace GreekHealthcareNetwork.Controllers
 
                 if (model.ProfilePicture != null)
                 {
+                    Image image = Image.FromStream(model.ProfilePicture.InputStream);
+                    if (image.Width != image.Height || image.Width < 237.5)
+                    {
+                        model.MedicalSpecialties = new List<MedicalSpecialty>();
+                        for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
+                        {
+                            model.MedicalSpecialties.Add((MedicalSpecialty)i);
+                        }
+                        ModelState.AddModelError("", "The profile picture width must be equal to its height and the width must be also over 237.5 pixels");
+                        return View(model);
+                    }
                     path = Path.Combine(Server.MapPath("~/Content/img/Doctors"),
                     model.ProfilePicture.FileName);
                     model.ProfilePicture.SaveAs(path);
