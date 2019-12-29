@@ -141,6 +141,11 @@ namespace GreekHealthcareNetwork.Models
         public List<MedicalSpecialty> MedicalSpecialties { get; set; }
     }
 
+    public class RegisterDoctorWorkingHoursViewModel
+    {
+
+    }
+
     public class InsuredRegisterViewModel : RegisterViewModel
     {
         
