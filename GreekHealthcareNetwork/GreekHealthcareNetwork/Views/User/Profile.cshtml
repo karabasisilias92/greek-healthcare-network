@@ -1,4 +1,4 @@
-﻿@model GreekHealthcareNetwork.Models.ApplicationUser
+﻿@model GreekHealthcareNetwork.Models.ProfileDetailsViewModel
 ]
     ViewBag.Title = "Profile";
 }
@@ -15,11 +15,11 @@
             </div>
             <div class="row" id="profileSection">
                 <div class="col-md-4">
-                    <img src="@Url.Content("~/Content/img/Doctors/")@Model.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
+                    <img src="@Url.Content("~/Content/img/Doctors/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
                 </div>
                 <div class="col-md-8 align-self-center">
                     <h4>Golden Member</h4>
-                    <p>Exp: @Model.SubscriptionEndDate</p>
+                    <p>Exp: @Model.User.SubscriptionEndDate</p>
                     <button type="button" class="btn btn-info">Renew</button>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                         <tr>
                             <th>Name:</th>
                             <td>
-                                @Model.FirstName
+                                @Model.User.FirstName
                                 <a href="#">
                                     <i class="far fa-edit"></i>
                                 </a>
@@ -37,27 +37,36 @@
                         </tr>
                         <tr>
                             <th>Last Name:</th>
-                            <td>@Model.LastName</td>
+                            <td>@Model.User.LastName</td>
                         </tr>
                         <tr>
                             <th>Date of birth:</th>
-                            <td>@Model.DoB</td>
+                            <td>@Model.User.DoB</td>
                         </tr>
                         <tr>
                             <th>AMKA:</th>
-                            <td>@Model.AMKA</td>
+                            <td>@Model.User.AMKA</td>
                         </tr>
                         <tr>
                             <th>Address:</th>
-                            <td>5th Klm Marathonos Av.</td>
+                            <td>
+                                @if (User.IsInRole("Doctor"))
+                                {
+                                    @Model.Doctor.OfficeAddress
+                                }
+                                @if (User.IsInRole("Insured"))
+                                {
+                                    @Model.Insured.HomeAddress
+                                }
+                            </td>
                         </tr>
                         <tr>
                             <th>Email:</th>
-                            <td>@Model.Email</td>
+                            <td>@Model.User.Email</td>
                         </tr>
                         <tr>
                             <th>Tel :</th>
-                            <td>@Model.PhoneNumber</td>
+                            <td>@Model.User.PhoneNumber</td>
                         </tr>
                     </tbody>
                 </table>
