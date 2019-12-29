@@ -39,9 +39,11 @@ namespace GreekHealthcareNetwork.Models
         public string ProfilePicture { get; set; }
 
         [Required]
+        [MinLength(11, ErrorMessage = "AMKA should be 11 digits.")]
+        [MaxLength(11, ErrorMessage = "AMKA should be 11 digits.")]
         [RegularExpression(@"^[0-9]{11}$",
          ErrorMessage = "AMKA should be 11 digits.")]
-        public long AMKA { get; set; }
+        public string AMKA { get; set; }
 
         [Required]
         public string PaypalAccount { get; set; }

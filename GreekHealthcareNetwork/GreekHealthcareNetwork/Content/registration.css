@@ -1,0 +1,11 @@
+﻿body {
+    background-color: #f7f7f7;
+}
+
+hr.thicker {
+    border-top: 3px solid;
+}
+
+input[type="submit"] {
+    width: 126.3px;
+}
