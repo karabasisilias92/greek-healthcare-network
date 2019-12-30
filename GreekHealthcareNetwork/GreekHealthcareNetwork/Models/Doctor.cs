@@ -26,6 +26,7 @@ namespace GreekHealthcareNetwork.Models
         public virtual AppointmentCostPerSpecialty AppointmentCost { get; set; }
 
         [Required]
+        [Display(Name = "Office Address")]
         public string OfficeAddress { get; set; }
 
         [Required]

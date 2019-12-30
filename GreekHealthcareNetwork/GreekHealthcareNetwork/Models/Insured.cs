@@ -24,6 +24,7 @@ namespace GreekHealthcareNetwork.Models
 
         [Required]
         [MaxLength(100)]
+        [Display(Name = "Home Address")]
         public string HomeAddress { get; set; }
 
         public int BookedAppointments { get; set; }

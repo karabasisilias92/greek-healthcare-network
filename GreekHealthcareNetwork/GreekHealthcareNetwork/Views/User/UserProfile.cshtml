@@ -39,9 +39,6 @@
                             <th>Name:</th>
                             <td>
                                 @Model.User.FirstName
-                                <a href="#">
-                                    <i class="fa fa-edit"></i>
-                                </a>
                             </td>
                         </tr>
                         <tr>
@@ -93,7 +90,7 @@
                         </tr>
                         <tr>
                             <td></td>
-                            <td><button type="button" class="btn btn-danger">Edit Details</button></td>
+                            <td><button type="button" id="editProfileButton" class="btn btn-danger" onclick="location.href='@Url.Action("EditProfile", "User")'">Edit Details</button></td>
                         </tr>
                     </tbody>
                 </table>

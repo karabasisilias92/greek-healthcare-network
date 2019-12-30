@@ -21,6 +21,7 @@ namespace GreekHealthcareNetwork.Models
         [MaxLength(50, ErrorMessage = "First name cannot be more than 50 characters")]
         [RegularExpression(@"^[A-Z][a-z]*$|^[Α-Ω][α-ωάήίόέύώϊϋΐΰ]*$",
          ErrorMessage = "First Name must start with capital letter and then contain only small letters of the same language.")]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
         [Required]
@@ -28,12 +29,14 @@ namespace GreekHealthcareNetwork.Models
         [MaxLength(50, ErrorMessage = "Last name cannot be more than 50 characters")]
         [RegularExpression(@"^[A-Z][a-z]*$|^[Α-Ω][α-ωάήίόέύώϊϋΐΰ]*$",
          ErrorMessage = "Last Name must start with capital letter and then contain only small letters of the same language.")]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
         [Required]
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        [Display(Name = "Date of birth")]
         public DateTime DoB { get; set; }
 
         public string ProfilePicture { get; set; }

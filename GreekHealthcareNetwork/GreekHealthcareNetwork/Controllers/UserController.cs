@@ -16,14 +16,13 @@ namespace GreekHealthcareNetwork.Controllers
         private readonly DoctorsRepository _doctorsRepository = new DoctorsRepository();
         private readonly InsuredsRepository _insuredsRepository = new InsuredsRepository();
 
-        // GET: Profile
-        public new ActionResult Profile()
+        private ProfileDetailsViewModel GetCurrentUser()
         {
             var userId = User.Identity.GetUserId();
             var currentUser = new ProfileDetailsViewModel();
 
             currentUser.User = _usersRepository.GetUserById(userId);
-            
+
             if (User.IsInRole("Doctor"))
             {
                 currentUser.Doctor = _doctorsRepository.GetDoctorById(userId);
@@ -34,8 +33,14 @@ namespace GreekHealthcareNetwork.Controllers
                 currentUser.Insured = _insuredsRepository.GetInsuredById(userId);
             }
 
+            return currentUser;
+        }
 
-            return View(currentUser);
+        // GET: Profile
+        public ActionResult UserProfile()
+        {
+
+            return View(GetCurrentUser());
         }
 
         public ActionResult AppointmentsHistory(SearchLoginViewModel searchLoginViewModel)
@@ -51,6 +56,29 @@ namespace GreekHealthcareNetwork.Controllers
         public ActionResult Messages()
         {
             return View();
+        }
+
+        public ActionResult EditProfile()
+        {
+            return View(GetCurrentUser());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditProfile(ProfileDetailsViewModel currentUser)
+        {
+            if (!ModelState.IsValid)
+            {
+                var user = GetCurrentUser();
+                currentUser.Insured.InsuredPlan = user.Insured.InsuredPlan;
+                currentUser.User.SubscriptionEndDate = user.User.SubscriptionEndDate;
+                currentUser.User.ProfilePicture = user.User.ProfilePicture;
+                return View(currentUser);
+            }
+
+            _usersRepository.UpdateUser(currentUser);
+
+            return RedirectToAction("UserProfile");
         }
     }
 }

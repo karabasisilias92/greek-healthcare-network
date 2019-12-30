@@ -1,0 +1,112 @@
+﻿@model GreekHealthcareNetwork.Models.ProfileDetailsViewModel
+@{
+    ViewBag.Title = "Edit Profile";
+}
+
+@section cssScripts{
+    <link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
+}
+
+@using (Html.BeginForm("EditProfile", "User", FormMethod.Post))
+{ 
+    @Html.AntiForgeryToken()
+    
+    <main id="main">
+        <div>
+            <div class="col-md-5 offset-md-4">
+                <div class="page-header">
+                    <h1>Profile</h1>
+                </div>
+                <div class="row" id="profileSection">
+                    <div class="col-md-4">
+                        <img src="@Url.Content("~/Content/img/Doctors/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
+                    </div>
+                    <div class="col-md-8 align-self-center">
+                        <h4>
+                            @if (User.IsInRole("Doctor"))
+                            {
+                                <text>Doctor</text>
+                            }
+                            @if (User.IsInRole("Insured"))
+                            {
+                                @Model.Insured.InsuredPlan.Name <text> Member</text>
+                            }
+                        </h4>
+                        <p>Exp: @Model.User.SubscriptionEndDate.ToString("dd/MM/yyyy")</p>
+                        <button type="button" class="btn btn-info">Renew</button>
+                    </div>
+                </div>
+                <div>
+                    <table class="table table-borderless mt-5">
+                        <tbody>
+                            <tr class="form-group">
+                                <th>@Html.LabelFor(m => m.User.FirstName):</th>
+                                <td>
+                                    @Html.TextBoxFor(m => m.User.FirstName, new { @class = "form-control" })
+                                </td>
+                            </tr>
+                            <tr class="form-group">
+                                <th>@Html.LabelFor(m => m.User.LastName):</th>
+                                <td>@Html.TextBoxFor(m => m.User.LastName, new { @class = "form-control" })</td>
+                            </tr>
+                            @if (User.IsInRole("Doctor"))
+                            {
+                                <tr class="form-group">
+                                    <th>@Html.LabelFor(m => m.Doctor.MedicalSpecialty):</th>
+                                    <th>@Model.Doctor.MedicalSpecialty</th>
+                                </tr>
+                            }
+                            <tr class="form-group">
+                                <th>@Html.LabelFor(m => m.User.DoB):</th>
+                                <td>@Html.EditorFor(m => m.User.DoB, new { @class = "form-control" })</td>
+                            </tr>
+                            <tr class="form-group">
+                                <th>@Html.LabelFor(m => m.User.AMKA):</th>
+                                <td>@Html.TextBoxFor(m => m.User.AMKA, new { @class = "form-control" })</td>
+                            </tr>
+                            @if (User.IsInRole("Doctor"))
+                            {
+                                <tr class="form-group">
+                                    <th>@Html.LabelFor(m => m.Doctor.WorkingHours):</th>
+                                    <td>@Html.TextBoxFor(m => m.Doctor.WorkingHours, new { @class = "form-control" }) </td>  @*<- To be filled with doctors working hours*@
+                                </tr>
+                            }
+                            <tr class="form-group">
+                                @if (User.IsInRole("Doctor"))
+                                {
+                                    <th>@Html.LabelFor(m => m.Doctor.OfficeAddress):</th>
+                                    <td>@Html.TextBoxFor(m => m.Doctor.OfficeAddress, new { @class = "form-control" })</td>
+                                }
+                                @if (User.IsInRole("Insured"))
+                                {
+                                    <th>@Html.LabelFor(m => m.Insured.HomeAddress)</th>
+                                    <td>@Html.TextBoxFor(m => m.Insured.HomeAddress, new { @class = "form-control" })</td>
+                                }
+                            <tr class="form-group">
+                                <th>@Html.LabelFor(m => m.User.Email):</th>
+                                <td>@Html.TextBoxFor(m => m.User.Email, new { @class = "form-control" })</td>
+                            </tr>
+                            <tr class="form-group">
+                                <th>@Html.LabelFor(m => m.User.PhoneNumber):</th>
+                                <td>@Html.TextBoxFor(m => m.User.PhoneNumber, new { @class = "form-control" })</td>
+                            </tr>
+                            <tr class="form-group">
+                                <td></td>
+                                <td><input type="submit" class="btn btn-danger" value="Update" /></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>@Html.ValidationSummary("", new { @class = "text-danger" })</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                </div>
+            </div>
+        </div>
+    </main>
+}
+
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    }
