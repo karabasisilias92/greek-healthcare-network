@@ -188,7 +188,8 @@
                                 });
                         });
                     }
-                    $('#send').click(function () {
+                    $('#send').click(function (e) {
+                        e.preventDefault();
                         let model = new Object();
                         model.Message = new Object();
                         model.Message.SenderId = $('#Message_SenderId').val();
@@ -200,8 +201,8 @@
                         model.DoctorSpecialty = -1;
                         model.MedicalSpecialties = [];
                         model.AppointmentDate = null;
-                        model.UserName = $('#UserName').val();
-                        model.Password = $('#Password').val();
+                        model.UserName = $('#UserName1').val();
+                        model.Password = $('#Password1').val();
                         model.RememberMe = false;
                         model = JSON.stringify(model)
                         $.ajax({
@@ -212,7 +213,10 @@
                             cache: false,
                             processData: false,
                             success: function () {
+                                $('#Message_Subject').val("");
+                                $('#Message_MessageText').val("");
                                 $('#normalContainerMessage').hide();
+                                $('#errorContainerMessage').hide();
                                 $('#successContainerMessage').show();
                                 setTimeout(function () {
                                     $('#newMessage').modal("hide");
@@ -275,8 +279,8 @@
                         $('#errorContainerMessage').hide();
                         $('#successContainerMessage').hide();
                         $('#Message_RecipientId').val(id);
+                        $('#normalContainerMessage').show();
                         $('#newMessage').modal('show');
-
                     })
                     $('.bookAppointments').click(function (e) {
                         let id = $(e.target).data('id');

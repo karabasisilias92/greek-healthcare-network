@@ -24,14 +24,14 @@
                     </div>
                 </div>
                 <div id="normalContainerMessage" class="container">
-                    <form id="messagearea" class="form-horizontal">
+                    <form id="messagearea" method="post" action="/api/Messages" class="form-horizontal">
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                         <div class="form-group">
-                            @Html.HiddenFor(m => m.UserName, new { @Value = User.Identity.Name })<!--Unused, here just to supress validation error messages-->
+                            <input value="@User.Identity.Name" class="input-validation-error" data-val="true" data-val-required="Username/Email field is Required." id="UserName1" name="UserName" type="hidden"><!--Unused, here just to supress validation error messages-->
                         </div>
                         <div class="form-group">
-                            @Html.HiddenFor(m => m.Password, new { @Value = "!Doctor123" })<!--Unused, here just to supress validation error messages-->
+                            <input value="!Doctor123" class="input-validation-error" data-val="true" data-val-required="Password is Reguired." id="Password1" name="Password" type="hidden"><!--Unused, here just to supress validation error messages-->
                         </div>
                         <div class="form-group">
                             @Html.HiddenFor(m => m.Message.SenderId, new { @Value = CurrentUserId })
