@@ -19,6 +19,26 @@ namespace GreekHealthcareNetwork.Repositories
             return user;
         }
 
+        public void ActivateUser(string userId)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var user = db.Users.Find(userId);
+                user.IsActive = true;
+                db.SaveChanges();
+            }
+        }
+
+        public void UpdateSubscriptionEndDate(string userId)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var user = db.Users.Find(userId);
+                user.SubscriptionEndDate = DateTime.Now.AddMonths(12);
+                db.SaveChanges();
+            }
+        }
+
         public void UpdateUser(ProfileDetailsViewModel updatedUser)
         {
             ApplicationUser user;

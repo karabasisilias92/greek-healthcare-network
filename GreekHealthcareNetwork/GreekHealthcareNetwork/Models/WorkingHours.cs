@@ -16,22 +16,25 @@ namespace GreekHealthcareNetwork.Models
 
         [Required]
         [JsonConverter(typeof(StringEnumConverter))]
-        public DayOfWeek Day { get; set; }
+        public DayOfWeek? Day { get; set; }
 
         [Required]
         [Column(TypeName = "time")]
         [DataType(DataType.Time)]
         [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true)]
-        public TimeSpan WorkStartTime { get; set; }
+        [Display(Name = "Work Start Time")]
+        public TimeSpan? WorkStartTime { get; set; }
 
         [Required]
         [Column(TypeName = "time")]
         [DataType(DataType.Time)]
         [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true)]
-        public TimeSpan WorkEndTime { get; set; }
+        [Display(Name = "Work End Time")]
+        public TimeSpan? WorkEndTime { get; set; }
 
         [Required]
         [RegularExpression(@"^15|30|45|60$", ErrorMessage = "Appointment duration must be 15, 30, 45 or 60 minutes.")]
+        [Display(Name = "Appointment Duration")]
         public byte AppointmentDuration { get; set; }
 
         public string DoctorId { get; set; }

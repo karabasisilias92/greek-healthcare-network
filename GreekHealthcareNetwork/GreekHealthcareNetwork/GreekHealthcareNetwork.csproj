@@ -189,6 +189,7 @@
     <Compile Include="Controllers\InsuredsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Controllers\PaymentsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Global.asax.cs">
@@ -284,6 +285,7 @@
     <Compile Include="Repositories\InsuredsRepository.cs" />
     <Compile Include="Repositories\UsersRepository.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Models\PaySubcriptionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\animate.css" />
@@ -496,6 +498,11 @@
     <Content Include="Views\Shared\_IndexPartial.cshtml" />
     <Content Include="Views\Shared\NewMessage.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Account\RegisterDoctorWorkingHours.cshtml" />
+    <Content Include="Views\Payments\PaySubscription.cshtml" />
+    <Content Include="Views\Payments\PayDoctor.cshtml" />
+    <Content Include="Views\Payments\RefundPatient.cshtml" />
+    <Content Include="Views\Account\DoctorPayDoctorPlan.cshtml" />
     <Content Include="Views\User\EditProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>

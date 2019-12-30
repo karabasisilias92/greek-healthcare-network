@@ -9,3 +9,20 @@ hr.thicker {
 input[type="submit"] {
     width: 126.3px;
 }
+
+#pay {
+    width: 126.3px;
+}
+
+#pay_skip {
+    display: flex;
+    align-items: flex-end;
+}
+
+p {
+    margin-bottom: 0px;
+}
+
+#skip {
+    padding-left: 0px;
+}
