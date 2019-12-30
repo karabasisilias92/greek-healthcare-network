@@ -31,7 +31,7 @@ namespace GreekHealthcareNetwork.Repositories
                 {
                     users = db.Users;
                 }
-                doctors = db.Doctors.Where(doctor => users.Any(user => user.Id == doctor.UserId)).Include("User")
+                doctors = db.Doctors.Where(doctor => users.Any(user => user.IsActive == true && user.Id == doctor.UserId)).Include("User")
                                                                                                  // Needs to be lazy loaded even though we do not need it here. We may implement searching for messages, 
                                                                                                  // so we cannot json ignore it in general
                                                                                                  .Include("User.Messages") 
@@ -109,6 +109,21 @@ namespace GreekHealthcareNetwork.Repositories
                 doctorPlanId = db.DoctorPlans.SingleOrDefault(plan => plan.MedicalSpecialty == medicalSpecialty).Id;
             }
             return doctorPlanId;
+        }
+
+        public DoctorPlan GetDoctorPlan(string doctorId)
+        {
+            DoctorPlan doctorPlan;
+            if (doctorId == null)
+            {
+                throw new ArgumentNullException("doctorId");
+            }
+
+            using (var db = new ApplicationDbContext())
+            {
+                doctorPlan = db.Doctors.Include("DoctorPlan").SingleOrDefault(doctor => doctor.UserId == doctorId).DoctorPlan;
+            }
+            return doctorPlan;
         }
 
         // If we just want to get appointment cost without fetching from DB all the doctor properties

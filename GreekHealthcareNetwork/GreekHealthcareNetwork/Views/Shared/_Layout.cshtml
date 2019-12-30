@@ -28,7 +28,7 @@
 </head>
 <body>
     <div id="firstRow">
-        @if (!Request.IsAuthenticated && !((string)ViewBag.Title).Contains("Registration"))
+        @if (!Request.IsAuthenticated && !((string)ViewBag.Title).Contains("Registration") && !((string)ViewBag.Title).Contains("Subscription"))
         {
             @Html.Partial("_VisitorNavbarPartial");
         }

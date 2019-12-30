@@ -150,6 +150,12 @@ namespace GreekHealthcareNetwork.Models
         public string DoctorId { get; set; }
     }
 
+    public class PayDoctorPlanViewModel
+    {
+        public DoctorPlan DoctorPlan { get; set; }
+        public string DoctorId { get; set; }
+    }
+
     public class InsuredRegisterViewModel : RegisterViewModel
     {
         

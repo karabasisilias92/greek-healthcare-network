@@ -9,11 +9,11 @@
 </section>
 
 <section id="doctorInfo" class="container">
-    @using (Html.BeginForm("DoctorRegister", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype= "multipart/form-data" }))
+    <h4>Please fill in below your personal information.</h4>
+    <hr class="thicker" />
+    @using (Html.BeginForm("DoctorRegister", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
-        <h4>Please fill in below your personal information.</h4>
-        <hr class="thicker" />
         @Html.ValidationSummary("", new { @class = "text-danger" })
         <div class="form-row">
             <div class="form-group col-md-4">
@@ -119,7 +119,7 @@
             <div class="form-group col-md-4">
                 @Html.LabelFor(m => m.PaypalAccount, new { @class = "col-md-6 control-label" })
                 <div class="col-md-10">
-                    @Html.TextBoxFor(m => m.PaypalAccount, new { @class = "form-control"})
+                    @Html.TextBoxFor(m => m.PaypalAccount, new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.PaypalAccount, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -139,8 +139,8 @@
             </div>
         </div>
     }
-            @Html.ActionLink("Back to Home", "Index", "Home", null, new { @class = "btn btn-outline-danger ml-3 mb-3" })
-    </section>
+    @Html.ActionLink("Back to Home", "Index", "Home", null, new { @class = "btn btn-outline-danger ml-3 mb-3" })
+</section>
 
 
 @section Scripts {

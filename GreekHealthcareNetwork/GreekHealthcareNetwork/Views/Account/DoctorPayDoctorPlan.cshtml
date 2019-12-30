@@ -1,0 +1,40 @@
+﻿@model GreekHealthcareNetwork.Models.PayDoctorPlanViewModel
+
+@{
+    ViewBag.Title = "Doctor Registration";
+}
+
+<section id="pageHeader" class="container my-3">
+    <img src="https://via.placeholder.com/80x80.png?text=GHNlogo" class="rounded-circle mb-3" />
+    <h2>@ViewBag.Title (3/3)</h2>
+</section>
+
+<section id="doctorPlanInfo" class="container">
+    <h4>Doctor subscription plan details:</h4>
+    <hr class="thicker" />
+    <p>
+        The subscription fee corresponding to @(Model.DoctorPlan.MedicalSpecialty)s is @Model.DoctorPlan.Fee.ToString("0.##") euros.
+        You can pay it off immediately or skip for now. However, if you skip payment, you will not be visible to patients so that they can book appointments.
+    </p>
+    <div id="pay_skip">
+        <div>
+            @using (Html.BeginForm("DoctorPayDoctorPlan", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary("", new { @class = "text-danger" })
+                @Html.HiddenFor(m => m.DoctorId, new { @Value = Model.DoctorId })
+                <div class="form-group">
+                    <div id="skip" class="col-md-12">
+                        <input type="submit" class="btn btn-outline-danger" value="Skip" />
+                    </div>
+                </div>
+            }
+        </div>
+        @Html.ActionLink("Pay", "PaySubscription", "Payments", new { userId = Model.DoctorId }, new { id = "pay", @class = "btn btn-outline-success mb-3" })
+    </div>
+</section>
+
+@section cssScripts {
+    <link href="~/Content/registration.css" rel="stylesheet" />
+}
+

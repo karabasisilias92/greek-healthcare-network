@@ -1,5 +1,6 @@
 ﻿@model GreekHealthcareNetwork.Models.RegisterDoctorWorkingHoursViewModel
 @using GreekHealthcareNetwork.Models;
+@using System.Text;
 @{
     ViewBag.Title = "Doctor Registration";
 }
@@ -9,23 +10,23 @@
     <h2>@ViewBag.Title (2/3)</h2>
 </section>
 
-<section id="doctorInfo" class="container">
+<section id="workingHoursInfo" class="container">
     @if (Model.WorkingHours == null)
     {
         Model.WorkingHours = new List<WorkingHours>();
         Model.WorkingHours.Add(new WorkingHours());
     }
+    <h4>Please fill in below your working hours.</h4>
+    <hr class="thicker" />
     @using (Html.BeginForm("RegisterDoctorWorkingHours", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         @Html.AntiForgeryToken()
-        <h4>Please fill in below your working hours.</h4>
-        <hr class="thicker" />
         @Html.ValidationSummary("", new { @class = "text-danger" })
         <div id="entriesList">
             @for (int i = 0; i < Model.WorkingHours.Count; i++)
             {
-                @Html.HiddenFor(m => m.WorkingHours[i].DoctorId, new { @Value = Model.DoctorId });
                 <div class="form-row">
+                    @Html.HiddenFor(m => m.WorkingHours[i].DoctorId, new { @Value = Model.DoctorId })
                     <div class="form-group col-md-3">
                         @Html.LabelFor(m => m.WorkingHours[i].Day, new { @class = "col-md-12 control-label" })
                         <div class="col-md-10">
@@ -119,8 +120,12 @@
                         </div>
                     </div>
                 </div>
+                if (i >= 1)
+                {
+                    <button class="btn btn-outline-danger ml-3 mb-3 deleteEntry">Delete Above Entry</button>
+                }
             }
-        </div>        
+        </div>
 
         <button id="addNewEntry" class="btn btn-outline-primary ml-3 mb-3">Add new entry</button>
 
@@ -130,67 +135,83 @@
             </div>
         </div>
     }
-    @Html.ActionLink("Skip", "PayDoctorPlan", "Account", null, new { @class = "btn btn-outline-danger ml-3 mb-3" })
+    @Html.ActionLink("Skip", "DoctorPayDoctorPlan", "Account", new { userId = Model.DoctorId }, new { @class = "btn btn-outline-danger ml-3 mb-3" })
 </section>
 
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
-            $('#addNewEntry').click(function (e) {
+        $(document).ready(function () {
+            var count = @Model.WorkingHours.Count;
+            function deleteEntry(e) {
+                    e.preventDefault();
+                    const elem = $(e.target);
+                    $(elem).prev().remove();
+                    $(elem).remove();
+                    count--;
+            }
+            function addListenerToDeleteButtons() {
+                $('.deleteEntry').off('click', deleteEntry);
+                $('.deleteEntry').on('click', deleteEntry);
+            }
+            function addNewEntry(e) {
                 e.preventDefault();
+                count++;
                 $('#entriesList').append(
-                    '@{
-                        Model.WorkingHours.Add(new WorkingHours());
-                        @Html.HiddenFor(m => m.WorkingHours[Model.WorkingHours.Count - 1].DoctorId, new { @Value = Model.DoctorId });
-                        }' + '< div class= "form-row" >' +
+                        '<input Value="' + '@Model.DoctorId' + '" id="WorkingHours_' + (count-1) + '__DoctorId" name="WorkingHours[' + (count-1) + '].DoctorId" type="hidden" value="" />' +
+                        '<div class= "form-row">' +
                                 '<div class="form-group col-md-3">' +
-                                '@Html.LabelFor(m => m.WorkingHours[Model.WorkingHours.Count - 1].Day, new { @class = "col-md-12 control-label" })' +
-                                '<div class="col-md-10">' +
-                                    '<select id="@("WorkingHours_" + (Model.WorkingHours.Count - 1) + "__Day")" name="@("WorkingHours[" + (Model.WorkingHours.Count - 1) + "].Day")" class="form-control mr-2" data-val="true" data-val-required="The Day field is required." required>' +
-                                        '<option>Choose day</option>' +
-                                        '@{ 
-                                            string result = "";
-                                            foreach (var item in Model.Days)
-                                            {
-                                                result = result + "<option value=" + (int)item + "\">" + @item + "</option>";
-                                            }
-                                        }' +
-                                '</select>' +
-                                '@Html.ValidationMessageFor(m => m.WorkingHours[Model.WorkingHours.Count-1].Day, "", new { @class = "text-danger" })' +
-                            '</div>' +
+                                    '<label class="col-md-12 control-label" for="WorkingHours_' + (count-1) + '__Day">Day</label>' +
+                                    '<div class="col-md-10">' +
+                                        '<select id="WorkingHours_' + (count-1) + '__Day" name="WorkingHours[' + (count-1) + '].Day" class="form-control mr-2" data-val="true" data-val-required="The Day field is required." required>' +
+                                            '<option>Choose day</option>' +
+                                            '<option value="1">Monday</option>' +
+                                            '<option value="2">Tuesday</option>' +
+                                            '<option value="3">Wednesday</option>' +
+                                            '<option value="4">Thursday</option>' +
+                                            '<option value="5">Friday</option>' +
+                                            '<option value="6">Saturday</option>' +
+                                            '<option value="0">Sunday</option>' +
+                                        '</select>' +
+                                        '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + (count-1) + '].Day" data-valmsg-replace="true"></span>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div class="form-group col-md-3">' +
+                                    '<label class="col-md-12 control-label" for="WorkingHours_' + (count-1) + '__WorkStartTime">Work Start Time</label>' +
+                                    '<div class="col-md-10">' +
+                                        '<input class="form-control" data-val="true" data-val-required="The Work Start Time field is required." id="WorkingHours_' + (count-1) + '__WorkStartTime" name="WorkingHours[' + (count-1) + '].WorkStartTime" type="time" value="" />' +
+                                        '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + (count-1) + '].WorkStartTime" data-valmsg-replace="true"></span>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div class="form-group col-md-3">' +
+                                    '<label class="col-md-12 control-label" for="WorkingHours_' + (count-1) + '__WorkEndTime">Work End Time</label>' +
+                                    '<div class="col-md-10">' +
+                                        '<input class="form-control" data-val="true" data-val-required="The Work End Time field is required." id="WorkingHours_' + (count-1) + '__WorkEndTime" name="WorkingHours[' + (count-1) + '].WorkEndTime" type="time" value="" />' +
+                                        '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + (count-1) + '].WorkEndTime" data-valmsg-replace="true"></span>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div class="form-group col-md-3">' +
+                                    '<label class="col-md-12 control-label" for="WorkingHours_' + (count-1) + '__AppointmentDuration">Appointment Duration</label>' +
+                                    '<div class="col-md-10">' +
+                                        '<select id="WorkingHours_' + (count-1) + '__AppointmentDuration" name="WorkingHours[' + (count-1) + '].AppointmentDuration" class="form-control mr-2" data-val="true" data-val-required="The Appointment Duration field is required." required>' +
+                                            '<option>Choose duration</option>' +
+                                            '<option value="15">15 minutes</option>' +
+                                            '<option value="30">30 minutes</option>' +
+                                            '<option value="45">45 minutes</option>' +
+                                            '<option value="60">60 minutes</option>' +
+                                        '</select>'+
+                                        '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + (count-1) + '].AppointmentDuration" data-valmsg-replace="true"></span>' +
+                                    '</div>' +
+                                '</div>' +
                         '</div>' +
-                        '<div class="form-group col-md-3">' +
-                            '@Html.LabelFor(m => m.WorkingHours[Model.WorkingHours.Count-1].WorkStartTime, new { @class = "col-md-12 control-label" })' +
-                            '<div class="col-md-10">' +
-                                '@Html.TextBoxFor(m => m.WorkingHours[Model.WorkingHours.Count-1].WorkStartTime, new { @class = "form-control", type = "time" })' +
-                                '@Html.ValidationMessageFor(m => m.WorkingHours[Model.WorkingHours.Count-1].WorkStartTime, "", new { @class = "text-danger" })' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="form-group col-md-3">' +
-                            '@Html.LabelFor(m => m.WorkingHours[Model.WorkingHours.Count-1].WorkEndTime, new { @class = "col-md-12 control-label" })' +
-                            '<div class="col-md-10">'+
-                                '@Html.TextBoxFor(m => m.WorkingHours[Model.WorkingHours.Count-1].WorkEndTime, new { @class = "form-control", type = "time" })' +
-                                '@Html.ValidationMessageFor(m => m.WorkingHours[Model.WorkingHours.Count-1].WorkStartTime, "", new { @class = "text-danger" })' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="form-group col-md-3">' +
-                            '@Html.LabelFor(m => m.WorkingHours[Model.WorkingHours.Count-1].AppointmentDuration, new { @class = "col-md-12 control-label" })' +
-                            '<div class="col-md-10">' +
-                                '<select id="@("WorkingHours_" + (Model.WorkingHours.Count-1) + "__AppointmentDuration")" name="@("WorkingHours[" + (Model.WorkingHours.Count-1) + "].AppointmentDuration")" class="form-control mr-2" data-val="true" data-val-required="The Appointment Duration field is required." required>' +
-                                    '<option>Choose duration</option>' +
-                                    '<option value="15">15 minutes</option>' +
-                                    '<option value="30">30 minutes</option>' +
-                                    '<option value="45">45 minutes</option>' +
-                                    '<option value="60">60 minutes</option>' +
-                                '</select>'+ +
-                                '@Html.ValidationMessageFor(m => m.WorkingHours[Model.WorkingHours.Count-1].AppointmentDuration, "", new { @class = "text-danger" })' +
-                            '</div>' +
-                        '</div>' +
-                    '</div>' +
-                    '<button id="@("deleteEntry" + (Model.WorkingHours.Count-1))" class="btn btn-outline-primary ml-3 mb-3" data-id="@(Model.WorkingHours.Count-1)">Delete Above Entry</button>' +
-                '}');
-            })
+                        '<button class="btn btn-outline-danger ml-3 mb-3 deleteEntry">Delete Above Entry</button>'
+                );
+                addListenerToDeleteButtons();
+            }
+            $('#addNewEntry').on('click', addNewEntry);
+            addListenerToDeleteButtons();
+        })
     </script>
 }
 
