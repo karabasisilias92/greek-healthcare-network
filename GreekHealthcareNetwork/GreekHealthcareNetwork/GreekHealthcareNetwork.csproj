@@ -273,6 +273,7 @@
     <Compile Include="Models\Insured.cs" />
     <Compile Include="Models\InsuredPlan.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ProfileDetailsViewModel.cs" />
     <Compile Include="Models\SearchLoginViewModel.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Enums\MessageStatus.cs" />
@@ -281,6 +282,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\AppointmentsRespository.cs" />
     <Compile Include="Repositories\DoctorsRepository.cs" />
+    <Compile Include="Repositories\InsuredsRepository.cs" />
     <Compile Include="Repositories\UsersRepository.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Models\PaySubcriptionViewModel.cs" />
