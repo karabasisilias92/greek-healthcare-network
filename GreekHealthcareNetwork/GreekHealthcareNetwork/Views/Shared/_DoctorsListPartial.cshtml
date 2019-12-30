@@ -66,36 +66,11 @@
     </div>
 </div>
 
-<div id="messageDoctor" class="modal fade">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="modal-title" id="myModalLabel">New Message</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div id="errorContainerMessage" class="container">
-                <div class="row">
-                    <p> Your message hasn't been sent. Please try again later. </p>
-                </div>
-            </div>
-            <div id="normalContainerBook" class="container">
-                <form id="messagearea" class="form-horizontal">
-                    <div class="form-group">
-                        <textarea class="form-control" id='areaformessage' style="min-width: 100%"></textarea>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <div class="form-horizontal">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Send</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+
+@if (User.IsInRole("Insured"))
+{
+    @Html.Partial("_NewMessage")
+}
 
 <div class="modal fade" id="bookAppointments" tabindex="-1" role="dialog" aria-labelledby="bookAppointmentsLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -187,6 +162,7 @@
 </div>
 
 @section customScripts {
+    @Scripts.Render("~/bundles/jqueryval")
     <script>
     $(document).ready(function () {
         function ListDoctors(firstName, lastName, specialty) {
@@ -206,12 +182,47 @@
                                 '<div><h3>' + doctor.User.FirstName + ' ' + doctor.User.LastName + '</h3>' +
                                 '<p>' + doctor.MedicalSpecialty + '</p> <button class="btn btn-outline-dark btn-sm showDoctorDetails" data-id="' + doctor.UserId + '">View Details</button>' +
                                 @if (User.IsInRole("Insured")) {
-                                    @(new HtmlString("'<button class=\"btn btn-outline-dark btn-sm showDoctorMessage\">Message</button><button class=\"btn btn-outline-dark btn-sm bookAppointments\" data-id=\"' + doctor.UserId + '\">Book Appointment</button></div></div></div>'"));
+                                    @(new HtmlString("'<button class=\"btn btn-outline-dark btn-sm showDoctorMessage\" data-id=\"' + doctor.UserId + '\">Message</button><button class=\"btn btn-outline-dark btn-sm bookAppointments\" data-id=\"' + doctor.UserId + '\">Book Appointment</button></div></div></div>'"));
                                 }else {
                                     @(new HtmlString("'</div></div></div>'"));
                                 });
                         });
                     }
+                    $('#send').click(function () {
+                        let model = new Object();
+                        model.Message = new Object();
+                        model.Message.SenderId = $('#Message_SenderId').val();
+                        model.Message.RecipientId = $('#Message_RecipientId').val();
+                        model.Message.Subject = $('#Message_Subject').val();
+                        model.Message.MessageText = $('#Message_MessageText').val();
+                        model.DoctorFirstName = "";
+                        model.DoctorLastName = "";
+                        model.DoctorSpecialty = -1;
+                        model.MedicalSpecialties = [];
+                        model.AppointmentDate = null;
+                        model.UserName = $('#UserName').val();
+                        model.Password = $('#Password').val();
+                        model.RememberMe = false;
+                        model = JSON.stringify(model)
+                        $.ajax({
+                            contentType: 'application/json',
+                            type: 'post',
+                            url: '/api/Messages',
+                            data: model,
+                            cache: false,
+                            processData: false,
+                            success: function () {
+                                $('#normalContainerMessage').hide();
+                                $('#successContainerMessage').show();
+                                setTimeout(function () {
+                                    $('#newMessage').modal("hide");
+                                }, 3000)
+                            },
+                            error: function (error) {
+                            }
+                        });
+                    })
+
                     $('.showDoctorDetails').click(function (e) {
                         let id = $(e.target).data('id');
                         $.ajax({
@@ -259,23 +270,13 @@
                             }
                         })
                     });
-
                     $('.showDoctorMessage').click(function (e) {
                         let id = $(e.target).data('id');
-                        $('#messageDoctor').modal('show');
-                        $ajax({
-                            url: '/api/Search/SearchDoctorById/Message' + id,
-                            type: 'get',
-                            dataType: 'json',
-                            success: function (message) {
-                                $('#errorContainerMessage').hide();
-                                $('#messagearea').text(message.show);
-                            },
-                            error: function () {
-                                $('#normalContainerBook').hide();
-                                $('#errorContainerMessage').show();
-                            }
-                        })
+                        $('#errorContainerMessage').hide();
+                        $('#successContainerMessage').hide();
+                        $('#Message_RecipientId').val(id);
+                        $('#newMessage').modal('show');
+
                     })
                     $('.bookAppointments').click(function (e) {
                         let id = $(e.target).data('id');
@@ -326,7 +327,7 @@
                                 $('#doctorTelephoneBook').text(doctor.User.PhoneNumber);
                                 $('#normalContainerBook').show();
                                 $('#bookAppointments').modal('show');
-                                
+
                             },
                             error: function () {
                                 $('#normalContainerBook').hide();

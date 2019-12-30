@@ -9,6 +9,8 @@ namespace GreekHealthcareNetwork.Models
 {
     public class Message
     {
+        public static int ConversationIdCounter { get; set; } = 1;
+
         [Key]
         public int Id { get; set; }
 

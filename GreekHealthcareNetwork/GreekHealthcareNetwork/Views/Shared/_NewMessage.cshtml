@@ -1,11 +1,16 @@
-﻿@model GreekHealthcareNetwork.Models.Message
+﻿@model GreekHealthcareNetwork.Models.SearchLoginViewModel
+@using Microsoft.AspNet.Identity;
+@{ var CurrentUserId = User.Identity.GetUserId();}
 
-    <div class="modal-dialog">
+<div class="modal fade" id="newMessage" tabindex="-1" role="dialog" aria-labelledby="newMessageLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
 
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">New Message</h4>
+                <h4 class="modal-title" id="newMessageLabel">New Message</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div id="errorContainerMessage" class="container">
@@ -13,25 +18,46 @@
                         <p> Your message hasn't been sent. Please try again later. </p>
                     </div>
                 </div>
-                <div id="normalContainerBook" class="container">
-                    <form id="messagearea" class="form-horizontal">
-                        <div class="form-group">
-                            <textarea class="form-control" id='areaformessage' style="min-width: 100%"></textarea>
-                        </div>
-                    </form>
+                <div id="successContainerMessage" class="container">
+                    <div class="row">
+                        <p> Your message has been sent. </p>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <div class="form-horizontal">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Send</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <div id="normalContainerMessage" class="container">
+                    <form id="messagearea" class="form-horizontal">
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.HiddenFor(m => m.UserName, new { @Value = User.Identity.Name })<!--Unused, here just to supress validation error messages-->
+                        </div>
+                        <div class="form-group">
+                            @Html.HiddenFor(m => m.Password, new { @Value = "!Doctor123" })<!--Unused, here just to supress validation error messages-->
+                        </div>
+                        <div class="form-group">
+                            @Html.HiddenFor(m => m.Message.SenderId, new { @Value = CurrentUserId })
+                        </div>
+                        <div class="form-group">
+                            @Html.HiddenFor(m => m.Message.RecipientId)
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Message.Subject, new { @class = "col-md-12 control-label" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(m => m.Message.Subject, new { @class = "form-control", style = "min-width: 100%" })
+                                @Html.ValidationMessageFor(m => m.Message.Subject, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Message.MessageText, new { @class = "col-md-12 control-label" })
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(m => m.Message.MessageText, new { @class = "form-control", style = "min-width: 100%" })
+                                @Html.ValidationMessageFor(m => m.Message.MessageText, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-success ml-3" id="send">Send</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-@section messageScripts {
-    <script>
-        
-    </script>
- }

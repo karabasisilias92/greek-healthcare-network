@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -7,28 +8,35 @@ namespace GreekHealthcareNetwork.Models
 {
     public class MessagesRepository
     {
-        private static readonly List<Message> _message = new List<Message>()
-        {
-            new Message
-            {
-                Id = 1,
-            },
-            new Message
-            {
-                Id=2
-            }
-
-        };
-
         public Message FindById(int id)
         {
-            return _message.SingleOrDefault(i => i.Id == id);
+            Message message;
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                message= db.Messages.Find(id);
+            }
+            return message;
         }
         public void Add(Message message)
         {
-            int newId = _message.Max(i => i.Id) + 1;
-            message.Id = newId;
-            _message.Add(message);
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                db.Messages.Add(message);
+                db.SaveChanges();
+            }      
+        }
+        public IEnumerable<Message> GetAllMessages(string UserId)
+        {
+            if (UserId==null)
+            {
+                throw new ArgumentNullException("UserId");
+            }
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                return db.Messages.Where(m => m.RecipientId == UserId)
+                                  .Include("Sender")
+                                  .ToList();
+            } 
         }
     }
 }
