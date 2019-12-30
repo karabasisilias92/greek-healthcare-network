@@ -26,7 +26,6 @@ namespace GreekHealthcareNetwork.Models
         }
         public void Add(Message message)
         {
-            //15o vhma
             int newId = _message.Max(i => i.Id) + 1;
             message.Id = newId;
             _message.Add(message);

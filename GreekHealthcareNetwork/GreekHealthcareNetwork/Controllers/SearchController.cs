@@ -49,5 +49,17 @@ namespace GreekHealthcareNetwork.Controllers
             }
             return Ok(appointments);
         }
+
+        [HttpGet]
+        [Route("api/Search/SearchAppointmentById/{appointmentId}")]
+        public IHttpActionResult SearchAppointmentById(int appointmentId)
+        {
+            var appointment = _appointments.GetAppointmentById(appointmentId);
+            if (appointment == null)
+            {
+                return NotFound();
+            }
+            return Ok(appointment);
+        }
     }
 }

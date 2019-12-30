@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Services.Description;
+
 
 namespace GreekHealthcareNetwork.Controllers
 {
@@ -18,7 +18,7 @@ namespace GreekHealthcareNetwork.Controllers
             return Ok(_message.FindById(id));
         }
         [HttpPost]
-        public IHttpActionResult Post([FromBody]Message message)
+        public IHttpActionResult Post(Message message)
         {
             if (!ModelState.IsValid)
             {

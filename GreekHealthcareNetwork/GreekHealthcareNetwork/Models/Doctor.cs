@@ -20,17 +20,13 @@ namespace GreekHealthcareNetwork.Models
 
         [Required]
         [JsonConverter(typeof(StringEnumConverter))]
-        public MedicalSpecialty MedicalSpecialty { get; set; }
+        public MedicalSpecialty? MedicalSpecialty { get; set; }
+
+        [ForeignKey("MedicalSpecialty")]
+        public virtual AppointmentCostPerSpecialty AppointmentCost { get; set; }
 
         [Required]
         public string OfficeAddress { get; set; }
-
-        [Required]
-        public string PaypalAccount { get; set; }
-
-        [Column(TypeName = "money")]
-        [DataType(DataType.Currency)]
-        public decimal AppointmentCost { get; set; }
 
         [Required]
         public int DoctorPlanId { get; set; }
