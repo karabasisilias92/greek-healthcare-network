@@ -143,7 +143,17 @@ namespace GreekHealthcareNetwork.Models
 
     public class RegisterDoctorWorkingHoursViewModel
     {
+        public List<DayOfWeek> Days { get; set; }
 
+        [Required]
+        public List<WorkingHours> WorkingHours { get; set; }
+        public string DoctorId { get; set; }
+    }
+
+    public class PayDoctorPlanViewModel
+    {
+        public DoctorPlan DoctorPlan { get; set; }
+        public string DoctorId { get; set; }
     }
 
     public class InsuredRegisterViewModel : RegisterViewModel
