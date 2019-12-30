@@ -9,7 +9,7 @@ using System.Web.Http;
 
 namespace GreekHealthcareNetwork.Controllers
 {
-    public class MessageController : ApiController
+    public class MessagesController : ApiController
     {
         private readonly MessagesRepository _message = new MessagesRepository();
         [HttpGet]
