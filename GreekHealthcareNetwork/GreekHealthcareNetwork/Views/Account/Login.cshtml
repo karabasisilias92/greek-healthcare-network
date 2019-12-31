@@ -8,11 +8,30 @@
 }
 
 @section scripts {
-    <script src="~/Scripts/mdbScripts/LRModal.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#modalLRForm').modal('show');
-        })
-    </script>
+    @if (!Request.IsAuthenticated)
+    {
+        <script src="~/Scripts/mdbScripts/LRModal.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#modalLRForm').modal('show');
+            })
+        </script>
+    }
+    @if (User.IsInRole("Doctor"))
+    {
+        <script>
+            $(document).ready(function () {
+                $('#headerDoctor').addClass('header-top')
+            })
+        </script>
+    }
+    @if (User.IsInRole("Insured"))
+    {
+        <script>
+            $(document).ready(function () {
+                $('#headerInsured').addClass('header-top')
+            })
+        </script>
+    }
     @Scripts.Render("~/bundles/jqueryval")
 }

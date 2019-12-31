@@ -24,6 +24,14 @@
             }
         }
     </script>
+    @if (User.IsInRole("Insured"))
+    {
+        <link href="~/Content/insuredsNavbar.css" rel="stylesheet" />
+    }
+    @if (User.IsInRole("Doctor"))
+    {
+        <link href="~/Content/doctorsNavbar.css" rel="stylesheet" />
+    }
     @RenderSection("cssScripts", required: false)
 </head>
 <body>
@@ -34,7 +42,7 @@
         }
         @if (User.IsInRole("Doctor") && !((string)ViewBag.Title).Contains("Home"))
         {
-            <div style="height: 78px;">
+            <div class="mb-4" style="height: 78px;">
                 @Html.Partial("_DoctorNavBarPartial")
             </div>
         }
@@ -44,7 +52,7 @@
         }
         @if (User.IsInRole("Insured") && !((string)ViewBag.Title).Contains("Home"))
         {
-            <div style="height: 78px;">
+            <div class="mb-4" style="height: 78px;">
                 @Html.Partial("_InsuredNavBarPartial")
             </div>
         }

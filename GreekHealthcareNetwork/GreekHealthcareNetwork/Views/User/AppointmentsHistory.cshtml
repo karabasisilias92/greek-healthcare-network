@@ -7,14 +7,6 @@
 
 @section cssScripts{
     <link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
-    @if (User.IsInRole("Insured"))
-    {
-        <link href="~/Content/insuredsCSS.css" rel="stylesheet" />
-    }
-    @if (User.IsInRole("Doctor"))
-    {
-        <link href="~/Content/doctorsCSS.css" rel="stylesheet" />
-    }
 }
 
 <main id="main" class="mt-4">
