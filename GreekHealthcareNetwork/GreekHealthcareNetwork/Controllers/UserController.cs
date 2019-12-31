@@ -137,7 +137,7 @@ namespace GreekHealthcareNetwork.Controllers
             }
             catch (Exception error)
             {
-                ModelState.AddModelError("", error);
+                ModelState.AddModelError("", error.Message);
                 return View(user);
             }
 

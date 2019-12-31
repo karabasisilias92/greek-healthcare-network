@@ -62,10 +62,11 @@
                             </tr>
                             @if (User.IsInRole("Doctor"))
                             {
-                                <tr class="form-group">
-                                    <th>@Html.LabelFor(m => m.Doctor.MedicalSpecialty):</th>
-                                    <td>@Model.Doctor.MedicalSpecialty</td>
-                                </tr>
+                            <tr class="form-group">
+                                <th>@Html.LabelFor(m => m.Doctor.MedicalSpecialty):</th>
+                                <td>@Html.TextBoxFor(m => m.Doctor.MedicalSpecialty, new { @class = "form-control", @readonly="readonly" })</td>
+                                <td>@Html.ValidationMessageFor(m => m.Doctor.MedicalSpecialty, "", new { @class = "text-danger" })</td>
+                            </tr>
                             }
                             <tr class="form-group">
                                 <th>@Html.LabelFor(m => m.User.DoB):</th>
@@ -86,7 +87,7 @@
                             {
                                 <tr class="form-group">
                                     <th>@Html.LabelFor(m => m.Doctor.WorkingHours):</th>
-                                    <td>@Html.TextBoxFor(m => m.Doctor.WorkingHours, new { @class = "form-control" }) </td>  @*<- To be filled with doctors working hours*@
+                                    <td>@*@Html.TextBoxFor(m => m.Doctor.WorkingHours, new { @class = "form-control" })*@ </td>  @*<- To be filled with doctors working hours*@
                                 </tr>
                             }
                             <tr class="form-group">
