@@ -259,6 +259,10 @@
     <Compile Include="Migrations\201912291322148_Change AMKA type to string.Designer.cs">
       <DependentUpon>201912291322148_Change AMKA type to string.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912302334206_Set foreign keys as required..cs" />
+    <Compile Include="Migrations\201912302334206_Set foreign keys as required..Designer.cs">
+      <DependentUpon>201912302334206_Set foreign keys as required..cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -274,6 +278,7 @@
     <Compile Include="Models\InsuredPlan.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ProfileDetailsViewModel.cs" />
+    <Compile Include="Repositories\MessagesRepository.cs" />
     <Compile Include="Models\SearchLoginViewModel.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Enums\MessageStatus.cs" />
@@ -496,7 +501,7 @@
     <Content Include="Views\Shared\_CustomScriptsLayout.cshtml" />
     <Content Include="Views\Insureds\BookAppointment.cshtml" />
     <Content Include="Views\Shared\_IndexPartial.cshtml" />
-    <Content Include="Views\Shared\NewMessage.cshtml" />
+    <Content Include="Views\Shared\_NewMessage.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Account\RegisterDoctorWorkingHours.cshtml" />
     <Content Include="Views\Payments\PaySubscription.cshtml" />
@@ -568,6 +573,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912291322148_Change AMKA type to string.resx">
       <DependentUpon>201912291322148_Change AMKA type to string.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912302334206_Set foreign keys as required..resx">
+      <DependentUpon>201912302334206_Set foreign keys as required..cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

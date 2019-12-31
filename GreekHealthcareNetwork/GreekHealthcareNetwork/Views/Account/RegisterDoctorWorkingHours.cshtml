@@ -16,12 +16,12 @@
         Model.WorkingHours = new List<WorkingHours>();
         Model.WorkingHours.Add(new WorkingHours());
     }
-    <h4>Please fill in below your working hours.</h4>
+    <h4>Your account to our site has been created. Please fill in below your working hours.</h4>
     <hr class="thicker" />
     @using (Html.BeginForm("RegisterDoctorWorkingHours", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         @Html.AntiForgeryToken()
-        @Html.ValidationSummary("", new { @class = "text-danger" })
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div id="entriesList">
             @for (int i = 0; i < Model.WorkingHours.Count; i++)
             {
@@ -122,7 +122,7 @@
                     @if (i >= 1)
                     {
                         <div class="form-group col-md-2 d-flex align-items-md-end">
-                            <button class="btn btn-outline-danger deleteEntry">Delete Entry</button>
+                            <button class="btn btn-outline-danger ml-3 deleteEntry">Delete Entry</button>
                         </div>
                     }
                 </div>
@@ -137,7 +137,10 @@
             </div>
         </div>
     }
-    @Html.ActionLink("Skip", "DoctorPayDoctorPlan", "Account", new { userId = Model.DoctorId }, new { @class = "btn btn-outline-danger ml-3 mb-3" })
+    <div class="d-flex align-items-center">
+        @Html.ActionLink("Skip", "DoctorPayDoctorPlan", "Account", new { userId = Model.DoctorId }, new { @class = "btn btn-outline-danger ml-3 mb-3" })
+        <p class="ml-2 mb-3"><u>Note:</u> You can skip this step, however you will not be visible to patients so that they can book appointments until you declare your working hours.</p>
+    </div>
 </section>
 
 
@@ -206,7 +209,7 @@
                                         '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + (count-1) + '].AppointmentDuration" data-valmsg-replace="true"></span>' +
                                     '</div>' +
                                 '</div>' +
-                                '<div class="form-group col-md-2 d-flex align-items-md-end">' +
+                                '<div class="form-group col-md-2 ml-3 d-flex align-items-md-end">' +
                                     '<button class="btn btn-outline-danger deleteEntry">Delete Entry</button>' +
                                 '</div>' +
                         '</div>'

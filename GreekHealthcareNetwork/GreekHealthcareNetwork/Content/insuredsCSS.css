@@ -1,7 +1,10 @@
 ﻿#headerInsured {
-    background-color: #343b40;
-    padding: 30px 0;
-    height: 92px;
+    background: rgba(52, 59, 64, 0.9);
+    padding: 10px 0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
     transition: all 0.5s;
     z-index: 997;
 }
@@ -27,8 +30,6 @@
 }
 
 #headerInsured.header-fixed {
-    background: rgba(52, 59, 64, 0.9);
-    padding: 20px 0;
-    height: 72px;
+    padding: 5px 0;
     transition: all 0.5s;
 }

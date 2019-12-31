@@ -282,11 +282,11 @@ h6 {
 
 /* Nav Meu Styling */
 
-.nav-menu a {
+.nav-menu a.nav-menu a {
     padding: 0 8px 10px 8px;
     text-decoration: none;
     display: inline-block;
-    color: #000000;
+    color: #fff;
     font-family: "Poppins", sans-serif;
     font-weight: 400;
     text-transform: uppercase;

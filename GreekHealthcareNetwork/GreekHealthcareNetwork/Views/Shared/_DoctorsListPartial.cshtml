@@ -66,6 +66,12 @@
     </div>
 </div>
 
+
+@if (User.IsInRole("Insured"))
+{
+    @Html.Partial("_NewMessage")
+}
+
 <div class="modal fade" id="bookAppointments" tabindex="-1" role="dialog" aria-labelledby="bookAppointmentsLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -148,14 +154,15 @@
                                 </div>
                             </div>
                         </div>
-                    </div>                        
+                    </div>
                 </div>
-            </div>            
+            </div>
         </div>
     </div>
 </div>
 
 @section customScripts {
+    @Scripts.Render("~/bundles/jqueryval")
     <script>
     $(document).ready(function () {
         function ListDoctors(firstName, lastName, specialty) {
@@ -175,12 +182,51 @@
                                 '<div><h3>' + doctor.User.FirstName + ' ' + doctor.User.LastName + '</h3>' +
                                 '<p>' + doctor.MedicalSpecialty + '</p> <button class="btn btn-outline-dark btn-sm showDoctorDetails" data-id="' + doctor.UserId + '">View Details</button>' +
                                 @if (User.IsInRole("Insured")) {
-                                    @(new HtmlString("'<button class=\"btn btn-outline-dark btn-sm\">Message</button><button class=\"btn btn-outline-dark btn-sm bookAppointments\" data-id=\"' + doctor.UserId + '\">Book Appointment</button></div></div></div>'"));
+                                    @(new HtmlString("'<button class=\"btn btn-outline-dark btn-sm showDoctorMessage\" data-id=\"' + doctor.UserId + '\">Message</button><button class=\"btn btn-outline-dark btn-sm bookAppointments\" data-id=\"' + doctor.UserId + '\">Book Appointment</button></div></div></div>'"));
                                 }else {
                                     @(new HtmlString("'</div></div></div>'"));
                                 });
                         });
                     }
+                    $('#send').click(function (e) {
+                        e.preventDefault();
+                        let model = new Object();
+                        model.Message = new Object();
+                        model.Message.SenderId = $('#Message_SenderId').val();
+                        model.Message.RecipientId = $('#Message_RecipientId').val();
+                        model.Message.Subject = $('#Message_Subject').val();
+                        model.Message.MessageText = $('#Message_MessageText').val();
+                        model.DoctorFirstName = "";
+                        model.DoctorLastName = "";
+                        model.DoctorSpecialty = -1;
+                        model.MedicalSpecialties = [];
+                        model.AppointmentDate = null;
+                        model.UserName = $('#UserName1').val();
+                        model.Password = $('#Password1').val();
+                        model.RememberMe = false;
+                        model = JSON.stringify(model)
+                        $.ajax({
+                            contentType: 'application/json',
+                            type: 'post',
+                            url: '/api/Messages',
+                            data: model,
+                            cache: false,
+                            processData: false,
+                            success: function () {
+                                $('#Message_Subject').val("");
+                                $('#Message_MessageText').val("");
+                                $('#normalContainerMessage').hide();
+                                $('#errorContainerMessage').hide();
+                                $('#successContainerMessage').show();
+                                setTimeout(function () {
+                                    $('#newMessage').modal("hide");
+                                }, 3000)
+                            },
+                            error: function (error) {
+                            }
+                        });
+                    })
+
                     $('.showDoctorDetails').click(function (e) {
                         let id = $(e.target).data('id');
                         $.ajax({
@@ -228,6 +274,14 @@
                             }
                         })
                     });
+                    $('.showDoctorMessage').click(function (e) {
+                        let id = $(e.target).data('id');
+                        $('#errorContainerMessage').hide();
+                        $('#successContainerMessage').hide();
+                        $('#Message_RecipientId').val(id);
+                        $('#normalContainerMessage').show();
+                        $('#newMessage').modal('show');
+                    })
                     $('.bookAppointments').click(function (e) {
                         let id = $(e.target).data('id');
                         function listAvailableAppointments(date) {
@@ -269,7 +323,7 @@
                                 }
                                 const appointmentDate = $('#AppointmentDate').val();
                                 $('#date').val(appointmentDate);
-                             
+
                               @*implement here creation of appointment select list*@
 
 
@@ -277,6 +331,7 @@
                                 $('#doctorTelephoneBook').text(doctor.User.PhoneNumber);
                                 $('#normalContainerBook').show();
                                 $('#bookAppointments').modal('show');
+
                             },
                             error: function () {
                                 $('#normalContainerBook').hide();
@@ -284,7 +339,8 @@
                             }
                         })
                     });
- 
+
+
                 },
                 error: function () {
                     $('#doctorsList').empty();

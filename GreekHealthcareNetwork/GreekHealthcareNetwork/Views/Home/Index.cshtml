@@ -4,10 +4,24 @@
 @Html.Partial("_IndexPartial")
 
 @section cssScripts {
-    <link href="~/Content/mdb.css" rel="stylesheet" />
+    @if (!Request.IsAuthenticated)
+    {
+        <link href="~/Content/mdb.css" rel="stylesheet" />
+    }
+    @if (User.IsInRole("Insured"))
+    {
+        <link href="~/Content/insuredsCSS.css" rel="stylesheet" />
+    }
+    @if (User.IsInRole("Doctor"))
+    {
+        <link href="~/Content/doctorsCSS.css" rel="stylesheet" />
+    }
 }
 
 @section scripts {
-    <script src="~/Scripts/mdbScripts/LRModal.js"></script>
+    @if (!Request.IsAuthenticated)
+    {
+        <script src="~/Scripts/mdbScripts/LRModal.js"></script>
+    }
     @Scripts.Render("~/bundles/jqueryval")
 }

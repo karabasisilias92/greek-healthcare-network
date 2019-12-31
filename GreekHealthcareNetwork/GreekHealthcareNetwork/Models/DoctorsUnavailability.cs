@@ -18,6 +18,7 @@ namespace GreekHealthcareNetwork.Models
         [Required]
         public DateTime UnavailableUntil { get; set; }
 
+        [Required]
         public string DoctorId { get; set; }
 
         [ForeignKey("DoctorId")]

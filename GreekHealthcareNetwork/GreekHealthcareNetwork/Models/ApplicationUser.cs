@@ -57,7 +57,7 @@ namespace GreekHealthcareNetwork.Models
         [Column(TypeName="date")]
         public DateTime SubscriptionEndDate { get; set; }
 
-        //[JsonIgnore]
+        [JsonIgnore]
         public virtual ICollection<Message> Messages { get; set; }
 
         // The three below are inherited from IdentityUser but we need to ignore them when serializing for JSON, 
