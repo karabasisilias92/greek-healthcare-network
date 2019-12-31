@@ -49,6 +49,7 @@ namespace GreekHealthcareNetwork.Models
         public string AMKA { get; set; }
 
         [Required]
+        [Display(Name = "Paypal Account")]
         public string PaypalAccount { get; set; }
 
         public bool IsActive { get; set; }

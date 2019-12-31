@@ -20,6 +20,7 @@ namespace GreekHealthcareNetwork.Models
 
         [Required]
         [JsonConverter(typeof(StringEnumConverter))]
+        [Display(Name = "Medical Specialty")]
         public MedicalSpecialty? MedicalSpecialty { get; set; }
 
         [ForeignKey("MedicalSpecialty")]
@@ -38,6 +39,7 @@ namespace GreekHealthcareNetwork.Models
         [JsonIgnore]
         public virtual DoctorPlan DoctorPlan { get; set; }
 
+        [Display(Name = "Working Hours")]
         public virtual ICollection<WorkingHours> WorkingHours { get; set; }
         
         [JsonIgnore]
