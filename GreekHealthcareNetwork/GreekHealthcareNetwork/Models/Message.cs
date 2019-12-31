@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -27,17 +28,21 @@ namespace GreekHealthcareNetwork.Models
 
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
+        [Display(Name = "Sent Date")]
         public DateTime SentDate { get; set; }
 
         [Column(TypeName = "time")]
         [DataType(DataType.Time)]
+        [Display(Name = "Sent Time")]
         public TimeSpan SentTime { get; set; }
 
+        [Display(Name = "Message Status")]
         public MessageStatus MessageStatus { get; set; }
 
         [Required]
         public string Subject { get; set; }
 
+        [Display(Name = "Message Text")]
         [Required]
         public string MessageText { get; set; }
 

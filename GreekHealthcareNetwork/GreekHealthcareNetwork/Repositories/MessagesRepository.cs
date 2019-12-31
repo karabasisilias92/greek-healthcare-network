@@ -28,16 +28,18 @@ namespace GreekHealthcareNetwork.Repositories
         }
         public IEnumerable<Message> GetAllMessages(string UserId)
         {
+            IEnumerable<Message> messages;
             if (UserId==null)
             {
                 throw new ArgumentNullException("UserId");
             }
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
-                return db.Messages.Where(m => m.RecipientId == UserId)
+                messages = db.Messages.Where(m => m.RecipientId == UserId)
                                   .Include("Sender")
                                   .ToList();
-            } 
+            }
+            return messages;
         }
     }
 }

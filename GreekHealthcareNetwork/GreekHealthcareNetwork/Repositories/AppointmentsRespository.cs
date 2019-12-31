@@ -37,10 +37,8 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                              .Include("Doctor.WorkingHours")
                                                                                                              .Include("Doctor.AppointmentCost")
                                                                                                              .Include("Doctor.User")
-                                                                                                             .Include("Doctor.User.Messages")
                                                                                                              .Include("Insured")
                                                                                                              .Include("Insured.User")
-                                                                                                             .Include("Insured.User.Messages")
                                                                                                              .ToList();
 
                 if (doctorsSpecialty >= 0 && doctorsSpecialty < Enum.GetNames(typeof(MedicalSpecialty)).Length)
@@ -83,10 +81,8 @@ namespace GreekHealthcareNetwork.Repositories
                                              .Include("Doctor.WorkingHours")
                                              .Include("Doctor.AppointmentCost")
                                              .Include("Doctor.User")
-                                             .Include("Doctor.User.Messages")
                                              .Include("Insured")
                                              .Include("Insured.User")
-                                             .Include("Insured.User.Messages")
                                              .SingleOrDefault(d => d.Id.Equals(appointmentId));
                 return appointment;
             }
