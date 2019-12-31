@@ -46,11 +46,11 @@ namespace GreekHealthcareNetwork.Migrations
             }
 
 
-            if (!userManager.Users.Any(i => i.UserName == "admin@ghn.gr"))
+            if (!userManager.Users.Any(i => i.UserName == "admin"))
             {
                 var result = userManager.Create(new ApplicationUser
                 {
-                    UserName = "admin@ghn.gr",
+                    UserName = "admin",
                     Email = "admin@ghn.gr",
                     FirstName = "John",
                     LastName = "Smith",

@@ -263,6 +263,10 @@
     <Compile Include="Migrations\201912302334206_Set foreign keys as required..Designer.cs">
       <DependentUpon>201912302334206_Set foreign keys as required..cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912311843125_Office_Home address max, min length.cs" />
+    <Compile Include="Migrations\201912311843125_Office_Home address max, min length.Designer.cs">
+      <DependentUpon>201912311843125_Office_Home address max, min length.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -490,7 +494,6 @@
     <Content Include="Views\Shared\_DoctorNavBarPartial.cshtml" />
     <Content Include="Views\Shared\_VisitorNavbarPartial.cshtml" />
     <Content Include="Views\Shared\_InsuredNavBarPartial.cshtml" />
-
     <Content Include="Views\User\UserProfile.cshtml" />
     <Content Include="Views\User\AppointmentsHistory.cshtml" />
     <Content Include="Views\Shared\_SearchPartial.cshtml" />
@@ -575,6 +578,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912302334206_Set foreign keys as required..resx">
       <DependentUpon>201912302334206_Set foreign keys as required..cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912311843125_Office_Home address max, min length.resx">
+      <DependentUpon>201912311843125_Office_Home address max, min length.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
