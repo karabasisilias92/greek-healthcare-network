@@ -36,14 +36,22 @@ namespace GreekHealthcareNetwork.Controllers
         {
             if (!ModelState.IsValid)
             {
-                //implementation for return model to Modal pending 
-                return BadRequest();
+                //implementation for return model to Modal pending
+                return BadRequest(ModelState);
             }
             model.Message.SentDate = DateTime.Now.Date;
             model.Message.SentTime = DateTime.Now.TimeOfDay;
             model.Message.MessageStatus = MessageStatus.Unread;
             model.Message.ConversationId = Message.ConversationIdCounter++;
-            _message.Add(model.Message);
+            try
+            {
+                _message.Add(model.Message);
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "An error has occured. Please try again.");
+                return BadRequest(ModelState);
+            }
             return ResponseMessage(Request.CreateResponse(HttpStatusCode.Created));
             //h return Ok();
         }

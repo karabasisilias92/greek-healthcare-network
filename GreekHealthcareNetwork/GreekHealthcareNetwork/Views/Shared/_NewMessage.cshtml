@@ -14,17 +14,17 @@
             </div>
             <div class="modal-body">
                 <div id="errorContainerMessage" class="container">
-                    <div class="row">
-                        <p> Your message hasn't been sent. Please try again later. </p>
+                    <div class="form-horizontal">
+                        <p class="text-danger ml-3 mb-2"> Your message hasn't been sent. Please try again. </p>
                     </div>
                 </div>
                 <div id="successContainerMessage" class="container">
-                    <div class="row">
-                        <p> Your message has been sent. </p>
+                    <div class="form-horizontal">
+                        <p class="text-success ml-3 mb-2"> Your message has been sent. </p>
                     </div>
                 </div>
                 <div id="normalContainerMessage" class="container">
-                    <form id="messagearea" method="post" action="/api/Messages" class="form-horizontal">
+                    <form id="messagearea" class="form-horizontal">
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                         <div class="form-group">
