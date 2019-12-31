@@ -1,42 +1,42 @@
-﻿@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-{
-    @Html.AntiForgeryToken()
-    <header id="headerInsured">
-        <div class="container d-flex flex-row justify-content-between">
+﻿    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+        <header id="headerInsured">
+            <div class="container d-flex flex-row align-items-center justify-content-between">
 
-            <div id="logo">
-                <!--<a href="/Home/Index"><img src="@Url.Content("~/Content/img/logo.png")" alt="GHN" title="" /></a>-->
-                <!-- Uncomment below if you prefer to use a text logo -->
-                <h1><a href="/Home/Index">GHN</a></h1>
-            </div>
-            <div id="nav-menu-container">
-                <ul class="nav-menu">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Doctors", "Doctors", "Insureds")</li>
-                    <li>@Html.ActionLink("Book Appointment", "BookAppointment", "Insureds")</li>
-                </ul>
-            </div>
+                <div id="logo">
+                    <!--<a href="/Home/Index"><img src="@Url.Content("~/Content/img/logo.png")" alt="GHN" title="" /></a>-->
+                    <!-- Uncomment below if you prefer to use a text logo -->
+                    <h1><a href="/Home/Index">GHN</a></h1>
+                </div>
+                <div id="nav-menu-container">
+                    <ul class="nav-menu">
+                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                        <li>@Html.ActionLink("Doctors", "Doctors", "Insureds")</li>
+                        <li>@Html.ActionLink("Book Appointment", "BookAppointment", "Insureds")</li>
+                    </ul>
+                </div>
 
-            <div id="profilePic">
-                <ul class="nav-menu">
-                    <li class="nav-menu menu-has-children">
-                        <a href="#">
-                            <img src="@Url.Content("~/Content/img/Insureds/defaultUserImage.png")" class="rounded-circle mt-2" style="max-height:40px; max-width:40px" alt="User" title="" />
-                        </a>
-                        <ul>
-                            <li>@Html.ActionLink("Profile", "Profile", "User")</li>
-                            <li>@Html.ActionLink("Messages", "Messages", "User")</li>
-                            <li>@Html.ActionLink("Appointments History", "AppointmentsHistory", "User")</li>
-                            <li>
-                                <a href="javascript:document.getElementById('logoutForm').submit()">
-                                    Logout
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+                <div id="profilePic">
+                    <ul class="nav-menu">
+                        <li class="nav-menu menu-has-children">
+                            <a href="#">
+                                <img src="@Url.Content("~/Content/img/Insureds/defaultUserImage.png")" class="rounded-circle mt-2" style="max-height:40px; max-width:40px" alt="User" title="" />
+                            </a>
+                            <ul>
+                                <li>@Html.ActionLink("Profile", "Profile", "User")</li>
+                                <li>@Html.ActionLink("Messages", "Messages", "User")</li>
+                                <li>@Html.ActionLink("Appointments History", "AppointmentsHistory", "User")</li>
+                                <li>
+                                    <a href="javascript:document.getElementById('logoutForm').submit()">
+                                        Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </header>
-}
+        </header>
+    }
 

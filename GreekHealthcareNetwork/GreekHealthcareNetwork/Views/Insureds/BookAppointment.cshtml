@@ -1,12 +1,18 @@
 ﻿@model GreekHealthcareNetwork.Models.SearchLoginViewModel
 @{
-    ViewBag.Title = "BookAppointment";
+    ViewBag.Title = "Book Appointment";
 }
-
-<h2>Book Appointment</h2>
-<div>
-    @{
-        Html.RenderPartial("_DoctorsListPartial");
-    }
+<div class="container mt-4">
+    <div class="row">
+        <div class="section-header col-md-12">
+            <h2>Book an appointment now!</h2>
+            <p>Search for the doctor you desire and book your appointment at the desired date.</p>
+        </div>
+        @Html.Partial("_DoctorsListPartial")
+    </div>
 </div>
+
+@section cssScripts {
+    <link href="~/Content/insuredsCSS.css" rel="stylesheet" />
+}
 

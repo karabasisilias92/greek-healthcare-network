@@ -93,7 +93,11 @@ namespace GreekHealthcareNetwork.Controllers
             ApplicationUser user;
             using(ApplicationDbContext db = new ApplicationDbContext())
             {
-                user = db.Users.Include("Roles").SingleOrDefault(u => u.Email == model.UserName);
+                user = db.Users.SingleOrDefault(u => u.Email == model.UserName);
+                if (user == null)
+                {
+                    user = db.Users.SingleOrDefault(u => u.UserName == model.UserName);
+                }
             }
             if (user != null)
             {

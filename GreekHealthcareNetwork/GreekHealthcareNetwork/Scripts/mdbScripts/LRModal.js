@@ -3,15 +3,15 @@
         return "input[type=".concat(t, "]")
     })).join(", "), ", textarea");
     var o = function (t) {
-        if (t.hasclass("validate")) {
+        if (t.hasClass("validate")) {
             var e = t.val(),
                 n = !e.length,
-                r = !t[0].validity.badinput;
-            if (n && r) t.removeclass("valid").removeclass("invalid");
+                r = !t[0].validity.badInput;
+            if (n && r) t.removeClass("valid").removeClass("invalid");
             else {
                 var i = t.is(":valid"),
-                    o = number(t.attr("length")) || 0;
-                i && (!o || o > e.length) ? t.removeclass("invalid").addclass("valid") : t.removeclass("valid").addclass("invalid")
+                    o = Number(t.attr("length")) || 0;
+                i && (!o || o > e.length) ? t.removeClass("invalid").addClass("valid") : t.removeClass("valid").addClass("invalid")
             }
         }
     };
@@ -19,7 +19,7 @@
         var e = t.siblings("label, i"),
             n = t.val().length,
             r = t.attr("placeholder");
-        e["".concat(n || r ? "add" : "remove", "class")]("active")
+        e["".concat(n || r ? "add" : "remove", "Class")]("active")
     };
     var a = function () {
         var e = t(void 0);

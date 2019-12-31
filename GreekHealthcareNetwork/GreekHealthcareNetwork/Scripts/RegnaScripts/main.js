@@ -5,9 +5,13 @@ jQuery(document).ready(function ($) {
     if ($(this).scrollTop() > 100) {
       $('.back-to-top').fadeIn('slow');
       $('#header').addClass('header-fixed');
+      $('#headerDoctor').addClass('header-fixed');
+      $('#headerInsured').addClass('header-fixed');
     } else {
       $('.back-to-top').fadeOut('slow');
       $('#header').removeClass('header-fixed');
+      $('#headerDoctor').removeClass('header-fixed');
+      $('#headerInsured').removeClass('header-fixed');
     }
   });
   $('.back-to-top').click(function () {
@@ -76,7 +80,7 @@ jQuery(document).ready(function ($) {
     })
 
   // Smoth scroll on page hash links
-  $('a[href*="#"]:not([href="#"])').on('click', function () {
+    $('a[href*="#"]:not([href="#"])').on('click', function () {
     if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
 
       var target = $(this.hash);

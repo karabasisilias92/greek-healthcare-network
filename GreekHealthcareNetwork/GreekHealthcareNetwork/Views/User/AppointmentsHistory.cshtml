@@ -7,9 +7,17 @@
 
 @section cssScripts{
     <link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
+    @if (User.IsInRole("Insured"))
+    {
+        <link href="~/Content/insuredsCSS.css" rel="stylesheet" />
+    }
+    @if (User.IsInRole("Doctor"))
+    {
+        <link href="~/Content/doctorsCSS.css" rel="stylesheet" />
+    }
 }
 
-<main id="main">
+<main id="main" class="mt-4">
     <div class="col-8 offset-2">
         <div class="page-header">
             <h1>
@@ -86,7 +94,6 @@
         </div>
     </div>
 </div>
-
 
 @section AppointmentScripts{
     <script>
