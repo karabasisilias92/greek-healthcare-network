@@ -1,44 +1,50 @@
-﻿
-    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-        @Html.AntiForgeryToken()
-        <header id="headerDoctor">
-            <div class="container d-flex flex-row align-items-center justify-content-between">
+﻿@using Microsoft.AspNet.Identity;
+@using GreekHealthcareNetwork.Repositories;
+@{ 
+    var userId = @User.Identity.GetUserId();
+    var users = new UsersRepository();
+    var profilePicture = users.GetUserById(userId).ProfilePicture;
+}
+@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+{
+    @Html.AntiForgeryToken()
+    <header id="headerDoctor">
+        <div class="container d-flex flex-row align-items-center justify-content-between">
 
-                <div id="logo">
-                    <!--<a href="/Doctors/Index"><img src="@Url.Content("~/Content/img/logo.png")" alt="GHN" title="" /></a>-->
-                    <!-- Uncomment below if you prefer to use a text logo -->
-                    <h1><a href="/Home/Index">GHN</a></h1>
-                </div>
-                <div id="nav-menu-container">
-                    <ul class="nav-menu">
-                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <li>@Html.ActionLink("Appointments", "Appointments", "Doctors")</li>
-                    </ul>
-                </div>
-
-                <div id="profilePic">
-                    <ul class="nav-menu">
-                        <li class="nav-menu menu-has-children">
-                            <a href="#">
-                                <img src="@Url.Content("~/Content/img/Doctors/defaultUserImage.png")" class="rounded-circle mt-2" style="max-height:40px; max-width:40px" alt="User" title="" />
-                            </a>
-                            <ul>
-                                <li>@Html.ActionLink("Profile", "UserProfile", "User")</li>
-                                <li>@Html.ActionLink("Messages", "Messages", "User")</li>
-                                <li>@Html.ActionLink("Appointments History", "AppointmentsHistory", "User")</li>
-                                <li>
-                                    <a href="javascript:document.getElementById('logoutForm').submit()">
-                                        Logout
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+            <div id="logo">
+                <!--<a href="/Doctors/Index"><img src="@Url.Content("~/Content/img/logo.png")" alt="GHN" title="" /></a>-->
+                <!-- Uncomment below if you prefer to use a text logo -->
+                <h1><a href="/Home/Index">GHN</a></h1>
             </div>
-        </header>
-    }
+            <div id="nav-menu-container">
+                <ul class="nav-menu">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Appointments", "Appointments", "Doctors")</li>
+                </ul>
+            </div>
+
+            <div id="profilePic">
+                <ul class="nav-menu">
+                    <li class="nav-menu menu-has-children">
+                        <a href="#">
+                            <img src="@Url.Content("~/Content/img/Doctors/" + userId + "/" + profilePicture)" class="rounded-circle mt-2" style="max-height:40px; max-width:40px" alt="User" title="" />
+                        </a>
+                        <ul>
+                            <li>@Html.ActionLink("Profile", "UserProfile", "User")</li>
+                            <li>@Html.ActionLink("Messages", "Messages", "User")</li>
+                            <li>@Html.ActionLink("Appointments History", "AppointmentsHistory", "User")</li>
+                            <li>
+                                <a href="javascript:document.getElementById('logoutForm').submit()">
+                                    Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+}
 
 
 

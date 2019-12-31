@@ -26,7 +26,7 @@ namespace GreekHealthcareNetwork.Models
         public virtual AppointmentCostPerSpecialty AppointmentCost { get; set; }
 
         [Required]
-        [MinLength(10, ErrorMessage = "Office Address length cannot be less than 100 characters.")]
+        [MinLength(10, ErrorMessage = "Office Address length cannot be less than 10 characters.")]
         [MaxLength(100, ErrorMessage = "Office Address length cannot be more than 100 characters.")]
         [Display(Name = "Office Address")]
         public string OfficeAddress { get; set; }

@@ -115,11 +115,11 @@ namespace GreekHealthcareNetwork.Controllers
                 {
                     if (HttpContext.User.IsInRole("Insured"))
                     {
-                        path = Path.Combine(Server.MapPath("~/Content/img/Insureds/"), modifiedUser.ProfilePicture.FileName);
+                        path = Path.Combine(Server.MapPath("~/Content/img/Insureds/" + user.User.Id + "/"), modifiedUser.ProfilePicture.FileName);
                     }
                     if (HttpContext.User.IsInRole("Doctor"))
                     {
-                        path = Path.Combine(Server.MapPath("~/Content/img/Doctors/"), modifiedUser.ProfilePicture.FileName);
+                        path = Path.Combine(Server.MapPath("~/Content/img/Doctors/" + user.User.Id + "/"), modifiedUser.ProfilePicture.FileName);
                     }
                     modifiedUser.ProfilePicture.SaveAs(path);
                 }

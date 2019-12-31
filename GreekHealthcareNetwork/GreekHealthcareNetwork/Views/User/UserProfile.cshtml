@@ -1,5 +1,6 @@
 ﻿@model GreekHealthcareNetwork.Models.ProfileDetailsViewModel
-@{ 
+@using Microsoft.AspNet.Identity;
+@{
     ViewBag.Title = "Profile";
 }
 
@@ -17,11 +18,11 @@
                 <div class="col-md-4">
                     @if (User.IsInRole("Doctor"))
                     {
-                        <img src="@Url.Content("~/Content/img/Doctors/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
+                        <img src="@Url.Content("~/Content/img/Doctors/" + @User.Identity.GetUserId() + "/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
                     }
                     @if (User.IsInRole("Insured"))
                     {
-                        <img src="@Url.Content("~/Content/img/Insureds/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
+                        <img src="@Url.Content("~/Content/img/Insureds/" + @User.Identity.GetUserId() + "/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
                     }
                 </div>
                 <div class="col-md-8 align-self-center">
@@ -30,10 +31,10 @@
                         {
                             <text>Doctor</text>
                         }
-                         @if (User.IsInRole("Insured"))
-                         {
-                             @Model.Insured.InsuredPlan.Name <text> Member</text>
-                         }
+                        @if (User.IsInRole("Insured"))
+                        {
+                            @Model.Insured.InsuredPlan.Name <text> Member</text>
+                        }
                     </h4>
                     <p>Exp: @Model.User.SubscriptionEndDate.ToString("dd/MM/yyyy")</p>
                     <button type="button" class="btn btn-info">Renew</button>

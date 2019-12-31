@@ -311,15 +311,9 @@
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\img\apple-touch-icon.png" />
     <Content Include="Content\img\defaultUserImage.png" />
-    <Content Include="Content\img\Doctors\defaultUserImage.png" />
-    <Content Include="Content\img\Doctors\doctor1.jpg" />
-    <Content Include="Content\img\Doctors\doctor2.jpg" />
-    <Content Include="Content\img\Doctors\doctor3.jpg" />
-    <Content Include="Content\img\Doctors\doctor4.jpg" />
     <Content Include="Content\img\employees-885338_1920-e1565727877609-1500x630.jpg" />
     <Content Include="Content\img\favicon.png" />
     <Content Include="Content\img\Healthcare-Background-Pics.jpg" />
-    <Content Include="Content\img\Insureds\defaultUserImage.png" />
     <Content Include="Content\insuredsNavbar.css" />
     <Content Include="Content\mdb.css" />
     <Content Include="Content\registration.css" />
@@ -514,6 +508,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\img\Admins\" />
+    <Folder Include="Content\img\Doctors\" />
+    <Folder Include="Content\img\Insureds\" />
     <Folder Include="Views\Appointments\" />
   </ItemGroup>
   <ItemGroup>

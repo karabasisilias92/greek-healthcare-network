@@ -211,14 +211,12 @@ namespace GreekHealthcareNetwork.Controllers
                         ModelState.AddModelError("", "The profile picture width must be equal to its height and the width must be also over 237.5 pixels");
                         return View(model);
                     }
-                    path = Path.Combine(Server.MapPath("~/Content/img/Doctors"),
-                    model.ProfilePicture.FileName);
-                    model.ProfilePicture.SaveAs(path);
+                    path = model.ProfilePicture.FileName;                    
                 }
 
-                var user = new ApplicationUser 
-                { 
-                    UserName = model.UserName, 
+                var user = new ApplicationUser
+                {
+                    UserName = model.UserName,
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
@@ -226,12 +224,23 @@ namespace GreekHealthcareNetwork.Controllers
                     DoB = model.DoB,
                     AMKA = model.AMKA,
                     PaypalAccount = model.PaypalAccount,
-                    ProfilePicture = Path.GetFileName(path)
+                    ProfilePicture = path
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     string userId = UserManager.FindByName(model.UserName).Id;
+                    Directory.CreateDirectory(Server.MapPath("~/Content/img/Doctors/" + userId));
+                    path = Path.Combine(Server.MapPath("~/Content/img/Doctors/" + userId), path);
+                    if (model.ProfilePicture != null)
+                    {
+                        model.ProfilePicture.SaveAs(path);
+                    } 
+                    else
+                    {
+                        string defaultImagePath = Server.MapPath("~/Content/img/defaultUserImage.png");
+                        System.IO.File.Copy(defaultImagePath, path, true);
+                    }
                     try
                     {
                         int doctorPlanId = _doctors.GetDoctorPlanId(model.MedicalSpecialty);
@@ -373,6 +382,94 @@ namespace GreekHealthcareNetwork.Controllers
             await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             return RedirectToAction("Index", "Home");
         }
+
+        // GET: /Account/ClientRegister
+        [AllowAnonymous]
+        public ActionResult ClientRegister()
+        {
+            InsuredRegisterViewModel model = new InsuredRegisterViewModel();
+            return View(model);
+        }
+
+        //
+        // POST: /Account/ClientRegister
+        //[HttpPost]
+        //[AllowAnonymous]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> ClientRegister(InsuredRegisterViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        string path = "defaultUserImage.png";
+
+        //        if (model.ProfilePicture != null)
+        //        {
+        //            Image image = Image.FromStream(model.ProfilePicture.InputStream);
+        //            if (image.Width != image.Height || image.Width < 237.5)
+        //            {
+        //                ModelState.AddModelError("", "The profile picture width must be equal to its height and the width must be also over 237.5 pixels");
+        //                return View(model);
+        //            }
+        //            path = Path.Combine(Server.MapPath("~/Content/img/Insureds"),
+        //            model.ProfilePicture.FileName);
+        //            model.ProfilePicture.SaveAs(path);
+        //        }
+
+        //        var user = new ApplicationUser
+        //        {
+        //            UserName = model.UserName,
+        //            Email = model.Email,
+        //            FirstName = model.FirstName,
+        //            LastName = model.LastName,
+        //            PhoneNumber = model.PhoneNumber,
+        //            DoB = model.DoB,
+        //            AMKA = model.AMKA,
+        //            PaypalAccount = model.PaypalAccount,
+        //            ProfilePicture = Path.GetFileName(path)
+        //        };
+        //        var result = await UserManager.CreateAsync(user, model.Password);
+        //        if (result.Succeeded)
+        //        {
+        //            string userId = UserManager.FindByName(model.UserName).Id;
+        //            try
+        //            {
+        //                int doctorPlanId = _doctors.GetDoctorPlanId(model.MedicalSpecialty);
+        //                Doctor doctor = new Doctor { UserId = userId, OfficeAddress = model.OfficeAddress, MedicalSpecialty = model.MedicalSpecialty, DoctorPlanId = doctorPlanId };
+        //                _doctors.InsertDoctor(doctor);
+        //            }
+        //            catch (Exception)
+        //            {
+        //                model.MedicalSpecialties = new List<MedicalSpecialty>();
+        //                for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
+        //                {
+        //                    model.MedicalSpecialties.Add((MedicalSpecialty)i);
+        //                }
+        //                await UserManager.DeleteAsync(user);
+        //                // If we could not create doctor for some reason, something failed, redisplay form
+
+        //                ModelState.AddModelError("", "Something went wrong, please try again.");
+        //                return View(model);
+        //            }
+        //            UserManager.AddToRole(userId, "Doctor");
+        //            //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+        //            // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
+        //            // Send an email with this link
+        //            // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+        //            // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+        //            // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+        //            return RedirectToAction("RegisterDoctorWorkingHours", "Account", new { userId = userId });
+        //        }
+        //        AddErrors(result);
+        //    }
+        //    model.MedicalSpecialties = new List<MedicalSpecialty>();
+        //    for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
+        //    {
+        //        model.MedicalSpecialties.Add((MedicalSpecialty)i);
+        //    }
+        //    // If we got this far, something failed, redisplay form
+        //    return View(model);
+        //}
 
         //
         // GET: /Account/ConfirmEmail

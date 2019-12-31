@@ -1,4 +1,5 @@
 ﻿@model GreekHealthcareNetwork.Models.ProfileDetailsViewModel
+@using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Edit Profile";
 }
@@ -7,10 +8,10 @@
     <link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
 }
 
-@using (Html.BeginForm("EditProfile", "User", FormMethod.Post,  new { role = "form", enctype = "multipart/form-data" }))
-{ 
+@using (Html.BeginForm("EditProfile", "User", FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
+{
     @Html.AntiForgeryToken()
-    
+
     <main id="main">
         <div>
             <div class="col-md-5 offset-md-4">
@@ -22,11 +23,11 @@
                         <div class="changeProfPicContainer">
                             @if (User.IsInRole("Doctor"))
                             {
-                                <img src="@Url.Content("~/Content/img/Doctors/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
+                                <img src="@Url.Content("~/Content/img/Doctors/" + @User.Identity.GetUserId() + "/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
                             }
                             @if (User.IsInRole("Insured"))
                             {
-                                <img src="@Url.Content("~/Content/img/Insureds/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
+                                <img src="@Url.Content("~/Content/img/Insureds/" + @User.Identity.GetUserId() + "/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
                             }
                             @Html.TextBoxFor(m => m.ProfilePicture, new { @class = "form-control", type = "file", accept = "image/*" })
                         </div>
@@ -68,8 +69,8 @@
                             }
                             <tr class="form-group">
                                 <th>@Html.LabelFor(m => m.User.DoB):</th>
-                                <td>@Html.TextBoxFor(m => m.User.DoB, new { @class="form-control", type="date", @Value = Model.User.DoB.ToString("yyyy-MM-dd") })</td>
-                                <td>@Html.ValidationMessageFor(m=>m.User.DoB, "", new { @class = "text-danger" })</td>
+                                <td>@Html.TextBoxFor(m => m.User.DoB, new { @class = "form-control", type = "date", @Value = Model.User.DoB.ToString("yyyy-MM-dd") })</td>
+                                <td>@Html.ValidationMessageFor(m => m.User.DoB, "", new { @class = "text-danger" })</td>
                             </tr>
                             <tr class="form-group">
                                 <th>@Html.LabelFor(m => m.User.AMKA):</th>
@@ -99,7 +100,7 @@
                                 {
                                     <th>@Html.LabelFor(m => m.Insured.HomeAddress)</th>
                                     <td>@Html.TextBoxFor(m => m.Insured.HomeAddress, new { @class = "form-control" })</td>
-                                    <td>@Html.ValidationMessageFor(m => m.Insured.HomeAddress, "", new { @class = "text-danger" } )</td>
+                                    <td>@Html.ValidationMessageFor(m => m.Insured.HomeAddress, "", new { @class = "text-danger" })</td>
                                 }
                             <tr class="form-group">
                                 <th>@Html.LabelFor(m => m.User.Email):</th>
@@ -121,7 +122,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    
+
                 </div>
             </div>
         </div>
@@ -130,4 +131,4 @@
 
 @section Scripts{
     @Scripts.Render("~/bundles/jqueryval")
-    }
+}

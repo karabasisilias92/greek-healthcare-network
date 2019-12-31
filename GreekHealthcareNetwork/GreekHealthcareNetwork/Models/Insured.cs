@@ -23,7 +23,7 @@ namespace GreekHealthcareNetwork.Models
         public virtual InsuredPlan InsuredPlan { get; set; }
 
         [Required]
-        [MinLength(10, ErrorMessage = "Home Address length cannot be less than 100 characters.")]
+        [MinLength(10, ErrorMessage = "Home Address length cannot be less than 10 characters.")]
         [MaxLength(100, ErrorMessage = "Home Address length cannot be more than 100 characters.")]
         [Display(Name = "Home Address")]
         public string HomeAddress { get; set; }
