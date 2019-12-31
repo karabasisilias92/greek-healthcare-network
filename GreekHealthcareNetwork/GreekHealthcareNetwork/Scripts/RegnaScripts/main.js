@@ -5,13 +5,17 @@ jQuery(document).ready(function ($) {
     if ($(this).scrollTop() > 100) {
       $('.back-to-top').fadeIn('slow');
       $('#header').addClass('header-fixed');
+      $('#headerDoctor').removeClass('header-top');
       $('#headerDoctor').addClass('header-fixed');
+      $('#headerInsured').removeClass('header-top');
       $('#headerInsured').addClass('header-fixed');
     } else {
       $('.back-to-top').fadeOut('slow');
       $('#header').removeClass('header-fixed');
       $('#headerDoctor').removeClass('header-fixed');
+      $('#headerDoctor').addClass('header-top');
       $('#headerInsured').removeClass('header-fixed');
+      $('#headerInsured').addClass('header-top');
     }
   });
   $('.back-to-top').click(function () {

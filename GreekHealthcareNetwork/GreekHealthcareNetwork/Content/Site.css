@@ -278,13 +278,15 @@ h6 {
 /* Nav Menu Arrows */
 
 .sf-arrows .sf-with-ul {
-    padding-right: 30px;
+    padding-left: 25px;
+    padding-right: 25px;
 }
 
 .sf-arrows .sf-with-ul:after {
     content: "\f107";
     position: absolute;
-    right: 15px;
+    right: 10px;
+    top: 20px;
     font-family: FontAwesome;
     font-style: normal;
     font-weight: normal;
