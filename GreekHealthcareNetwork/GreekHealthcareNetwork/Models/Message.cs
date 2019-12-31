@@ -12,12 +12,14 @@ namespace GreekHealthcareNetwork.Models
         public static int ConversationIdCounter { get; set; } = 1;
 
         [Key]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
-        public int ConversationId { get; set; }
+        public long ConversationId { get; set; }
 
+        [Required]
         public string SenderId { get; set; }
 
+        [Required]
         public string RecipientId { get; set; }
 
         [ForeignKey("SenderId")]

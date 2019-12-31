@@ -1,10 +1,11 @@
-﻿using System;
+﻿using GreekHealthcareNetwork.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
-namespace GreekHealthcareNetwork.Models
+namespace GreekHealthcareNetwork.Repositories
 {
     public class MessagesRepository
     {

@@ -13,6 +13,7 @@ namespace GreekHealthcareNetwork.Models
         [MaxLength(100)]  
         public string Name { get; set; }
 
+        [Required]
         public string PlanAppoinments { get; set; }
 
         [Required]

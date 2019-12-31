@@ -15,11 +15,13 @@ namespace GreekHealthcareNetwork.Models
         [Key]
         public int Id { get; set; }
 
+        [Required]
         public string DoctorId { get; set; }
 
         [ForeignKey("DoctorId")]
         public virtual Doctor Doctor { get; set; }
 
+        [Required]
         public string InsuredId { get; set; }
 
         [ForeignKey("InsuredId")]

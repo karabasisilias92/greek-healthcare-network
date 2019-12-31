@@ -37,6 +37,7 @@ namespace GreekHealthcareNetwork.Models
         [Display(Name = "Appointment Duration")]
         public byte AppointmentDuration { get; set; }
 
+        [Required]
         public string DoctorId { get; set; }
 
         [ForeignKey("DoctorId")]
