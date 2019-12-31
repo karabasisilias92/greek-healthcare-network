@@ -15,7 +15,14 @@
             </div>
             <div class="row" id="profileSection">
                 <div class="col-md-4">
-                    <img src="@Url.Content("~/Content/img/Doctors/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
+                    @if (User.IsInRole("Doctor"))
+                    {
+                        <img src="@Url.Content("~/Content/img/Doctors/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
+                    }
+                    @if (User.IsInRole("Insured"))
+                    {
+                        <img src="@Url.Content("~/Content/img/Insureds/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
+                    }
                 </div>
                 <div class="col-md-8 align-self-center">
                     <h4>
@@ -68,7 +75,7 @@
                         {
                             <tr>
                                 <th>Working Hours:</th>
-                                <td> Data of working hours </td>  @*<- To be filled with doctors working hours*@
+                                <td>Data of working hours </td>  @*<- To be filled with doctors working hours*@
                             </tr>
                         }
                         <tr>

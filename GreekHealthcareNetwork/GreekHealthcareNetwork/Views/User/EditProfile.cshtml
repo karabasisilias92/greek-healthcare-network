@@ -7,7 +7,7 @@
     <link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
 }
 
-@using (Html.BeginForm("EditProfile", "User", FormMethod.Post))
+@using (Html.BeginForm("EditProfile", "User", FormMethod.Post,  new { role = "form", enctype = "multipart/form-data" }))
 { 
     @Html.AntiForgeryToken()
     
@@ -19,7 +19,10 @@
                 </div>
                 <div class="row" id="profileSection">
                     <div class="col-md-4">
-                        <img src="@Url.Content("~/Content/img/Doctors/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
+                        <div class="changeProfPicContainer">
+                            <img src="@Url.Content("~/Content/img/Doctors/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
+                            @Html.TextBoxFor(m => m.ProfilePicture, new { @class = "form-control", type = "file", accept = "image/*" })
+                        </div>
                     </div>
                     <div class="col-md-8 align-self-center">
                         <h4>
@@ -41,12 +44,8 @@
                         <tbody>
                             <tr class="form-group">
                                 <th>@Html.LabelFor(m => m.User.FirstName):</th>
-                                <td>
-                                    @Html.TextBoxFor(m => m.User.FirstName, new { @class = "form-control" })
-                                </td>
-                                <td>
-                                    @Html.ValidationMessageFor(m => m.User.FirstName, "", new { @class = "text-danger" })
-                                </td>
+                                <td>@Html.TextBoxFor(m => m.User.FirstName, new { @class = "form-control" })</td>
+                                <td>@Html.ValidationMessageFor(m => m.User.FirstName, "", new { @class = "text-danger" })</td>
                             </tr>
                             <tr class="form-group">
                                 <th>@Html.LabelFor(m => m.User.LastName):</th>

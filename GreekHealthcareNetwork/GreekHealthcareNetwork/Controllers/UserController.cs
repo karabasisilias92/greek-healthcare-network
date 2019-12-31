@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -36,6 +38,30 @@ namespace GreekHealthcareNetwork.Controllers
             return currentUser;
         }
 
+        private ProfileDetailsViewModel UpdatedUser(ProfileDetailsViewModel modifiedUser)
+        {
+            var updatedUser = GetCurrentUser();
+            updatedUser.User.FirstName = modifiedUser.User.FirstName;
+            updatedUser.User.LastName = modifiedUser.User.LastName;
+            updatedUser.User.DoB = modifiedUser.User.DoB;
+            updatedUser.User.AMKA = modifiedUser.User.AMKA;
+            updatedUser.User.PaypalAccount = modifiedUser.User.PaypalAccount;
+            updatedUser.User.Email = modifiedUser.User.Email;
+            updatedUser.User.PhoneNumber = modifiedUser.User.PhoneNumber;
+
+            if (HttpContext.User.IsInRole("Doctor"))
+            {
+                updatedUser.Doctor.MedicalSpecialty = modifiedUser.Doctor.MedicalSpecialty;
+                updatedUser.Doctor.WorkingHours = modifiedUser.Doctor.WorkingHours;
+                updatedUser.Doctor.OfficeAddress = modifiedUser.Doctor.OfficeAddress;
+            }
+            if (HttpContext.User.IsInRole("Insured"))
+            {
+                updatedUser.Insured.HomeAddress = modifiedUser.Insured.HomeAddress;
+            }
+
+            return updatedUser;
+        }
         // GET: Profile
         public ActionResult UserProfile()
         {
@@ -65,35 +91,45 @@ namespace GreekHealthcareNetwork.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditProfile(ProfileDetailsViewModel currentUser)
+        public ActionResult EditProfile(ProfileDetailsViewModel modifiedUser)
         {
+
+             var user = UpdatedUser(modifiedUser);
+
             if (!ModelState.IsValid)
             {
-                var user = GetCurrentUser();
-                currentUser.Insured.InsuredPlan = user.Insured.InsuredPlan;
-                currentUser.User.SubscriptionEndDate = user.User.SubscriptionEndDate;
-                currentUser.User.ProfilePicture = user.User.ProfilePicture;
-                return View(currentUser);
+                return View(user);
+            }
+
+            if (modifiedUser.ProfilePicture != null)
+            {
+                Image image = Image.FromStream(modifiedUser.ProfilePicture.InputStream);
+                if (image.Width != image.Height || image.Width < 237.5)
+                {
+                    ModelState.AddModelError("", "The profile picture width must be equal to its height and the width must be also over 237.5 pixels");
+                    return View(user);
+                }
+                try
+                {
+                    string path = Path.Combine(Server.MapPath("~/Content/img/Insureds/"), modifiedUser.ProfilePicture.FileName);
+                    modifiedUser.ProfilePicture.SaveAs(path);
+                    user.User.ProfilePicture = Path.GetFileName(path);
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex);
+                }
             }
 
             try
             {
-                var user = GetCurrentUser();
-                currentUser.Insured.InsuredPlan = user.Insured.InsuredPlan;
-                currentUser.User.SubscriptionEndDate = user.User.SubscriptionEndDate;
-                currentUser.User.ProfilePicture = user.User.ProfilePicture;
-                _usersRepository.UpdateUser(currentUser);
+                _usersRepository.UpdateUser(user);
             }
             catch (Exception error)
             {
                 ModelState.AddModelError("", error);
-                var user = GetCurrentUser();
-                currentUser.Insured.InsuredPlan = user.Insured.InsuredPlan;
-                currentUser.User.SubscriptionEndDate = user.User.SubscriptionEndDate;
-                currentUser.User.ProfilePicture = user.User.ProfilePicture;
-                return View(currentUser);
+                return View(user);
             }
-            
 
             return RedirectToAction("UserProfile");
         }

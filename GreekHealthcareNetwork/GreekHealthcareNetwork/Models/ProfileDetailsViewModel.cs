@@ -10,5 +10,6 @@ namespace GreekHealthcareNetwork.Models
         public ApplicationUser User { get; set; }
         public Doctor Doctor { get; set; }
         public Insured Insured { get; set; }
+        public HttpPostedFileBase ProfilePicture { get; set; }
     }
 }
