@@ -20,7 +20,14 @@
                 <div class="row" id="profileSection">
                     <div class="col-md-4">
                         <div class="changeProfPicContainer">
-                            <img src="@Url.Content("~/Content/img/Doctors/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
+                            @if (User.IsInRole("Doctor"))
+                            {
+                                <img src="@Url.Content("~/Content/img/Doctors/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
+                            }
+                            @if (User.IsInRole("Insured"))
+                            {
+                                <img src="@Url.Content("~/Content/img/Insureds/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
+                            }
                             @Html.TextBoxFor(m => m.ProfilePicture, new { @class = "form-control", type = "file", accept = "image/*" })
                         </div>
                     </div>

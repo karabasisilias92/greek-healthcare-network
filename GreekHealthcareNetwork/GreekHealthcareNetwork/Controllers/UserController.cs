@@ -101,6 +101,8 @@ namespace GreekHealthcareNetwork.Controllers
                 return View(user);
             }
 
+            string path = user.User.ProfilePicture;
+
             if (modifiedUser.ProfilePicture != null)
             {
                 Image image = Image.FromStream(modifiedUser.ProfilePicture.InputStream);
@@ -111,15 +113,23 @@ namespace GreekHealthcareNetwork.Controllers
                 }
                 try
                 {
-                    string path = Path.Combine(Server.MapPath("~/Content/img/Insureds/"), modifiedUser.ProfilePicture.FileName);
+                    if (HttpContext.User.IsInRole("Insured"))
+                    {
+                        path = Path.Combine(Server.MapPath("~/Content/img/Insureds/"), modifiedUser.ProfilePicture.FileName);
+                    }
+                    if (HttpContext.User.IsInRole("Doctor"))
+                    {
+                        path = Path.Combine(Server.MapPath("~/Content/img/Doctors/"), modifiedUser.ProfilePicture.FileName);
+                    }
                     modifiedUser.ProfilePicture.SaveAs(path);
-                    user.User.ProfilePicture = Path.GetFileName(path);
                 }
                 catch (Exception ex)
                 {
                     ModelState.AddModelError("", ex);
                 }
             }
+
+            user.User.ProfilePicture = Path.GetFileName(path);
 
             try
             {
