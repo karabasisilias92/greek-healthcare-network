@@ -41,23 +41,20 @@ namespace GreekHealthcareNetwork.Repositories
 
         public void UpdateUser(ProfileDetailsViewModel updatedUser)
         {
-            ApplicationUser user;
-            Doctor doctor;
-            Insured insured;
 
             using (var db = new ApplicationDbContext())
             {
-                user = db.Users.Attach(updatedUser.User);
+                db.Users.Attach(updatedUser.User);
                 db.Entry(updatedUser.User).State = System.Data.Entity.EntityState.Modified;
 
-                if (Roles.IsUserInRole("Doctor"))
+                if (HttpContext.Current.User.IsInRole("Doctor"))
                 {
-                    doctor = db.Doctors.Attach(updatedUser.Doctor);
+                    db.Doctors.Attach(updatedUser.Doctor);
                     db.Entry(updatedUser.Doctor).State = System.Data.Entity.EntityState.Modified;
                 }
-                if (Roles.IsUserInRole("Insured"))
+                if (HttpContext.Current.User.IsInRole("Insured"))
                 {
-                    insured = db.Insureds.Attach(updatedUser.Insured);
+                    db.Insureds.Attach(updatedUser.Insured);
                     db.Entry(updatedUser.Insured).State = System.Data.Entity.EntityState.Modified;
                 }
 

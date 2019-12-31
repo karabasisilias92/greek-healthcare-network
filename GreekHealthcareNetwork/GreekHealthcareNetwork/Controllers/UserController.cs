@@ -76,7 +76,24 @@ namespace GreekHealthcareNetwork.Controllers
                 return View(currentUser);
             }
 
-            _usersRepository.UpdateUser(currentUser);
+            try
+            {
+                var user = GetCurrentUser();
+                currentUser.Insured.InsuredPlan = user.Insured.InsuredPlan;
+                currentUser.User.SubscriptionEndDate = user.User.SubscriptionEndDate;
+                currentUser.User.ProfilePicture = user.User.ProfilePicture;
+                _usersRepository.UpdateUser(currentUser);
+            }
+            catch (Exception error)
+            {
+                ModelState.AddModelError("", error);
+                var user = GetCurrentUser();
+                currentUser.Insured.InsuredPlan = user.Insured.InsuredPlan;
+                currentUser.User.SubscriptionEndDate = user.User.SubscriptionEndDate;
+                currentUser.User.ProfilePicture = user.User.ProfilePicture;
+                return View(currentUser);
+            }
+            
 
             return RedirectToAction("UserProfile");
         }

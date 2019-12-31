@@ -60,6 +60,10 @@
                             <th>AMKA:</th>
                             <td>@Model.User.AMKA</td>
                         </tr>
+                        <tr>
+                            <th>@Html.LabelFor(m => m.User.PaypalAccount)</th>
+                            <td>@Model.User.PaypalAccount</td>
+                        </tr>
                         @if (User.IsInRole("Doctor"))
                         {
                             <tr>
