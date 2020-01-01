@@ -39,14 +39,27 @@ namespace GreekHealthcareNetwork.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> PaySubscription(PaySubcriptionViewModel model)
         {
-            var doctor = _doctors.GetDoctorById(model.UserId);
-            if (doctor.WorkingHours != null && doctor.WorkingHours.Count > 0)
+            var user = _users.GetUserById(model.UserId);
+            using (var db = new ApplicationDbContext())
             {
-                _users.ActivateUser(doctor.UserId);
-            }
-            doctor.User.SubscriptionEndDate = DateTime.Now;
-            _users.UpdateSubscriptionEndDate(doctor.UserId);
-            await SignInManager.SignInAsync(doctor.User, isPersistent: false, rememberBrowser: false);
+                string doctorRoleId = _users.GetRoleIdByName("Doctor");
+                string insuredRoleId = _users.GetRoleIdByName("Insured");
+                if (user.Roles.Any(r => r.RoleId.Equals(doctorRoleId)))
+                {
+                    var doctor = _doctors.GetDoctorById(model.UserId);
+                    if (doctor.WorkingHours != null && doctor.WorkingHours.Count > 0)
+                    {
+                        _users.ActivateUser(doctor.UserId);
+                    }
+                    _users.UpdateSubscriptionEndDate(doctor.UserId);
+                }
+                else if (user.Roles.Any(r => r.RoleId.Equals(insuredRoleId)))
+                {
+                    _users.ActivateUser(user.Id);
+                    _users.UpdateSubscriptionEndDate(user.Id);
+                }
+            }            
+            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             return RedirectToAction("Index", "Home");
         }
 
