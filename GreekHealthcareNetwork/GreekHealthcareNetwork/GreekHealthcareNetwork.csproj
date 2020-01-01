@@ -267,6 +267,10 @@
     <Compile Include="Migrations\201912311843125_Office_Home address max, min length.Designer.cs">
       <DependentUpon>201912311843125_Office_Home address max, min length.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001011552498_InsuredPlanId to Insured nullable.cs" />
+    <Compile Include="Migrations\202001011552498_InsuredPlanId to Insured nullable.Designer.cs">
+      <DependentUpon>202001011552498_InsuredPlanId to Insured nullable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -578,6 +582,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912311843125_Office_Home address max, min length.resx">
       <DependentUpon>201912311843125_Office_Home address max, min length.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001011552498_InsuredPlanId to Insured nullable.resx">
+      <DependentUpon>202001011552498_InsuredPlanId to Insured nullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

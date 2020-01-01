@@ -16,7 +16,7 @@ namespace GreekHealthcareNetwork.Models
         public virtual ApplicationUser User { get; set; }
 
         [Display(Name = "InsuredPlan")]
-        public int InsuredPlanId { get; set; }
+        public int? InsuredPlanId { get; set; }
 
         [ForeignKey("InsuredPlanId")]
         [JsonIgnore]
