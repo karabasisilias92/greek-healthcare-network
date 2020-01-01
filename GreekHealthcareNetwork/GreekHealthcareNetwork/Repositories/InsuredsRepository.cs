@@ -14,10 +14,36 @@ namespace GreekHealthcareNetwork.Repositories
             using (var db = new ApplicationDbContext())
             {
                 insured = db.Insureds.Include("InsuredPlan")
+                                     .Include("User")
                                      .SingleOrDefault(i => i.UserId == insuredId);
             }
 
             return insured;
+        }
+
+        public void InsertInsured(Insured insured)
+        {
+            if (insured == null)
+            {
+                throw new ArgumentNullException("insured");
+            }
+
+            using (var db = new ApplicationDbContext())
+            {
+                db.Insureds.Add(insured);
+                db.SaveChanges();
+            }
+        }
+
+        public IEnumerable<InsuredPlan> GetInsuredPlans()
+        {
+            IEnumerable<InsuredPlan> insuredPlans;
+
+            using (var db = new ApplicationDbContext())
+            {
+                insuredPlans = db.InsuredPlans.ToList();
+            }
+            return insuredPlans;
         }
     }
 }

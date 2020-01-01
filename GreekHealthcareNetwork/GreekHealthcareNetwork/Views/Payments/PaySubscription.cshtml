@@ -1,6 +1,9 @@
 ﻿@model GreekHealthcareNetwork.Models.PaySubcriptionViewModel
+@using GreekHealthcareNetwork.Models;
+@using GreekHealthcareNetwork.Repositories;
 @{
     ViewBag.Title = "Pay Subscription";
+    var _users = new UsersRepository();
 }
 
 <section id="pageHeader" class="container my-3">
@@ -24,7 +27,19 @@
                 </div>
             }
         </div>
-        @Html.ActionLink("Back to previous page", "DoctorPayDoctorPlan", "Account", new { userId = Model.UserId }, new { id = "backToPreviousPage", @class = "btn btn-outline-danger mb-3" })
+        @{
+            var user = _users.GetUserById(Model.UserId);
+            string doctorRoleId = _users.GetRoleIdByName("Doctor");
+            string insuredRoleId = _users.GetRoleIdByName("Insured");
+            if (user.Roles.Any(r => r.RoleId.Equals(doctorRoleId)))
+            {
+                @Html.ActionLink("Back to previous page", "DoctorPayDoctorPlan", "Account", new { userId = Model.UserId }, new { id = "backToPreviousPage", @class = "btn btn-outline-danger mb-3" })
+            }
+            else if (user.Roles.Any(r => r.RoleId.Equals(insuredRoleId)))
+            {
+                @Html.ActionLink("Back to previous page", "ClientPayInsuredPlan", "Account", new { userId = Model.UserId }, new { id = "backToPreviousPage", @class = "btn btn-outline-danger mb-3" })
+            }
+        }
     </div>
 </section>
 

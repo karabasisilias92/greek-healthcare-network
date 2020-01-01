@@ -135,7 +135,7 @@ namespace GreekHealthcareNetwork.Models
         public MedicalSpecialty? MedicalSpecialty { get; set; }
 
         [Required]
-        [MinLength(10, ErrorMessage = "Office Address length cannot be less than 100 characters.")]
+        [MinLength(10, ErrorMessage = "Office Address length cannot be less than 10 characters.")]
         [MaxLength(100, ErrorMessage = "Office Address length cannot be more than 100 characters.")]
         [Display(Name = "Office Address")]
         public string OfficeAddress { get; set; }
@@ -161,10 +161,16 @@ namespace GreekHealthcareNetwork.Models
     public class InsuredRegisterViewModel : RegisterViewModel
     {
         [Required]
-        [MinLength(10, ErrorMessage = "Home Address length cannot be less than 100 characters.")]
+        [MinLength(10, ErrorMessage = "Home Address length cannot be less than 10 characters.")]
         [MaxLength(100, ErrorMessage = "Home Address length cannot be more than 100 characters.")]
         [Display(Name = "Home Address")]
         public string HomeAddress { get; set; }
+    }
+
+    public class PayInsuredPlanViewModel
+    {
+        public IEnumerable<InsuredPlan> InsuredPlans { get; set; }
+        public string InsuredId { get; set; }
     }
 
     public class ResetPasswordViewModel

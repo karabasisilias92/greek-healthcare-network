@@ -1,6 +1,7 @@
 ﻿using GreekHealthcareNetwork.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Security;
@@ -14,7 +15,7 @@ namespace GreekHealthcareNetwork.Repositories
             ApplicationUser user;
             using (var db = new ApplicationDbContext())
             {
-                user = db.Users.SingleOrDefault(i => i.Id.Equals(userId));
+                user = db.Users.Include("Roles").SingleOrDefault(i => i.Id.Equals(userId));
             }
             return user;
         }
@@ -62,6 +63,20 @@ namespace GreekHealthcareNetwork.Repositories
 
                 db.SaveChanges();
             }
+        }
+
+        public string GetRoleIdByName(string roleName)
+        {
+            string roleId;
+            if (roleName == null)
+            {
+                throw new ArgumentNullException("roleName");
+            }
+            using (var db = new ApplicationDbContext())
+            {
+                roleId = db.Roles.SingleOrDefault(r => r.Name.Equals(roleName)).Id;
+            }
+            return roleId;
         }
     }
 }
