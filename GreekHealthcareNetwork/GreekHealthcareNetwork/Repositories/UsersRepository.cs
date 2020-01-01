@@ -49,11 +49,13 @@ namespace GreekHealthcareNetwork.Repositories
 
                 if (HttpContext.Current.User.IsInRole("Doctor"))
                 {
+                    updatedUser.Doctor.User = updatedUser.User;
                     db.Doctors.Attach(updatedUser.Doctor);
                     db.Entry(updatedUser.Doctor).State = System.Data.Entity.EntityState.Modified;
                 }
                 if (HttpContext.Current.User.IsInRole("Insured"))
                 {
+                    updatedUser.Insured.User = updatedUser.User;
                     db.Insureds.Attach(updatedUser.Insured);
                     db.Entry(updatedUser.Insured).State = System.Data.Entity.EntityState.Modified;
                 }

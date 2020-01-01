@@ -74,10 +74,24 @@
                         </tr>
                         @if (User.IsInRole("Doctor"))
                         {
-                            <tr>
-                                <th>Working Hours:</th>
-                                <td>Data of working hours </td>  @*<- To be filled with doctors working hours*@
-                            </tr>
+                            if (Model.Doctor.WorkingHours.Count == 0)
+                            {
+                                <tr>
+                                    <th>Working Hours:</th>
+                                    <td>Doctor has not declared any working hours yet.</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                foreach (var item in Model.Doctor.WorkingHours)
+                                {
+                                    
+                                    <tr>
+                                        <th>@(Model.Doctor.WorkingHours.First() == item ? "Working Hours:" : "")</th>
+                                        <td>@item.WorkingDayConcat</td>
+                                    </tr>
+                                }
+                            }
                         }
                         <tr>
                             <th>Address:</th>

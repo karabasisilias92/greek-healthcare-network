@@ -43,5 +43,14 @@ namespace GreekHealthcareNetwork.Models
         [ForeignKey("DoctorId")]
         [JsonIgnore]
         public virtual Doctor Doctor { get; set; }
+
+        [NotMapped]
+        public string WorkingDayConcat
+        {
+            get
+            {
+                return Day.ToString() + "," + " " + WorkStartTime.Value.Hours.ToString() + ":" + WorkStartTime.Value.Minutes.ToString("D2") + " " + "-" + " " + WorkEndTime.Value.Hours.ToString() + ":" + WorkEndTime.Value.Minutes.ToString("D2");
+            }
+        }
     }
 }
