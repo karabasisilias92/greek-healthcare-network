@@ -62,11 +62,11 @@
                             </tr>
                             @if (User.IsInRole("Doctor"))
                             {
-                            <tr class="form-group">
-                                <th>@Html.LabelFor(m => m.Doctor.MedicalSpecialty):</th>
-                                <td>@Html.TextBoxFor(m => m.Doctor.MedicalSpecialty, new { @class = "form-control", @readonly="readonly" })</td>
-                                <td>@Html.ValidationMessageFor(m => m.Doctor.MedicalSpecialty, "", new { @class = "text-danger" })</td>
-                            </tr>
+                                <tr class="form-group">
+                                    <th>@Html.LabelFor(m => m.Doctor.MedicalSpecialty):</th>
+                                    <td>@Html.TextBoxFor(m => m.Doctor.MedicalSpecialty, new { @class = "form-control", @readonly = "readonly" })</td>
+                                    <td>@Html.ValidationMessageFor(m => m.Doctor.MedicalSpecialty, "", new { @class = "text-danger" })</td>
+                                </tr>
                             }
                             <tr class="form-group">
                                 <th>@Html.LabelFor(m => m.User.DoB):</th>
@@ -85,10 +85,30 @@
                             </tr>
                             @if (User.IsInRole("Doctor"))
                             {
-                                <tr class="form-group">
-                                    <th>@Html.LabelFor(m => m.Doctor.WorkingHours):</th>
-                                    <td>@*@Html.TextBoxFor(m => m.Doctor.WorkingHours, new { @class = "form-control" })*@ </td>  @*<- To be filled with doctors working hours*@
-                                </tr>
+                                if (Model.Doctor.WorkingHours.Count == 0)
+                                {
+                                    <tr>
+                                        <th>@Html.LabelFor(m => m.Doctor.WorkingHours):</th>
+                                        <td>Doctor has not declared any working hours yet.</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    for (int i = 0; i < Model.Doctor.WorkingHours.Count; i++)
+                                    {
+                                        <tr>
+                                            @if (i == 0)
+                                            {
+                                                <th>@Html.LabelFor(m => m.Doctor.WorkingHours):</th>
+                                            }
+                                            else
+                                            {
+                                                <th></th>
+                                            }
+                                            <td>@Html.TextBoxFor(m => m.Doctor.WorkingHours.ToList()[i].WorkingDayConcat, new { @class = "form-control", @readonly = "readonly" })</td>
+                                        </tr>
+                                    }
+                                }
                             }
                             <tr class="form-group">
                                 @if (User.IsInRole("Doctor"))
