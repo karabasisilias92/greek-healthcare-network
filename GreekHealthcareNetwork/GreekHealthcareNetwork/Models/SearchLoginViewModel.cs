@@ -32,5 +32,7 @@ namespace GreekHealthcareNetwork.Models
         public bool RememberMe { get; set; }
 
         public Message Message { get; set; }
+
+        public List<InsuredPlan> InsuredPlans { get; set; }
     }
 }

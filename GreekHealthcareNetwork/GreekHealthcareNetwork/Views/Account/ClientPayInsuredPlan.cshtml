@@ -1,0 +1,34 @@
+﻿@model GreekHealthcareNetwork.Models.PayInsuredPlanViewModel
+
+@{
+    ViewBag.Title = "Client Registration";
+}
+
+<section id="pageHeader" class="container my-3">
+    <img src="https://via.placeholder.com/80x80.png?text=GHNlogo" class="rounded-circle mb-3" />
+    <h2>@ViewBag.Title (2/2)</h2>
+</section>
+
+<section id="insuredPlanInfo" class="container">
+    <div id="pay_skip">
+        <div>
+            @using (Html.BeginForm("ClientPayInsuredPlan", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(m => m.InsuredId, new { @Value = Model.InsuredId })
+                <div class="form-group">
+                    <div id="skip" class="col-md-12">
+                        <input type="submit" class="btn btn-outline-danger" value="Skip" />
+                    </div>
+                </div>
+            }
+        </div>
+        @Html.ActionLink("Pay", "PaySubscription", "Payments", new { userId = Model.InsuredId }, new { id = "pay", @class = "btn btn-outline-success mb-3" })
+    </div>
+</section>
+
+@section cssScripts {
+    <link href="~/Content/registration.css" rel="stylesheet" />
+}
+

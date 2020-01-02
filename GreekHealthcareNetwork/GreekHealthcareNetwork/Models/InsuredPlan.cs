@@ -30,6 +30,10 @@ namespace GreekHealthcareNetwork.Models
         public double ExceededAppointmentRate { get; set; }
 
         [Required]
+        [RegularExpression(@"^(([1-9]\d+)|\d)(\.(\d+))?$")]
+        public double CancelationRefundPercentage { get; set; }
+
+        [Required]
         public int PlanDuration { get; set; }
 
     }
