@@ -66,7 +66,7 @@ namespace GreekHealthcareNetwork.Models
         [JsonIgnore]
         public new virtual ICollection<IdentityUserClaim> Claims { get; set; }
 
-        [JsonIgnore]
+        //[JsonIgnore]
         public new virtual ICollection<IdentityUserRole> Roles { get; set; }
 
         [JsonIgnore]

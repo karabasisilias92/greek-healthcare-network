@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -20,6 +21,8 @@ namespace GreekHealthcareNetwork.Models
         [Required]
         public string SenderId { get; set; }
 
+        [ForeignKey("RecipientId")]
+        public virtual ApplicationUser Recipient {get; set;}
         [Required]
         public string RecipientId { get; set; }
 
@@ -36,6 +39,7 @@ namespace GreekHealthcareNetwork.Models
         [Display(Name = "Sent Time")]
         public TimeSpan SentTime { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         [Display(Name = "Message Status")]
         public MessageStatus MessageStatus { get; set; }
 

@@ -15,6 +15,7 @@ namespace GreekHealthcareNetwork.Repositories
             {
                 insured = db.Insureds.Include("InsuredPlan")
                                      .Include("User")
+                                     .Include("User.Roles")
                                      .SingleOrDefault(i => i.UserId == insuredId);
             }
 
