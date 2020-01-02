@@ -1,12 +1,14 @@
 ﻿@using Microsoft.AspNet.Identity;
+@using GreekHealthcareNetwork.Models;
+@using GreekHealthcareNetwork.Repositories;
 @{
     ViewBag.Title = "Messages";
     var CurrentUserId = User.Identity.GetUserId();
-    var CurrentMessageId = User.Messages();
+    var Users = new UsersRepository();
 }
 
 @section cssScripts{
-    <link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/messages.css")" type="text/css" rel="stylesheet" />
 }
 
 <main id="main">
@@ -23,36 +25,16 @@
             <table class="table mt-4">
                 <thead>
                     <tr>
-                        <td> scope="col"></td>
-                        <td> scope="col">From/To</td>
-                        <td> scope="col">Status</td>
-                        <td> scope="col">Date</td>
-                        <td> scope="col">Time</td>
-                        <td> scope="col">Actions</td>
+                        <th scope="col"></th>
+                        <th scope="col">From</th>
+                        <th scope="col">To</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
-                <tbody id="MessageList">
-                    <tr>
-                        <td><img src="https://via.placeholder.com/20" class="rounded-circle w-100 h-100" alt=""></td>
-                        <td>Michael Johanson</td>
-                        <td>Received</td>
-                        <td>12/12/2019</td>
-                        <td>10:00 - 10:30</td>
-                        <td>
-                            <button class="btn btn-light">View</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><img src="https://via.placeholder.com/20" class="rounded-circle w-100 h-100" alt=""></td>
-                        <td>Michael Johanson</td>
-                        <td>Sent</td>
-                        <td>12/12/2019</td>
-                        <td>10:00 - 10:30</td>
-                        <td>
-                            <button class="btn btn-light" id="viewBtn">View</button>
-                        </td>
-                    </tr>
-
+                <tbody id="messageList">
                 </tbody>
             </table>
         </div>
@@ -60,10 +42,7 @@
 </main>
 <div class="container">
     <div class="row">
-        <div class="cold-md-3">
-            <button type="button" class="btn btn-primary" data-togle="modal" data-target="#mymodal">
-                Click me
-            </button>
+        <div class="col-md-3">
             <div class="modal fade" id="mymodal">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -78,7 +57,7 @@
                                 <form id="updateeventsform2" class="form-horizontal">
                                     <div class="form-group">
                                         <textarea class="form-control" id='areaforinfo' style="min-width: 100%"></textarea>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Submit</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Reply</button>
                                     </div>
                                 </form>
                             </div>
@@ -95,57 +74,97 @@
 @section scripts{
     <script> 
         $(document).ready(function () {
-            //4o vhma
-            function listMessages(UserId) {
-               
+            function listMessages(UserId) {             
                 $.ajax({
                     dataType: 'json',
                     type: 'get',
-                    url: '/api/Message?&userId=' + UserId,                                     
+                    url: '/api/Messages?&UserId=' + UserId,                                     
                     success: function (data) {
                          $('#messageList').empty();
                         if (data.length == 0) {
-                            $("#MessageList").append('<tr><td colspan="6">There are no appointments matching these criteria.</td></tr>');
+                            $("#messageList").append('<tr><td colspan="7">You have no messages yet.</td></tr>');
                         }
                         else {
                             data.forEach(function (message) {
                                     const tr = $(document.createElement('tr'));
                                     const userImage = $(document.createElement('td'));
                                     const image = $(document.createElement('img'));
-                                    $(image).attr('src', );
-                                    $(userImage)
+                                    @{ 
+                                        string insuredRoleId = Users.GetRoleIdByName("Insured");
+                                        string doctorRoleId = Users.GetRoleIdByName("Doctor");
+                                        string adminRoleId = Users.GetRoleIdByName("Administrator");
+
+                                    }
+                                    if (message.Sender.Roles[0].RoleId == '@insuredRoleId') {
+                                        $(image).attr('src', '@Url.Content("~/Content/img/Insureds/")' + message.Sender.Id + '/' + message.Sender.ProfilePicture);
+                                    }
+                                    else if (message.Sender.Roles[0].RoleId == '@doctorRoleId') {
+                                        $(image).attr('src', '@Url.Content("~/Content/img/Doctors/")' + message.Sender.Id + '/' + message.Sender.ProfilePicture);
+                                    }
+                                    else {
+                                        $(image).attr('src', '@Url.Content("~/Content/img/Admins/")' + message.Sender.Id + '/' + message.Sender.ProfilePicture);
+                                    }
+                                    $(image).attr('class', 'rounded-circle')
+                                    $(userImage).append(image);
                                     $(tr).append(userImage);
-                                    const fromTo = $(document.createElement('td'));
-                                    $(fromTo).text(message.Sender.FirstName + ' ' + message.Sender.LastName);
+                                    const from = $(document.createElement('td'));
+                                    $(from).text(message.Sender.FirstName + ' ' + message.Sender.LastName);
+                                    $(tr).append(from);
+                                    const to = $(document.createElement('td'));
+                                    $(to).text(message.Recipient.FirstName + ' ' + message.Recipient.LastName);
                                     const status = $(document.createElement('td'));
-                                    $(status).text(message.Status);
+                                    $(tr).append(to);
+
+                                    if (message.Sender.Id == UserId) {
+                                        $(status).text('Sent');
+                                    }
+                                    else {
+                                        $(status).text('Received');
+                                        if (message.MessageStatus == "Unread") {
+                                            $(tr).attr('class', 'font-weight-bold')
+
+                                        }
+                                        else if (message.MessageStatus == "Replied") {
+                                            $(tr).attr('class', 'text-success font-italic')
+                                        }
+                                    }
                                     $(tr).append(status);
                                     const date = $(document.createElement('td'));
-                                    $(date).text(message.Date);
+                                    const datePart = message.SentDate.split('T')[0];
+                                    const datePartSplitted = datePart.split('-');
+                                    $(date).text(datePartSplitted[2] + '-' + datePartSplitted[1] + '-' +datePartSplitted[0]);
                                     $(tr).append(date);
                                     const time = $(document.createElement('td'));
-                                    $(time).text(message.Time);
+                                    $(time).text(message.SentTime.split(':')[0] + ':' + message.SentTime.split(':')[1]);
                                     $(tr).append(time);
+                                    const action = $(document.createElement('td'));
+                                    const view = $(document.createElement('button'));
+                                    $(view).text('View');
+                                $(view).addClass('btn btn-light viewBtn');
+                                $(view).attr('data-id', message.Id);
+
+                                    $(action).append(view);
+                                
+                                    $(tr).append(action);
+                                    $('#messageList').append(tr);
+                                
+
+                            }); 
+                            $('.viewBtn').click(function (e) {
+                                //
                             });
-                            
                         }
-                        $('#MessageList').append('<tr><td>' + User.UserId
-                                + '</td><td>' + message.Sender.FirstName + ' ' + message.Sender.LastName
-                                + '</td><td>' + message.Status
-                                + '</td><td>' + message.Date
-                                + '</td><td>' + message.Time
-                                + '</td><td>' + message.Action)
                     },
                     error: function (error) {
                         console.log(error);
+                        $('#messageList').empty();
+                        $("#messageList").append('<tr><td colspan="7"> Something went wrong. Please try again later. </td></tr>')
 
                     }
                 
                 })
             }
-            $('#viewBtn').click(function (e) {
-
-            })
+            listMessages('@CurrentUserId');
         })
     </script>
     

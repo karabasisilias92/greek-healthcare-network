@@ -14,7 +14,7 @@ namespace GreekHealthcareNetwork.Controllers
     {
         private readonly MessagesRepository _message = new MessagesRepository();
         [System.Web.Http.HttpGet]
-        public IHttpActionResult GetMessage(int id)
+        public IHttpActionResult Get(long id)
         {
             Message message = _message.FindById(id);
             if (message == null)

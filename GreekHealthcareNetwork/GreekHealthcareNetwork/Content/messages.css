@@ -1,0 +1,10 @@
+﻿body {
+}
+.table th, .table td {
+    vertical-align: middle;
+}
+
+#messageList img {
+    max-width: 80px;
+    max-height: 80px;
+}
