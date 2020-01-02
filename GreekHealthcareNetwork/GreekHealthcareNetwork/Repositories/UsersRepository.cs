@@ -78,5 +78,15 @@ namespace GreekHealthcareNetwork.Repositories
             }
             return roleId;
         }
+
+        public void UpdateFileName(string fileName, string userId)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var user = db.Users.Find(userId);
+                user.ProfilePicture = fileName;
+                db.SaveChanges();
+            }
+        }
     }
 }
