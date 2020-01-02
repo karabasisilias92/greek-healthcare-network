@@ -13,16 +13,16 @@ namespace GreekHealthcareNetwork.Controllers
     public class MessagesController : ApiController
     {
         private readonly MessagesRepository _message = new MessagesRepository();
-        //[HttpGet]
-        //public IHttpActionResult Get(int id)
-        //{
-        //    Message message = _message.FindById(id);
-        //    if(message==null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(message);
-        //}
+        [System.Web.Http.HttpGet]
+        public IHttpActionResult GetMessage(int id)
+        {
+            Message message = _message.FindById(id);
+            if (message == null)
+            {
+                return NotFound();
+            }
+            return Ok(message);
+        }
         [System.Web.Http.HttpGet]
         public IHttpActionResult Get(string UserId)
         {

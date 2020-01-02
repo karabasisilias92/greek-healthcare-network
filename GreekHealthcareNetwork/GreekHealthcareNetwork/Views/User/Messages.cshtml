@@ -1,5 +1,8 @@
-﻿@{
+﻿@using Microsoft.AspNet.Identity;
+@{
     ViewBag.Title = "Messages";
+    var CurrentUserId = User.Identity.GetUserId();
+    var CurrentMessageId = User.Messages();
 }
 
 @section cssScripts{
@@ -19,14 +22,16 @@
         <div>
             <table class="table mt-4">
                 <thead>
-                <th scope="col"></th>
-                <th scope="col">From/To</th>
-                <th scope="col">Status</th>
-                <th scope="col">Date</th>
-                <th scope="col">Time</th>
-                <th scope="col">Actions</th>
+                    <tr>
+                        <td> scope="col"></td>
+                        <td> scope="col">From/To</td>
+                        <td> scope="col">Status</td>
+                        <td> scope="col">Date</td>
+                        <td> scope="col">Time</td>
+                        <td> scope="col">Actions</td>
+                    </tr>
                 </thead>
-                <tbody>
+                <tbody id="MessageList">
                     <tr>
                         <td><img src="https://via.placeholder.com/20" class="rounded-circle w-100 h-100" alt=""></td>
                         <td>Michael Johanson</td>
@@ -44,46 +49,105 @@
                         <td>12/12/2019</td>
                         <td>10:00 - 10:30</td>
                         <td>
-                            <button class="btn btn-light">View</button>
+                            <button class="btn btn-light" id="viewBtn">View</button>
                         </td>
                     </tr>
 
                 </tbody>
             </table>
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="cold-md-3">
-                    <button type="button" class="btn btn-primary" data-togle="modal" data-target="#mymodal">
-                        Click me
-                    </button>
-                    <div class="modal fade" id="mymodal">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h3>Message For:</h3>
+    </div>
+</main>
+<div class="container">
+    <div class="row">
+        <div class="cold-md-3">
+            <button type="button" class="btn btn-primary" data-togle="modal" data-target="#mymodal">
+                Click me
+            </button>
+            <div class="modal fade" id="mymodal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Message For:</h3>
 
-                                    <div class="modal-body">
-                                        <p>
-                                            The exams results will be avaialable from the next week
-                                            Please contact me.
-                                        </p>
-                                        <form id="updateeventsform2" class="form-horizontal">
-                                            <div class="form-group">
-                                                <textarea class="form-control" id='areaforinfo' style="min-width: 100%"></textarea>
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Submit</button>
-                                            </div>
-                                        </form>
+                            <div class="modal-body">
+                                <p>
+                                    The exams results will be avaialable from the next week
+                                    Please contact me.
+                                </p>
+                                <form id="updateeventsform2" class="form-horizontal">
+                                    <div class="form-group">
+                                        <textarea class="form-control" id='areaforinfo' style="min-width: 100%"></textarea>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Submit</button>
                                     </div>
-                                </div>
-
+                                </form>
                             </div>
-
                         </div>
+
                     </div>
+
                 </div>
             </div>
         </div>
-</main>
+    </div>
+</div>
 
+@section scripts{
+    <script> 
+        $(document).ready(function () {
+            //4o vhma
+            function listMessages(UserId) {
+               
+                $.ajax({
+                    dataType: 'json',
+                    type: 'get',
+                    url: '/api/Message?&userId=' + UserId,                                     
+                    success: function (data) {
+                         $('#messageList').empty();
+                        if (data.length == 0) {
+                            $("#MessageList").append('<tr><td colspan="6">There are no appointments matching these criteria.</td></tr>');
+                        }
+                        else {
+                            data.forEach(function (message) {
+                                    const tr = $(document.createElement('tr'));
+                                    const userImage = $(document.createElement('td'));
+                                    const image = $(document.createElement('img'));
+                                    $(image).attr('src', );
+                                    $(userImage)
+                                    $(tr).append(userImage);
+                                    const fromTo = $(document.createElement('td'));
+                                    $(fromTo).text(message.Sender.FirstName + ' ' + message.Sender.LastName);
+                                    const status = $(document.createElement('td'));
+                                    $(status).text(message.Status);
+                                    $(tr).append(status);
+                                    const date = $(document.createElement('td'));
+                                    $(date).text(message.Date);
+                                    $(tr).append(date);
+                                    const time = $(document.createElement('td'));
+                                    $(time).text(message.Time);
+                                    $(tr).append(time);
+                            });
+                            
+                        }
+                        $('#MessageList').append('<tr><td>' + User.UserId
+                                + '</td><td>' + message.Sender.FirstName + ' ' + message.Sender.LastName
+                                + '</td><td>' + message.Status
+                                + '</td><td>' + message.Date
+                                + '</td><td>' + message.Time
+                                + '</td><td>' + message.Action)
+                    },
+                    error: function (error) {
+                        console.log(error);
+
+                    }
+                
+                })
+            }
+            $('#viewBtn').click(function (e) {
+
+            })
+        })
+    </script>
+    
+}
 
