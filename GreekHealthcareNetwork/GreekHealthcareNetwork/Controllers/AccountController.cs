@@ -71,6 +71,7 @@ namespace GreekHealthcareNetwork.Controllers
             {
                 searchLoginViewModel.MedicalSpecialties.Add((MedicalSpecialty)i);
             }
+            searchLoginViewModel.InsuredPlans = _insureds.GetInsuredPlans().ToList();
             return View(searchLoginViewModel);
         }
 
@@ -88,6 +89,7 @@ namespace GreekHealthcareNetwork.Controllers
                 {
                     model.MedicalSpecialties.Add((MedicalSpecialty)i);
                 }
+                model.InsuredPlans = _insureds.GetInsuredPlans().ToList();
                 return View(model);
             }
             // This is in order to enable login both with email and username
@@ -127,6 +129,7 @@ namespace GreekHealthcareNetwork.Controllers
                     {
                         model.MedicalSpecialties.Add((MedicalSpecialty)i);
                     }
+                    model.InsuredPlans = _insureds.GetInsuredPlans().ToList();
                     return View(model);
             }
         }
