@@ -45,5 +45,30 @@ namespace GreekHealthcareNetwork.Repositories
             }
             return insuredPlans;
         }
+
+        public InsuredPlan GetInsuredPlan(int planId)
+        {
+            InsuredPlan insuredPlan;
+            if (planId < 1)
+            {
+                throw new ArgumentException("planId");
+            }
+
+            using (var db = new ApplicationDbContext())
+            {
+                insuredPlan = db.InsuredPlans.Find(planId);
+            }
+            return insuredPlan;
+        }
+
+        public void UpdateInsuredPlan(string userId, int planId)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var user = db.Insureds.Find(userId);
+                user.InsuredPlanId = planId;
+                db.SaveChanges();
+            }
+        }
     }
 }

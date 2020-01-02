@@ -670,6 +670,10 @@ body.mobile-nav-active {
     background-color: #c0c0c0;
 }
 
+.pricing-content.gold h2 {
+    background-color: #ffd700;
+}
+
 .pricing-content h3 {
     color: #fff;
     text-align: center;
@@ -739,12 +743,14 @@ body.mobile-nav-active {
     padding: 45px 0;
 }
 
-.pricing-content.featured .price-bottom {
-    background-color: #3fbbc0;
+.pricing-content.gold h3 {
+    background: #4ACCD1;
+    font-size: 38px;
+    padding: 45px 0;
 }
 
-.pricing-content.featured h2 {
-    background-color: #ffd700
+.pricing-content.featured .price-bottom {
+    background-color: #3fbbc0;
 }
 
 .icon-success {

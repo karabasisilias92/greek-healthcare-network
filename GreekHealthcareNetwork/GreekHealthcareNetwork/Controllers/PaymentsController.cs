@@ -1,5 +1,6 @@
 ﻿using GreekHealthcareNetwork.Models;
 using GreekHealthcareNetwork.Repositories;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,11 @@ namespace GreekHealthcareNetwork.Controllers
     public class PaymentsController : Controller
     {
         private ApplicationSignInManager _signInManager;
+        private ApplicationUserManager _userManager;
         private readonly DoctorsRepository _doctors = new DoctorsRepository();
+        private readonly InsuredsRepository _insureds = new InsuredsRepository();
         private readonly UsersRepository _users = new UsersRepository();
+
         public ApplicationSignInManager SignInManager
         {
             get
@@ -26,11 +30,33 @@ namespace GreekHealthcareNetwork.Controllers
                 _signInManager = value;
             }
         }
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
+
         // GET: Payments
         [AllowAnonymous]
-        public ActionResult PaySubscription(string userId)
+        public ActionResult PaySubscription(string userId, int planId)
         {
-            PaySubcriptionViewModel model = new PaySubcriptionViewModel() { UserId = userId };
+            decimal planFee;
+            if (UserManager.IsInRole(userId, "Doctor"))
+            {
+                planFee = _doctors.GetDoctorPlan(userId).Fee;
+            }
+            else
+            {
+                planFee = _insureds.GetInsuredPlan(planId).PlanFee;
+            }
+            PaySubcriptionViewModel model = new PaySubcriptionViewModel() { UserId = userId, PlanId = planId, PlanFee = planFee};
             return View(model);
         }
 
@@ -42,9 +68,7 @@ namespace GreekHealthcareNetwork.Controllers
             var user = _users.GetUserById(model.UserId);
             using (var db = new ApplicationDbContext())
             {
-                string doctorRoleId = _users.GetRoleIdByName("Doctor");
-                string insuredRoleId = _users.GetRoleIdByName("Insured");
-                if (user.Roles.Any(r => r.RoleId.Equals(doctorRoleId)))
+                if (UserManager.IsInRole(model.UserId, "Doctor"))
                 {
                     var doctor = _doctors.GetDoctorById(model.UserId);
                     if (doctor.WorkingHours != null && doctor.WorkingHours.Count > 0)
@@ -53,8 +77,9 @@ namespace GreekHealthcareNetwork.Controllers
                     }
                     _users.UpdateSubscriptionEndDate(doctor.UserId);
                 }
-                else if (user.Roles.Any(r => r.RoleId.Equals(insuredRoleId)))
+                else if (UserManager.IsInRole(model.UserId, "Insured"))
                 {
+                    _insureds.UpdateInsuredPlan(user.Id, model.PlanId);
                     _users.ActivateUser(user.Id);
                     _users.UpdateSubscriptionEndDate(user.Id);
                 }

@@ -9,8 +9,15 @@
     <h2>@ViewBag.Title (2/2)</h2>
 </section>
 
-<section id="insuredPlanInfo" class="container">
-    <div id="pay_skip">
+<section id="insuredPlanInfo" class="container mb-5">
+    <h4>Available insurance plans details:</h4>
+    <hr class="thicker" />
+    <p>
+        Choose one of the below plans and pay it off immediately or skip choosing for now. 
+        However, if you skip, you will not be able to book any appointments
+        or send messages to doctors, until you choose and pay for a plan.
+    </p>
+    <div id="#pay_skipInsured">
         <div>
             @using (Html.BeginForm("ClientPayInsuredPlan", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
@@ -19,12 +26,47 @@
                 @Html.HiddenFor(m => m.InsuredId, new { @Value = Model.InsuredId })
                 <div class="form-group">
                     <div id="skip" class="col-md-12">
-                        <input type="submit" class="btn btn-outline-danger" value="Skip" />
+                        <input type="submit" class="btn btn-outline-danger my-3" value="Skip" />
                     </div>
                 </div>
             }
         </div>
-        @Html.ActionLink("Pay", "PaySubscription", "Payments", new { userId = Model.InsuredId }, new { id = "pay", @class = "btn btn-outline-success mb-3" })
+        <div class="row">
+            @for (int i = 0; i < Model.InsuredPlans.Count; i++)
+            {
+                <div @if (!Model.InsuredPlans[i].Name.Equals("Gold")) { @(new HtmlString("class=\"col-sm-4 pricing-box\"")) ; } else { @(new HtmlString("class=\"col-sm-4 pricing-box\" featured-price")) ; }>
+                    <div class="wow bounceInUp" @if (i == 0) { @(new HtmlString("data-wow-delay=\"0.1s\"")) ; } else if (i == 1) { @(new HtmlString("data-wow-delay=\"0.3s\"")) ; } else { @(new HtmlString("data-wow-delay=\"0.2s\"")) ; }>
+
+                        <div @if (i == 0) { @(new HtmlString("class=\"pricing-content general silver\"")) ; } else if (i == 1) { @(new HtmlString("class=\"pricing-content featured\"")) ; } else { @(new HtmlString("class=\"pricing-content general bronze\"")) ; }>
+                            <h2>@Model.InsuredPlans[i].Name Plan</h2>
+                            <h3>@Model.InsuredPlans[i].PlanFee.ToString("0.##")&euro; @if (Model.InsuredPlans[i].PlanDuration == 12) {@(new HtmlString("<span>per year</span>"));}</h3>
+                            <ul>
+                                @if (Model.InsuredPlans[i].Name.Equals("Gold"))
+                                {
+                                    <li><i class="fa fa-check icon-success"></i><span>@Model.InsuredPlans[i].PlanAppoinments Appointments</span></li>
+                                    <li><i class="fa fa-times icon-danger"></i><span><del>Limited number of Appointments</del></span></li>
+                                    <li><i class="fa fa-check icon-success"></i><span>Charge per appointment: <b>@(Model.InsuredPlans[i].AppointmentRate)&euro;</b></span></li>
+                                    <li><i class="fa fa fa-times icon-danger"></i><span><del>Charge per appointment after limit has been exceeded</del></span></li>
+                                }
+                                else
+                                {
+                                    <li><i class="fa fa-times icon-danger"></i><span><del>Unlimited Appointments</del></span></li>
+                                    <li><i class="fa fa-check icon-success"></i><span>Limited number of Appointments: <b>@Model.InsuredPlans[i].PlanAppoinments</b></span></li>
+                                    <li><i class="fa fa-check icon-success"></i><span>Charge per appointment: <b>@(Model.InsuredPlans[i].AppointmentRate)% of appointment's total cost</b></span></li>
+                                    <li><i class="fa fa-check icon-success"></i><span>Charge per appointment <b>after limit</b> has been exceeded: <b>@(Model.InsuredPlans[i].ExceededAppointmentRate)% of appointment's total cost</b></span></li>
+                                }
+                                <li><i class="fa fa-check icon-success"></i><span><b>Full refund</b> in case of appointment cancellation <b>until 3 days before</b> the appointment date</span></li>
+                                <li><i class="fa fa-check icon-success"></i><span><b>@(Model.InsuredPlans[i].CancelationRefundPercentage)% refund</b> in case of cancellation <b>less than 3 days before</b> the appointment date</span></li>
+                                <li><i class="fa fa-check icon-success"></i><span>Exchange messages with the doctors</span></li>
+                            </ul>
+                            <div class="price-bottom">
+                                @Html.ActionLink("PURCHASE", "PaySubscription", "Payments", new { userId = Model.InsuredId, planId = Model.InsuredPlans[i].Id }, new { id = "pay", @class = "btn btn-skin mb-3" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 </section>
 

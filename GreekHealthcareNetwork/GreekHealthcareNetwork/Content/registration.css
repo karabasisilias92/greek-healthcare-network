@@ -1,5 +1,5 @@
 ﻿body {
-    background-color: #f7f7f7;
+    background-color: #fafafa;
 }
 
 hr.thicker {
@@ -19,10 +19,172 @@ input[type="submit"] {
     align-items: flex-end;
 }
 
+#pay_skipInsured {
+    display: flex;
+    flex-direction: column;
+}
+
 p {
     margin-bottom: 0px;
 }
 
 #skip {
     padding-left: 0px;
+}
+
+/* Insurance plans section
+--------------------------------*/
+
+#insurancePlans {
+    background: #fff;
+    padding: 80px 0 60px 0;
+}
+
+.pricing-box {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.pricing-content {
+    background: #fff;
+    -webkit-box-shadow: 0 0 7px rgba(0,0,0,0.1);
+    box-shadow: 0 0 7px rgba(0,0,0,0.1);
+    margin-top: 20px;
+    -webkit-transition: all .25s ease-in-out;
+    -moz-transition: all .25s ease-in-out;
+    -o-transition: all .25s ease-in-out;
+    transition: all .25s ease-in-out;
+    position: relative;
+    border-radius: 4px;
+}
+
+.pricing-content.general {
+    z-index: 99;
+}
+
+.pricing-content:hover {
+    margin-top: -10px;
+    -webkit-transition: all .25s ease-in-out;
+    -moz-transition: all .25s ease-in-out;
+    -o-transition: all .25s ease-in-out;
+    transition: all .25s ease-in-out;
+    -webkit-box-shadow: 0 2px 20px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2px 20px 0 rgba(0,0,0,0.2);
+}
+
+.pricing-content h2 {
+    color: #FFF;
+    font-size: 17px;
+    text-align: center;
+    margin-bottom: 0;
+    padding: 30px 0;
+    border-radius: 4px 4px 0 0;
+}
+
+.pricing-content.bronze h2 {
+    background-color: #cd7f32;
+}
+
+.pricing-content.silver h2 {
+    background-color: #c0c0c0;
+}
+
+.pricing-content h3 {
+    color: #fff;
+    text-align: center;
+    font-size: 32px;
+    background: #444;
+    margin-bottom: 0;
+    font-weight: 700;
+    padding: 30px 0;
+}
+
+.pricing-content h3 span {
+    font-weight: 300;
+    font-size: 18px;
+}
+
+.pricing-content ul {
+    list-style: none;
+    margin: 25px 0;
+}
+
+.pricing-content li {
+    display: flex;
+    border-top: 1px dotted #EFEFEF;
+    width: 85%;
+    color: #333;
+    margin: 0 auto;
+    padding: 15px 0;
+}
+
+.pricing-content li span {
+    margin-left: 10px;
+}
+
+.pricing-content li:first-child {
+    border-top: none;
+}
+
+.pricing-content li del {
+    color: #aaa;
+}
+
+.price-bottom {
+    background: #f7f7f7;
+    text-align: center;
+    padding: 25px 0;
+    border-radius: 0 0 4px 4px;
+}
+
+
+.pricing-content p {
+    background: #F8F8F8;
+    padding: 20px;
+}
+
+.pricing-content.featured {
+    margin-top: -20px;
+    position: relative;
+    z-index: 9999;
+    -webkit-box-shadow: 0 2px 20px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 2px 20px 0 rgba(0,0,0,0.2);
+}
+
+.pricing-content.featured h2 {
+    background-color: #ffd700;
+}
+
+.pricing-content.featured h3 {
+    background: #4ACCD1;
+    font-size: 38px;
+    padding: 45px 0;
+}
+
+.pricing-content.featured .price-bottom {
+    background-color: #3fbbc0;
+}
+
+.icon-success {
+    color: #7db53b;
+}
+
+.icon-danger {
+    color: #e24e47;
+}
+
+.btn-skin {
+    background-color: #4ACCD1;
+    border-color: #4ACCD1;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 2px;
+}
+
+.btn-skin:hover, .btn-skin:focus, .btn-skin:active, .btn-skin.active {
+    color: #fff;
+    background-color: #666;
+    border-color: #666;
+    font-weight: 600;
+    letter-spacing: 2px;
 }

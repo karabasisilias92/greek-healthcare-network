@@ -13,6 +13,7 @@
 
 <section id="PaymentInfo" class="container">
     <p> Implementation pending</p>
+    <p> Your paypal amount will be charged: @Model.PlanFee&euro;</p>
     <div id="pay_skip">
         <div>
             @using (Html.BeginForm("PaySubscription", "Payments", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
@@ -20,6 +21,7 @@
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 @Html.HiddenFor(m => m.UserId, new { @Value = Model.UserId })
+                @Html.HiddenFor(m => m.PlanId, new { @Value = Model.PlanId })
                 <div class="form-group">
                     <div id="skip" class="col-md-12">
                         <input type="submit" class="btn btn-outline-success" value="Pay" />

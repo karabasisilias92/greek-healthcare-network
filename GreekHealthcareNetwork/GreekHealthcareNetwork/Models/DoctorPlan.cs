@@ -10,11 +10,13 @@ namespace GreekHealthcareNetwork.Models
         public int Id { get; set; }
 
         [Required]
+        [Display(Name = "Medical Specialty")]
         public MedicalSpecialty MedicalSpecialty { get; set; }
 
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]
         [RegularExpression(@"^(([1-9]\d+)|\d)(\.(\d{2}))?$")]
+        [Display(Name = "Plan fee")]
         public decimal Fee { get; set; }
     }
 

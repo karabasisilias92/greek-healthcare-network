@@ -98,7 +98,7 @@
                     <div @if (!Model.InsuredPlans[i].Name.Equals("Gold")) { @(new HtmlString("class=\"col-sm-4 pricing-box\"")); } else { @(new HtmlString("class=\"col-sm-4 pricing-box\" featured-price")); }>
                         <div class="wow bounceInUp" @if (i == 0) { @(new HtmlString("data-wow-delay=\"0.1s\"")); } else if (i == 1) { @(new HtmlString("data-wow-delay=\"0.3s\"")); } else { @(new HtmlString("data-wow-delay=\"0.2s\"")); }>
 
-                            <div @if (i == 0) { @(new HtmlString("class=\"pricing-content general silver\"")); } else if (i == 1) { @(new HtmlString("class=\"pricing-content featured\"")); } else { @(new HtmlString("class=\"pricing-content general bronze\"")); }>
+                            <div @if (i == 0) { @(new HtmlString("class=\"pricing-content general silver\"")); } else if (i == 1) { @(new HtmlString("class=\"pricing-content gold\"")); } else { @(new HtmlString("class=\"pricing-content general bronze\"")); }>
                                 <h2>@Model.InsuredPlans[i].Name Plan</h2>
                                 <h3>@Model.InsuredPlans[i].PlanFee.ToString("0.##")&euro; @if (Model.InsuredPlans[i].PlanDuration == 12) { @(new HtmlString("<span>per year</span>")); }</h3>
                                 <ul>
@@ -120,15 +120,11 @@
                                     <li><i class="fa fa-check icon-success"></i><span><b>@(Model.InsuredPlans[i].CancelationRefundPercentage)% refund</b> in case of cancellation <b>less than 3 days before</b> the appointment date</span></li>
                                     <li><i class="fa fa-check icon-success"></i><span>Exchange messages with the doctors</span></li>
                                 </ul>
-
-@*<div class="price-bottom">
-        <a href="#" class="btn btn-skin btn-lg">Purchase</a>
-    </div>*@
                             </div>
                         </div>
                     </div>
                 }
-</div>
+            </div>
 
         </div>
     </section><!-- #insurancePlans -->

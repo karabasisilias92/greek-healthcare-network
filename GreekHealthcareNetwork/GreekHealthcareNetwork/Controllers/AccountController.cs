@@ -465,7 +465,7 @@ namespace GreekHealthcareNetwork.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("RegisterClientInsuredPlan", "Account", new { userId = userId });
+                    return RedirectToAction("ClientPayInsuredPlan", "Account", new { userId = userId });
                 }
                 AddErrors(result);
             }
@@ -478,7 +478,7 @@ namespace GreekHealthcareNetwork.Controllers
         {
             PayInsuredPlanViewModel model = new PayInsuredPlanViewModel();
             model.InsuredId = userId;
-            model.InsuredPlans = _insureds.GetInsuredPlans();
+            model.InsuredPlans = _insureds.GetInsuredPlans().ToList();
             return View(model);
         }
 

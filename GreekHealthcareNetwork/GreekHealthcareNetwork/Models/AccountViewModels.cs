@@ -169,7 +169,7 @@ namespace GreekHealthcareNetwork.Models
 
     public class PayInsuredPlanViewModel
     {
-        public IEnumerable<InsuredPlan> InsuredPlans { get; set; }
+        public List<InsuredPlan> InsuredPlans { get; set; }
         public string InsuredId { get; set; }
     }
 
