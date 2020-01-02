@@ -269,7 +269,7 @@
                             dataType: 'json',
                             success: function (doctor) {
                                 $('#errorContainer').hide();
-                                $('#profileSection img').attr('src', '@Url.Content("~/Content/img/Doctors/")' + doctor.User.ProfilePicture);
+                                $('#profileSection img').attr('src', '@Url.Content("~/Content/img/Doctors/")' + doctor.User.Id + '/' + doctor.User.ProfilePicture);
                                 $('#firstName').text(doctor.User.FirstName);
                                 $('#lastName').text(doctor.User.LastName);
                                 $('#medicalSpecialty').text(doctor.MedicalSpecialty);
