@@ -9,8 +9,8 @@ namespace GreekHealthcareNetwork.Models
 {
     public class SearchLoginViewModel
     {
-        public string DoctorFirstName { get; set; }
-        public string DoctorLastName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public int DoctorSpecialty { get; set; }
         public List<MedicalSpecialty> MedicalSpecialties { get; set; }
 
