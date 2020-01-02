@@ -98,13 +98,16 @@ namespace GreekHealthcareNetwork.Controllers
         {
 
              var user = UpdatedUser(modifiedUser);
+            string userId = user.User.Id;
 
             if (!ModelState.IsValid)
             {
                 return View(user);
             }
 
-            string path = user.User.ProfilePicture;
+            string path = "";
+            string fileName = user.User.ProfilePicture;
+            string fileNameExt = Path.GetExtension(fileName);
 
             if (modifiedUser.ProfilePicture != null)
             {
@@ -116,13 +119,14 @@ namespace GreekHealthcareNetwork.Controllers
                 }
                 try
                 {
+                    fileNameExt = Path.GetExtension(modifiedUser.ProfilePicture.FileName);
                     if (HttpContext.User.IsInRole("Insured"))
                     {
-                        path = Path.Combine(Server.MapPath("~/Content/img/Insureds/" + user.User.Id + "/"), modifiedUser.ProfilePicture.FileName);
+                        path = Path.Combine(Server.MapPath("~/Content/img/Insureds/" + userId + "/"), userId + fileNameExt);
                     }
                     if (HttpContext.User.IsInRole("Doctor"))
                     {
-                        path = Path.Combine(Server.MapPath("~/Content/img/Doctors/" + user.User.Id + "/"), modifiedUser.ProfilePicture.FileName);
+                        path = Path.Combine(Server.MapPath("~/Content/img/Doctors/" + userId + "/"), userId + fileNameExt);
                     }
                     modifiedUser.ProfilePicture.SaveAs(path);
                 }
