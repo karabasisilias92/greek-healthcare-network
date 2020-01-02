@@ -1,4 +1,5 @@
 ﻿using GreekHealthcareNetwork.Models;
+using GreekHealthcareNetwork.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace GreekHealthcareNetwork.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly InsuredsRepository _insureds = new InsuredsRepository();
         public ActionResult Index(SearchLoginViewModel searchLoginViewModel)
         {
             ViewBag.ReturnUrl = string.Empty;
@@ -17,6 +19,7 @@ namespace GreekHealthcareNetwork.Controllers
             {
                 searchLoginViewModel.MedicalSpecialties.Add((MedicalSpecialty)i);
             }
+            searchLoginViewModel.InsuredPlans = _insureds.GetInsuredPlans().ToList();
             return View(searchLoginViewModel);
         }
     }
