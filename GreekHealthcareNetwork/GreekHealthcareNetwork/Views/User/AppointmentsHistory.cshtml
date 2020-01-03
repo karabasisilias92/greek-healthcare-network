@@ -128,8 +128,8 @@
                     $.ajax({
                         dataType: 'json',
                         type: 'get',
-                        url: '/api/Search/InsuredAppointmentsSearchResults?doctorsFirstName=' + firstName +
-                                                                         '&doctorsLastName=' + lastName +
+                        url: '/api/Search/AppointmentsSearchResults?firstName=' + firstName +
+                                                                         '&lastName=' + lastName +
                                                                          '&doctorsSpecialty=' + specialty +
                                                                          '&appointmentDay=' + appointmentDate +
                                                                          '&userId=' + userId,
@@ -151,7 +151,6 @@
                                     const appointmentDate = appointment.AppointmentDate.split("T");
                                     if (isUserInsured) {
                                         $('#appointmentsList').append('<tr><td>' +
-                                            (isUserInsured ? '<img src="@Url.Content("~/Content/img/Doctors/")' + appointment.Doctor.User.Id + '/' + appointment.Doctor.User.ProfilePicture + '" alt="' + appointment.Doctor.User.ProfilePicture + '"' + 'class="rounded-circle">' : )
                                             '<img src="@Url.Content("~/Content/img/Doctors/")' + appointment.Doctor.User.Id + '/' + appointment.Doctor.User.ProfilePicture + '" alt="' + appointment.Doctor.User.ProfilePicture + '"' + 'class="rounded-circle"></td>' +
                                             '<td>' + appointment.Doctor.User.FirstName + ' ' + appointment.Doctor.User.LastName + '</td>' +
                                             '<td>' + appointment.Doctor.MedicalSpecialty + '</td>' +
@@ -190,7 +189,6 @@
                                         const appointmentStart = appointment.AppointmentStartTime.split(":");
                                         const appointmentEnd = appointment.AppointmentEndTime.split(":");
                                         const appointmentDate = appointment.AppointmentDate.split("T");
-                                        const dOB = appointment.Insured.DoB.split("T");
 
                                         if (isUserInsured) {
                                             $('#doctorsPicture img').attr('src', '@Url.Content("~/Content/img/Doctors/")' + appointment.Doctor.User.Id + '/' + appointment.Doctor.User.ProfilePicture);
@@ -204,7 +202,8 @@
                                             $('#appointmentDetailsModal').modal('show');
                                         }
 
-                                        if (isUserInsured) {
+                                        if (isUserDoctor) {
+                                            const dOB = appointment.Insured.User.DoB.split("T");
                                             $('#insuredsPicture img').attr('src', '@Url.Content("~/Content/img/Insureds/")' + appointment.Insured.User.Id + '/' + appointment.Insured.User.ProfilePicture);
                                             $('#insuredsFirstName').text(appointment.Insured.User.FirstName);
                                             $('#insuredsLastName').text(appointment.Insured.User.LastName);
@@ -238,7 +237,12 @@
 
             $('#search').on('submit', function (e) {
                 e.preventDefault();
-                ListAppointments(e.target[0].value, e.target[1].value, e.target[2].value, e.target[3].value, '@CurrentUserId');
+                if (isUserInsured) {
+                    ListAppointments(e.target[0].value, e.target[1].value, e.target[2].value, e.target[3].value, '@CurrentUserId');
+                }
+                if (isUserDoctor) {
+                    ListAppointments(e.target[0].value, e.target[1].value, -1, e.target[2].value, '@CurrentUserId');
+                }
             })
         })
     </script>

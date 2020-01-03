@@ -40,9 +40,9 @@ namespace GreekHealthcareNetwork.Controllers
 
         [HttpGet]
         [Route("api/Search/AppointmentsSearchResults")]
-        public IHttpActionResult SearchResults(string FirstName, string LastName, int doctorsSpecialty, DateTime appointmentDay, string userId)
+        public IHttpActionResult SearchResults(string firstName, string lastName, int doctorsSpecialty, DateTime appointmentDay, string userId)
         {
-            var appointments = _appointments.GetFilteredAppointments(FirstName, LastName, doctorsSpecialty, appointmentDay, userId);
+            var appointments = _appointments.GetFilteredAppointments(firstName, lastName, doctorsSpecialty, appointmentDay, userId);
             if (appointments == null)
             {
                 return NotFound();

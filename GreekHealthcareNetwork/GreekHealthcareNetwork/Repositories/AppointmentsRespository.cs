@@ -35,7 +35,7 @@ namespace GreekHealthcareNetwork.Repositories
 
                 if (HttpContext.Current.User.IsInRole("Doctor"))
                 {
-                    appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.DoctorId) && appointment.InsuredId == userId)
+                    appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.DoctorId == userId)
                                                                                                                  .Include("Doctor")
                                                                                                                  .Include("Doctor.WorkingHours")
                                                                                                                  .Include("Doctor.AppointmentCost")
@@ -54,14 +54,16 @@ namespace GreekHealthcareNetwork.Repositories
 
                 if (HttpContext.Current.User.IsInRole("Insured"))
                 {
-                    appointments = db.Appointments.Where(appointment => appointment.DoctorId == userId && users.Any(user => user.Id == appointment.InsuredId))
-                              .Include("Doctor")
-                              .Include("Doctor.User")
-                              .Include("Doctor.AppointmentCost")
-                              .Include("Doctor.WorkingHours")
-                              .Include("Insured")
-                              .Include("Insured.User")
-                              .ToList();
+                    appointments = db.Appointments.Where(appointment => appointment.InsuredId == userId && users.Any(user => user.Id == appointment.DoctorId))
+                                                  .Include("Doctor")
+                                                  .Include("Doctor.User")
+                                                  .Include("Doctor.User.Roles")
+                                                  .Include("Doctor.AppointmentCost")
+                                                  .Include("Doctor.WorkingHours")
+                                                  .Include("Insured")
+                                                  .Include("Insured.User")
+                                                  .Include("Insured.User.Roles")
+                                                  .ToList();
                 }
 
 
