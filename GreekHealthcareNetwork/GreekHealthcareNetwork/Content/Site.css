@@ -779,11 +779,9 @@ doctors section
     margin-bottom: 20px;
 }
 
-.img-thumbnail h3 {
-    word-break: break-all;
-    margin-top: 20px;
-    padding-bottom: 5px;
-    margin-bottom: 10px;
+.img-thumbnail h5 {
+    overflow: hidden;
+    margin: 0px 0 5px 0;
 }
 
 .img-thumbnail p {
@@ -802,6 +800,10 @@ doctors section
 
 .img-thumbnail a:hover {
     color: #999;
+}
+
+.img-thumbnail div {
+    padding: 15px;
 }
 
 .caption {

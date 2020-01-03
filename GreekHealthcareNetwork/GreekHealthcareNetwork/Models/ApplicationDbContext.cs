@@ -21,13 +21,30 @@ namespace GreekHealthcareNetwork.Models
         public DbSet<AppointmentCostPerSpecialty> AppointmentCostPerSpecialty {get; set;}
 
         public ApplicationDbContext()
-            : base("GCNConnection", throwIfV1Schema: false)
+            : base("GHNConnection", throwIfV1Schema: false)
         {
         }
 
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Message>()
+                        .HasRequired(m => m.Sender)
+                        .WithMany(s => s.Messages)
+                        .HasForeignKey(m => m.SenderId)
+                        .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<Message>()
+                        .HasRequired(m => m.Recipient)
+                        .WithMany()
+                        .HasForeignKey(m => m.RecipientId)
+                        .WillCascadeOnDelete(false);
         }
     }
 }

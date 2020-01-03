@@ -275,9 +275,9 @@
     <Compile Include="Migrations\202001012305093_AppointmentCancelationRefund.Designer.cs">
       <DependentUpon>202001012305093_AppointmentCancelationRefund.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202001022220506_%27Newattribute%27.cs" />
-    <Compile Include="Migrations\202001022220506_%27Newattribute%27.Designer.cs">
-      <DependentUpon>202001022220506_%27Newattribute%27.cs</DependentUpon>
+    <Compile Include="Migrations\202001032033032_FixMessageRelationships.cs" />
+    <Compile Include="Migrations\202001032033032_FixMessageRelationships.Designer.cs">
+      <DependentUpon>202001032033032_FixMessageRelationships.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -600,8 +600,8 @@
     <EmbeddedResource Include="Migrations\202001012305093_AppointmentCancelationRefund.resx">
       <DependentUpon>202001012305093_AppointmentCancelationRefund.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001022220506_%27Newattribute%27.resx">
-      <DependentUpon>202001022220506_%27Newattribute%27.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202001032033032_FixMessageRelationships.resx">
+      <DependentUpon>202001032033032_FixMessageRelationships.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

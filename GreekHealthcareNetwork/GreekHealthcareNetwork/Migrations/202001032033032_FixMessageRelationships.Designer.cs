@@ -7,13 +7,13 @@ namespace GreekHealthcareNetwork.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class Newattribute : IMigrationMetadata
+    public sealed partial class FixMessageRelationships : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Newattribute));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(FixMessageRelationships));
         
         string IMigrationMetadata.Id
         {
-            get { return "202001022220506_'Newattribute'"; }
+            get { return "202001032033032_FixMessageRelationships"; }
         }
         
         string IMigrationMetadata.Source

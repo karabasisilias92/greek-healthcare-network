@@ -11,7 +11,7 @@ namespace GreekHealthcareNetwork.Models
 {
     public class Message
     {
-        public static int ConversationIdCounter { get; set; } = 1;
+        public static long ConversationIdCounter { get; set; } = 1;
 
         [Key]
         public long Id { get; set; }
@@ -21,13 +21,12 @@ namespace GreekHealthcareNetwork.Models
         [Required]
         public string SenderId { get; set; }
 
-        [ForeignKey("RecipientId")]
-        public virtual ApplicationUser Recipient {get; set;}
+        public virtual ApplicationUser Sender { get; set; }
+
         [Required]
         public string RecipientId { get; set; }
 
-        [ForeignKey("SenderId")]
-        public virtual ApplicationUser Sender { get; set; }
+        public virtual ApplicationUser Recipient { get; set; }
 
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
