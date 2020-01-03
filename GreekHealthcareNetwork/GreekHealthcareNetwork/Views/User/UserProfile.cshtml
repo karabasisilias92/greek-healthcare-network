@@ -43,9 +43,9 @@
                             }
                         }
                     </h4>
-                    @if (!Model.User.SubscriptionEndDate.ToString("dd/MM/yyyy").Equals("01-01-0001"))
+                    @if (!Model.User.SubscriptionEndDate.ToString("dd-MM-yyyy").Equals("01-01-0001"))
                     {
-                        <p>Exp: @Model.User.SubscriptionEndDate.ToString("dd/MM/yyyy")</p>
+                        <p>Exp: @Model.User.SubscriptionEndDate.ToString("dd-MM-yyyy")</p>
                         <button type="button" class="btn btn-info mt-2">Renew</button>
                     }
                     else
