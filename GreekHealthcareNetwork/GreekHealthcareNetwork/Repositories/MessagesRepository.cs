@@ -10,12 +10,13 @@ namespace GreekHealthcareNetwork.Repositories
 {
     public class MessagesRepository
     {
-        public Message FindById(int id)
+        //
+        public Message FindById(long id)
         {
             Message message;
             using (ApplicationDbContext db = new ApplicationDbContext())
-            {
-                message= db.Messages.Find(id);
+            {//me single or defaultt prwta ta include k meta ena lamda gia to id tou  
+                message= db.Messages.Find(id); 
             }
             return message;
         }
@@ -36,8 +37,11 @@ namespace GreekHealthcareNetwork.Repositories
             }
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
-                messages = db.Messages.Where(m => m.RecipientId == UserId)
+                messages = db.Messages.Where(m => m.RecipientId.Equals(UserId) || m.SenderId.Equals(UserId))
                                   .Include("Sender")
+                                  .Include("Sender.Roles")
+                                  .Include("Recipient")
+                                  .Include("Recipient.Roles")
                                   .ToList();
             }
             return messages;

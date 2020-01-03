@@ -34,7 +34,8 @@ namespace GreekHealthcareNetwork.Repositories
                 doctors = db.Doctors.Where(doctor => users.Any(user => user.IsActive == true && user.Id == doctor.UserId)).Include("User")
                                                                                                  // Needs to be lazy loaded even though we do not need it here. We may implement searching for messages, 
                                                                                                  // so we cannot json ignore it in general
-                                                                                                 .Include("User.Messages") 
+                                                                                                 .Include("User.Messages")
+                                                                                                 .Include("User.Roles")
                                                                                                  .Include("WorkingHours")
                                                                                                  .Include("AppointmentCost")
                                                                                                  .OrderBy(i => i.MedicalSpecialty)
@@ -58,6 +59,7 @@ namespace GreekHealthcareNetwork.Repositories
             {
                 doctor = db.Doctors.Include("User")
                                    .Include("User.Messages")
+                                   .Include("User.Roles")
                                    .Include("WorkingHours")
                                    .Include("AppointmentCost")
                                    .SingleOrDefault(d => d.UserId.Equals(doctorId));

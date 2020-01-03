@@ -1,15 +1,18 @@
 ﻿@model GreekHealthcareNetwork.Models.SearchLoginViewModel
 
     <form id="search" class="form-inline my-3 px-2" method="get" action="@Url.Action("SearchResults", "Search")">
-        @Html.TextBoxFor(m => m.DoctorFirstName, new { @class = "form-control mr-sm-2 my-2", type = "search", placeholder = "First Name", aria_label = "Search" })
-        @Html.TextBoxFor(m => m.DoctorLastName, new { @class = "form-control mr-sm-2 my-2", type = "search", placeholder = "Last Name", aria_label = "Search" })
-        <select name="DoctorSpecialty" class="form-control mr-2">
-            <option value="-1"> All </option>
-            @foreach (var item in Model.MedicalSpecialties)
-            {
-                <option value="@((int)item)">@item</option>
-            }
-        </select>
+        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control mr-sm-2 my-2", type = "search", placeholder = "First Name", aria_label = "Search" })
+        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control mr-sm-2 my-2", type = "search", placeholder = "Last Name", aria_label = "Search" })
+        @if (User.IsInRole("Insured"))
+        {
+            <select name="DoctorSpecialty" class="form-control mr-2">
+                <option value="-1"> All </option>
+                @foreach (var item in Model.MedicalSpecialties)
+                {
+                    <option value="@((int)item)">@item</option>
+                }
+            </select>
+        }
         @if (User.IsInRole("Insured") || User.IsInRole("Doctor") @* Check vies is different to Home index *@ )
         {
             @Html.TextBoxFor(m => m.AppointmentDate, new { @class = "form-control mr-sm-2 my-2", type = "date", aria_label = "Search" })

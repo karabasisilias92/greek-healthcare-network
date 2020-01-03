@@ -39,16 +39,40 @@ namespace GreekHealthcareNetwork.Controllers
         }
 
         [HttpGet]
-        [Route("api/Search/InsuredAppointmentsSearchResults")]
-        public IHttpActionResult SearchResults(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty, DateTime appointmentDay, string userId)
+        [Route("api/Search/AppointmentsSearchResults")]
+        public IHttpActionResult SearchResults(string firstName, string lastName, int doctorsSpecialty, DateTime appointmentDay, string userId)
         {
-            var appointments = _appointments.GetDoctorFilteredAppointments(doctorsFirstName, doctorsLastName, doctorsSpecialty, appointmentDay, userId);
+            var appointments = _appointments.GetFilteredAppointments(firstName, lastName, doctorsSpecialty, appointmentDay, userId);
             if (appointments == null)
             {
                 return NotFound();
             }
             return Ok(appointments);
         }
+
+        //[HttpGet]
+        //[Route("api/Search/InsuredAppointmentsSearchResults")]
+        //public IHttpActionResult SearchResults(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty, DateTime appointmentDay, string userId)
+        //{
+        //    var appointments = _appointments.GetDoctorFilteredAppointments(doctorsFirstName, doctorsLastName, doctorsSpecialty, appointmentDay, userId);
+        //    if (appointments == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(appointments);
+        //}
+
+        //[HttpGet]
+        //[Route("api/Search/DoctorAppointmentsSearchResults")]
+        //public IHttpActionResult searchResults(string insuredsFirstName, string insuredsLastName, DateTime appointmentDate, string userId)
+        //{
+        //    var appointments = _appointments.GetInsuredFilteredAppointments(insuredsFirstName, insuredsLastName, appointmentDate, userId);
+        //    if (appointments == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(appointments);
+        //}
 
         [HttpGet]
         [Route("api/Search/SearchAppointmentById/{appointmentId}")]

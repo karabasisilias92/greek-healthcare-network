@@ -7,7 +7,7 @@ using System.Web;
 
 namespace GreekHealthcareNetwork.Models
 {
-    [JsonConverter(typeof(StringEnumConverter))]
+    
     public enum MessageStatus
     {
         Read,
