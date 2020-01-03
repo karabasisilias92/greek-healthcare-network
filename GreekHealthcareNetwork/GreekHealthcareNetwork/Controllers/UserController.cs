@@ -11,6 +11,8 @@ using Microsoft.AspNet.Identity;
 
 namespace GreekHealthcareNetwork.Controllers
 {
+
+    [OutputCache(NoStore = true, Duration = 0)]
     public class UserController : Controller
     {
         private readonly AppointmentsRespository _appointmentsRespository = new AppointmentsRespository();
@@ -87,7 +89,6 @@ namespace GreekHealthcareNetwork.Controllers
             return View();
         }
 
-        [OutputCache(NoStore = true, Duration = 0)]
         public ActionResult EditProfile()
         {
             return View(GetCurrentUser());
@@ -95,7 +96,6 @@ namespace GreekHealthcareNetwork.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [OutputCache(NoStore = true, Duration = 0)]
         public ActionResult EditProfile(ProfileDetailsViewModel modifiedUser)
         {
 
