@@ -45,11 +45,6 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                                  .Include("Insured.User")
                                                                                                                  .Include("Insured.User.Roles")
                                                                                                                  .ToList();
-
-                    if (doctorsSpecialty >= 0 && doctorsSpecialty < Enum.GetNames(typeof(MedicalSpecialty)).Length)
-                    {
-                        appointments = appointments.Where(appointment => (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty).ToList();
-                    }
                 }
 
                 if (HttpContext.Current.User.IsInRole("Insured"))
@@ -64,6 +59,11 @@ namespace GreekHealthcareNetwork.Repositories
                                                   .Include("Insured.User")
                                                   .Include("Insured.User.Roles")
                                                   .ToList();
+
+                    if (doctorsSpecialty >= 0 && doctorsSpecialty < Enum.GetNames(typeof(MedicalSpecialty)).Length)
+                    {
+                        appointments = appointments.Where(appointment => (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty).ToList();
+                    }
                 }
 
 

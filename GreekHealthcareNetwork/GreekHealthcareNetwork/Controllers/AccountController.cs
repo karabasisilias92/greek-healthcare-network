@@ -235,10 +235,10 @@ namespace GreekHealthcareNetwork.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    string userId = UserManager.FindByName(model.UserName).Id;
-                    fileName = userId + fileNameExt;
-                    Directory.CreateDirectory(Server.MapPath("~/Content/img/Doctors/" + userId));
-                    string path = Path.Combine(Server.MapPath("~/Content/img/Doctors/" + userId), fileName);
+                    user = UserManager.FindByName(model.UserName);
+                    fileName = user.Id + fileNameExt;
+                    Directory.CreateDirectory(Server.MapPath("~/Content/img/Doctors/" + user.Id));
+                    string path = Path.Combine(Server.MapPath("~/Content/img/Doctors/" + user.Id), fileName);
                     if (model.ProfilePicture != null)
                     {
                         model.ProfilePicture.SaveAs(path);
@@ -251,8 +251,9 @@ namespace GreekHealthcareNetwork.Controllers
                     try
                     {
                         int doctorPlanId = _doctors.GetDoctorPlanId(model.MedicalSpecialty);
-                        Doctor doctor = new Doctor { UserId = userId, OfficeAddress = model.OfficeAddress, MedicalSpecialty = model.MedicalSpecialty, DoctorPlanId = doctorPlanId };
-                        _users.UpdateFileName(fileName, userId);
+                        Doctor doctor = new Doctor { UserId = user.Id, OfficeAddress = model.OfficeAddress, MedicalSpecialty = model.MedicalSpecialty, DoctorPlanId = doctorPlanId };
+                        user.ProfilePicture = fileName;
+                        _users.UpdateUser(user);
                         _doctors.InsertDoctor(doctor);
                     }
                     catch (Exception)
@@ -268,7 +269,7 @@ namespace GreekHealthcareNetwork.Controllers
                         ModelState.AddModelError("", "Something went wrong, please try again.");
                         return View(model);
                     }
-                    UserManager.AddToRole(userId, "Doctor");
+                    UserManager.AddToRole(user.Id, "Doctor");
                     //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -276,7 +277,7 @@ namespace GreekHealthcareNetwork.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("RegisterDoctorWorkingHours", "Account", new { userId = userId });
+                    return RedirectToAction("RegisterDoctorWorkingHours", "Account", new { userId = user.Id });
                 }
                 AddErrors(result);
             }
@@ -437,10 +438,10 @@ namespace GreekHealthcareNetwork.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    string userId = UserManager.FindByName(model.UserName).Id;
-                    fileName = userId + fileNameExt;
-                    Directory.CreateDirectory(Server.MapPath("~/Content/img/Insureds/" + userId));
-                    string path = Path.Combine(Server.MapPath("~/Content/img/Insureds/" + userId), fileName);
+                    user = UserManager.FindByName(model.UserName);
+                    fileName = user.Id + fileNameExt;
+                    Directory.CreateDirectory(Server.MapPath("~/Content/img/Insureds/" + user.Id));
+                    string path = Path.Combine(Server.MapPath("~/Content/img/Insureds/" + user.Id), fileName);
                     if (model.ProfilePicture != null)
                     {
                         model.ProfilePicture.SaveAs(path);
@@ -452,8 +453,9 @@ namespace GreekHealthcareNetwork.Controllers
                     }
                     try
                     {
-                        Insured insured = new Insured { UserId = userId, HomeAddress = model.HomeAddress};
-                        _users.UpdateFileName(fileName, userId);
+                        Insured insured = new Insured { UserId = user.Id, HomeAddress = model.HomeAddress};
+                        user.ProfilePicture = fileName;
+                        _users.UpdateUser(user);
                         _insureds.InsertInsured(insured);
                     }
                     catch (Exception)
@@ -464,7 +466,7 @@ namespace GreekHealthcareNetwork.Controllers
                         ModelState.AddModelError("", "Something went wrong, please try again.");
                         return View(model);
                     }
-                    UserManager.AddToRole(userId, "Insured");
+                    UserManager.AddToRole(user.Id, "Insured");
                     //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -472,7 +474,7 @@ namespace GreekHealthcareNetwork.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("ClientPayInsuredPlan", "Account", new { userId = userId });
+                    return RedirectToAction("ClientPayInsuredPlan", "Account", new { userId = user.Id });
                 }
                 AddErrors(result);
             }

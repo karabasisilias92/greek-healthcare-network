@@ -87,6 +87,7 @@ namespace GreekHealthcareNetwork.Controllers
             return View();
         }
 
+        [OutputCache(NoStore = true, Duration = 0)]
         public ActionResult EditProfile()
         {
             return View(GetCurrentUser());
@@ -94,6 +95,7 @@ namespace GreekHealthcareNetwork.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [OutputCache(NoStore = true, Duration = 0)]
         public ActionResult EditProfile(ProfileDetailsViewModel modifiedUser)
         {
 
@@ -107,7 +109,7 @@ namespace GreekHealthcareNetwork.Controllers
 
             string path = "";
             string fileName = user.User.ProfilePicture;
-            string fileNameExt = Path.GetExtension(fileName);
+            string fileNameExt;
 
             if (modifiedUser.ProfilePicture != null)
             {
@@ -124,18 +126,26 @@ namespace GreekHealthcareNetwork.Controllers
                     {
                         path = Path.Combine(Server.MapPath("~/Content/img/Insureds/" + userId + "/"), userId + fileNameExt);
                     }
-                    if (HttpContext.User.IsInRole("Doctor"))
+                    else if (HttpContext.User.IsInRole("Doctor"))
                     {
                         path = Path.Combine(Server.MapPath("~/Content/img/Doctors/" + userId + "/"), userId + fileNameExt);
+                    }
+                    else
+                    {
+                        path = Path.Combine(Server.MapPath("~/Content/img/Admins/" + userId + "/"), userId + fileNameExt);
                     }
                     modifiedUser.ProfilePicture.SaveAs(path);
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError("", ex);
+                    ModelState.AddModelError("", ex.Message);
                 }
             }
-
+            else
+            {
+                path = fileName;
+            }
+            
             user.User.ProfilePicture = Path.GetFileName(path);
 
             try

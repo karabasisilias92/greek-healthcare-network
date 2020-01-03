@@ -65,6 +65,17 @@ namespace GreekHealthcareNetwork.Repositories
             }
         }
 
+        public void UpdateUser(ApplicationUser updatedUser)
+        {
+
+            using (var db = new ApplicationDbContext())
+            {
+                db.Users.Attach(updatedUser);
+                db.Entry(updatedUser).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+
         public string GetRoleIdByName(string roleName)
         {
             string roleId;
@@ -77,16 +88,6 @@ namespace GreekHealthcareNetwork.Repositories
                 roleId = db.Roles.SingleOrDefault(r => r.Name.Equals(roleName)).Id;
             }
             return roleId;
-        }
-
-        public void UpdateFileName(string fileName, string userId)
-        {
-            using (var db = new ApplicationDbContext())
-            {
-                var user = db.Users.Find(userId);
-                user.ProfilePicture = fileName;
-                db.SaveChanges();
-            }
         }
     }
 }

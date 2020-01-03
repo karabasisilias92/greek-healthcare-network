@@ -40,11 +40,32 @@
                             }
                             @if (User.IsInRole("Insured"))
                             {
-                                @Model.Insured.InsuredPlan.Name <text> Member</text>
+                                if (Model.Insured.InsuredPlan != null)
+                                {
+                                    @Model.Insured.InsuredPlan.Name <text> Member</text>
+                                }
+                                else
+                                {
+                                    <text> No insurance plan yet </text>
+                                }
                             }
                         </h4>
-                        <p>Exp: @Model.User.SubscriptionEndDate.ToString("dd/MM/yyyy")</p>
-                        <button type="button" class="btn btn-info">Renew</button>
+                        @if (!Model.User.SubscriptionEndDate.ToString("dd/MM/yyyy").Equals("01-01-0001"))
+                        {
+                            <p>Exp: @Model.User.SubscriptionEndDate.ToString("dd/MM/yyyy")</p>
+                            <button type="button" class="btn btn-info mt-2">Renew</button>
+                        }
+                        else
+                        {
+                            if (User.IsInRole("Insured"))
+                            {
+                                <button type="button" class="btn btn-info mt-2">Buy a plan</button>
+                            }
+                            else if (User.IsInRole("Doctor"))
+                            {
+                                <button type="button" class="btn btn-info mt-2">Pay Subscription</button>
+                            }
+                        }
                     </div>
                 </div>
                 <div>

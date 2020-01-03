@@ -35,6 +35,10 @@
     $(document).on("focus", r, (function (e) {
         $(e.target).siblings("label, i").addClass("active")
     }));
+    $(document).ready(function () {
+        $('input[value]').siblings("label, i").addClass("active")
+        $('input[value=""]').siblings("label, i").removeClass("active")
+    });
     $(document).on("blur", r, (function (e) {
         var n = $(e.target),
             r = !n.val(),
