@@ -42,29 +42,30 @@
 </main>
 <div class="container">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-3">@*des ta div*@
             <div class="modal fade" id="mymodal">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h3>Message For:</h3>
-
-                            <div class="modal-body">
-                                <p>
-                                    The exams results will be avaialable from the next week
-                                    Please contact me.
-                                </p>
-                                <form id="updateeventsform2" class="form-horizontal">
-                                    <div class="form-group">
-                                        <textarea class="form-control" id='areaforinfo' style="min-width: 100%"></textarea>
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Reply</button>
-                                    </div>
-                                </form>
-                            </div>
+                            <h3>Message For:</h3> @*mesa sto jq thelw selector gia na allaxv timh
+                                                      an to message.SenderId einai iso me currentuserid
+                                                      tha pairnei th timh message to:message.Recipient.Firstname k last name
+                                                      alliew tha leei message from:message.semdrf.Firstname k lastname*@
                         </div>
-
+                        <div class="modal-body">
+                            <h4>Subject</h4>@*message.subject*@
+                            <p>
+                                The exams results will be avaialable from the next week
+                                Please contact me. @*message.messagetext*@
+                            </p>
+                            <form id="updateeventsform2" class="form-horizontal">
+                                <div class="form-group">
+                                    <textarea class="form-control" id='areaforinfo' style="min-width: 100%"></textarea>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Reply</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -151,7 +152,7 @@
 
                             }); 
                             $('.viewBtn').click(function (e) {
-                                //
+                                //h parametros pou tha tou dwsw thelei data-it
                             });
                         }
                     },
