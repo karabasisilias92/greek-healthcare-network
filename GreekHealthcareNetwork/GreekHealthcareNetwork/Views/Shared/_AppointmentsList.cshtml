@@ -99,6 +99,24 @@
     </div>
 </div>
 
+<div class="modal fade" id="confirm-cancel-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-cancel-modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Appointment Cancellation</h4>
+            </div>
+            <div class="modal-body">
+                <p>You are about to cancled your appointment</p>
+                <p>Are still want to cancel it?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                <a class="btn btn-danger btn-ok">Yes</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section AppointmentScripts{
     @Scripts.Render("~/bundles/jqueryval")
     <script>
@@ -160,7 +178,7 @@
                                         (isUserDoctor ? '<button type="button" class="btn btn-light showAppointmentDetails table-button" data-id="' + appointment.Id + '">View</button><button class="btn btn-light table-button">Message</button>' : '') +
                                         ((appointment.AppointmentStatus != "Upcoming" && isUserInsured)  ? '<button type="button" class="btn btn-light showAppointmentDetails table-button" data-id="' + appointment.Id + '">View</button>' : '') +
                                         ((appointment.AppointmentStatus == "Upcoming" && isUserInsured) ? '<button type="button" class="btn btn-success table-button" data-toggle="modal" data-target="">Edit</button>' : '') +
-                                        ((appointment.AppointmentStatus == "Upcoming") ? '<button class="btn btn-danger table-button">Cancel</button>' : '') +
+                                        ((appointment.AppointmentStatus == "Upcoming") ? '<button class="btn btn-danger table-button cancel-appointment" data-id="' + appointment.Id + '">Cancel</button>' : '') +
                                         '</td ></tr>'
                                     );
                                 });
@@ -212,6 +230,31 @@
                                         console.log('error')
                                     }
                                 })
+                            });
+                            $('.cancel-appointment').click(function (e) {
+                                let id = $(e.target).data('id');
+                                $('.btn-ok').attr('data-id', id);
+                                $('#confirm-cancel-modal').modal('show');
+                            });
+
+                            $('.btn-ok').click(function (e) {
+                                console.log('YES clicked')
+                                let id = $(e.target).data('id');
+                                console.log(id)
+                                $.ajax({
+                                    url: '@Url.Action("CancelAppointment", "Appointments")',
+                                    type: 'post',
+                                    data: {
+                                        appointmentId: id
+                                    },
+                                    success: function (result) {
+                                        $('#confirm-cancel-modal').modal('hide');
+                                        ListAppointments('', '', -1, '0001-01-01', '@CurrentUserId');
+                                    },
+                                    error: function () {
+                                        alert("error");
+                                    }
+                                });
                             });
                         },
                         error: function (error) {

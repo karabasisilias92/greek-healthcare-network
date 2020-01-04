@@ -196,5 +196,15 @@ namespace GreekHealthcareNetwork.Repositories
                 return appointment;
             }
         }
+
+        public void CancelAppointment(int appointmentId)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var appointment = db.Appointments.SingleOrDefault(m => m.Id == appointmentId);
+                appointment.AppointmentStatus = AppointmentStatus.Canceled;
+                db.SaveChanges();
+            }
+        }
     }
 }
