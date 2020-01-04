@@ -1,5 +1,18 @@
 ﻿@model GreekHealthcareNetwork.Models.SearchLoginViewModel
-
+@using GreekHealthcareNetwork.Models
+@{ 
+    string visitorUserId;
+    int doctors;
+    int insureds;
+    int appointments;
+    using(var db = new ApplicationDbContext())
+    {
+        visitorUserId = db.Users.SingleOrDefault(u => u.Email.Equals("visitor@ghn.gr")).Id;
+        doctors = db.Doctors.Count();
+        insureds = db.Insureds.Count();
+        appointments = db.Appointments.Count();
+    }
+}
 <section id="home">
     <div class="home-container">
         <h1>Welcome to Greek Healthcare Network!</h1>
@@ -17,27 +30,27 @@
             <div class="row about-container">
 
                 <div class="col-lg-6 content order-lg-1 order-2">
-                    <h2 class="title">Few Words About Us</h2>
+                    <h2 class="title">A Few Words About Us</h2>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        The Greek Healthcare Network (GHN) company was founded in 2015. Since then we are steadily growing in size, reaching out to more people day by day and gaining recognition among doctors and our clients for the services we offer to them.
                     </p>
 
                     <div class="icon-box wow fadeInUp">
-                        <div class="icon"><i class="fa fa-shopping-bag"></i></div>
-                        <h4 class="title"><a href="">Eiusmod Tempor</a></h4>
-                        <p class="description">Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi</p>
+                        <div class="icon"><i class="fa fa-users"></i></div>
+                        <h4 class="title">Our Team</h4>
+                        <p class="description">We are a group of highly inspired and motivated professionals, trying to offer services of the highest quality to our clients</p>
                     </div>
 
                     <div class="icon-box wow fadeInUp" data-wow-delay="0.2s">
-                        <div class="icon"><i class="fa fa-photo"></i></div>
-                        <h4 class="title"><a href="">Magni Dolores</a></h4>
-                        <p class="description">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+                        <div class="icon"><i class="fa fa-empire"></i></div>
+                        <h4 class="title">Our Vision</h4>
+                        <p class="description">We not only aim at becoming one the most successful companies in the healthcare field in Greece, but also satisfying our target group as much as possible by offering them state-of-the-art services.</p>
                     </div>
 
                     <div class="icon-box wow fadeInUp" data-wow-delay="0.4s">
                         <div class="icon"><i class="fa fa-bar-chart"></i></div>
-                        <h4 class="title"><a href="">Dolor Sitema</a></h4>
-                        <p class="description">Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata</p>
+                        <h4 class="title">Daily reporting activity</h4>
+                        <p class="description">Our support team gets daily reports about our platform activity and is working constantly on improving our users' experience.</p>
                     </div>
 
                 </div>
@@ -54,28 +67,28 @@
         <div class="container wow fadeIn">
             <div class="section-header">
                 <h3 class="section-title">Facts</h3>
-                <p class="section-description">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque</p>
+                <p class="section-description">Our statistics indicate how successful we are!</p>
             </div>
             <div class="row counters">
 
                 <div class="col-lg-3 col-6 text-center">
-                    <span data-toggle="counter-up">232</span>
-                    <p>Clients</p>
+                    <span data-toggle="counter-up">@Model.MedicalSpecialties.Count</span>
+                    <p>Medical Specialties</p>
                 </div>
 
                 <div class="col-lg-3 col-6 text-center">
-                    <span data-toggle="counter-up">521</span>
-                    <p>Projects</p>
+                    <span data-toggle="counter-up">@doctors</span>
+                    <p>Doctors</p>
                 </div>
 
                 <div class="col-lg-3 col-6 text-center">
-                    <span data-toggle="counter-up">1,463</span>
-                    <p>Hours Of Support</p>
+                    <span data-toggle="counter-up">@insureds</span>
+                    <p>Insured Clients</p>
                 </div>
 
                 <div class="col-lg-3 col-6 text-center">
-                    <span data-toggle="counter-up">15</span>
-                    <p>Hard Workers</p>
+                    <span data-toggle="counter-up">@appointments</span>
+                    <p>Appointments Booked</p>
                 </div>
 
             </div>
@@ -108,6 +121,8 @@
                                         <li><i class="fa fa-times icon-danger"></i><span><del>Limited number of Appointments</del></span></li>
                                         <li><i class="fa fa-check icon-success"></i><span>Charge per appointment: <b>@(Model.InsuredPlans[i].AppointmentRate)&euro;</b></span></li>
                                         <li><i class="fa fa fa-times icon-danger"></i><span><del>Charge per appointment after limit has been exceeded</del></span></li>
+                                        <li><i class="fa fa-check icon-success"></i><span><b>Free</b> cancellation of appointment <b>until 3 days before</b> the appointment date</span></li>
+                                        <li><i class="fa fa-check icon-success"></i><span><b>Free</b> cancellation of appointment <b>less than 3 days before</b> the appointment date</span></li>                                    
                                     }
                                     else
                                     {
@@ -115,9 +130,9 @@
                                         <li><i class="fa fa-check icon-success"></i><span>Limited number of Appointments: <b>@Model.InsuredPlans[i].PlanAppoinments</b></span></li>
                                         <li><i class="fa fa-check icon-success"></i><span>Charge per appointment: <b>@(Model.InsuredPlans[i].AppointmentRate)% of appointment's total cost</b></span></li>
                                         <li><i class="fa fa-check icon-success"></i><span>Charge per appointment <b>after limit</b> has been exceeded: <b>@(Model.InsuredPlans[i].ExceededAppointmentRate)% of appointment's total cost</b></span></li>
+                                        <li><i class="fa fa-check icon-success"></i><span><b>Full refund</b> in case of appointment cancellation <b>until 3 days before</b> the appointment date</span></li>
+                                        <li><i class="fa fa-check icon-success"></i><span><b>@(Model.InsuredPlans[i].CancelationRefundPercentage)% refund</b> in case of cancellation <b>less than 3 days before</b> the appointment date</span></li>
                                     }
-                                    <li><i class="fa fa-check icon-success"></i><span><b>Full refund</b> in case of appointment cancellation <b>until 3 days before</b> the appointment date</span></li>
-                                    <li><i class="fa fa-check icon-success"></i><span><b>@(Model.InsuredPlans[i].CancelationRefundPercentage)% refund</b> in case of cancellation <b>less than 3 days before</b> the appointment date</span></li>
                                     <li><i class="fa fa-check icon-success"></i><span>Exchange messages with the doctors</span></li>
                                 </ul>
                             </div>
@@ -151,29 +166,29 @@
         <div class="container wow fadeInUp">
             <div class="section-header">
                 <h3 class="section-title">Contact</h3>
-                <p class="section-description">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque</p>
+                <p class="section-description">For more information about our platform, insurance plans, doctor subscription fees, etc. contact us via the form below.</p>
             </div>
         </div>
 
         <div class="container wow fadeInUp mt-5">
             <div class="row justify-content-center">
 
-                <div class="col-lg-3 col-md-4">
+                <div class="col-lg-3 col-md-4 pt-3">
 
                     <div class="info">
                         <div>
                             <i class="fa fa-map-marker"></i>
-                            <p>A108 Adam Street<br>New York, NY 535022</p>
+                            <p>Panepistimiou 39<br>Athens, 105 64</p>
                         </div>
 
                         <div>
                             <i class="fa fa-envelope"></i>
-                            <p>info@example.com</p>
+                            <p>info@ghn.gr</p>
                         </div>
 
                         <div>
                             <i class="fa fa-phone"></i>
-                            <p>+1 5589 55488 55s</p>
+                            <p>+30 21058764348</p>
                         </div>
                     </div>
 
@@ -181,44 +196,96 @@
                         <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
                         <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
                         <a href="#" class="instagram"><i class="fa fa-instagram"></i></a>
-                        <a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a>
                         <a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a>
                     </div>
 
                 </div>
 
-                <div class="col-lg-5 col-md-8">
-                    <div class="form">
-                        <div id="sendmessage">Your message has been sent. Thank you!</div>
-                        <div id="errormessage"></div>
-                        <form action="" method="post" role="form" class="contactForm">
-                            <div class="form-group">
-                                <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
-                                <div class="validation"></div>
+                <div class="col-lg-7 col-md-8">
+                    @using (Html.BeginForm("Post", "Messages", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div id="errorContainerMessage" class="container" style="display:none">
+                            <div class="form-horizontal">
+                                <p class="text-danger ml-3 mb-2"> Your message hasn't been sent. Please try again. </p>
                             </div>
-                            <div class="form-group">
-                                <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
-                                <div class="validation"></div>
+                        </div>
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.HiddenFor(m => m.VisitorMessage.SenderId, new { @Value = visitorUserId })
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                @Html.LabelFor(m => m.VisitorMessage.FirstName, new { @class = "col-md-6 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.VisitorMessage.FirstName, new { @class = "form-control", placeholder = "Your first name" })
+                                    @Html.ValidationMessageFor(m => m.VisitorMessage.FirstName, "", new { @class = "text-danger" })
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
-                                <div class="validation"></div>
+                            <div class="form-group col">
+                                @Html.LabelFor(m => m.VisitorMessage.LastName, new { @class = "col-md-6 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.VisitorMessage.LastName, new { @class = "form-control", placeholder = "Your last name" })
+                                    @Html.ValidationMessageFor(m => m.VisitorMessage.LastName, "", new { @class = "text-danger" })
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
-                                <div class="validation"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                @Html.LabelFor(m => m.VisitorMessage.Email, new { @class = "col-md-6 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.VisitorMessage.Email, new { @class = "form-control", placeholder = "Your email" })
+                                    @Html.ValidationMessageFor(m => m.VisitorMessage.Email, "", new { @class = "text-danger" })
+                                </div>
                             </div>
-                            <div class="text-center"><button type="submit">Send Message</button></div>
-                        </form>
-                    </div>
+                            <div class="form-group col">
+                                @Html.LabelFor(m => m.VisitorMessage.Subject, new { @class = "col-md-6 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(m => m.VisitorMessage.Subject, new { @class = "form-control", placeholder = "Message Subject" })
+                                    @Html.ValidationMessageFor(m => m.VisitorMessage.Subject, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col">
+                                @Html.LabelFor(m => m.VisitorMessage.MessageText, new { @class = "col-md-6 control-label" })
+                                <div class="col-md-10">
+                                    @Html.TextAreaFor(m => m.VisitorMessage.MessageText, new { @class = "form-control", placeholder = "Write your message here", rows = 5 })
+                                    @Html.ValidationMessageFor(m => m.VisitorMessage.MessageText, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group col" style="margin-top: 27px">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input id="sendContactForm" type="submit" class="btn btn-outline-dark" value="Send Message" />
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
 
-            </div>
+                    </div>
 
         </div>
     </section><!-- #contact -->
 
 </main>
+
+<!-- Modal: Visitor Message Sent -->
+<div class="modal fade" id="VisitorMessageSent" tabindex="-1" role="dialog" aria-labelledby="VisitorMessageSentLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="VisitorMessageSentLabel">Success</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Your message was sent successfully!</p>
+             </div>
+        </div>
+    </div>
+</div>
 
 <!--Modal: Login / Register Form-->
 <div class="modal fade" id="modalLRForm" tabindex="-1" role="dialog" aria-labelledby="modalLRFormLabel" aria-hidden="true">

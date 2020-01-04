@@ -179,7 +179,7 @@
                         data.forEach(function (doctor) {
                             $('#doctorsList').append('<div class="col-md-3 col-sm-6 col-xs-12"><div class="img-thumbnail">' +
                                 '<img src="@Url.Content("~/Content/img/Doctors/")' + doctor.User.Id + '/' + doctor.User.ProfilePicture + '" alt="' + doctor.User.ProfilePicture + '">' +
-                                '<div><h3>' + doctor.User.FirstName + ' ' + doctor.User.LastName + '</h3>' +
+                                '<div><h5>' + doctor.User.FirstName +  '</h5><h5>' + doctor.User.LastName + '</h5>' +
                                 '<p>' + doctor.MedicalSpecialty + '</p> <button class="btn btn-outline-dark btn-sm showDoctorDetails" data-id="' + doctor.UserId + '">View Details</button>' +
                                 @if (User.IsInRole("Insured")) {
                                     @(new HtmlString("'<button class=\"btn btn-outline-dark btn-sm showDoctorMessage\" data-id=\"' + doctor.UserId + '\">Message</button><button class=\"btn btn-outline-dark btn-sm bookAppointments\" data-id=\"' + doctor.UserId + '\">Book Appointment</button></div></div></div>'"));
@@ -208,6 +208,7 @@
                             model.UserName = $('#UserName1').val();
                             model.Password = $('#Password1').val();
                             model.RememberMe = false;
+                            model.VisitorMessage = null;
                             model = JSON.stringify(model)
                             $.ajax({
                                 contentType: 'application/json',

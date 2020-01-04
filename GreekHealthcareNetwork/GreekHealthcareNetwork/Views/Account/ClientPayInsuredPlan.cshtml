@@ -47,6 +47,8 @@
                                     <li><i class="fa fa-times icon-danger"></i><span><del>Limited number of Appointments</del></span></li>
                                     <li><i class="fa fa-check icon-success"></i><span>Charge per appointment: <b>@(Model.InsuredPlans[i].AppointmentRate)&euro;</b></span></li>
                                     <li><i class="fa fa fa-times icon-danger"></i><span><del>Charge per appointment after limit has been exceeded</del></span></li>
+                                    <li><i class="fa fa-check icon-success"></i><span><b>Free</b> cancellation of appointment <b>until 3 days before</b> the appointment date</span></li>
+                                    <li><i class="fa fa-check icon-success"></i><span><b>Free</b> cancellation of appointment <b>less than 3 days before</b> the appointment date</span></li>
                                 }
                                 else
                                 {
@@ -54,9 +56,9 @@
                                     <li><i class="fa fa-check icon-success"></i><span>Limited number of Appointments: <b>@Model.InsuredPlans[i].PlanAppoinments</b></span></li>
                                     <li><i class="fa fa-check icon-success"></i><span>Charge per appointment: <b>@(Model.InsuredPlans[i].AppointmentRate)% of appointment's total cost</b></span></li>
                                     <li><i class="fa fa-check icon-success"></i><span>Charge per appointment <b>after limit</b> has been exceeded: <b>@(Model.InsuredPlans[i].ExceededAppointmentRate)% of appointment's total cost</b></span></li>
+                                    <li><i class="fa fa-check icon-success"></i><span><b>Full refund</b> in case of appointment cancellation <b>until 3 days before</b> the appointment date</span></li>
+                                    <li><i class="fa fa-check icon-success"></i><span><b>@(Model.InsuredPlans[i].CancelationRefundPercentage)% refund</b> in case of cancellation <b>less than 3 days before</b> the appointment date</span></li>
                                 }
-                                <li><i class="fa fa-check icon-success"></i><span><b>Full refund</b> in case of appointment cancellation <b>until 3 days before</b> the appointment date</span></li>
-                                <li><i class="fa fa-check icon-success"></i><span><b>@(Model.InsuredPlans[i].CancelationRefundPercentage)% refund</b> in case of cancellation <b>less than 3 days before</b> the appointment date</span></li>
                                 <li><i class="fa fa-check icon-success"></i><span>Exchange messages with the doctors</span></li>
                             </ul>
                             <div class="price-bottom">

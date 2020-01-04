@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
+using System.Web.WebPages;
 
 namespace GreekHealthcareNetwork.Controllers
 {
@@ -36,21 +38,40 @@ namespace GreekHealthcareNetwork.Controllers
         {
             if (!ModelState.IsValid)
             {
-                //implementation for return model to Modal pending
                 return BadRequest(ModelState);
             }
-            model.Message.SentDate = DateTime.Now.Date;
-            model.Message.SentTime = DateTime.Now.TimeOfDay;
-            model.Message.MessageStatus = MessageStatus.Unread;
-            model.Message.ConversationId = Message.ConversationIdCounter++;
-            try
+            if(model.Message != null)
             {
-                _message.Add(model.Message);
+                model.Message.SentDate = DateTime.Now.Date;
+                model.Message.SentTime = DateTime.Now.TimeOfDay;
+                model.Message.MessageStatus = MessageStatus.Unread;
+                model.Message.ConversationId = _message.NewConversationId() + 1;
+                try
+                {
+                    _message.Add(model.Message);
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("", "An error has occured. Please try again.");
+                    return BadRequest(ModelState);
+                }
             }
-            catch (Exception)
+            else
             {
-                ModelState.AddModelError("", "An error has occured. Please try again.");
-                return BadRequest(ModelState);
+                model.VisitorMessage.RecipientId = _message.AdminWithLessVisitorMessagesUnreplied();
+                model.VisitorMessage.SentDate = DateTime.Now.Date;
+                model.VisitorMessage.SentTime = DateTime.Now.TimeOfDay;
+                model.VisitorMessage.MessageStatus = MessageStatus.Unread;
+                model.VisitorMessage.ConversationId = _message.NewConversationId() + 1;
+                try
+                {
+                    _message.Add(model.VisitorMessage);
+                }
+                catch (Exception)
+                {
+                    ModelState.AddModelError("", "An error has occured. Please try again.");
+                    return BadRequest(ModelState);
+                }
             }
             return ResponseMessage(Request.CreateResponse(HttpStatusCode.Created));
             //h return Ok();
