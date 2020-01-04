@@ -58,6 +58,7 @@ namespace GreekHealthcareNetwork.Repositories
             return convId;
         }
 
+        // Used for "load balancing" visitor messages to administrators, if we have more than one
         public string AdminWithLessVisitorMessagesUnreplied()
         {
             string id = "c0c59e7b-4e90-42bd-922b-ffc699dd6305";
@@ -65,12 +66,12 @@ namespace GreekHealthcareNetwork.Repositories
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                using (SqlCommand cmd = new SqlCommand("Select RecipientId FROM Messages WHERE MessageStatus = 1 AND Discriminator = 'VisitorMessage' GROUP BY RecipientId, MessageStatus Having COUNT(*) = (SELECT Min(MessagesNumber) FROM (SELECT Count(*) MessagesNumber FROM Messages WHERE MessageStatus = 1 AND Discriminator = 'VisitorMessage' GROUP BY RecipientId, MessageStatus) AS q1)", conn))
+                using (SqlCommand cmd = new SqlCommand("Select RecipientId FROM Messages WHERE MessageStatus = 1 AND Discriminator = 'VisitorMessage' GROUP BY RecipientId Having COUNT(*) = (SELECT Min(MessagesNumber) FROM (SELECT Count(*) MessagesNumber FROM Messages WHERE MessageStatus = 1 AND Discriminator = 'VisitorMessage' GROUP BY RecipientId) AS q1)", conn))
                 {
                     try
                     {
                         string result = (string)cmd.ExecuteScalar();
-                        if(result != null)
+                        if (result != null)
                         {
                             id = result;
                         }

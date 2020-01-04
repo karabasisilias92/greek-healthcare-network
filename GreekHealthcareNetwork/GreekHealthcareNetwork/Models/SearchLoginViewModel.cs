@@ -36,5 +36,7 @@ namespace GreekHealthcareNetwork.Models
         public List<InsuredPlan> InsuredPlans { get; set; }
 
         public VisitorMessage VisitorMessage { get; set; }
+
+        public Appointment Appointment { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model GreekHealthcareNetwork.Models.SearchLoginViewModel
+@{
     Layout = "~/Views/Shared/_CustomScriptsLayout.cshtml";
 }
 
@@ -89,70 +90,78 @@
                 </div>
                 <div id="normalContainerBook" class="container">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="row" id="profilepictureBook">
                                 <div class="col-md-12">
                                     <img src="" class="rounded-circle w-100 h-100" alt="">
                                 </div>
-                            </div>
-                            <div class="row" id="profilesectionBook">
-                                <div class="col-md-12">
-                                    <table class="table table-borderless mt-5">
-                                        <tbody>
-                                            <tr>
-                                                <th>First Name:</th>
-                                                <td id="firstNameBook"> </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Last Name:</th>
-                                                <td id="lastNameBook"> </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Medical Specialty:</th>
-                                                <td id="medicalSpecialtyBook"> </td>
-                                            </tr>
-                                            <tr id="officeAddressBookTR">
-                                                <th>Office Address:</th>
-                                                <td id="officeAddressBook"> </td>
-                                            </tr>
-                                            <tr id="doctorEmailBookTR">
-                                                <th>Email:</th>
-                                                <td id="doctorEmailBook"> </td>
-                                            </tr>
-                                            <tr>
-                                                <th>Telephone:</th>
-                                                <td id="doctorTelephoneBook"> </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                            </div>                            
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <div class="row" id="bookapointmentsection">
                                 <div class="col-md-12">
-                                    <form method="post">
+                                    <form method="post" action="/Insureds/BookAppointment">
                                         <div class="form-group">
-                                            <label class="control-label" for="date">Date</label>
-                                            <input class="form-control" id="date" name="date" type="date" />
+                                            @Html.LabelFor(m => m.Appointment.AppointmentDate, new { @class = "col-md-12 control-label" })
+                                            <div class="col-md-10">
+                                                @Html.TextBoxFor(m => m.Appointment.AppointmentDate, new { @class = "form-control", type = "date" })
+                                                @Html.ValidationMessageFor(m => m.Appointment.AppointmentDate, "", new { @class = "text-danger" })
+                                            </div>
                                         </div>
                                         <div class="form-group">
-
-                                            <select id="select" name="select" class="form-control">
-                                                <option value="option1">one</option>
-                                                <option value="option2">two</option>
-                                                <option value="option3">three</option>
-                                                <option value="option4">four</option>
-                                                <option value="option5">five</option>
-                                            </select>
+                                            @Html.LabelFor(m => m.Appointment.AppointmentStartTime, new { @class = "col-md-12 control-label" })
+                                            <div class="col-md-10">
+                                                @Html.DropDownListFor(m => m.Appointment.AppointmentStartTime, new SelectList(new List<Object>()) , "-- Select Time --" ,new { @class = "form-control"})
+                                                @Html.ValidationMessageFor(m => m.Appointment.AppointmentStartTime, "", new { @class = "text-danger" })
+                                            </div>
                                         </div>
                                         <div class="form-group">
-                                            <textarea class="form-control" id='areaforinfo' style="min-width: 100%"></textarea>
+                                            @Html.LabelFor(m => m.Appointment.InsuredComments, new { @class = "col-md-12 control-label" })
+                                            <div class="col-md-10">
+                                                @Html.TextAreaFor(m => m.Appointment.InsuredComments, new { @class = "form-control"})
+                                                @Html.ValidationMessageFor(m => m.Appointment.InsuredComments, "", new { @class = "text-danger" })
+                                            </div>
                                         </div>
-                                        <input type="button" class="btn btn-default" data-dismiss="modal" name="book" value="Book">
+                                        <div class="form-group">
+                                            <div class="col-md-offset-2 col-md-10">
+                                                <input type="submit" class="btn btn-outline-dark" value="Book Appointment" />
+                                            </div>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="profilesectionBook" class="col-md-12">
+                            <table class="table table-borderless mt-2">
+                                <tbody>
+                                    <tr>
+                                        <th>First Name:</th>
+                                        <td id="firstNameBook"> </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Last Name:</th>
+                                        <td id="lastNameBook"> </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Medical Specialty:</th>
+                                        <td id="medicalSpecialtyBook"> </td>
+                                    </tr>
+                                    <tr id="officeAddressBookTR">
+                                        <th>Office Address:</th>
+                                        <td id="officeAddressBook"> </td>
+                                    </tr>
+                                    <tr id="doctorEmailBookTR">
+                                        <th>Email:</th>
+                                        <td id="doctorEmailBook"> </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Telephone:</th>
+                                        <td id="doctorTelephoneBook"> </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -329,7 +338,7 @@
                             dataType: 'json',
                             success: function (doctor) {
                                 $('#errorContainerBook').hide();
-                                $('#profileSectionBook img').attr('src', '@Url.Content("~/Content/img/Doctors/")' + doctor.User.ProfilePicture);
+                                $('#profilepictureBook img').attr('src', '@Url.Content("~/Content/img/Doctors/")' + doctor.User.Id + '/' + doctor.User.ProfilePicture);
                                 $('#firstNameBook').text(doctor.User.FirstName);
                                 $('#lastNameBook').text(doctor.User.LastName);
                                 $('#medicalSpecialtyBook').text(doctor.MedicalSpecialty);
