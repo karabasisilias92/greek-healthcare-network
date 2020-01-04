@@ -15,7 +15,7 @@ namespace GreekHealthcareNetwork.Repositories
         {
             Message message;
             using (ApplicationDbContext db = new ApplicationDbContext())
-            {//me single or defaultt prwta ta include k meta ena lamda gia to id tou  
+            {//me single or default prwta ta include k meta ena lamda gia to id tou  
                 message= db.Messages.Find(id);    
             }
             return message;
