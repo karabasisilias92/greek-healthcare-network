@@ -11,8 +11,6 @@ namespace GreekHealthcareNetwork.Models
 {
     public class Message
     {
-        public static long ConversationIdCounter { get; set; } = 1;
-
         [Key]
         public long Id { get; set; }
 

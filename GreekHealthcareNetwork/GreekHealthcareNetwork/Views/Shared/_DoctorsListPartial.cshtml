@@ -208,6 +208,7 @@
                             model.UserName = $('#UserName1').val();
                             model.Password = $('#Password1').val();
                             model.RememberMe = false;
+                            model.VisitorMessage = null;
                             model = JSON.stringify(model)
                             $.ajax({
                                 contentType: 'application/json',
