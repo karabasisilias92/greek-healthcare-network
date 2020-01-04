@@ -520,6 +520,7 @@
     <Content Include="Views\User\EditProfile.cshtml" />
     <Content Include="Views\Account\ClientPayInsuredPlan.cshtml" />
     <Content Include="Views\Account\ClientRegister.cshtml" />
+    <Content Include="Views\Shared\_AppointmentsList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

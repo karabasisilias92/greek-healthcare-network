@@ -1,4 +1,5 @@
 ﻿using GreekHealthcareNetwork.Models;
+using GreekHealthcareNetwork.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -45,6 +46,11 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                                  .Include("Insured.User")
                                                                                                                  .Include("Insured.User.Roles")
                                                                                                                  .ToList();
+                    string val = HttpContext.Current.Request.UrlReferrer.ToString();
+                    if (HttpContext.Current.Request.UrlReferrer.ToString().EndsWith("Appointments"))
+                    {
+                        appointments = appointments.Where(appointment => appointment.AppointmentStatus == AppointmentStatus.Upcoming).ToList();
+                    }
                 }
 
                 if (HttpContext.Current.User.IsInRole("Insured"))
