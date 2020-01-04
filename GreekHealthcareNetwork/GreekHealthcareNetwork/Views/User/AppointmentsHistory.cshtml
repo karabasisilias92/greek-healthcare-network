@@ -148,31 +148,30 @@
                                     console.log('Step3');
                                     const appointmentStart = appointment.AppointmentStartTime.split(":");
                                     const appointmentEnd = appointment.AppointmentEndTime.split(":");
-                                    const appointmentDate = appointment.AppointmentDate.split("T");
+                                    const appointmentUnformatedDate = appointment.AppointmentDate.split("T");
+                                    const appointmentDate = appointmentUnformatedDate[0].split("-");
+                                    $('#appointmentsList').append('<tr>')
                                     if (isUserInsured) {
-                                        $('#appointmentsList').append('<tr><td>' +
-                                            '<img src="@Url.Content("~/Content/img/Doctors/")' + appointment.Doctor.User.Id + '/' + appointment.Doctor.User.ProfilePicture + '" alt="' + appointment.Doctor.User.ProfilePicture + '"' + 'class="rounded-circle"></td>' +
+                                        $('#appointmentsList').append(
+                                            '<td><img src="@Url.Content("~/Content/img/Doctors/")' + appointment.Doctor.User.Id + '/' + appointment.Doctor.User.ProfilePicture + '" alt="' + appointment.Doctor.User.ProfilePicture + '"' + 'class="rounded-circle"></td>' +
                                             '<td>' + appointment.Doctor.User.FirstName + ' ' + appointment.Doctor.User.LastName + '</td>' +
-                                            '<td>' + appointment.Doctor.MedicalSpecialty + '</td>' +
-                                            '<td>' + appointmentDate[0] + '</td>' +
-                                            '<td>' + appointmentStart[0] + ':' + appointmentStart[1] + '-' + appointmentEnd[0] + ':' + appointmentEnd[1] + '</td>' +
-                                            '<td>' + appointment.AppointmentStatus + '</td>' +
-                                            ((appointment.AppointmentStatus == "Upcoming") ? '<td><button type="button" class="btn btn-success" data-toggle="modal" data-target="">Edit</button><button class="btn btn-danger">Cancel</button>' : '<td><button type="button" class="btn btn-light showAppointmentDetails" data-id="' + appointment.Id + '">View</button>') +
-                                            '</td ></tr>'
+                                            '<td>' + appointment.Doctor.MedicalSpecialty + '</td>'
                                         );
                                     }
                                     if (isUserDoctor) {
-                                        $('#appointmentsList').append('<tr><td>' +
-                                            '<img src="@Url.Content("~/Content/img/Insureds/")' + appointment.Insured.User.Id + '/' + appointment.Insured.User.ProfilePicture + '" alt="' + appointment.Doctor.User.ProfilePicture + '"' + 'class="rounded-circle"></td>' +
-                                            '<td>' + appointment.Insured.User.FirstName + ' ' + appointment.Insured.User.LastName + '</td>' +
-                                            '<td>' + appointmentDate[0] + '</td>' +
-                                            '<td>' + appointmentStart[0] + ':' + appointmentStart[1] + ' - ' + appointmentEnd[0] + ':' + appointmentEnd[1] + '</td>' +
-                                            '<td>' + appointment.AppointmentStatus + '</td>' +
-                                            ((appointment.AppointmentStatus == "Upcoming") ? '<td><button type="button" class="btn btn-success" data-toggle="modal" data-target="">Edit</button><button class="btn btn-danger">Cancel</button>' : '<td><button type="button" class="btn btn-light showAppointmentDetails" data-id="' + appointment.Id + '">View</button>') +
-                                            '</td ></tr>'
-                                    );
-
+                                        $('#appointmentsList').append(
+                                            '<td><img src="@Url.Content("~/Content/img/Insureds/")' + appointment.Insured.User.Id + '/' + appointment.Insured.User.ProfilePicture + '" alt="' + appointment.Doctor.User.ProfilePicture + '"' + 'class="rounded-circle"></td>' +
+                                            '<td>' + appointment.Insured.User.FirstName + ' ' + appointment.Insured.User.LastName + '</td>'
+                                        );
                                     }
+                                    $('#appointmentsList').append(
+                                        '<td>' + appointmentDate[2] + "-" + appointmentDate[1] + "-" + appointmentDate[0] + '</td>' +
+                                        '<td>' + appointmentStart[0] + ':' + appointmentStart[1] + ' - ' + appointmentEnd[0] + ':' + appointmentEnd[1] + '</td>' +
+                                        '<td>' + appointment.AppointmentStatus + '</td>' +
+                                        ((appointment.AppointmentStatus == "Upcoming") ? '<td><button type="button" class="btn btn-success table-button" data-toggle="modal" data-target="">Edit</button><button class="btn btn-danger table-button">Cancel</button>' : '<td><button type="button" class="btn btn-light showAppointmentDetails table-button" data-id="' + appointment.Id + '">View</button>') +
+                                        (isUserDoctor ? '<button class="btn btn-light table-button">Message</button>' : '') +
+                                        '</td ></tr>'
+                                    );
                                 });
                             }
                             fixFooterPosition(data.length);
