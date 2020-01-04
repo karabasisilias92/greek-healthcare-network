@@ -23,5 +23,15 @@ namespace GreekHealthcareNetwork.Controllers
             }
             return View(searchLoginViewModel);
         }
+
+        public ActionResult Doctors(SearchLoginViewModel searchLoginViewModel)
+        {
+            searchLoginViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
+            for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
+            {
+                searchLoginViewModel.MedicalSpecialties.Add((MedicalSpecialty)i);
+            }
+            return View(searchLoginViewModel);
+        }
     }
 }
