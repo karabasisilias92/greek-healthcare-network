@@ -11,13 +11,17 @@ namespace GreekHealthcareNetwork.Repositories
 {
     public class MessagesRepository
     {
-        //
         public Message FindById(long id)
         {
             Message message;
             using (ApplicationDbContext db = new ApplicationDbContext())
-            {//me single or defaultt prwta ta include k meta ena lamda gia to id tou  
-                message= db.Messages.Find(id); 
+            { 
+                message = db.Messages
+                    .Include("Sender")
+                    .Include("Recipient")
+                    .Include("Sender.Roles")
+                    .Include("Recipient.Roles")
+                    .SingleOrDefault(i => i.Id == id);
             }
             return message;
         }
@@ -29,6 +33,19 @@ namespace GreekHealthcareNetwork.Repositories
                 db.SaveChanges();
             }      
         }
+        public void UpdateMessage(Message message)
+        {
+            if (message == null)
+            {
+                throw new ArgumentNullException("message");
+            }
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                db.Messages.Attach(message);
+                db.Entry(message).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
         public IEnumerable<Message> GetAllMessages(string UserId)
         {
             IEnumerable<Message> messages;
@@ -39,6 +56,8 @@ namespace GreekHealthcareNetwork.Repositories
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
                 messages = db.Messages.Where(m => m.RecipientId.Equals(UserId) || m.SenderId.Equals(UserId))
+                                  .OrderByDescending(m => m.SentDate)
+                                  .ThenByDescending(m => m.SentTime)
                                   .Include("Sender")
                                   .Include("Sender.Roles")
                                   .Include("Recipient")
