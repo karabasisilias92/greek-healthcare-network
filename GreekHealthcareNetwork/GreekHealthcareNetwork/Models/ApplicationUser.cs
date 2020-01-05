@@ -32,6 +32,12 @@ namespace GreekHealthcareNetwork.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
+        [NotMapped]
+        public string FullName
+        {
+            get { return FirstName + " " + LastName; }
+        }
+
         [Required]
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]

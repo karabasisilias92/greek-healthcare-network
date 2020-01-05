@@ -88,6 +88,21 @@ namespace GreekHealthcareNetwork.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [Authorize(Roles = "Insured")]
+        public ActionResult PayAppointmentCharge(int id, decimal appointmentCharge)
+        {
+            PayAppointmentChargeViewModel model = new PayAppointmentChargeViewModel() { AppointmentId = id, AppointmentCharge = appointmentCharge };
+            return View(model);
+        }
+
+        [Authorize(Roles = "Insured")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PayAppointmentCharge(PayAppointmentChargeViewModel model)
+        {
+            return RedirectToAction("SuccessfulBooking", "Insureds", new { id = model.AppointmentId });
+        }
+
         public ActionResult PayDoctor()
         {
             return View();

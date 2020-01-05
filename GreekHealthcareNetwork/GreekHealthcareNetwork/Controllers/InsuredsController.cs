@@ -39,14 +39,31 @@ namespace GreekHealthcareNetwork.Controllers
                 Insured insured = _insureds.GetInsuredById(appointment.InsuredId);
                 byte appointmentDuration = doctor.WorkingHours.SingleOrDefault(d => d.Day == appointment.AppointmentDate.DayOfWeek).AppointmentDuration;
                 appointment.AppointmentEndTime = appointment.AppointmentStartTime + new TimeSpan(0, appointmentDuration, 0);
-                _appointments.AddAppointment(appointment);
-                var appointmentCost = doctor.AppointmentCost;
+                var appointmentCost = doctor.AppointmentCost.AppointmentCost;
                 var insuredPlan = insured.InsuredPlan;
                 if (insuredPlan.Name.Equals("Gold"))
                 {
-                    return RedirectToAction()
+                    appointment.InsuredAppointmentCharge = 0;
+                    int id = _appointments.AddAppointment(appointment);
+                    insured.BookedAppointments++;
+                    _insureds.UpdateInsured(insured);
+                    return RedirectToAction("SuccessfulBooking", new { id = id });
                 }
-                return RedirectToAction
+                else
+                {
+                    if (insured.BookedAppointments < Convert.ToInt32(insuredPlan.PlanAppoinments))
+                    {
+                        appointment.InsuredAppointmentCharge = appointmentCost * Convert.ToDecimal(insuredPlan.AppointmentRate / 100);
+                    }
+                    else
+                    {
+                        appointment.InsuredAppointmentCharge = appointmentCost * Convert.ToDecimal(insuredPlan.ExceededAppointmentRate / 100);
+                    }
+                    int id = _appointments.AddAppointment(appointment);
+                    insured.BookedAppointments++;
+                    _insureds.UpdateInsured(insured);
+                    return RedirectToAction("PayAppointmentCharge", "Payments", new { id = id, appointmentCharge = appointment.InsuredAppointmentCharge });
+                }
             }
             return View(appointment);
         }

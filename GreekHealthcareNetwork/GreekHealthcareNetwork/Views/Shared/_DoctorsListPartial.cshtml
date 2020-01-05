@@ -237,11 +237,14 @@
                 }
             })
         }
-        function ListDoctors(firstName, lastName, specialty) {
+        function ListDoctors(firstName, lastName, specialty, appointmentDate) {
+            if (appointmentDate == "") {
+                appointmentDate = "0001-01-01";
+            }
             $.ajax({
                 dataType: 'json',
                 type: 'get',
-                url: '/api/Search/SearchDoctorResults?doctorsFirstName=' + firstName + '&doctorsLastName=' + lastName + '&doctorsSpecialty=' + specialty,
+                url: '/api/Search/SearchDoctorResults?doctorsFirstName=' + firstName + '&doctorsLastName=' + lastName + '&doctorsSpecialty=' + specialty + '&appointmentDate=' + appointmentDate,
                 success: function (data) {
                     $('#doctorsList').empty();
                     if (data.length == 0) {
@@ -464,7 +467,7 @@
                 }
             })
         }
-        ListDoctors('', '', -1);
+        ListDoctors('', '', -1, '0001-01-01');
         const today = new Date();
         const day = String(today.getDate()).padStart(2, '0');
         const month = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -473,7 +476,12 @@
         $('#Appointment_AppointmentDate').attr('min', year + '-' + month + '-' + day);        
         $('#search').on('submit', function (e) {
             e.preventDefault();
-            ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value);
+            if (e.target[3] == undefined) {
+                ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value, '0001-01-01');
+            }
+            else {
+                ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value, e.target[3]);
+            }
         })
         $('#bookAppointments').on('hidden.bs.modal', function () {
             $('#NoAvailableAppointments').hide();

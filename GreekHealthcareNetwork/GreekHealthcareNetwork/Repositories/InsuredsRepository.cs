@@ -71,5 +71,19 @@ namespace GreekHealthcareNetwork.Repositories
                 db.SaveChanges();
             }
         }
+
+        public void UpdateInsured(Insured insured)
+        {
+            if (insured == null)
+            {
+                throw new ArgumentNullException("insured");
+            }
+            using (var db = new ApplicationDbContext())
+            {
+                db.Insureds.Attach(insured);
+                db.Entry(insured).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
     }
 }

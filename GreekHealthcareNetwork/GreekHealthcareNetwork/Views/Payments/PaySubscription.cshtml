@@ -7,13 +7,16 @@
 }
 
 <section id="pageHeader" class="container my-3">
-    <img src="https://via.placeholder.com/80x80.png?text=GHNlogo" class="rounded-circle mb-3" />
+    @if (!Request.IsAuthenticated)
+    {
+        <img src="https://via.placeholder.com/80x80.png?text=GHNlogo" class="rounded-circle mb-3" />
+    }
     <h2>@ViewBag.Title</h2>
 </section>
 
 <section id="PaymentInfo" class="container">
     <p> Implementation pending</p>
-    <p> Your paypal amount will be charged: @Model.PlanFee.ToString("0.##")&euro;</p>
+    <p> Your paypal account will be charged: @Model.PlanFee.ToString("0.##")&euro;</p>
     <div id="pay_skip">
         <div>
             @using (Html.BeginForm("PaySubscription", "Payments", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))

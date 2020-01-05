@@ -16,12 +16,14 @@ namespace GreekHealthcareNetwork.Models
         public int Id { get; set; }
 
         [Required]
+        [Display(Name = "Doctor")]
         public string DoctorId { get; set; }
 
         [ForeignKey("DoctorId")]
         public virtual Doctor Doctor { get; set; }
 
         [Required]
+        [Display(Name = "Patient")]
         public string InsuredId { get; set; }
 
         [ForeignKey("InsuredId")]
@@ -35,6 +37,7 @@ namespace GreekHealthcareNetwork.Models
         [DataType(DataType.Date)]
         [Required]
         [Display(Name = "Appointment date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime AppointmentDate { get; set; }
 
         [Column(TypeName = "time")]
@@ -46,6 +49,15 @@ namespace GreekHealthcareNetwork.Models
         [Column(TypeName = "time")]
         [DataType(DataType.Time)]
         public TimeSpan AppointmentEndTime { get; set; }
+
+        [Display(Name = "Appointment time")]
+        [NotMapped]
+        public string AppointmentTime 
+        { get
+            {
+                return AppointmentStartTime.ToString(@"hh\:mm") + " - " + AppointmentEndTime.ToString(@"hh\:mm");
+            }
+        }
 
         [JsonConverter(typeof(StringEnumConverter))]
         public AppointmentStatus AppointmentStatus { get; set; }

@@ -1,74 +1,71 @@
 ﻿@model GreekHealthcareNetwork.Models.Appointment
 
 @{
-    ViewBag.Title = "SuccessfulBooking";
+    ViewBag.Title = "Successful Booking";
 }
 
-<h2>SuccessfulBooking</h2>
+<div class="container">
 
-<div>
-    <h4>Appointment</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.DoctorId)
-        </dt>
+    <h2>Your appointment has been booked successfully!</h2>
 
-        <dd>
-            @Html.DisplayFor(model => model.DoctorId)
-        </dd>
+    <div>
+        <h4>Appointment Details</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.DoctorId)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.InsuredId)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Doctor.User.FullName)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.InsuredId)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.InsuredId)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.AppointmentDate)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Insured.User.FullName)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.AppointmentDate)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.AppointmentDate)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.AppointmentStartTime)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.AppointmentDate)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.AppointmentStartTime)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.AppointmentTime)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.AppointmentEndTime)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.AppointmentTime)
+            </dd>                
 
-        <dd>
-            @Html.DisplayFor(model => model.AppointmentEndTime)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.InsuredComments)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.InsuredComments)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.InsuredComments)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.DoctorComments)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.DoctorComments)
-        </dd>
-
-    </dl>
+            <dd>
+                @Html.DisplayFor(model => model.InsuredComments)
+            </dd>
+        </dl>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            const firstRowHeight = +$('#firstRow').css('height').split('px')[0];;
+            console.log(firstRowHeight);
+            $('#firstRow').css('height', 'calc(100vh - 108.4px)');
+            const minHeight = +$('#firstRow').css('height').split('px')[0];;
+            console.log(minHeight);
+            if (firstRowHeight > minHeight) {
+                $('#firstRow').css('height', firstRowHeight);
+            }
+        })
+    </script>    
+}

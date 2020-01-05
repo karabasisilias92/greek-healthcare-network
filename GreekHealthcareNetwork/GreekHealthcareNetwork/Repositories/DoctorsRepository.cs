@@ -6,10 +6,10 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace GreekHealthcareNetwork.Repositories
-{
+{   
     public class DoctorsRepository
     {
-        public IEnumerable<Doctor> GetFilteredDoctors(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty)
+        public IEnumerable<Doctor> GetFilteredDoctors(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty, DateTime appointmentDate)
         {
             IEnumerable<Doctor> doctors;
             IEnumerable<ApplicationUser> users;
@@ -31,33 +31,75 @@ namespace GreekHealthcareNetwork.Repositories
                 {
                     users = db.Users;
                 }
-                if (doctorsSpecialty >= 0 && doctorsSpecialty < Enum.GetNames(typeof(MedicalSpecialty)).Length)
+                var appDay = appointmentDate.Date.ToString("yyyy-MM-dd");
+                if (appDay != "0001-01-01")
                 {
-                   doctors = db.Doctors.Where(doctor => users.Any(user => user.IsActive == true && user.Id == doctor.UserId) && (int)doctor.MedicalSpecialty == doctorsSpecialty).Include("User")
-                                                                                                 // Needs to be lazy loaded even though we do not need it here. We may implement searching for messages, 
-                                                                                                 // so we cannot json ignore it in general
-                                                                                                 .Include("User.Messages")
-                                                                                                 .Include("User.Roles")
-                                                                                                 .Include("WorkingHours")
-                                                                                                 .Include("AppointmentCost")
-                                                                                                 .OrderBy(i => i.MedicalSpecialty)
-                                                                                                 .ThenBy(i => i.User.LastName)
-                                                                                                 .ThenBy(i => i.User.FirstName)
-                                                                                                 .ToList();
+                    if (doctorsSpecialty >= 0 && doctorsSpecialty < Enum.GetNames(typeof(MedicalSpecialty)).Length)
+                    {
+                        doctors = db.Doctors.Where(doctor => users.Any(user => user.IsActive == true && user.Id == doctor.UserId) 
+                                                                                                     && (int)doctor.MedicalSpecialty == doctorsSpecialty
+                                                                                                     && doctor.WorkingHours.Any(w => w.Day == appointmentDate.DayOfWeek
+                                                                                                     && ((w.WorkEndTime - w.WorkStartTime).Value.TotalMinutes / w.AppointmentDuration) > db.Appointments.Where(app => app.DoctorId.Equals(doctor.UserId)
+                                                                                                     && app.AppointmentDate == appointmentDate
+                                                                                                     && app.AppointmentStartTime >= w.WorkStartTime
+                                                                                                     && app.AppointmentEndTime <= w.WorkEndTime).Count()))
+                                                                                                     .Include("User")
+                                                                                                     .Include("User.Messages")
+                                                                                                     .Include("User.Roles")
+                                                                                                     .Include("WorkingHours")
+                                                                                                     .Include("AppointmentCost")
+                                                                                                     .OrderBy(i => i.MedicalSpecialty)
+                                                                                                     .ThenBy(i => i.User.LastName)
+                                                                                                     .ThenBy(i => i.User.FirstName)
+                                                                                                     .ToList();
+                    }
+                    else
+                    {
+                        doctors = db.Doctors.Where(doctor => users.Any(user => user.IsActive == true && user.Id == doctor.UserId) 
+                                                                                                     && doctor.WorkingHours.Any(w => w.Day == appointmentDate.DayOfWeek 
+                                                                                                     && ((w.WorkEndTime - w.WorkStartTime).Value.TotalMinutes / w.AppointmentDuration) > db.Appointments.Where(app => app.DoctorId.Equals(doctor.UserId) 
+                                                                                                     && app.AppointmentDate == appointmentDate 
+                                                                                                     && app.AppointmentStartTime >= w.WorkStartTime 
+                                                                                                     && app.AppointmentEndTime <= w.WorkEndTime).Count()))
+                                                                                                     .Include("User")
+                                                                                                     .Include("User.Messages")
+                                                                                                     .Include("User.Roles")
+                                                                                                     .Include("WorkingHours")
+                                                                                                     .Include("AppointmentCost")
+                                                                                                     .OrderBy(i => i.MedicalSpecialty)
+                                                                                                     .ThenBy(i => i.User.LastName)
+                                                                                                     .ThenBy(i => i.User.FirstName)
+                                                                                                     .ToList();
+                    }
                 }
                 else
                 {
-                    doctors = db.Doctors.Where(doctor => users.Any(user => user.IsActive == true && user.Id == doctor.UserId)).Include("User")
-                                                                                                 // Needs to be lazy loaded even though we do not need it here. We may implement searching for messages, 
-                                                                                                 // so we cannot json ignore it in general
-                                                                                                 .Include("User.Messages")
-                                                                                                 .Include("User.Roles")
-                                                                                                 .Include("WorkingHours")
-                                                                                                 .Include("AppointmentCost")
-                                                                                                 .OrderBy(i => i.MedicalSpecialty)
-                                                                                                 .ThenBy(i => i.User.LastName)
-                                                                                                 .ThenBy(i => i.User.FirstName)
-                                                                                                 .ToList();
+                    if (doctorsSpecialty >= 0 && doctorsSpecialty < Enum.GetNames(typeof(MedicalSpecialty)).Length)
+                    {
+                        doctors = db.Doctors.Where(doctor => users.Any(user => user.IsActive == true && user.Id == doctor.UserId) && (int)doctor.MedicalSpecialty == doctorsSpecialty)
+                                                                                                      .Include("User")
+                                                                                                      .Include("User.Messages")
+                                                                                                      .Include("User.Roles")
+                                                                                                      .Include("WorkingHours")
+                                                                                                      .Include("AppointmentCost")
+                                                                                                      .OrderBy(i => i.MedicalSpecialty)
+                                                                                                      .ThenBy(i => i.User.LastName)
+                                                                                                      .ThenBy(i => i.User.FirstName)
+                                                                                                      .ToList();
+                    }
+                    else
+                    {
+                        doctors = db.Doctors.Where(doctor => users.Any(user => user.IsActive == true && user.Id == doctor.UserId))
+                                                                                                     .Include("User")
+                                                                                                     .Include("User.Messages")
+                                                                                                     .Include("User.Roles")
+                                                                                                     .Include("WorkingHours")
+                                                                                                     .Include("AppointmentCost")
+                                                                                                     .OrderBy(i => i.MedicalSpecialty)
+                                                                                                     .ThenBy(i => i.User.LastName)
+                                                                                                     .ThenBy(i => i.User.FirstName)
+                                                                                                     .ToList();
+                    }
                 }
             }
 

@@ -298,6 +298,7 @@
     <Compile Include="Models\Insured.cs" />
     <Compile Include="Models\InsuredPlan.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\PayAppointmentChargeViewModel.cs" />
     <Compile Include="Models\ProfileDetailsViewModel.cs" />
     <Compile Include="Repositories\MessagesRepository.cs" />
     <Compile Include="Models\SearchLoginViewModel.cs" />
@@ -528,6 +529,7 @@
     <Content Include="Views\Insureds\Doctors.cshtml" />
     <Content Include="Views\Shared\_AppointmentsList.cshtml" />
     <Content Include="Views\Insureds\SuccessfulBooking.cshtml" />
+    <Content Include="Views\Payments\PayAppointmentCharge.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -292,17 +292,20 @@ namespace GreekHealthcareNetwork.Repositories
             }
         }
 
-        public void AddAppointment(Appointment appointment)
+        public int AddAppointment(Appointment appointment)
         {
             if (appointment == null)
             {
                 throw new ArgumentNullException("appointment");
             }
+            int id;
             using (var db = new ApplicationDbContext())
             {
                 db.Appointments.Add(appointment);
                 db.SaveChanges();
+                id = appointment.Id;
             }
+            return id;
         }
     }
 }
