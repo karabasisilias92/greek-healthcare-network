@@ -27,6 +27,10 @@ namespace GreekHealthcareNetwork.Models
         [ForeignKey("InsuredId")]
         public virtual Insured Insured { get; set; }
 
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "money")]
+        public decimal InsuredAppointmentCharge { get; set; }
+
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
         [Required]
