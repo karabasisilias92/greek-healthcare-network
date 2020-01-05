@@ -528,6 +528,7 @@
     <Content Include="Views\Account\ClientRegister.cshtml" />
     <Content Include="Views\Insureds\Doctors.cshtml" />
     <Content Include="Views\Shared\_AppointmentsList.cshtml" />
+    <Content Include="Views\Shared\_ModalCancelAppointmentPartial.cshtml" />
     <Content Include="Views\Insureds\SuccessfulBooking.cshtml" />
     <Content Include="Views\Payments\PayAppointmentCharge.cshtml" />
   </ItemGroup>

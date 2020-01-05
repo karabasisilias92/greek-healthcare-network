@@ -257,6 +257,7 @@ namespace GreekHealthcareNetwork.Repositories
                                              .Include("Doctor.User.Roles")
                                              .Include("Insured")
                                              .Include("Insured.User")
+                                             .Include("Insured.InsuredPlan")
                                              .Include("Insured.User.Roles")
                                              .SingleOrDefault(d => d.Id.Equals(appointmentId));
                 return appointment;
