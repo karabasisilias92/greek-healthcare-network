@@ -184,6 +184,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AppointmentsController.cs" />
     <Compile Include="Controllers\DoctorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InsuredsController.cs" />
@@ -521,6 +522,7 @@
     <Content Include="Views\Account\ClientPayInsuredPlan.cshtml" />
     <Content Include="Views\Account\ClientRegister.cshtml" />
     <Content Include="Views\Insureds\Doctors.cshtml" />
+    <Content Include="Views\Shared\_AppointmentsList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

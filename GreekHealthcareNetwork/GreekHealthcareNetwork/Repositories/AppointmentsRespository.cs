@@ -36,7 +36,33 @@ namespace GreekHealthcareNetwork.Repositories
                 var appDay = appointmentDay.Date.ToString("yyyy-MM-dd");
                 if (HttpContext.Current.User.IsInRole("Doctor"))
                 {
-                    if (appDay != "0001-01-01")
+                    if (appDay != "0001-01-01" && HttpContext.Current.Request.UrlReferrer.ToString().EndsWith("Appointments"))
+                    {
+                        appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.DoctorId == userId && appointment.AppointmentDate == appointmentDay && appointment.AppointmentStatus == AppointmentStatus.Upcoming)
+                                                                                                                 .Include("Doctor")
+                                                                                                                 .Include("Doctor.WorkingHours")
+                                                                                                                 .Include("Doctor.AppointmentCost")
+                                                                                                                 .Include("Doctor.User")
+                                                                                                                 .Include("Doctor.User.Roles")
+                                                                                                                 .Include("Insured")
+                                                                                                                 .Include("Insured.User")
+                                                                                                                 .Include("Insured.User.Roles")
+                                                                                                                 .ToList();
+                    }
+                    else if (HttpContext.Current.Request.UrlReferrer.ToString().EndsWith("Appointments"))
+                    {
+                        appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.DoctorId == userId && appointment.AppointmentStatus == AppointmentStatus.Upcoming)
+                                                                                                                 .Include("Doctor")
+                                                                                                                 .Include("Doctor.WorkingHours")
+                                                                                                                 .Include("Doctor.AppointmentCost")
+                                                                                                                 .Include("Doctor.User")
+                                                                                                                 .Include("Doctor.User.Roles")
+                                                                                                                 .Include("Insured")
+                                                                                                                 .Include("Insured.User")
+                                                                                                                 .Include("Insured.User.Roles")
+                                                                                                                 .ToList();
+                    }
+                    else if (appDay != "0001-01-01")
                     {
                         appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.DoctorId == userId && appointment.AppointmentDate == appointmentDay)
                                                                                                                  .Include("Doctor")
@@ -254,6 +280,16 @@ namespace GreekHealthcareNetwork.Repositories
                                               .ToList();
             }
             return appointments;
+        }
+
+        public void CancelAppointment(int appointmentId)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var appointment = db.Appointments.SingleOrDefault(m => m.Id == appointmentId);
+                appointment.AppointmentStatus = AppointmentStatus.Canceled;
+                db.SaveChanges();
+            }
         }
     }
 }
