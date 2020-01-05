@@ -30,7 +30,7 @@ namespace GreekHealthcareNetwork.Controllers
         {
             return Ok(_message.GetAllMessages(UserId));
         }
-        
+
         [System.Web.Http.HttpPost]
         [ValidateAntiForgeryToken]
         [System.Web.Mvc.AllowAnonymous]
@@ -40,12 +40,16 @@ namespace GreekHealthcareNetwork.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if(model.Message != null)
+            if (model.Message != null)
             {
                 model.Message.SentDate = DateTime.Now.Date;
                 model.Message.SentTime = DateTime.Now.TimeOfDay;
                 model.Message.MessageStatus = MessageStatus.Unread;
-                model.Message.ConversationId = _message.NewConversationId() + 1;
+                if (model.Message.ConversationId == 0)
+                {
+                    model.Message.ConversationId = _message.NewConversationId() + 1;
+                }
+
                 try
                 {
                     _message.Add(model.Message);
@@ -75,6 +79,18 @@ namespace GreekHealthcareNetwork.Controllers
             }
             return ResponseMessage(Request.CreateResponse(HttpStatusCode.Created));
             //h return Ok();
+        }
+
+
+        [System.Web.Http.HttpPut, System.Web.Http.HttpPatch]
+        public IHttpActionResult Update(Message message)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            _message.UpdateMessage(message);
+            return Ok();
         }
     }
 }

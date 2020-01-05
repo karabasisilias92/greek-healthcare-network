@@ -267,6 +267,7 @@
                         if ($form.valid()) {
                             let model = new Object();
                             model.Message = new Object();
+                            model.Message.ConversationId = 0;
                             model.Message.SenderId = $('#Message_SenderId').val();
                             model.Message.RecipientId = $('#Message_RecipientId').val();
                             model.Message.Subject = $('#Message_Subject').val();
@@ -334,7 +335,6 @@
                             });
                         }
                     })
-
                     $('.showDoctorDetails').click(function (e) {
                         let id = $(e.target).data('id');
                         $.ajax({
@@ -390,6 +390,10 @@
                         $('#normalContainerMessage').show();
                         $('#newMessage').modal('show');
                     })
+                    $("#newMessage").on("hidden.bs.modal", function () {
+                        $('#Message_Subject').val("");
+                        $('#Message_MessageText').val("");
+                    });
                     $('.bookAppointments').click(function (e) {
                         let id = $(e.target).data('id');
                         $.ajax({
