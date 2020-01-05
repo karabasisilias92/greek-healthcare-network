@@ -11,12 +11,15 @@ namespace GreekHealthcareNetwork.Controllers
     public class AppointmentsController : Controller
     {
         private readonly AppointmentsRespository _appointmentsRespository = new AppointmentsRespository();
+        private readonly DoctorsRepository _doctorssRespository = new DoctorsRepository();
+        private readonly InsuredsRepository _insuredRespository = new InsuredsRepository();
 
         // GET: Appointments
         public ActionResult CancelAppointmentDetails(int appointmentId)
         {
-
-            return PartialView();
+            var appointment = new Appointment();
+            appointment = _appointmentsRespository.GetAppointmentById(appointmentId);
+            return PartialView("_ModalCancelAppointmentPartial", appointment);
         }
 
         [HttpPost]

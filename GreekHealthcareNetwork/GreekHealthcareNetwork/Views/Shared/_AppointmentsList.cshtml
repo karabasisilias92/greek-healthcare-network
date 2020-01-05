@@ -100,20 +100,22 @@
 </div>
 
 <div class="modal fade" id="confirm-cancel-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-cancel-modalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4>Appointment Cancellation</h4>
+    <div id="myModalContent">
+        @*<div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>Appointment Cancellation</h4>
+                </div>
+                <div class="modal-body">
+                    <p>You are about to cancel your appointment on @Model.AppointmentDate with the @Model.DoctorSpecialty Dr.</p>
+                    <p>Are still want to cancel it?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    <a class="btn btn-danger btn-ok">Yes</a>
+                </div>
             </div>
-            <div class="modal-body">
-                <p>You are about to cancel your appointment on @Model.AppointmentDate with the @Model.DoctorSpecialty Dr.</p>
-                <p>Are still want to cancel it?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                <a class="btn btn-danger btn-ok">Yes</a>
-            </div>
-        </div>
+        </div>*@
     </div>
 </div>
 
@@ -233,8 +235,22 @@
                             });
                             $('.cancel-appointment').click(function (e) {
                                 let id = $(e.target).data('id');
-                                $('.btn-ok').attr('data-id', id);
-                                $('#confirm-cancel-modal').modal('show');
+                                $.ajax({
+                                    type: "GET",
+                                    url: '/Appointments/CancelAppointmentDetails',
+                                    contentType: "application/json; charset=utf-8",
+                                    data: { "appointmentId": id },
+                                    datatype: "json",
+                                    success: function (data) {
+                                        debugger;
+                                        $('#myModalContent').html(data);
+                                        $('#confirm-cancel-modal').modal('show');
+                                        $('.btn-ok').attr('data-id', id);
+                                    },
+                                    error: function () {
+                                        alert("Dynamic content load failed.");
+                                    }
+                                });
                             });
 
                             $('.btn-ok').click(function (e) {

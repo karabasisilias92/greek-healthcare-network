@@ -527,6 +527,7 @@
     <Content Include="Views\Account\ClientRegister.cshtml" />
     <Content Include="Views\Insureds\Doctors.cshtml" />
     <Content Include="Views\Shared\_AppointmentsList.cshtml" />
+    <Content Include="Views\Shared\_ModalCancelAppointmentPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,30 @@
+﻿@model GreekHealthcareNetwork.Models.Appointment
+    @{ 
+        var refundAmount = (Model.InsuredAppointmentCharge * Convert.ToDecimal(Model.Insured.InsuredPlan.CancelationRefundPercentage)) * 0.01m;
+        var fullRefund = Model.InsuredAppointmentCharge;
+        string[] date = Model.AppointmentDate.ToString().Split(null);
+    }
+
+<div class="modal-dialog modal-xl">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>Appointment Cancellation</h4>
+        </div>
+        <div class="modal-body">
+            <h5>You are about to cancel your appointment on @date[0] with the @Model.Doctor.MedicalSpecialty Dr. @Model.Doctor.User.FirstName @Model.Doctor.User.LastName</h5>
+            @if (((int)(Model.AppointmentDate - DateTime.Now.Date).Days < 3) && (Model.Insured.InsuredPlan.Name == "Bronze" || Model.Insured.InsuredPlan.Name == "Silver"))
+            {
+                  <h5>Since the appointment is less than 3 day away you will get a refund of @Model.Insured.InsuredPlan.CancelationRefundPercentage% (@decimal.Truncate(refundAmount) &euro;) </h5>
+            }
+            else
+            {
+                <h5>You will get a full refund (@decimal.Truncate(fullRefund) &euro;)</h5>
+            }
+            <h5>Do you still want to cancel it?</h5>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+            <a class="btn btn-danger btn-ok">Yes</a>
+        </div>
+    </div>
+</div>
