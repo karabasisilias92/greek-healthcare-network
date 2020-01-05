@@ -195,6 +195,7 @@
                         if ($form.valid()) {
                             let model = new Object();
                             model.Message = new Object();
+                            model.Message.ConversationId = 0;
                             model.Message.SenderId = $('#Message_SenderId').val();
                             model.Message.RecipientId = $('#Message_RecipientId').val();
                             model.Message.Subject = $('#Message_Subject').val();
@@ -262,7 +263,6 @@
                             });
                         }
                     })
-
                     $('.showDoctorDetails').click(function (e) {
                         let id = $(e.target).data('id');
                         $.ajax({
@@ -314,10 +314,14 @@
                         let id = $(e.target).data('id');
                         $('#errorContainerMessage').hide();
                         $('#successContainerMessage').hide();
-                        $('#Message_RecipientId').val(id);
+                        $('#Message_RecipientId').val(id);//auto xrhsimopoieis-allazeis to id.
                         $('#normalContainerMessage').show();
                         $('#newMessage').modal('show');
                     })
+                    $("#newMessage").on("hidden.bs.modal", function () {
+                        $('#Message_Subject').val("");
+                        $('#Message_MessageText').val("");
+                    });
                     $('.bookAppointments').click(function (e) {
                         let id = $(e.target).data('id');
                         function listAvailableAppointments(date) {
