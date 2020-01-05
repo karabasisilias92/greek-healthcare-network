@@ -280,6 +280,10 @@
     <Compile Include="Migrations\202001032033032_FixMessageRelationships.Designer.cs">
       <DependentUpon>202001032033032_FixMessageRelationships.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001051516086_InsuredAppointmentCharge property in Appointments.cs" />
+    <Compile Include="Migrations\202001051516086_InsuredAppointmentCharge property in Appointments.Designer.cs">
+      <DependentUpon>202001051516086_InsuredAppointmentCharge property in Appointments.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -606,6 +610,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001032033032_FixMessageRelationships.resx">
       <DependentUpon>202001032033032_FixMessageRelationships.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001051516086_InsuredAppointmentCharge property in Appointments.resx">
+      <DependentUpon>202001051516086_InsuredAppointmentCharge property in Appointments.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

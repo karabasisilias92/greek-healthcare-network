@@ -13,16 +13,18 @@ namespace GreekHealthcareNetwork.Controllers
         private readonly AppointmentsRespository _appointmentsRespository = new AppointmentsRespository();
 
         // GET: Appointments
-        public ActionResult Index()
+        public ActionResult CancelAppointmentDetails(int appointmentId)
         {
-            return View();
+
+            return PartialView();
         }
 
         [HttpPost]
         public ActionResult CancelAppointment(int appointmentId)
         {
-            _appointmentsRespository.CancelAppointment(appointmentId);
+            //_appointmentsRespository.CancelAppointment(appointmentId);
             // code for sending message
+            // Tha allazei ton arithmo twn bookedApointments kata -1???
             return Json("Success");
         }
     }
