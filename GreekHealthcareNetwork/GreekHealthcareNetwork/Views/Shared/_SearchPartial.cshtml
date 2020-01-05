@@ -27,7 +27,7 @@
             }
 
         }
-        @if (!ViewBag.Title.Contains("Home") && (User.IsInRole("Insured") || User.IsInRole("Doctor"))@* Check vies is different to Home index *@ /**/
+        @if (!ViewBag.Title.Contains("Home") && ((User.IsInRole("Insured") && !ViewBag.Title.Contains("Doctors")) || User.IsInRole("Doctor"))@* Check vies is different to Home index *@ /**/
                                                                                                                                     /**/
                                                                                                                                     )
                     {

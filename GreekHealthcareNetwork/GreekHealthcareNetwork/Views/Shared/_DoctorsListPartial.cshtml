@@ -1,6 +1,8 @@
 ﻿@model GreekHealthcareNetwork.Models.SearchLoginViewModel
+@using Microsoft.AspNet.Identity;
 @{
     Layout = "~/Views/Shared/_CustomScriptsLayout.cshtml";
+    var CurrentUserId = User.Identity.GetUserId();
 }
 
 <div class="col-12">
@@ -95,12 +97,18 @@
                                 <div class="col-md-12">
                                     <img src="" class="rounded-circle w-100 h-100" alt="">
                                 </div>
-                            </div>                            
+                            </div>
                         </div>
                         <div class="col-md-8">
                             <div class="row" id="bookapointmentsection">
                                 <div class="col-md-12">
                                     <form method="post" action="/Insureds/BookAppointment">
+                                        <div class="form-group">
+                                            @Html.HiddenFor(m => m.Appointment.DoctorId)
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.HiddenFor(m => m.Appointment.InsuredId)
+                                        </div>
                                         <div class="form-group">
                                             @Html.LabelFor(m => m.Appointment.AppointmentDate, new { @class = "col-md-12 control-label" })
                                             <div class="col-md-10">
@@ -108,21 +116,31 @@
                                                 @Html.ValidationMessageFor(m => m.Appointment.AppointmentDate, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        <div id="NoAvailableAppointments" class="form-group">
+                                            <div class="row">
+                                                <p> We are sorry but all the doctor's appointments are booked on this day. Please try choose another day. </p>
+                                            </div>
+                                        </div>
+                                        <div id="NoWorkingDay" class="form-group">
+                                            <div class="row">
+                                                <p> We are sorry but the doctor does not work on this day. Please try choose another day. </p>
+                                            </div>
+                                        </div>
+                                        <div id="appointmentTime" class="form-group">
                                             @Html.LabelFor(m => m.Appointment.AppointmentStartTime, new { @class = "col-md-12 control-label" })
                                             <div class="col-md-10">
-                                                @Html.DropDownListFor(m => m.Appointment.AppointmentStartTime, new SelectList(new List<Object>()) , "-- Select Time --" ,new { @class = "form-control"})
+                                                @Html.DropDownListFor(m => m.Appointment.AppointmentStartTime, new SelectList(new List<Object>()), new { @class = "form-control" })
                                                 @Html.ValidationMessageFor(m => m.Appointment.AppointmentStartTime, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        <div id="insuredComments" class="form-group">
                                             @Html.LabelFor(m => m.Appointment.InsuredComments, new { @class = "col-md-12 control-label" })
                                             <div class="col-md-10">
-                                                @Html.TextAreaFor(m => m.Appointment.InsuredComments, new { @class = "form-control"})
+                                                @Html.TextAreaFor(m => m.Appointment.InsuredComments, new { @class = "form-control" })
                                                 @Html.ValidationMessageFor(m => m.Appointment.InsuredComments, "", new { @class = "text-danger" })
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        <div id="bookAppointmentButton" class="form-group">
                                             <div class="col-md-offset-2 col-md-10">
                                                 <input type="submit" class="btn btn-outline-dark" value="Book Appointment" />
                                             </div>
@@ -173,7 +191,40 @@
 @section customScripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
-    $(document).ready(function () {
+        $(document).ready(function () {
+        function listAvailableAppointments(date, doctorId) {
+            $.ajax({
+                dataType: 'json',
+                type: 'get',
+                url: '/api/Search/GetAvailableAppointmentSlots?appointmentDay=' + date + '&doctorId=' + doctorId,
+                success: function (data) {
+                    $('#NoWorkingDay').hide();
+                    if (data.length == 0) {
+                        $('#appointmentTime').hide();
+                        $('#insuredComments').hide();
+                        $('#bookAppointmentButton').hide();
+                        $('#NoAvailableAppointments').show();
+                    }
+                    else {
+                        $('#NoAvailableAppointments').hide();
+                        $('#appointmentTime').show();
+                        $('#insuredComments').show();
+                        $('#bookAppointmentButton').show();
+                    }
+                    $('#normalContainerBook').show();
+                    $('#bookAppointments').modal('show');
+                },
+                error: function () {
+                    $('#appointmentTime').hide();
+                    $('#insuredComments').hide();
+                    $('#bookAppointmentButton').hide();
+                    $('#NoAvailableAppointments').hide();
+                    $('#NoWorkingDay').show();
+                    $('#normalContainerBook').show();
+                    $('#bookAppointments').modal('show');
+                }
+            })
+        }
         function ListDoctors(firstName, lastName, specialty) {
             $.ajax({
                 dataType: 'json',
@@ -329,9 +380,7 @@
                     })
                     $('.bookAppointments').click(function (e) {
                         let id = $(e.target).data('id');
-                        function listAvailableAppointments(date) {
-
-                        }
+                        
                         $.ajax({
                             url: '/api/Search/SearchDoctorById/' + id,
                             type: 'get',
@@ -366,17 +415,24 @@
                                         elem = $(elem).next();
                                     }
                                 }
-                                const appointmentDate = $('#AppointmentDate').val();
-                                $('#date').val(appointmentDate);
-
-                              @*implement here creation of appointment select list*@
-
-
+                                const appointmentDate = $('#AppointmentDate').val();  
                                 $('#doctorEmailBook').text(doctor.User.Email);
                                 $('#doctorTelephoneBook').text(doctor.User.PhoneNumber);
-                                $('#normalContainerBook').show();
-                                $('#bookAppointments').modal('show');
-
+                                $('#Appointment_DoctorId').val(doctor.UserId);
+                                $('#Appointment_InsuredId').val('@CurrentUserId');
+                                $('#Appointment_AppointmentDate').val(appointmentDate);
+                                if (appointmentDate == "" || appointmentDate == undefined) {
+                                    $('#appointmentTime').hide();
+                                    $('#insuredComments').hide();
+                                    $('#bookAppointmentButton').hide();
+                                    $('#NoAvailableAppointments').hide();
+                                    $('#NoWorkingDay').hide();
+                                    $('#normalContainerBook').show();
+                                    $('#bookAppointments').modal('show');
+                                }
+                                else {
+                                    listAvailableAppointments(appointmentDate, doctor.UserId);                                    
+                                }                                
                             },
                             error: function () {
                                 $('#normalContainerBook').hide();
@@ -397,6 +453,24 @@
         $('#search').on('submit', function (e) {
             e.preventDefault();
             ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value);
+        })
+        $('#bookAppointments').on('hidden.bs.modal', function () {
+            $('#NoAvailableAppointments').hide();
+            $('#NoWorkingDay').hide();
+            $('#Appointment_InsuredComments').val('');
+        })
+        $('#Appointment_AppointmentDate').on('change', function () {
+            const appointmentDate = $('#Appointment_AppointmentDate').val();
+            if (appointmentDate == "") {
+                $('#appointmentTime').hide();
+                $('#insuredComments').hide();
+                $('#bookAppointmentButton').hide();
+                $('#NoAvailableAppointments').hide();
+                $('#NoWorkingDay').hide();
+            }
+            else {
+                listAvailableAppointments(appointmentDate, $('#Appointment_DoctorId').val());                                    
+            } 
         })
     })
     </script>
