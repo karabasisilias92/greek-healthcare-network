@@ -75,7 +75,7 @@
                                 <p class="text-success ml-3 mb-2"> Your message has been sent. </p>
                             </div>
                         </div>
-                        <div id="normalContainerNewMessage" class="container">
+                        <div id="normalContainerSentMessage" class="container">
                             <form id="sentmessagearea" class="form-horizontal">
                                 @Html.AntiForgeryToken()
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -85,20 +85,18 @@
                                 <div class="form-group">
                                     <input value="!Doctor123" class="input-validation-error" data-val="true" data-val-required="Password is Reguired." id="Password1" name="Password" type="hidden"><!--Unused, here just to supress validation error messages-->
                                 </div>
-                                <div class="form-group" id="senderId">
+                                <div class="form-group">
                                     @Html.HiddenFor(m => m.Message.SenderId, new { @Value = CurrentUserId })
                                 </div>
-                                <div class="form-group" id="recipientId">
+                                <div class="form-group">
                                     @Html.HiddenFor(m => m.Message.RecipientId)
                                 </div>
-                                <div class="form-group" id="messageconversationid">
+                                <div class="form-group">
                                     @Html.HiddenFor(m => m.Message.ConversationId)
                                 </div>
                                 <div class="form-group">
-                                    @Html.LabelFor(m => m.Message.Subject, new { @class = "col-md-12 control-label" })
                                     <div class="col-md-10">
                                         @Html.HiddenFor(m => m.Message.Subject)
-                                        @Html.ValidationMessageFor(m => m.Message.Subject, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -108,8 +106,11 @@
                                         @Html.ValidationMessageFor(m => m.Message.MessageText, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
-                                <textarea class="form-control" id="areaforinfo" style="min-width: 100%"></textarea>
-                                <button type="button" class="btn btn-default" data-dismiss="modal" id="reply">Reply</button>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <input type="submit" class="btn btn-outline-dark" id="reply" value="Reply" />
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -122,6 +123,7 @@
 
 
 @section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
     <script>
 
         $(document).ready(function () {
@@ -140,6 +142,7 @@
                                     const tr = $(document.createElement('tr'));
                                     const userImage = $(document.createElement('td'));
                                     const image = $(document.createElement('img'));
+                                    $(tr).attr('id', message.Id);
                                     @{
                                         string insuredRoleId = Users.GetRoleIdByName("Insured");
                                         string doctorRoleId = Users.GetRoleIdByName("Doctor");
@@ -193,6 +196,7 @@
                                     $(view).text('View');
                                     $(view).addClass('btn btn-light viewBtn');
                                     $(view).attr('data-id', message.Id);
+                                
 
                                     $(action).append(view);
 
@@ -208,20 +212,37 @@
                                     success: function (message) {
                                         $('#errorContainerMessage').hide();
                                         $('#successContainerMessage').show();
-                                        $('#messageconversationid').val();
-                                        let model = new Object();
-                                        if (message.status == 'sent') {
-                                            model.Message.RecipientId = $('#recipientId').val();
-                                        }
-                                        else {
-                                            model.Message.RecipientId = $('#senderId').val();
-                                        }
-                                        //kai na kanw ton elegxo gia to recipientid
+                                        $('#successContainerSentMessage').hide();
+                                        $('#errorContainerSentMessage').hide();
+                                        $('#normalContainerSentMessage').show();
+                                        $('#Message_ConversationId').val(message.ConversationId);
+                                        $('#Message_Subject').val(message.Subject);
+                                        $('#reply').attr('data-id', message.Id);
+                                        $(e.target).parent().parent().removeClass('font-weight-bold');
+                                        let model = message;
+                                        model.MessageStatus = 'Read';
+                                        model = JSON.stringify(model);
+                                        $.ajax({
+                                            contentType: 'application/json',
+                                            type: 'put',
+                                            data: model,
+                                            url: '/api/Messages',
+                                            success: function () {
+                                                console.log('success')
+                                            },
+                                            error: function () {
+                                                console.log('error')
+                                            }
+                                        })
                                         let elem = $('#messageFor');
                                         if (message.SenderId == "@CurrentUserId") {
+                                            $('#Message_SenderId').val(message.SenderId);
+                                            $('#Message_RecipientId').val(message.RecipientId);
                                             $(elem).html('<b>Message to:</b> ' + message.Recipient.FirstName + ' ' + message.Recipient.LastName)
                                         }
                                         else {
+                                            $('#Message_SenderId').val(message.RecipientId);
+                                            $('#Message_RecipientId').val(message.SenderId);
                                             $(elem).html('<b>Message from:</b> ' + message.Sender.FirstName + ' ' + message.Sender.LastName)
                                         }
                                         $('#subject').html('<b>Subject:</b> ' + message.Subject);
@@ -245,6 +266,7 @@
                 })
             }
             $('#reply').click(function (e) {
+                e.preventDefault();
                 const $form = $('#sentmessagearea');
                 $.validator.unobtrusive.parse($form);
                 $form.validate();
@@ -270,18 +292,54 @@
                     $.ajax({
                         contentType: 'application/json',
                         type: 'post',
-                        url: '/api/Messages/model',
+                        url: '/api/Messages',
                         data: model,
                         cache: false,
                         processData: false,
                         success: function () {
+                            let id = $('#reply').data('id');
+                            $.ajax({
+                                dataType: 'json',
+                                type: 'get',
+                                url: '/api/Messages?&id=' + id,
+                                success: function (message) {
+                                    const tr = $('#' + message.Id);
+                                    if (message.SenderId != "@CurrentUserId") {
+                                        $(tr).addClass('text-success');
+                                        $(tr).addClass('font-italic');
+                                        $(tr).removeClass('font-weight-bold');
+                                    }
+                                    let m = message;
+                                    m.MessageStatus = 'Replied';
+                                    m = JSON.stringify(m);                           
+                                    $.ajax({
+                                        contentType: 'application/json',
+                                        type: 'put',
+                                        data: m,
+                                        url: '/api/Messages',
+                                        success: function () {
+                                            console.log('success')
+                                        },
+                                        error: function () {
+                                            console.log('error')
+                                        }
+                                    })
+                                },
+                                error: function (error) {
+                                    console.log(error)
+                                }
+
+                            });                                
                             $('#Message_MessageText').val("");
-                            $('#normalContainerSentMessage').show();
+                            $('#normalContainerSentMessage').hide();
                             $('#errorContainerSentMessage').hide();
-                            $('#successContainerSentMessage').hide();
+                            $('#successContainerSentMessage').show();
+                            setTimeout(function () {
+                                $('#viewMessage').modal("hide");
+                            }, 3000)
                         },
                         error: function (error) {
-                            $('#errorContainerNewMessage').show();
+                            $('#errorContainerSentMessage').show();
                             const errorObject = error.responseJSON.ModelState;
                             $('#sentmessagearea div.validation-summary-errors > ul').children().remove();
                             for (var property in errorObject) {
@@ -291,7 +349,7 @@
                                     }
                                 }
                             }
-                            const $form = $('#newmessagearea');
+                            const $form = $('#sentmessagearea');
                             $.validator.unobtrusive.parse($form);
                             $form.validate();
                             if (!$form.valid()) {
@@ -305,7 +363,7 @@
                     });
                 }
                 else {
-                    $('#errorContainerMessage').show();
+                    $('#errorContainerSentMessage').show();
                     console.log($form.validate().errorList);
                     $.each($form.validate().errorList, function (key, value) {
                         console.log(value);
