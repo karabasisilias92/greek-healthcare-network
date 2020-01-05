@@ -75,7 +75,7 @@
             <div class="form-group col-md-4">
                 @Html.LabelFor(m => m.DoB, new { @class = "col-md-6 control-label" })
                 <div class="col-md-10">
-                    @Html.TextBoxFor(m => m.DoB, new { @class = "form-control", type = "date" })
+                    @Html.TextBoxFor(m => m.DoB, new { @class = "form-control", type = "date", max = DateTime.Now.Date.ToString("yyyy-MM-dd") })
                     @Html.ValidationMessageFor(m => m.DoB, "", new { @class = "text-danger" })
                 </div>
             </div>

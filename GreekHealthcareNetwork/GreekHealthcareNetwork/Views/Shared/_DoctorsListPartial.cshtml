@@ -103,6 +103,8 @@
                             <div class="row" id="bookapointmentsection">
                                 <div class="col-md-12">
                                     <form method="post" action="/Insureds/BookAppointment">
+                                        @Html.AntiForgeryToken()
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                                         <div class="form-group">
                                             @Html.HiddenFor(m => m.Appointment.DoctorId)
                                         </div>
@@ -142,7 +144,7 @@
                                         </div>
                                         <div id="bookAppointmentButton" class="form-group">
                                             <div class="col-md-offset-2 col-md-10">
-                                                <input type="submit" class="btn btn-outline-dark" value="Book Appointment" />
+                                                <input id="bookAppointment" type="submit" class="btn btn-outline-dark" value="Book Appointment" />
                                             </div>
                                         </div>
                                     </form>
@@ -210,6 +212,16 @@
                         $('#appointmentTime').show();
                         $('#insuredComments').show();
                         $('#bookAppointmentButton').show();
+                        const selectTime = $('#Appointment_AppointmentStartTime');
+                        $(selectTime).children().remove();
+                        data.forEach(function (appointmentSlot) {
+                            const splittedStartTime = appointmentSlot.AppointmentStartTime.split(':');
+                            const splittedEndTime = appointmentSlot.AppointmentEndTime.split(':');
+                            const option = $(document.createElement('option'));
+                            $(option).text(splittedStartTime[0] + ':' + splittedStartTime[1] + ' - ' + splittedEndTime[0] + ':' + splittedEndTime[1]);
+                            $(option).val(appointmentSlot.AppointmentStartTime);
+                            $(selectTime).append(option);
+                        });
                     }
                     $('#normalContainerBook').show();
                     $('#bookAppointments').modal('show');
@@ -380,7 +392,6 @@
                     })
                     $('.bookAppointments').click(function (e) {
                         let id = $(e.target).data('id');
-                        
                         $.ajax({
                             url: '/api/Search/SearchDoctorById/' + id,
                             type: 'get',
@@ -415,7 +426,7 @@
                                         elem = $(elem).next();
                                     }
                                 }
-                                const appointmentDate = $('#AppointmentDate').val();  
+                                const appointmentDate = $('#AppointmentDate').val();
                                 $('#doctorEmailBook').text(doctor.User.Email);
                                 $('#doctorTelephoneBook').text(doctor.User.PhoneNumber);
                                 $('#Appointment_DoctorId').val(doctor.UserId);
@@ -431,8 +442,8 @@
                                     $('#bookAppointments').modal('show');
                                 }
                                 else {
-                                    listAvailableAppointments(appointmentDate, doctor.UserId);                                    
-                                }                                
+                                    listAvailableAppointments(appointmentDate, doctor.UserId);
+                                }
                             },
                             error: function () {
                                 $('#normalContainerBook').hide();
@@ -450,6 +461,12 @@
             })
         }
         ListDoctors('', '', -1);
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        const year = today.getFullYear();
+        $('#AppointmentDate').attr('min', year + '-' + month + '-' + day);
+        $('#Appointment_AppointmentDate').attr('min', year + '-' + month + '-' + day);        
         $('#search').on('submit', function (e) {
             e.preventDefault();
             ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value);
@@ -469,8 +486,8 @@
                 $('#NoWorkingDay').hide();
             }
             else {
-                listAvailableAppointments(appointmentDate, $('#Appointment_DoctorId').val());                                    
-            } 
+                listAvailableAppointments(appointmentDate, $('#Appointment_DoctorId').val());
+            }
         })
     })
     </script>
