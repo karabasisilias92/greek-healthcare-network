@@ -814,6 +814,10 @@ doctors section
     min-width: 160px;
 }
 
+#profilesectionBook th {
+    min-width: 160px;
+}
+
 #doctorsList .img-thumbnail button {
     margin: 5px 20px 10px 0px;
 }

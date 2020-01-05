@@ -85,5 +85,64 @@ namespace GreekHealthcareNetwork.Controllers
             }
             return Ok(appointment);
         }
+
+        [HttpGet]
+        [Route("api/Search/GetAvailableAppointmentSlots")]
+        public IHttpActionResult GetAvailableAppointmentSlots(DateTime appointmentDay, string doctorId)
+        {
+            var doctor = _doctors.GetDoctorById(doctorId);
+            var workingHoursOfDay = doctor.WorkingHours.Where(w => w.Day == appointmentDay.DayOfWeek).ToList();
+            if (workingHoursOfDay == null || workingHoursOfDay.Count() == 0)
+            {
+                return NotFound();
+            }
+            var appointmentSlots = new List<Appointment>();
+            var appointments = _appointments.GetDoctorAppointmentsOnDate(appointmentDay, doctorId);
+            var appointmentsStartTime = appointments.Select(app => app.AppointmentStartTime).ToList();
+            if (appointments == null || appointments.Count() == 0)
+            {
+                foreach (var item in workingHoursOfDay)
+                {
+                    var startTime = item.WorkStartTime;
+                    var endTime = item.WorkEndTime;
+                    var appDuration = item.AppointmentDuration;
+                    while (startTime < endTime)
+                    {
+                        var appointment = new Appointment();
+                        appointment.Doctor = null;
+                        appointment.Insured = null;
+                        appointment.AppointmentDate = appointmentDay;
+                        appointment.AppointmentStartTime = (TimeSpan)startTime;
+                        appointment.AppointmentEndTime = (TimeSpan)startTime + new TimeSpan(0, appDuration, 0);
+                        appointmentSlots.Add(appointment);
+                        startTime = appointment.AppointmentEndTime;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var item in workingHoursOfDay)
+                {
+                    var startTime = item.WorkStartTime;
+                    var endTime = item.WorkEndTime;
+                    var appDuration = item.AppointmentDuration;
+                    while (startTime < endTime)
+                    {   
+                        if (!appointmentsStartTime.Contains((TimeSpan)startTime))
+                        {
+                            var appointment = new Appointment();
+                            appointment.Doctor = null;
+                            appointment.Insured = null;
+                            appointment.AppointmentDate = appointmentDay;
+                            appointment.AppointmentStartTime = (TimeSpan)startTime;
+                            appointment.AppointmentEndTime = (TimeSpan)startTime + new TimeSpan(0, appDuration, 0);
+                            appointmentSlots.Add(appointment);
+                        }
+                        startTime += new TimeSpan(0, appDuration, 0);
+                    }
+                }
+            }
+            return Ok(appointmentSlots);
+        }
     }
 }

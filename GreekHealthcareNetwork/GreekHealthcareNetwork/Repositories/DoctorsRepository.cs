@@ -31,7 +31,9 @@ namespace GreekHealthcareNetwork.Repositories
                 {
                     users = db.Users;
                 }
-                doctors = db.Doctors.Where(doctor => users.Any(user => user.IsActive == true && user.Id == doctor.UserId)).Include("User")
+                if (doctorsSpecialty >= 0 && doctorsSpecialty < Enum.GetNames(typeof(MedicalSpecialty)).Length)
+                {
+                   doctors = db.Doctors.Where(doctor => users.Any(user => user.IsActive == true && user.Id == doctor.UserId) && (int)doctor.MedicalSpecialty == doctorsSpecialty).Include("User")
                                                                                                  // Needs to be lazy loaded even though we do not need it here. We may implement searching for messages, 
                                                                                                  // so we cannot json ignore it in general
                                                                                                  .Include("User.Messages")
@@ -42,10 +44,20 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                  .ThenBy(i => i.User.LastName)
                                                                                                  .ThenBy(i => i.User.FirstName)
                                                                                                  .ToList();
-
-                if (doctorsSpecialty >= 0 && doctorsSpecialty < Enum.GetNames(typeof(MedicalSpecialty)).Length)
+                }
+                else
                 {
-                    doctors = doctors.Where(doctor => (int)doctor.MedicalSpecialty == doctorsSpecialty).ToList();
+                    doctors = db.Doctors.Where(doctor => users.Any(user => user.IsActive == true && user.Id == doctor.UserId)).Include("User")
+                                                                                                 // Needs to be lazy loaded even though we do not need it here. We may implement searching for messages, 
+                                                                                                 // so we cannot json ignore it in general
+                                                                                                 .Include("User.Messages")
+                                                                                                 .Include("User.Roles")
+                                                                                                 .Include("WorkingHours")
+                                                                                                 .Include("AppointmentCost")
+                                                                                                 .OrderBy(i => i.MedicalSpecialty)
+                                                                                                 .ThenBy(i => i.User.LastName)
+                                                                                                 .ThenBy(i => i.User.FirstName)
+                                                                                                 .ToList();
                 }
             }
 

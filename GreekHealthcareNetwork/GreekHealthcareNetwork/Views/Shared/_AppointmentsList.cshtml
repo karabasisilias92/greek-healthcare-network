@@ -1,0 +1,283 @@
+﻿@model GreekHealthcareNetwork.Models.SearchLoginViewModel
+@using Microsoft.AspNet.Identity;
+@{
+    Layout = "~/Views/Shared/_CustomScriptsLayout.cshtml";
+    var CurrentUserId = User.Identity.GetUserId();
+}
+
+@section cssScripts{
+    <link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
+}
+
+<table class="table table-responsive mt-4">
+    <thead>
+        <tr>
+            <th scope="col"></th>
+            @if (User.IsInRole("Doctor"))
+            {
+                <th scope="col">Patient</th>
+            }
+            @if (User.IsInRole("Insured"))
+            {
+                <th scope="col">Doctor</th>
+                <th scope="col">Specialty</th>
+            }
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody id="appointmentsList">
+    </tbody>
+</table>
+
+<div class="modal fade" id="appointmentDetailsModal" tabindex="-1" role="dialog" aria-labelledby="appointmentDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="appointmentDetailsModalLabel">Appointment Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    @if (User.IsInRole("Doctor"))
+                    {
+                        <div class="col">
+                            <h4>Patient</h4>
+                            <div class="row mt-2">
+                                <div id="insuredsPicture" class="col-4">
+                                    <img class="rounded-circle" src="">
+                                </div>
+                                <div class="col-8">
+                                    <h5 id="insuredsFirstName"></h5>
+                                    <h5 id="insuredsLastName"></h5>
+                                    <p id="insuredsAge"></p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @if (User.IsInRole("Insured"))
+                    {
+                        <div class="col">
+                            <h4>Doctor</h4>
+                            <div class="row mt-2">
+                                <div id="doctorsPicture" class="col-4">
+                                    <img class="rounded-circle" src="">
+                                </div>
+                                <div class="col-8">
+                                    <h5 id="doctorsFirstName"></h5>
+                                    <h5 id="doctorsLastName"></h5>
+                                    <p id="Specialty"></p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <div class="col">
+                        <h4>Details</h4>
+                        <div class="mt-2">
+                            <p id="appointmentDateTime"></p>
+                            <p id="status"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col">
+                        <h6>@(User.IsInRole("Insured") ? "Your comments to Doctor:" : "Patient's comments:")</h6>
+                        <p id="patientComments"></p>
+                        @if (User.IsInRole("Doctor"))
+                        {
+                            <h6>Your Comments:</h6>
+                            <p id="doctorsComments"></p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-cancel-modal" tabindex="-1" role="dialog" aria-labelledby="confirm-cancel-modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Appointment Cancellation</h4>
+            </div>
+            <div class="modal-body">
+                <p>You are about to cancled your appointment</p>
+                <p>Are still want to cancel it?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                <a class="btn btn-danger btn-ok">Yes</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section AppointmentScripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            var isUserDoctor = @(User.IsInRole("Doctor") ? "true" : "false");
+            var isUserInsured = @(User.IsInRole("Insured") ? "true" : "false");
+
+            console.log('isUserDoctor:' + isUserDoctor);
+            console.log('isUserInsured:' + isUserInsured);
+
+            function ListAppointments(firstName, lastName, specialty, appointmentDate, userId) {
+                    if (appointmentDate == "") {
+                        appointmentDate = "0001-01-01";
+                    }
+                    $.ajax({
+                        dataType: 'json',
+                        type: 'get',
+                        url: '/api/Search/AppointmentsSearchResults?firstName=' + firstName +
+                                                                         '&lastName=' + lastName +
+                                                                         '&doctorsSpecialty=' + specialty +
+                                                                         '&appointmentDay=' + appointmentDate +
+                                                                         '&userId=' + userId,
+                        success: function (data) {
+                            $('#appointmentsList').empty();
+                            console.log('Step1');
+                            console.log(data.length);
+                            if (data.length == 0) {
+                                $("#appointmentsList").append('<tr><td colspan="7">There are no appointments matching these criteria.</td></tr>');
+                            }
+                            else {
+                                console.log('Step2')
+                                console.log(data.length);
+                                console.log(data)
+                                data.forEach(function (appointment) {
+                                    console.log('Step3');
+                                    const appointmentStart = appointment.AppointmentStartTime.split(":");
+                                    const appointmentEnd = appointment.AppointmentEndTime.split(":");
+                                    const appointmentUnformatedDate = appointment.AppointmentDate.split("T");
+                                    const appointmentDate = appointmentUnformatedDate[0].split("-");
+                                    $('#appointmentsList').append('<tr>')
+                                    if (isUserInsured) {
+                                        $('#appointmentsList').append(
+                                            '<td><img src="@Url.Content("~/Content/img/Doctors/")' + appointment.Doctor.User.Id + '/' + appointment.Doctor.User.ProfilePicture + '" alt="' + appointment.Doctor.User.ProfilePicture + '"' + 'class="rounded-circle"></td>' +
+                                            '<td>' + appointment.Doctor.User.FirstName + ' ' + appointment.Doctor.User.LastName + '</td>' +
+                                            '<td>' + appointment.Doctor.MedicalSpecialty + '</td>'
+                                        );
+                                    }
+                                    if (isUserDoctor) {
+                                        $('#appointmentsList').append(
+                                            '<td><img src="@Url.Content("~/Content/img/Insureds/")' + appointment.Insured.User.Id + '/' + appointment.Insured.User.ProfilePicture + '" alt="' + appointment.Doctor.User.ProfilePicture + '"' + 'class="rounded-circle"></td>' +
+                                            '<td>' + appointment.Insured.User.FirstName + ' ' + appointment.Insured.User.LastName + '</td>'
+                                        );
+                                    }
+                                    $('#appointmentsList').append(
+                                        '<td>' + appointmentDate[2] + "-" + appointmentDate[1] + "-" + appointmentDate[0] + '</td>' +
+                                        '<td>' + appointmentStart[0] + ':' + appointmentStart[1] + ' - ' + appointmentEnd[0] + ':' + appointmentEnd[1] + '</td>' +
+                                        '<td>' + appointment.AppointmentStatus + '</td>' +
+                                        '<td>' +
+                                        (isUserDoctor ? '<button type="button" class="btn btn-light showAppointmentDetails table-button" data-id="' + appointment.Id + '">View</button><button class="btn btn-light table-button">Message</button>' : '') +
+                                        ((appointment.AppointmentStatus != "Upcoming" && isUserInsured)  ? '<button type="button" class="btn btn-light showAppointmentDetails table-button" data-id="' + appointment.Id + '">View</button>' : '') +
+                                        ((appointment.AppointmentStatus == "Upcoming" && isUserInsured) ? '<button type="button" class="btn btn-success table-button" data-toggle="modal" data-target="">Edit</button>' : '') +
+                                        ((appointment.AppointmentStatus == "Upcoming") ? '<button class="btn btn-danger table-button cancel-appointment" data-id="' + appointment.Id + '">Cancel</button>' : '') +
+                                        '</td ></tr>'
+                                    );
+                                });
+                            }
+                            fixFooterPosition(data.length);
+                            $('.showAppointmentDetails').click(function (e) {
+                                console.log('view button clicked');
+                                let id = $(e.target).data('id');
+                                console.log('id is:' + id)
+                                $.ajax({
+                                    url: '/api/Search/SearchAppointmentById/' + id,
+                                    type: 'get',
+                                    dataType: 'json',
+                                    success: function (appointment) {
+                                        console.log('Into modal')
+                                        const appointmentStart = appointment.AppointmentStartTime.split(":");
+                                        const appointmentEnd = appointment.AppointmentEndTime.split(":");
+                                        const appointmentUnformatedDate = appointment.AppointmentDate.split("T");
+                                        const appointmentDate = appointmentUnformatedDate[0].split("-");
+
+                                        if (isUserInsured) {
+                                            $('#doctorsPicture img').attr('src', '@Url.Content("~/Content/img/Doctors/")' + appointment.Doctor.User.Id + '/' + appointment.Doctor.User.ProfilePicture);
+                                            $('#doctorsFirstName').text(appointment.Doctor.User.FirstName);
+                                            $('#doctorsLastName').text(appointment.Doctor.User.LastName);
+
+                                            $('#Specialty').text(appointment.Doctor.MedicalSpecialty);
+                                            $('#appointmentDateTime').text(appointmentDate[2] + '-' + appointmentDate[1] + '-' + appointmentDate[0] + ' ' + appointmentStart[0] + ':' + appointmentStart[1] + ' - ' + appointmentEnd[0] + ':' + appointmentEnd[1]);
+                                            $('#status').text('Status: ' + appointment.AppointmentStatus);
+                                            $('#patientComments').text(appointment.InsuredComments);
+                                            $('#appointmentDetailsModal').modal('show');
+                                        }
+
+                                        if (isUserDoctor) {
+                                            const dOB = appointment.Insured.User.DoB.split("T");
+                                            $('#insuredsPicture img').attr('src', '@Url.Content("~/Content/img/Insureds/")' + appointment.Insured.User.Id + '/' + appointment.Insured.User.ProfilePicture);
+                                            $('#insuredsFirstName').text(appointment.Insured.User.FirstName);
+                                            $('#insuredsLastName').text(appointment.Insured.User.LastName);
+
+                                            $('#Specialty').text(dOB[0]);
+                                            $('#appointmentDateTime').text(appointmentDate[2] + '-' + appointmentDate[1] + '-' + appointmentDate[0] + ' ' + appointmentStart[0] + ':' + appointmentStart[1] + ' - ' + appointmentEnd[0] + ':' + appointmentEnd[1]);
+                                            $('#status').text('Status: ' + appointment.AppointmentStatus);
+                                            $('#patientComments').text(appointment.InsuredComments);
+                                            $('#doctorComments').text(appointment.DoctorComments);
+                                            $('#appointmentDetailsModal').modal('show');
+                                        }
+
+                                    },
+                                    error: function () {
+                                        console.log('error')
+                                    }
+                                })
+                            });
+                            $('.cancel-appointment').click(function (e) {
+                                let id = $(e.target).data('id');
+                                $('.btn-ok').attr('data-id', id);
+                                $('#confirm-cancel-modal').modal('show');
+                            });
+
+                            $('.btn-ok').click(function (e) {
+                                console.log('YES clicked')
+                                let id = $(e.target).data('id');
+                                console.log(id)
+                                $.ajax({
+                                    url: '@Url.Action("CancelAppointment", "Appointments")',
+                                    type: 'post',
+                                    data: {
+                                        appointmentId: id
+                                    },
+                                    success: function (result) {
+                                        $('#confirm-cancel-modal').modal('hide');
+                                        ListAppointments('', '', -1, '0001-01-01', '@CurrentUserId');
+                                    },
+                                    error: function () {
+                                        alert("error");
+                                    }
+                                });
+                            });
+                        },
+                        error: function (error) {
+                            console.log(error);
+                            $('#appointmentsList').empty();
+                            $("#appointmentsList").append('<tr><td colspan="7"> Something went wrong. Please try again later. </td></tr>')
+                        }
+                    })
+            }
+
+            console.log('@CurrentUserId');
+
+            ListAppointments('', '', -1, '0001-01-01', '@CurrentUserId');
+
+            $('#search').on('submit', function (e) {
+                e.preventDefault();
+                if (isUserInsured) {
+                    ListAppointments(e.target[0].value, e.target[1].value, e.target[2].value, e.target[3].value, '@CurrentUserId');
+                }
+                if (isUserDoctor) {
+                    ListAppointments(e.target[0].value, e.target[1].value, -1, e.target[2].value, '@CurrentUserId');
+                }
+            })
+        })
+    </script>
+}

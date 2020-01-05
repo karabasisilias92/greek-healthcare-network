@@ -53,17 +53,17 @@
                         @if (!Model.User.SubscriptionEndDate.ToString("dd-MM-yyyy").Equals("01-01-0001"))
                         {
                             <p>Exp: @Model.User.SubscriptionEndDate.ToString("dd-MM-yyyy")</p>
-                            <button type="button" class="btn btn-info mt-2">Renew</button>
+                            <button type="button" class="btn btn-info mt-2 invisible">Renew</button>
                         }
                         else
                         {
                             if (User.IsInRole("Insured"))
                             {
-                                <button type="button" class="btn btn-info mt-2">Buy a plan</button>
+                                <button class="btn btn-info mt-2 invisible">Buy a plan</button>
                             }
                             else if (User.IsInRole("Doctor"))
                             {
-                                <button type="button" class="btn btn-info mt-2">Pay Subscription</button>
+                                <button class="btn btn-info mt-2 invisible">Pay Subscription</button>
                             }
                         }
                     </div>

@@ -8,8 +8,8 @@
     using(var db = new ApplicationDbContext())
     {
         visitorUserId = db.Users.SingleOrDefault(u => u.Email.Equals("visitor@ghn.gr")).Id;
-        doctors = db.Doctors.Count();
-        insureds = db.Insureds.Count();
+        doctors = db.Doctors.Include("User").Where(d => d.User.IsActive == true).Count();
+        insureds = db.Insureds.Include("User").Where(d => d.User.IsActive == true).Count();
         appointments = db.Appointments.Count();
     }
 }

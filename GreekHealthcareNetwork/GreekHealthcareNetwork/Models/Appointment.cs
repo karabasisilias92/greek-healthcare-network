@@ -29,10 +29,14 @@ namespace GreekHealthcareNetwork.Models
 
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
+        [Required]
+        [Display(Name = "Appointment date")]
         public DateTime AppointmentDate { get; set; }
 
         [Column(TypeName = "time")]
         [DataType(DataType.Time)]
+        [Required]
+        [Display(Name = "Appointment time")]
         public TimeSpan AppointmentStartTime { get; set; }
 
         [Column(TypeName = "time")]
@@ -42,8 +46,10 @@ namespace GreekHealthcareNetwork.Models
         [JsonConverter(typeof(StringEnumConverter))]
         public AppointmentStatus AppointmentStatus { get; set; }
 
+        [Display(Name = "Comments for doctor")]
         public string InsuredComments { get; set; }
 
+        [Display(Name = "Comments for patient")]
         public string DoctorComments { get; set; }
     }
 }
