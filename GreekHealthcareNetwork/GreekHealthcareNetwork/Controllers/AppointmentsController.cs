@@ -13,6 +13,7 @@ namespace GreekHealthcareNetwork.Controllers
         private readonly AppointmentsRespository _appointmentsRespository = new AppointmentsRespository();
         private readonly DoctorsRepository _doctorssRespository = new DoctorsRepository();
         private readonly InsuredsRepository _insuredRespository = new InsuredsRepository();
+        private readonly MessagesRepository _messagesRepository = new MessagesRepository();
 
         // GET: Appointments
         public ActionResult CancelAppointmentDetails(int appointmentId)
@@ -25,9 +26,58 @@ namespace GreekHealthcareNetwork.Controllers
         [HttpPost]
         public ActionResult CancelAppointment(int appointmentId)
         {
-            //_appointmentsRespository.CancelAppointment(appointmentId);
-            // code for sending message
-            // Tha allazei ton arithmo twn bookedApointments kata -1???
+            SearchLoginViewModel model = new SearchLoginViewModel();
+            var appointment = _appointmentsRespository.GetAppointmentById(appointmentId);
+
+            // Sets appointmentStatus to canceled and decrease the booked appointments by 1
+            try
+            {
+                _appointmentsRespository.CancelAppointment(appointmentId);
+            }
+            catch (Exception)
+            {
+                return Json("Error");
+            }
+
+            // Send message to the other part that the appointment canceled
+            model.Message = new Message();
+            model.Message.ConversationId = _messagesRepository.NewConversationId() + 1;
+            if (User.IsInRole("Insured"))
+            {
+                model.Message.SenderId = appointment.Insured.User.Id;
+                model.Message.RecipientId = appointment.Doctor.User.Id;
+                model.Message.MessageText = "Client cancelled the appointment!";
+            }
+            if (User.IsInRole("Doctor"))
+            {
+                model.Message.SenderId = appointment.Doctor.User.Id;
+                model.Message.RecipientId = appointment.Insured.User.Id;
+                model.Message.MessageText = "Doctor cancelled the appointment!";
+            }
+            model.Message.Subject = "Appointment Cancellation";
+            model.Message.SentDate = DateTime.Now.Date;
+            model.Message.SentTime = DateTime.Now.TimeOfDay;
+            model.Message.MessageStatus = MessageStatus.Unread;
+            model.FirstName = "";
+            model.LastName = "";
+            model.InsuredPlans = new List<InsuredPlan>();
+            model.DoctorSpecialty = -1;
+            model.MedicalSpecialties = new List<MedicalSpecialty>();
+            model.AppointmentDate = null;
+            model.UserName = User.Identity.Name;
+            model.Password = "!Doctor123";
+            model.RememberMe = false;
+            model.VisitorMessage = null;
+
+            try
+            {
+                _messagesRepository.Add(model.Message);
+            }
+            catch (Exception)
+            {
+                return Json("Error");
+            }
+
             return Json("Success");
         }
     }
