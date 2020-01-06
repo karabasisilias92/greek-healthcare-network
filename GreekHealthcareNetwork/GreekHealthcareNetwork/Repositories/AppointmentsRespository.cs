@@ -147,6 +147,16 @@ namespace GreekHealthcareNetwork.Repositories
                 }
             }
 
+            if (HttpContext.Current.Request.UrlReferrer.ToString().EndsWith("Appointments"))
+            {
+                appointments = appointments.OrderBy(i => i.AppointmentDate).ThenBy(i => i.AppointmentStartTime);
+            }
+
+            if (!HttpContext.Current.Request.UrlReferrer.ToString().EndsWith("Appointments"))
+            {
+                appointments = appointments.OrderByDescending(i => i.AppointmentDate).ThenByDescending(i => i.AppointmentStartTime);
+            }
+
             return appointments;
 
         }
