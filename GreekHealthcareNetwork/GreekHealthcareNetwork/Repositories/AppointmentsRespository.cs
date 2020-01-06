@@ -299,6 +299,10 @@ namespace GreekHealthcareNetwork.Repositories
             {
                 var appointment = db.Appointments.SingleOrDefault(m => m.Id == appointmentId);
                 appointment.AppointmentStatus = AppointmentStatus.Canceled;
+
+                var insured = db.Insureds.SingleOrDefault(m => m.User.Id == appointment.InsuredId);
+                insured.BookedAppointments--;
+
                 db.SaveChanges();
             }
         }
