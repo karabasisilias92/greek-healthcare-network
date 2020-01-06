@@ -118,7 +118,7 @@
         </div>*@
     </div>
 </div>
-
+@Html.Partial("_NewMessage")
 @section AppointmentScripts{
     @Scripts.Render("~/bundles/jqueryval")
     <script>
@@ -177,7 +177,7 @@
                                         '<td>' + appointmentStart[0] + ':' + appointmentStart[1] + ' - ' + appointmentEnd[0] + ':' + appointmentEnd[1] + '</td>' +
                                         '<td>' + appointment.AppointmentStatus + '</td>' +
                                         '<td>' +
-                                        (isUserDoctor ? '<button type="button" class="btn btn-light showAppointmentDetails table-button" data-id="' + appointment.Id + '">View</button><button class="btn btn-light table-button" data-id="' + appointment.Insured.User.Id + '">Message</button>' : '<button class="btn btn-light table-button" data-id="' + appointment.Doctor.User.Id + '">Message</button>') +
+                                        (isUserDoctor ? '<button type="button" class="btn btn-light showAppointmentDetails table-button" data-id="' + appointment.Id + '">View</button><button class="btn btn-light table-button sendMessage" data-id="' + appointment.Insured.User.Id + '">Message</button>' : '<button class="btn btn-light table-button sendMessage" data-id="' + appointment.Doctor.User.Id + '">Message</button>') +
                                         ((appointment.AppointmentStatus != "Upcoming" && isUserInsured)  ? '<button type="button" class="btn btn-light showAppointmentDetails table-button" data-id="' + appointment.Id + '">View</button>' : '') +
                                         ((appointment.AppointmentStatus == "Upcoming" && isUserInsured) ? '<button type="button" class="btn btn-success table-button" data-toggle="modal" data-target="">Edit</button>' : '') +
                                         ((appointment.AppointmentStatus == "Upcoming") ? '<button class="btn btn-danger table-button cancel-appointment" data-id="' + appointment.Id + '">Cancel</button>' : '') +
@@ -185,6 +185,91 @@
                                     );
                                 });
                             }
+                            $('.sendMessage').click(function (e) {
+                                let id = $(e.target).data('id');
+                                $('#errorContainerMessage').hide();
+                                $('#successContainerMessage').hide();
+                                $('#Message_RecipientId').val(id);
+                                $('#normalContainerMessage').show();
+                                $('#newMessage').modal('show');
+                            })
+                            $('#send').click(function (e) {
+                                const $form = $('#messagearea');
+                                $.validator.unobtrusive.parse($form);
+                                $form.validate();
+                                if ($form.valid()) {
+                                    let model = new Object();
+                                    model.Message = new Object();
+                                    model.Message.ConversationId = 0;
+                                    model.Message.SenderId = $('#Message_SenderId').val();
+                                    model.Message.RecipientId = $('#Message_RecipientId').val();
+                                    model.Message.Subject = $('#Message_Subject').val();
+                                    model.Message.MessageText = $('#Message_MessageText').val();
+                                    model.FirstName = "";
+                                    model.LastName = "";
+                                    model.InsuredPlans = [];
+                                    model.DoctorSpecialty = -1;
+                                    model.MedicalSpecialties = [];
+                                    model.AppointmentDate = null;
+                                    model.UserName = $('#UserName1').val();
+                                    model.Password = $('#Password1').val();
+                                    model.RememberMe = false;
+                                    model.VisitorMessage = null;
+                                    model = JSON.stringify(model)
+                                    $.ajax({
+                                        contentType: 'application/json',
+                                        type: 'post',
+                                        url: '/api/Messages',
+                                        data: model,
+                                        cache: false,
+                                        processData: false,
+                                        success: function () {
+                                            $('#Message_Subject').val("");
+                                            $('#Message_MessageText').val("");
+                                            $('#normalContainerMessage').hide();
+                                            $('#errorContainerMessage').hide();
+                                            $('#successContainerMessage').show();
+                                            setTimeout(function () {
+                                                $('#newMessage').modal("hide");
+                                            }, 3000)
+                                        },
+                                        error: function (error) {
+                                            $('#errorContainerMessage').show();
+                                            const errorObject = error.responseJSON.ModelState;
+                                            $('#messagearea div.validation-summary-errors > ul').children().remove();
+                                            for (var property in errorObject) {
+                                                if (errorObject.hasOwnProperty(property)) {
+                                                    if (property == '') {
+                                                        $('#messagearea div.validation-summary-errors > ul').append('<li>' + errorObject[property] + '</li>')
+                                                    }
+                                                }
+                                            }
+                                            const $form = $('#messagearea');
+                                            $.validator.unobtrusive.parse($form);
+                                            $form.validate();
+                                            if (!$form.valid()) {
+                                                $.each($form.validate().errorList, function (key, value) {
+                                                    const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                                                    $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                                                    $errorSpan.show();
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
+                                else {
+                                    $('#errorContainerMessage').show();
+                                    console.log($form.validate().errorList);
+                                    $.each($form.validate().errorList, function (key, value) {
+                                        console.log(value);
+                                        const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                                        $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                                        $errorSpan.show();
+                                    });
+                                }
+                            })
+
+
                             fixFooterPosition(data.length);
                             $('.showAppointmentDetails').click(function (e) {
                                 console.log('view button clicked');
