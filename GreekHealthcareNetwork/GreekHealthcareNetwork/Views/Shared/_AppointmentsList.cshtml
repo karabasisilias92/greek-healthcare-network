@@ -331,19 +331,13 @@
                                         $('#myModalContent').html(data);
                                         $('#confirm-cancel-modal').modal('show');
                                         $('.btn-ok').attr('data-id', id);
-                                    },
-                                    error: function () {
-                                        alert("Dynamic content load failed.");
-                                    }
-                                });
-                            });
-
-                            $('.btn-ok').click(function (e) {
+                                        $('.btn-ok').click(function (e) {
                                 console.log('YES clicked')
                                 let id = $(e.target).data('id');
                                 console.log(id)
                                 $.ajax({
-                                    url: '@Url.Action("CancelAppointment", "Appointments")',
+                                    url: '/Appointments/CancelAppointment',
+                                    @*url: '@Url.Action("CancelAppointment", "Appointments")',*@
                                     type: 'post',
                                     data: {
                                         appointmentId: id
@@ -357,6 +351,13 @@
                                     }
                                 });
                             });
+                                    },
+                                    error: function () {
+                                        alert("Dynamic content load failed.");
+                                    }
+                                });
+                            });
+                            
                         },
                         error: function (error) {
                             console.log(error);
