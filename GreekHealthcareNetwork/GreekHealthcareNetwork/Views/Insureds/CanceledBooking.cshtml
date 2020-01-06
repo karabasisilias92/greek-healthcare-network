@@ -6,7 +6,7 @@
 
 <div class="container">
 
-    <h2>Your appointment has been booked successfully!</h2>
+    <h2>Your booking for the appointment below has been cancelled!</h2>
 
     <div>
         <h4>Appointment Details</h4>
@@ -42,7 +42,7 @@
 
             <dd>
                 @Html.DisplayFor(model => model.AppointmentTime)
-            </dd>                
+            </dd>
 
             <dt>
                 @Html.DisplayNameFor(model => model.InsuredComments)
@@ -67,5 +67,5 @@
                 $('#firstRow').css('height', firstRowHeight);
             }
         })
-    </script>    
+    </script>
 }

@@ -25,6 +25,7 @@ namespace GreekHealthcareNetwork.Models
 
         [Required]
         [Display(Name = "Patient")]
+        [Index("IX_DoctorId_AppointmentDate_AppointmentStartTime", 2, IsUnique = true)]
         public string InsuredId { get; set; }
 
         [ForeignKey("InsuredId")]
@@ -39,14 +40,14 @@ namespace GreekHealthcareNetwork.Models
         [Required]
         [Display(Name = "Appointment date")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-        [Index("IX_DoctorId_AppointmentDate_AppointmentStartTime", 2, IsUnique = true)]
+        [Index("IX_DoctorId_AppointmentDate_AppointmentStartTime", 3, IsUnique = true)]
         public DateTime AppointmentDate { get; set; }
 
         [Column(TypeName = "time")]
         [DataType(DataType.Time)]
         [Required]
         [Display(Name = "Appointment time")]
-        [Index("IX_DoctorId_AppointmentDate_AppointmentStartTime", 3, IsUnique = true)]
+        [Index("IX_DoctorId_AppointmentDate_AppointmentStartTime", 4, IsUnique = true)]
         public TimeSpan AppointmentStartTime { get; set; }
 
         [Column(TypeName = "time")]

@@ -1,4 +1,5 @@
 ﻿using GreekHealthcareNetwork.Models;
+using GreekHealthcareNetwork.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -39,7 +40,8 @@ namespace GreekHealthcareNetwork.Repositories
                         doctors = db.Doctors.Where(doctor => users.Any(user => user.IsActive == true && user.Id == doctor.UserId) 
                                                                                                      && (int)doctor.MedicalSpecialty == doctorsSpecialty
                                                                                                      && doctor.WorkingHours.Any(w => w.Day == appointmentDate.DayOfWeek
-                                                                                                     && (DbFunctions.DiffMinutes(w.WorkStartTime, w.WorkEndTime) / w.AppointmentDuration) > db.Appointments.Where(app => app.DoctorId.Equals(doctor.UserId)
+                                                                                                     && (DbFunctions.DiffMinutes(w.WorkStartTime, w.WorkEndTime) / w.AppointmentDuration) > db.Appointments.Where(app => app.AppointmentStatus == AppointmentStatus.Upcoming 
+                                                                                                     && app.DoctorId.Equals(doctor.UserId)
                                                                                                      && DbFunctions.DiffDays(app.AppointmentDate, appointmentDate) == 0
                                                                                                      && DbFunctions.DiffMinutes(w.WorkStartTime, app.AppointmentStartTime) >= 0
                                                                                                      && DbFunctions.DiffMinutes(app.AppointmentEndTime, w.WorkEndTime) >= 0).Count()))
@@ -57,7 +59,8 @@ namespace GreekHealthcareNetwork.Repositories
                     {
                         doctors = db.Doctors.Where(doctor => users.Any(user => user.IsActive == true && user.Id == doctor.UserId)
                                                                                                      && doctor.WorkingHours.Any(w => w.Day == appointmentDate.DayOfWeek
-                                                                                                     && (DbFunctions.DiffMinutes(w.WorkStartTime, w.WorkEndTime) / w.AppointmentDuration) > db.Appointments.Where(app => app.DoctorId.Equals(doctor.UserId)
+                                                                                                     && (DbFunctions.DiffMinutes(w.WorkStartTime, w.WorkEndTime) / w.AppointmentDuration) > db.Appointments.Where(app => app.AppointmentStatus == AppointmentStatus.Upcoming 
+                                                                                                     && app.DoctorId.Equals(doctor.UserId)
                                                                                                      && DbFunctions.DiffDays(app.AppointmentDate, appointmentDate) == 0
                                                                                                      && DbFunctions.DiffMinutes(w.WorkStartTime, app.AppointmentStartTime) >= 0
                                                                                                      && DbFunctions.DiffMinutes(app.AppointmentEndTime, w.WorkEndTime) >= 0).Count()))
