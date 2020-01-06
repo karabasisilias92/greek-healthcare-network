@@ -322,5 +322,14 @@ namespace GreekHealthcareNetwork.Repositories
             }
             return id;
         }
+
+        public void DeleteAppointment(int appointmentId)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                db.Appointments.Remove(db.Appointments.Find(appointmentId));
+                db.SaveChanges();
+            }
+        }
     }
 }

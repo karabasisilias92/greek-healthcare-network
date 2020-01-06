@@ -289,6 +289,10 @@
     <Compile Include="Migrations\202001060051293_Unique Index for Appointments.Designer.cs">
       <DependentUpon>202001060051293_Unique Index for Appointments.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001061027562_UpdateUniqueIndexForAppointments.cs" />
+    <Compile Include="Migrations\202001061027562_UpdateUniqueIndexForAppointments.Designer.cs">
+      <DependentUpon>202001061027562_UpdateUniqueIndexForAppointments.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -536,6 +540,7 @@
     <Content Include="Views\Shared\_ModalCancelAppointmentPartial.cshtml" />
     <Content Include="Views\Insureds\SuccessfulBooking.cshtml" />
     <Content Include="Views\Payments\PayAppointmentCharge.cshtml" />
+    <Content Include="Views\Insureds\CanceledBooking.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -624,6 +629,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001060051293_Unique Index for Appointments.resx">
       <DependentUpon>202001060051293_Unique Index for Appointments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001061027562_UpdateUniqueIndexForAppointments.resx">
+      <DependentUpon>202001061027562_UpdateUniqueIndexForAppointments.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

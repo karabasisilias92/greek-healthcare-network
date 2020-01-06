@@ -1,7 +1,8 @@
 ﻿@model GreekHealthcareNetwork.Models.PayAppointmentChargeViewModel
-
+@using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Pay Appointment Charge";
+    var CurrentUserId = User.Identity.GetUserId();
 }
 
 <section id="PaymentInfo" class="container">
@@ -15,5 +16,6 @@
         @Html.HiddenFor(m => m.AppointmentId, new { @Value = Model.AppointmentId })
         <input type="submit" class="btn btn-outline-success mb-3" value="Pay" />
     }
+    @Html.ActionLink("Cancel Booking", "CanceledBooking", "Insureds", new { appointmentId = Model.AppointmentId, insuredId = CurrentUserId}, new { @class = "btn btn-outline-danger mb-3" })
 </section>
 
