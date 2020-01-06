@@ -30,12 +30,21 @@ namespace GreekHealthcareNetwork.Controllers
                 appointment.AppointmentStatus = AppointmentStatus.Upcoming;
                 var appointmentCost = doctor.AppointmentCost.AppointmentCost;
                 var insuredPlan = insured.InsuredPlan;
+                int id = _appointments.AppointmentEntryExists(insured.UserId, doctor.UserId, appointment.AppointmentDate, appointment.AppointmentStartTime);
                 if (insuredPlan.Name.Equals("Gold"))
                 {
                     appointment.InsuredAppointmentCharge = 0;
                     try
                     {
-                        int id = _appointments.AddAppointment(appointment);
+                        if (id == 0)
+                        {
+                            id = _appointments.AddAppointment(appointment);
+                        }
+                        else
+                        {
+                            appointment.Id = id;
+                            _appointments.UpdateAppointment(appointment);
+                        }
                         insured.BookedAppointments++;
                         _insureds.UpdateInsured(insured);
                         return Ok(new { action = "SuccessfulBooking", controller = "Insureds", id = id, appointmentCharge = 0 });
@@ -58,7 +67,15 @@ namespace GreekHealthcareNetwork.Controllers
                     }
                     try
                     {
-                        int id = _appointments.AddAppointment(appointment);
+                        if (id == 0)
+                        {
+                            id = _appointments.AddAppointment(appointment);
+                        }
+                        else
+                        {
+                            appointment.Id = id;
+                            _appointments.UpdateAppointment(appointment);
+                        }
                         insured.BookedAppointments++;
                         _insureds.UpdateInsured(insured);
                         return Ok(new { action = "PayAppointmentCharge", controller = "Payments", id = id, appointmentCharge = appointment.InsuredAppointmentCharge });

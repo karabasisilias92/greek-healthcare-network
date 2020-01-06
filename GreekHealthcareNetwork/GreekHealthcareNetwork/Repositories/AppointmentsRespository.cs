@@ -327,5 +327,39 @@ namespace GreekHealthcareNetwork.Repositories
                 db.SaveChanges();
             }
         }
+
+        public void UpdateAppointment(Appointment appointment)
+        {
+            if (appointment == null)
+            {
+                throw new ArgumentNullException("insured");
+            }
+            using (var db = new ApplicationDbContext())
+            {
+                db.Appointments.Attach(appointment);
+                db.Entry(appointment).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+
+        public int AppointmentEntryExists(string insuredId, string doctorId, DateTime appointmentDate, TimeSpan appointmentStartTime)
+        {
+            int id;
+            using (var db = new ApplicationDbContext())
+            {
+                var appointment = db.Appointments.SingleOrDefault(app => app.InsuredId.Equals(insuredId) && app.DoctorId.Equals(doctorId)
+                                                                         && DbFunctions.DiffDays(app.AppointmentDate, appointmentDate) == 0
+                                                                         && DbFunctions.DiffMinutes(app.AppointmentStartTime, appointmentStartTime) == 0);
+                if (appointment == null)
+                {
+                    id = 0;
+                }
+                else
+                {
+                    id = appointment.Id;
+                }
+            }
+            return id;
+        }
     }
 }

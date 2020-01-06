@@ -90,7 +90,7 @@ namespace GreekHealthcareNetwork.Controllers
 
         [Authorize(Roles = "Insured")]
         public ActionResult PayAppointmentCharge(int id, decimal appointmentCharge)
-        {
+        {           
             PayAppointmentChargeViewModel model = new PayAppointmentChargeViewModel() { AppointmentId = id, AppointmentCharge = appointmentCharge };
             return View(model);
         }

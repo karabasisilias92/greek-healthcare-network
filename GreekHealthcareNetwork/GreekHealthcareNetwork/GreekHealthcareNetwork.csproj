@@ -540,7 +540,8 @@
     <Content Include="Views\Shared\_ModalCancelAppointmentPartial.cshtml" />
     <Content Include="Views\Insureds\SuccessfulBooking.cshtml" />
     <Content Include="Views\Payments\PayAppointmentCharge.cshtml" />
-    <Content Include="Views\Insureds\CanceledBooking.cshtml" />
+    <Content Include="Views\Insureds\CancelledBooking.cshtml" />
+    <Content Include="Views\Insureds\CancelledBookingDueToNotPayingOnTime.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

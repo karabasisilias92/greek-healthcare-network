@@ -14,8 +14,38 @@
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(m => m.AppointmentId, new { @Value = Model.AppointmentId })
-        <input type="submit" class="btn btn-outline-success mb-3" value="Pay" />
+        <input id="pay" type="submit" class="btn btn-outline-success mb-3" value="Pay" />
     }
-    @Html.ActionLink("Cancel Booking", "CanceledBooking", "Insureds", new { appointmentId = Model.AppointmentId, insuredId = CurrentUserId}, new { @class = "btn btn-outline-danger mb-3" })
+    @Html.ActionLink("Cancel Booking", "CancelledBooking", "Insureds", new { appointmentId = Model.AppointmentId, insuredId = CurrentUserId }, new { id = "cancel", @class = "btn btn-outline-danger mb-3" })
 </section>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            const firstRowHeight = +$('#firstRow').css('height').split('px')[0];;
+            console.log(firstRowHeight);
+            $('#firstRow').css('height', 'calc(100vh - 124.4px)');
+            const minHeight = +$('#firstRow').css('height').split('px')[0];;
+            console.log(minHeight);
+            if (firstRowHeight > minHeight) {
+                $('#firstRow').css('height', firstRowHeight);
+            }
+        })
+    </script>
+    <script>
+        function main() {
+            var timeoutVar = setTimeout(function () {
+                window.location.replace('/Insureds/CancelledBookingDueToNotPayingOnTime?appointmentId=' + '@Model.AppointmentId' + '&insuredId=' + '@CurrentUserId');
+            }, 10*60*1000);
+            document.querySelector('#pay').addEventListener('click', function () {
+                clearTimeout(timeoutVar);
+            })
+            document.querySelector('#cancel').addEventListener('click', function () {
+                clearTimeout(timeoutVar);
+            })
+        }
+        window.addEventListener('load', main);
+    </script>
+}
+
 

@@ -1,0 +1,72 @@
+﻿@model GreekHealthcareNetwork.Models.Appointment
+
+@{
+    ViewBag.Title = "Cancelled Booking Due To Not Paying On Time";
+}
+
+<div class="container">
+
+        <h3>You did not finalize your payment on time so your booking for the appointment below has been cancelled! 
+            Of course you can try and book it again, if it is still open.</h3>
+        <div>
+            <h4>Appointment Details</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.DoctorId)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Doctor.User.FullName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.InsuredId)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Insured.User.FullName)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.AppointmentDate)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.AppointmentDate)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.AppointmentTime)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.AppointmentTime)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.InsuredComments)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.InsuredComments)
+                </dd>
+            </dl>
+        </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            const firstRowHeight = +$('#firstRow').css('height').split('px')[0];;
+            console.log(firstRowHeight);
+            $('#firstRow').css('height', 'calc(100vh - 124.4px)');
+            const minHeight = +$('#firstRow').css('height').split('px')[0];;
+            console.log(minHeight);
+            if (firstRowHeight > minHeight) {
+                $('#firstRow').css('height', firstRowHeight);
+            }
+        })
+    </script>
+}
+

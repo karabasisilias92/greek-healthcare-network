@@ -34,7 +34,21 @@ namespace GreekHealthcareNetwork.Controllers
             return View(appointment);
         }
 
-        public ActionResult CanceledBooking(int appointmentId, string insuredId)
+        public ActionResult CancelledBooking(int appointmentId, string insuredId)
+        {
+            var appointment = _appointments.GetAppointmentById(appointmentId);
+            if (appointment == null)
+            {
+                return RedirectToAction("BookAppointment");
+            }
+            _appointments.DeleteAppointment(appointmentId);
+            var insured = _insureds.GetInsuredById(insuredId);
+            insured.BookedAppointments--;
+            _insureds.UpdateInsured(insured);
+            return View(appointment);
+        }
+
+        public ActionResult CancelledBookingDueToNotPayingOnTime(int appointmentId, string insuredId)
         {
             var appointment = _appointments.GetAppointmentById(appointmentId);
             if (appointment == null)
