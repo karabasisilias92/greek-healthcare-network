@@ -102,9 +102,13 @@
                         <div class="col-md-8">
                             <div class="row" id="bookapointmentsection">
                                 <div class="col-md-12">
-                                    <form method="post" action="/Insureds/BookAppointment">
+                                    <form id="bookAppointmentForm">
                                         @Html.AntiForgeryToken()
-                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                        <div class="validation-summary-errors text-danger">
+                                            <ul>
+
+                                            </ul>
+                                        </div>
                                         <div class="form-group">
                                             @Html.HiddenFor(m => m.Appointment.DoctorId)
                                         </div>
@@ -194,314 +198,379 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script>
         $(document).ready(function () {
-        function listAvailableAppointments(date, doctorId) {
-            $.ajax({
-                dataType: 'json',
-                type: 'get',
-                url: '/api/Search/GetAvailableAppointmentSlots?appointmentDay=' + date + '&doctorId=' + doctorId,
-                success: function (data) {
-                    $('#NoWorkingDay').hide();
-                    if (data.length == 0) {
+            function listAvailableAppointments(date, doctorId) {
+                $.ajax({
+                    dataType: 'json',
+                    type: 'get',
+                    url: '/api/Search/GetAvailableAppointmentSlots?appointmentDay=' + date + '&doctorId=' + doctorId,
+                    success: function (data) {
+                        $('#NoWorkingDay').hide();
+                        if (data.length == 0) {
+                            $('#appointmentTime').hide();
+                            $('#insuredComments').hide();
+                            $('#bookAppointmentButton').hide();
+                            $('#NoAvailableAppointments').show();
+                        }
+                        else {
+                            $('#NoAvailableAppointments').hide();
+                            $('#appointmentTime').show();
+                            $('#insuredComments').show();
+                            $('#bookAppointmentButton').show();
+                            const selectTime = $('#Appointment_AppointmentStartTime');
+                            $(selectTime).children().remove();
+                            data.forEach(function (appointmentSlot) {
+                                const splittedStartTime = appointmentSlot.AppointmentStartTime.split(':');
+                                const splittedEndTime = appointmentSlot.AppointmentEndTime.split(':');
+                                const option = $(document.createElement('option'));
+                                $(option).text(splittedStartTime[0] + ':' + splittedStartTime[1] + ' - ' + splittedEndTime[0] + ':' + splittedEndTime[1]);
+                                $(option).val(appointmentSlot.AppointmentStartTime);
+                                $(selectTime).append(option);
+                            });
+                        }
+                        $('#normalContainerBook').show();
+                        $('#bookAppointments').modal('show');
+                    },
+                    error: function () {
                         $('#appointmentTime').hide();
                         $('#insuredComments').hide();
                         $('#bookAppointmentButton').hide();
-                        $('#NoAvailableAppointments').show();
-                    }
-                    else {
                         $('#NoAvailableAppointments').hide();
-                        $('#appointmentTime').show();
-                        $('#insuredComments').show();
-                        $('#bookAppointmentButton').show();
-                        const selectTime = $('#Appointment_AppointmentStartTime');
-                        $(selectTime).children().remove();
-                        data.forEach(function (appointmentSlot) {
-                            const splittedStartTime = appointmentSlot.AppointmentStartTime.split(':');
-                            const splittedEndTime = appointmentSlot.AppointmentEndTime.split(':');
-                            const option = $(document.createElement('option'));
-                            $(option).text(splittedStartTime[0] + ':' + splittedStartTime[1] + ' - ' + splittedEndTime[0] + ':' + splittedEndTime[1]);
-                            $(option).val(appointmentSlot.AppointmentStartTime);
-                            $(selectTime).append(option);
-                        });
+                        $('#NoWorkingDay').show();
+                        $('#normalContainerBook').show();
+                        $('#bookAppointments').modal('show');
                     }
-                    $('#normalContainerBook').show();
-                    $('#bookAppointments').modal('show');
-                },
-                error: function () {
+                })
+            }
+            function ListDoctors(firstName, lastName, specialty, appointmentDate) {
+                if (appointmentDate == "") {
+                    appointmentDate = "0001-01-01";
+                }
+                $.ajax({
+                    dataType: 'json',
+                    type: 'get',
+                    url: '/api/Search/SearchDoctorResults?doctorsFirstName=' + firstName + '&doctorsLastName=' + lastName + '&doctorsSpecialty=' + specialty + '&appointmentDate=' + appointmentDate,
+                    success: function (data) {
+                        $('#doctorsList').empty();
+                        if (data.length == 0) {
+                            $("#doctorsList").append('<div class="col-md-12 col-sm-12 col-xs-12"><p> There are no doctors matching these criteria. </p><div>')
+                        }
+                        else {
+                            data.forEach(function (doctor) {
+                                $('#doctorsList').append('<div class="col-md-3 col-sm-6 col-xs-12"><div class="img-thumbnail">' +
+                                    '<img src="@Url.Content("~/Content/img/Doctors/")' + doctor.User.Id + '/' + doctor.User.ProfilePicture + '" alt="' + doctor.User.ProfilePicture + '">' +
+                                    '<div><h5>' + doctor.User.FirstName +  '</h5><h5>' + doctor.User.LastName + '</h5>' +
+                                    '<p>' + doctor.MedicalSpecialty + '</p> <button class="btn btn-outline-dark btn-sm showDoctorDetails" data-id="' + doctor.UserId + '">View Details</button>' +
+                                    @if (User.IsInRole("Insured")) {
+                                        @(new HtmlString("'<button class=\"btn btn-outline-dark btn-sm showDoctorMessage\" data-id=\"' + doctor.UserId + '\">Message</button><button class=\"btn btn-outline-dark btn-sm bookAppointments\" data-id=\"' + doctor.UserId + '\">Book Appointment</button></div></div></div>'"));
+                                    }else {
+                                        @(new HtmlString("'</div></div></div>'"));
+                                    });
+                            });
+                        }
+                        $('#send').click(function (e) {
+                            const $form = $('#messagearea');
+                            $.validator.unobtrusive.parse($form);
+                            $form.validate();
+                            if ($form.valid()) {
+                                let model = new Object();
+                                model.Message = new Object();
+                                model.Message.ConversationId = 0;
+                                model.Message.SenderId = $('#Message_SenderId').val();
+                                model.Message.RecipientId = $('#Message_RecipientId').val();
+                                model.Message.Subject = $('#Message_Subject').val();
+                                model.Message.MessageText = $('#Message_MessageText').val();
+                                model.FirstName = "";
+                                model.LastName = "";
+                                model.InsuredPlans = [];
+                                model.DoctorSpecialty = -1;
+                                model.MedicalSpecialties = [];
+                                model.AppointmentDate = null;
+                                model.UserName = $('#UserName1').val();
+                                model.Password = $('#Password1').val();
+                                model.RememberMe = false;
+                                model.VisitorMessage = null;
+                                model = JSON.stringify(model)
+                                $.ajax({
+                                    contentType: 'application/json',
+                                    type: 'post',
+                                    url: '/api/Messages',
+                                    data: model,
+                                    cache: false,
+                                    processData: false,
+                                    success: function () {
+                                        $('#Message_Subject').val("");
+                                        $('#Message_MessageText').val("");
+                                        $('#normalContainerMessage').hide();
+                                        $('#errorContainerMessage').hide();
+                                        $('#successContainerMessage').show();
+                                        setTimeout(function () {
+                                            $('#newMessage').modal("hide");
+                                        }, 3000)
+                                    },
+                                    error: function (error) {
+                                        $('#errorContainerMessage').show();
+                                        const errorObject = error.responseJSON.ModelState;
+                                        $('#messagearea div.validation-summary-errors > ul').children().remove();
+                                        for (var property in errorObject) {
+                                            if (errorObject.hasOwnProperty(property)) {
+                                                if (property == '') {
+                                                    $('#messagearea div.validation-summary-errors > ul').append('<li>' + errorObject[property] + '</li>')
+                                                }
+                                            }
+                                        }
+                                        const $form = $('#messagearea');
+                                        $.validator.unobtrusive.parse($form);
+                                        $form.validate();
+                                        if (!$form.valid()) {
+                                            $.each($form.validate().errorList, function (key, value) {
+                                                const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                                                $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                                                $errorSpan.show();
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                            else {
+                                $('#errorContainerMessage').show();
+                                console.log($form.validate().errorList);
+                                $.each($form.validate().errorList, function (key, value) {
+                                    console.log(value);
+                                    const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                                    $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                                    $errorSpan.show();
+                                });
+                            }
+                        })
+                        $('.showDoctorDetails').click(function (e) {
+                            let id = $(e.target).data('id');
+                            $.ajax({
+                                url: '/api/Search/SearchDoctorById/' + id,
+                                type: 'get',
+                                dataType: 'json',
+                                success: function (doctor) {
+                                    $('#errorContainer').hide();
+                                    $('#profileSection img').attr('src', '@Url.Content("~/Content/img/Doctors/")' + doctor.User.Id + '/' + doctor.User.ProfilePicture);
+                                    $('#firstName').text(doctor.User.FirstName);
+                                    $('#lastName').text(doctor.User.LastName);
+                                    $('#medicalSpecialty').text(doctor.MedicalSpecialty);
+                                    $('#officeAddress').text(doctor.OfficeAddress);
+                                    let elem = $('#officeAddressTR');
+                                    while ($(elem).next()[0].id != 'doctorEmailTR') {
+                                        const next = $(elem).next();
+                                        $(next).remove();
+                                    }
+                                    if (doctor.WorkingHours.length == 0) {
+                                        $(elem).after('<tr><th>Working hours:</th><td> Doctor has not declared any working hours yet. </td></tr>');
+                                    }
+                                    else {
+                                        for (let i = 0; i < doctor.WorkingHours.length; i++) {
+                                            if (i == 0) {
+                                                const workStartTime = doctor.WorkingHours[i].WorkStartTime.split(':');
+                                                const workEndTime = doctor.WorkingHours[i].WorkEndTime.split(':');
+                                                $(elem).after('<tr><th>Working hours:</th><td>' + doctor.WorkingHours[i].Day + ', ' + workStartTime[0] + ':' + workStartTime[1] + '-' + workEndTime[0] + ':' + workEndTime[1] + '</td></tr>')
+                                            }
+                                            else {
+                                                const workStartTime = doctor.WorkingHours[i].WorkStartTime.split(':');
+                                                const workEndTime = doctor.WorkingHours[i].WorkEndTime.split(':');
+                                                $(elem).after('<tr><th></th><td>' + doctor.WorkingHours[i].Day + ', ' + workStartTime[0] + ':' + workStartTime[1] + '-' + workEndTime[0] + ':' + workEndTime[1] + '</td></tr>')
+                                            }
+                                            elem = $(elem).next();
+                                        }
+                                    }
+                                    $('#doctorEmail').text(doctor.User.Email);
+                                    $('#doctorTelephone').text(doctor.User.PhoneNumber);
+                                    $('#normalContainer').show();
+                                    $('#doctorDetails').modal('show');
+                                },
+                                error: function () {
+                                    $('#normalContainer').hide();
+                                    $('#errorContainer').show();
+                                }
+                            })
+                        });
+                        $('.showDoctorMessage').click(function (e) {
+                            let id = $(e.target).data('id');
+                            $('#errorContainerMessage').hide();
+                            $('#successContainerMessage').hide();
+                            $('#Message_RecipientId').val(id);
+                            $('#normalContainerMessage').show();
+                            $('#newMessage').modal('show');
+                        })
+                        $("#newMessage").on("hidden.bs.modal", function () {
+                            $('#Message_Subject').val("");
+                            $('#Message_MessageText').val("");
+                        });
+                        $('.bookAppointments').click(function (e) {
+                            let id = $(e.target).data('id');
+                            $.ajax({
+                                url: '/api/Search/SearchDoctorById/' + id,
+                                type: 'get',
+                                dataType: 'json',
+                                success: function (doctor) {
+                                    $('#errorContainerBook').hide();
+                                    $('#profilepictureBook img').attr('src', '@Url.Content("~/Content/img/Doctors/")' + doctor.User.Id + '/' + doctor.User.ProfilePicture);
+                                    $('#firstNameBook').text(doctor.User.FirstName);
+                                    $('#lastNameBook').text(doctor.User.LastName);
+                                    $('#medicalSpecialtyBook').text(doctor.MedicalSpecialty);
+                                    $('#officeAddressBook').text(doctor.OfficeAddress);
+                                    let elem = $('#officeAddressBookTR');
+                                    while ($(elem).next()[0].id != 'doctorEmailBookTR') {
+                                        const next = $(elem).next();
+                                        $(next).remove();
+                                    }
+                                    if (doctor.WorkingHours.length == 0) {
+                                        $(elem).after('<tr><th>Working hours:</th><td> Doctor has not declared any working hours yet. </td></tr>');
+                                    }
+                                    else {
+                                        for (let i = 0; i < doctor.WorkingHours.length; i++) {
+                                            if (i == 0) {
+                                                const workStartTime = doctor.WorkingHours[i].WorkStartTime.split(':');
+                                                const workEndTime = doctor.WorkingHours[i].WorkEndTime.split(':');
+                                                $(elem).after('<tr><th>Working hours:</th><td>' + doctor.WorkingHours[i].Day + ', ' + workStartTime[0] + ':' + workStartTime[1] + '-' + workEndTime[0] + ':' + workEndTime[1] + '</td></tr>')
+                                            }
+                                            else {
+                                                const workStartTime = doctor.WorkingHours[i].WorkStartTime.split(':');
+                                                const workEndTime = doctor.WorkingHours[i].WorkEndTime.split(':');
+                                                $(elem).after('<tr><th></th><td>' + doctor.WorkingHours[i].Day + ', ' + workStartTime[0] + ':' + workStartTime[1] + '-' + workEndTime[0] + ':' + workEndTime[1] + '</td></tr>')
+                                            }
+                                            elem = $(elem).next();
+                                        }
+                                    }
+                                    const appointmentDate = $('#AppointmentDate').val();
+                                    $('#doctorEmailBook').text(doctor.User.Email);
+                                    $('#doctorTelephoneBook').text(doctor.User.PhoneNumber);
+                                    $('#Appointment_DoctorId').val(doctor.UserId);
+                                    $('#Appointment_InsuredId').val('@CurrentUserId');
+                                    $('#Appointment_AppointmentDate').val(appointmentDate);
+                                    if (appointmentDate == "" || appointmentDate == undefined) {
+                                        $('#appointmentTime').hide();
+                                        $('#insuredComments').hide();
+                                        $('#bookAppointmentButton').hide();
+                                        $('#NoAvailableAppointments').hide();
+                                        $('#NoWorkingDay').hide();
+                                        $('#normalContainerBook').show();
+                                        $('#bookAppointments').modal('show');
+                                    }
+                                    else {
+                                        listAvailableAppointments(appointmentDate, doctor.UserId);
+                                    }
+                                },
+                                error: function () {
+                                    $('#normalContainerBook').hide();
+                                    $('#errorContainerBook').show();
+                                }
+                            })
+                        });
+                    },
+                    error: function () {
+                        $('#doctorsList').empty();
+                        $('#doctorsList').append('<div class="col-md-12 col-sm-12 col-xs-12"><p> There are no doctors matching these criteria. </p><div>');
+                    }
+                })
+            }
+            $('#Appointment_InsuredComments').val('');
+            ListDoctors('', '', -1, '0001-01-01');
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            const year = today.getFullYear();
+            $('#AppointmentDate').attr('min', year + '-' + month + '-' + day);
+            $('#Appointment_AppointmentDate').attr('min', year + '-' + month + '-' + day);        
+            $('#search').on('submit', function (e) {
+                e.preventDefault();
+                if (e.target[3].type == 'date') {
+                    ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value, e.target[3].value);
+                }
+                else {
+                    ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value, '0001-01-01');
+                }
+            })
+            $('#bookAppointments').on('hidden.bs.modal', function () {
+                $('#NoAvailableAppointments').hide();
+                $('#NoWorkingDay').hide();
+                $('#Appointment_InsuredComments').val('');
+                $('#bookAppointmentForm div.validation-summary-errors > ul').children().remove();
+            })
+            $('#Appointment_AppointmentDate').on('change', function () {
+                $('#bookAppointmentForm div.validation-summary-errors > ul').children().remove();
+                const appointmentDate = $('#Appointment_AppointmentDate').val();
+                if (appointmentDate == "") {
                     $('#appointmentTime').hide();
                     $('#insuredComments').hide();
                     $('#bookAppointmentButton').hide();
                     $('#NoAvailableAppointments').hide();
-                    $('#NoWorkingDay').show();
-                    $('#normalContainerBook').show();
-                    $('#bookAppointments').modal('show');
+                    $('#NoWorkingDay').hide();
+                }
+                else {
+                    listAvailableAppointments(appointmentDate, $('#Appointment_DoctorId').val());
                 }
             })
-        }
-        function ListDoctors(firstName, lastName, specialty, appointmentDate) {
-            if (appointmentDate == "") {
-                appointmentDate = "0001-01-01";
-            }
-            $.ajax({
-                dataType: 'json',
-                type: 'get',
-                url: '/api/Search/SearchDoctorResults?doctorsFirstName=' + firstName + '&doctorsLastName=' + lastName + '&doctorsSpecialty=' + specialty + '&appointmentDate=' + appointmentDate,
-                success: function (data) {
-                    $('#doctorsList').empty();
-                    if (data.length == 0) {
-                        $("#doctorsList").append('<p> There are no doctors matching these criteria. </p>')
-                    }
-                    else {
-                        data.forEach(function (doctor) {
-                            $('#doctorsList').append('<div class="col-md-3 col-sm-6 col-xs-12"><div class="img-thumbnail">' +
-                                '<img src="@Url.Content("~/Content/img/Doctors/")' + doctor.User.Id + '/' + doctor.User.ProfilePicture + '" alt="' + doctor.User.ProfilePicture + '">' +
-                                '<div><h5>' + doctor.User.FirstName +  '</h5><h5>' + doctor.User.LastName + '</h5>' +
-                                '<p>' + doctor.MedicalSpecialty + '</p> <button class="btn btn-outline-dark btn-sm showDoctorDetails" data-id="' + doctor.UserId + '">View Details</button>' +
-                                @if (User.IsInRole("Insured")) {
-                                    @(new HtmlString("'<button class=\"btn btn-outline-dark btn-sm showDoctorMessage\" data-id=\"' + doctor.UserId + '\">Message</button><button class=\"btn btn-outline-dark btn-sm bookAppointments\" data-id=\"' + doctor.UserId + '\">Book Appointment</button></div></div></div>'"));
-                                }else {
-                                    @(new HtmlString("'</div></div></div>'"));
+            $('#bookAppointment').click(function (e) {
+                e.preventDefault();
+                const $form = $('#bookAppointmentForm');
+                $.validator.unobtrusive.parse($form);
+                $form.validate();
+                if ($form.valid()) {
+                    let model = new Object();
+                    model.DoctorId = $('#Appointment_DoctorId').val();
+                    model.InsuredId = $('#Appointment_InsuredId').val();
+                    model.AppointmentDate = $('#Appointment_AppointmentDate').val();
+                    model.AppointmentStartTime = $('#Appointment_AppointmentStartTime').val();
+                    model.InsuredComments = $('#Appointment_InsuredComments').val();
+                    model = JSON.stringify(model)
+                    $.ajax({
+                        contentType: 'application/json',
+                        type: 'post',
+                        url: '/api/BookAppointment',
+                        data: model,
+                        cache: false,
+                        processData: false,
+                        success: function (response) {
+                            $('#bookAppointmentForm div.validation-summary-errors > ul').children().remove();
+                            $('#Appointment_InsuredComments').val('');
+                            console.log(response);
+                            if (response.appointmentCharge > 0) {
+                                window.location.replace('/' + response.controller + '/' + response.action + '?id=' + response.id + '&appointmentCharge=' + response.appointmentCharge);
+                            }
+                            else {
+                                window.location.replace('/' + response.controller + '/' + response.action + '?id=' + response.id);
+                            }
+                        },
+                        error: function (error) {
+                            const errorObject = error.responseJSON.ModelState;
+                            $('#bookAppointmentForm div.validation-summary-errors > ul').children().remove();
+                            for (var property in errorObject) {
+                                if (errorObject.hasOwnProperty(property)) {
+                                    if (property == '') {
+                                        $('#bookAppointmentForm div.validation-summary-errors > ul').append('<li>' + errorObject[property] + '</li>')
+                                    }
+                                }
+                            }
+                            const $form = $('#bookAppointmentForm');
+                            $.validator.unobtrusive.parse($form);
+                            $form.validate();
+                            if (!$form.valid()) {
+                                $.each($form.validate().errorList, function (key, value) {
+                                    const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                                    $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                                    $errorSpan.show();
                                 });
-                        });
-                    }
-                    $('#send').click(function (e) {
-                        const $form = $('#messagearea');
-                        $.validator.unobtrusive.parse($form);
-                        $form.validate();
-                        if ($form.valid()) {
-                            let model = new Object();
-                            model.Message = new Object();
-                            model.Message.ConversationId = 0;
-                            model.Message.SenderId = $('#Message_SenderId').val();
-                            model.Message.RecipientId = $('#Message_RecipientId').val();
-                            model.Message.Subject = $('#Message_Subject').val();
-                            model.Message.MessageText = $('#Message_MessageText').val();
-                            model.FirstName = "";
-                            model.LastName = "";
-                            model.InsuredPlans = [];
-                            model.DoctorSpecialty = -1;
-                            model.MedicalSpecialties = [];
-                            model.AppointmentDate = null;
-                            model.UserName = $('#UserName1').val();
-                            model.Password = $('#Password1').val();
-                            model.RememberMe = false;
-                            model.VisitorMessage = null;
-                            model = JSON.stringify(model)
-                            $.ajax({
-                                contentType: 'application/json',
-                                type: 'post',
-                                url: '/api/Messages',
-                                data: model,
-                                cache: false,
-                                processData: false,
-                                success: function () {
-                                    $('#Message_Subject').val("");
-                                    $('#Message_MessageText').val("");
-                                    $('#normalContainerMessage').hide();
-                                    $('#errorContainerMessage').hide();
-                                    $('#successContainerMessage').show();
-                                    setTimeout(function () {
-                                        $('#newMessage').modal("hide");
-                                    }, 3000)
-                                },
-                                error: function (error) {
-                                    $('#errorContainerMessage').show();
-                                    const errorObject = error.responseJSON.ModelState;
-                                    $('#messagearea div.validation-summary-errors > ul').children().remove();
-                                    for (var property in errorObject) {
-                                        if (errorObject.hasOwnProperty(property)) {
-                                            if (property == '') {
-                                                $('#messagearea div.validation-summary-errors > ul').append('<li>' + errorObject[property] + '</li>')
-                                            }
-                                        }
-                                    }
-                                    const $form = $('#messagearea');
-                                    $.validator.unobtrusive.parse($form);
-                                    $form.validate();
-                                    if (!$form.valid()) {
-                                        $.each($form.validate().errorList, function (key, value) {
-                                            const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
-                                            $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
-                                            $errorSpan.show();
-                                        });
-                                    }
-                                }
-                            });
-                        }
-                        else {
-                            $('#errorContainerMessage').show();
-                            console.log($form.validate().errorList);
-                            $.each($form.validate().errorList, function (key, value) {
-                                console.log(value);
-                                const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
-                                $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
-                                $errorSpan.show();
-                            });
-                        }
-                    })
-                    $('.showDoctorDetails').click(function (e) {
-                        let id = $(e.target).data('id');
-                        $.ajax({
-                            url: '/api/Search/SearchDoctorById/' + id,
-                            type: 'get',
-                            dataType: 'json',
-                            success: function (doctor) {
-                                $('#errorContainer').hide();
-                                $('#profileSection img').attr('src', '@Url.Content("~/Content/img/Doctors/")' + doctor.User.Id + '/' + doctor.User.ProfilePicture);
-                                $('#firstName').text(doctor.User.FirstName);
-                                $('#lastName').text(doctor.User.LastName);
-                                $('#medicalSpecialty').text(doctor.MedicalSpecialty);
-                                $('#officeAddress').text(doctor.OfficeAddress);
-                                let elem = $('#officeAddressTR');
-                                while ($(elem).next()[0].id != 'doctorEmailTR') {
-                                    const next = $(elem).next();
-                                    $(next).remove();
-                                }
-                                if (doctor.WorkingHours.length == 0) {
-                                    $(elem).after('<tr><th>Working hours:</th><td> Doctor has not declared any working hours yet. </td></tr>');
-                                }
-                                else {
-                                    for (let i = 0; i < doctor.WorkingHours.length; i++) {
-                                        if (i == 0) {
-                                            const workStartTime = doctor.WorkingHours[i].WorkStartTime.split(':');
-                                            const workEndTime = doctor.WorkingHours[i].WorkEndTime.split(':');
-                                            $(elem).after('<tr><th>Working hours:</th><td>' + doctor.WorkingHours[i].Day + ', ' + workStartTime[0] + ':' + workStartTime[1] + '-' + workEndTime[0] + ':' + workEndTime[1] + '</td></tr>')
-                                        }
-                                        else {
-                                            const workStartTime = doctor.WorkingHours[i].WorkStartTime.split(':');
-                                            const workEndTime = doctor.WorkingHours[i].WorkEndTime.split(':');
-                                            $(elem).after('<tr><th></th><td>' + doctor.WorkingHours[i].Day + ', ' + workStartTime[0] + ':' + workStartTime[1] + '-' + workEndTime[0] + ':' + workEndTime[1] + '</td></tr>')
-                                        }
-                                        elem = $(elem).next();
-                                    }
-                                }
-                                $('#doctorEmail').text(doctor.User.Email);
-                                $('#doctorTelephone').text(doctor.User.PhoneNumber);
-                                $('#normalContainer').show();
-                                $('#doctorDetails').modal('show');
-                            },
-                            error: function () {
-                                $('#normalContainer').hide();
-                                $('#errorContainer').show();
                             }
-                        })
+                        }
                     });
-                    $('.showDoctorMessage').click(function (e) {
-                        let id = $(e.target).data('id');
-                        $('#errorContainerMessage').hide();
-                        $('#successContainerMessage').hide();
-                        $('#Message_RecipientId').val(id);
-                        $('#normalContainerMessage').show();
-                        $('#newMessage').modal('show');
-                    })
-                    $("#newMessage").on("hidden.bs.modal", function () {
-                        $('#Message_Subject').val("");
-                        $('#Message_MessageText').val("");
+                }
+                else {
+                    console.log($form.validate().errorList);
+                    $.each($form.validate().errorList, function (key, value) {
+                        console.log(value);
+                        const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                        $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                        $errorSpan.show();
                     });
-                    $('.bookAppointments').click(function (e) {
-                        let id = $(e.target).data('id');
-                        $.ajax({
-                            url: '/api/Search/SearchDoctorById/' + id,
-                            type: 'get',
-                            dataType: 'json',
-                            success: function (doctor) {
-                                $('#errorContainerBook').hide();
-                                $('#profilepictureBook img').attr('src', '@Url.Content("~/Content/img/Doctors/")' + doctor.User.Id + '/' + doctor.User.ProfilePicture);
-                                $('#firstNameBook').text(doctor.User.FirstName);
-                                $('#lastNameBook').text(doctor.User.LastName);
-                                $('#medicalSpecialtyBook').text(doctor.MedicalSpecialty);
-                                $('#officeAddressBook').text(doctor.OfficeAddress);
-                                let elem = $('#officeAddressBookTR');
-                                while ($(elem).next()[0].id != 'doctorEmailBookTR') {
-                                    const next = $(elem).next();
-                                    $(next).remove();
-                                }
-                                if (doctor.WorkingHours.length == 0) {
-                                    $(elem).after('<tr><th>Working hours:</th><td> Doctor has not declared any working hours yet. </td></tr>');
-                                }
-                                else {
-                                    for (let i = 0; i < doctor.WorkingHours.length; i++) {
-                                        if (i == 0) {
-                                            const workStartTime = doctor.WorkingHours[i].WorkStartTime.split(':');
-                                            const workEndTime = doctor.WorkingHours[i].WorkEndTime.split(':');
-                                            $(elem).after('<tr><th>Working hours:</th><td>' + doctor.WorkingHours[i].Day + ', ' + workStartTime[0] + ':' + workStartTime[1] + '-' + workEndTime[0] + ':' + workEndTime[1] + '</td></tr>')
-                                        }
-                                        else {
-                                            const workStartTime = doctor.WorkingHours[i].WorkStartTime.split(':');
-                                            const workEndTime = doctor.WorkingHours[i].WorkEndTime.split(':');
-                                            $(elem).after('<tr><th></th><td>' + doctor.WorkingHours[i].Day + ', ' + workStartTime[0] + ':' + workStartTime[1] + '-' + workEndTime[0] + ':' + workEndTime[1] + '</td></tr>')
-                                        }
-                                        elem = $(elem).next();
-                                    }
-                                }
-                                const appointmentDate = $('#AppointmentDate').val();
-                                $('#doctorEmailBook').text(doctor.User.Email);
-                                $('#doctorTelephoneBook').text(doctor.User.PhoneNumber);
-                                $('#Appointment_DoctorId').val(doctor.UserId);
-                                $('#Appointment_InsuredId').val('@CurrentUserId');
-                                $('#Appointment_AppointmentDate').val(appointmentDate);
-                                if (appointmentDate == "" || appointmentDate == undefined) {
-                                    $('#appointmentTime').hide();
-                                    $('#insuredComments').hide();
-                                    $('#bookAppointmentButton').hide();
-                                    $('#NoAvailableAppointments').hide();
-                                    $('#NoWorkingDay').hide();
-                                    $('#normalContainerBook').show();
-                                    $('#bookAppointments').modal('show');
-                                }
-                                else {
-                                    listAvailableAppointments(appointmentDate, doctor.UserId);
-                                }
-                            },
-                            error: function () {
-                                $('#normalContainerBook').hide();
-                                $('#errorContainerBook').show();
-                            }
-                        })
-                    });
-
-
-                },
-                error: function () {
-                    $('#doctorsList').empty();
-                    $('#doctorsList').append('<p>There are no doctors matching these criteria.</p>');
                 }
             })
-        }
-        ListDoctors('', '', -1, '0001-01-01');
-        const today = new Date();
-        const day = String(today.getDate()).padStart(2, '0');
-        const month = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-        const year = today.getFullYear();
-        $('#AppointmentDate').attr('min', year + '-' + month + '-' + day);
-        $('#Appointment_AppointmentDate').attr('min', year + '-' + month + '-' + day);        
-        $('#search').on('submit', function (e) {
-            e.preventDefault();
-            if (e.target[3] == undefined) {
-                ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value, '0001-01-01');
-            }
-            else {
-                ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value, e.target[3]);
-            }
         })
-        $('#bookAppointments').on('hidden.bs.modal', function () {
-            $('#NoAvailableAppointments').hide();
-            $('#NoWorkingDay').hide();
-            $('#Appointment_InsuredComments').val('');
-        })
-        $('#Appointment_AppointmentDate').on('change', function () {
-            const appointmentDate = $('#Appointment_AppointmentDate').val();
-            if (appointmentDate == "") {
-                $('#appointmentTime').hide();
-                $('#insuredComments').hide();
-                $('#bookAppointmentButton').hide();
-                $('#NoAvailableAppointments').hide();
-                $('#NoWorkingDay').hide();
-            }
-            else {
-                listAvailableAppointments(appointmentDate, $('#Appointment_DoctorId').val());
-            }
-        })
-    })
     </script>
 }
 

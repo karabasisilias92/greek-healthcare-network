@@ -39,10 +39,10 @@ namespace GreekHealthcareNetwork.Repositories
                         doctors = db.Doctors.Where(doctor => users.Any(user => user.IsActive == true && user.Id == doctor.UserId) 
                                                                                                      && (int)doctor.MedicalSpecialty == doctorsSpecialty
                                                                                                      && doctor.WorkingHours.Any(w => w.Day == appointmentDate.DayOfWeek
-                                                                                                     && ((w.WorkEndTime - w.WorkStartTime).Value.TotalMinutes / w.AppointmentDuration) > db.Appointments.Where(app => app.DoctorId.Equals(doctor.UserId)
-                                                                                                     && app.AppointmentDate == appointmentDate
-                                                                                                     && app.AppointmentStartTime >= w.WorkStartTime
-                                                                                                     && app.AppointmentEndTime <= w.WorkEndTime).Count()))
+                                                                                                     && (DbFunctions.DiffMinutes(w.WorkStartTime, w.WorkEndTime) / w.AppointmentDuration) > db.Appointments.Where(app => app.DoctorId.Equals(doctor.UserId)
+                                                                                                     && DbFunctions.DiffDays(app.AppointmentDate, appointmentDate) == 0
+                                                                                                     && DbFunctions.DiffMinutes(w.WorkStartTime, app.AppointmentStartTime) >= 0
+                                                                                                     && DbFunctions.DiffMinutes(app.AppointmentEndTime, w.WorkEndTime) >= 0).Count()))
                                                                                                      .Include("User")
                                                                                                      .Include("User.Messages")
                                                                                                      .Include("User.Roles")
@@ -55,12 +55,12 @@ namespace GreekHealthcareNetwork.Repositories
                     }
                     else
                     {
-                        doctors = db.Doctors.Where(doctor => users.Any(user => user.IsActive == true && user.Id == doctor.UserId) 
-                                                                                                     && doctor.WorkingHours.Any(w => w.Day == appointmentDate.DayOfWeek 
-                                                                                                     && ((w.WorkEndTime - w.WorkStartTime).Value.TotalMinutes / w.AppointmentDuration) > db.Appointments.Where(app => app.DoctorId.Equals(doctor.UserId) 
-                                                                                                     && app.AppointmentDate == appointmentDate 
-                                                                                                     && app.AppointmentStartTime >= w.WorkStartTime 
-                                                                                                     && app.AppointmentEndTime <= w.WorkEndTime).Count()))
+                        doctors = db.Doctors.Where(doctor => users.Any(user => user.IsActive == true && user.Id == doctor.UserId)
+                                                                                                     && doctor.WorkingHours.Any(w => w.Day == appointmentDate.DayOfWeek
+                                                                                                     && (DbFunctions.DiffMinutes(w.WorkStartTime, w.WorkEndTime) / w.AppointmentDuration) > db.Appointments.Where(app => app.DoctorId.Equals(doctor.UserId)
+                                                                                                     && DbFunctions.DiffDays(app.AppointmentDate, appointmentDate) == 0
+                                                                                                     && DbFunctions.DiffMinutes(w.WorkStartTime, app.AppointmentStartTime) >= 0
+                                                                                                     && DbFunctions.DiffMinutes(app.AppointmentEndTime, w.WorkEndTime) >= 0).Count()))
                                                                                                      .Include("User")
                                                                                                      .Include("User.Messages")
                                                                                                      .Include("User.Roles")

@@ -185,6 +185,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AppointmentsController.cs" />
+    <Compile Include="Controllers\BookAppointmentController.cs" />
     <Compile Include="Controllers\DoctorsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InsuredsController.cs" />
@@ -283,6 +284,10 @@
     <Compile Include="Migrations\202001051516086_InsuredAppointmentCharge property in Appointments.cs" />
     <Compile Include="Migrations\202001051516086_InsuredAppointmentCharge property in Appointments.Designer.cs">
       <DependentUpon>202001051516086_InsuredAppointmentCharge property in Appointments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001060051293_Unique Index for Appointments.cs" />
+    <Compile Include="Migrations\202001060051293_Unique Index for Appointments.Designer.cs">
+      <DependentUpon>202001060051293_Unique Index for Appointments.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -616,6 +621,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001051516086_InsuredAppointmentCharge property in Appointments.resx">
       <DependentUpon>202001051516086_InsuredAppointmentCharge property in Appointments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001060051293_Unique Index for Appointments.resx">
+      <DependentUpon>202001060051293_Unique Index for Appointments.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
