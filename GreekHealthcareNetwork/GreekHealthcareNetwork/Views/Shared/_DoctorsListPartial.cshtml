@@ -420,7 +420,13 @@
                         })
                         if (isUserInsured && !insuredIsActive) {
                             $('.showDoctorMessage').prop('disabled', true);
+                            $('.showDoctorMessage').off('click');
                             $('.bookAppointments').prop('disabled', true);
+                            $('.bookAppointments').off('click');
+                            $('#send').prop('disabled', true);
+                            $('#send').off('click');
+                            $('#bookAppointment').prop('disabled', true);
+                            $('#bookAppointment').off('click');
                         }
                         $("#newMessage").on("hidden.bs.modal", function () {
                             $('#Message_Subject').val("");

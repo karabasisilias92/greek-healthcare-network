@@ -954,7 +954,7 @@ doctors section
     color: #ccc;
 }
 
-button:disabled:hover {
+button:disabled:hover, input:disabled:hover {
     cursor: default;
 }
 
