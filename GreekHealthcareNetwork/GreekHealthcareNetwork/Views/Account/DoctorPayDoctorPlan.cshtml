@@ -1,22 +1,58 @@
 ﻿@model GreekHealthcareNetwork.Models.PayDoctorPlanViewModel
-
+@using GreekHealthcareNetwork.Repositories
+@using Microsoft.AspNet.Identity;
+@using GreekHealthcareNetwork.Models;
 @{
-    ViewBag.Title = "Doctor Registration";
+    DateTime subscriptionEndDate = new DateTime();
 }
 
-<section id="pageHeader" class="container my-3">
-    <img src="https://via.placeholder.com/80x80.png?text=GHNlogo" class="rounded-circle mb-3" />
-    <h2>@ViewBag.Title (3/3)</h2>
-</section>
+@if (!Request.IsAuthenticated)
+{
+    ViewBag.Title = "Doctor Registration";
+    <section id="pageHeader" class="container my-3">
+        <img src="https://via.placeholder.com/80x80.png?text=GHNlogo" class="rounded-circle mb-3" />
+        <h2>@ViewBag.Title (3/3)</h2>
+    </section>
+}
+else
+{
+    var CurrentUserId = User.Identity.GetUserId();
+    using (var db = new ApplicationDbContext())
+    {
+        subscriptionEndDate = db.Users.SingleOrDefault(u => u.Id.Equals(CurrentUserId))
+                                    .SubscriptionEndDate.Date;
+    }
+    if (subscriptionEndDate.ToString("yyyy-MM-dd").Equals("0001-01-01"))
+    {
+        ViewBag.Title = "Pay subscription";
+    }
+    else
+    {
+        ViewBag.Title = "Renew subscription";
+    }
+    <section id="pageHeader" class="container my-3">
+        <h2>@ViewBag.Title</h2>
+    </section>
+}
 
 <section id="doctorPlanInfo" class="container">
     <h4>Doctor subscription plan details:</h4>
     <hr class="thicker" />
-    <p>
-        The subscription fee corresponding to @(Model.DoctorPlan.MedicalSpecialty)s is @Model.DoctorPlan.Fee.ToString("0.##") euros.
-        You can pay it off immediately or skip for now. However, if you skip payment, you will not be visible to patients so that they can book appointments.
-    </p>
-    <div id="pay_skip">
+    @if (!Request.IsAuthenticated || subscriptionEndDate.ToString("yyyy-MM-dd").Equals("0001-01-01"))
+    {
+        <p>
+            The subscription fee corresponding to @(Model.DoctorPlan.MedicalSpecialty)s is @Model.DoctorPlan.Fee.ToString("0.##") euros.
+            You can pay it off immediately or skip for now. However, if you skip payment, you will not be visible to patients so that they can book appointments.
+        </p>
+    }
+    else
+    {
+        <p>
+            The subscription fee corresponding to @(Model.DoctorPlan.MedicalSpecialty)s is @Model.DoctorPlan.Fee.ToString("0.##") euros.
+            Your current subscription ends at @subscriptionEndDate.ToString("dd-MM-yyyy"). You can renew it now for another year after the end of it.
+        </p>
+    }
+    <div id="pay_skip" class="mt-4">
         <div>
             @using (Html.BeginForm("DoctorPayDoctorPlan", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
@@ -25,7 +61,14 @@
                 @Html.HiddenFor(m => m.DoctorId, new { @Value = Model.DoctorId })
                 <div class="form-group">
                     <div id="skip" class="col-md-12">
-                        <input type="submit" class="btn btn-outline-danger" value="Skip" />
+                        @if (!Request.IsAuthenticated || subscriptionEndDate.ToString("yyyy-MM-dd").Equals("0001-01-01"))
+                        {
+                            <input type="submit" class="btn btn-outline-danger" value="Skip" />
+                        }
+                        else
+                        {
+                            <input type="submit" class="btn btn-outline-danger" value="Back to profile" />
+                        }
                     </div>
                 </div>
             }
@@ -37,4 +80,20 @@
 @section cssScripts {
     <link href="~/Content/registration.css" rel="stylesheet" />
 }
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            const firstRowHeight = +$('#firstRow').css('height').split('px')[0];;
+            console.log(firstRowHeight);
+            $('#firstRow').css('height', 'calc(100vh - 124.4px)');
+            const minHeight = +$('#firstRow').css('height').split('px')[0];;
+            console.log(minHeight);
+            if (firstRowHeight > minHeight) {
+                $('#firstRow').css('height', firstRowHeight);
+            }
+        })
+    </script>
+}
+
 

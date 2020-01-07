@@ -954,6 +954,10 @@ doctors section
     color: #ccc;
 }
 
+button:disabled:hover {
+    cursor: default;
+}
+
 @media (min-width: 769px) {
     #call-to-action .cta-btn-container {
         display: -webkit-box;

@@ -2,7 +2,7 @@
 @using GreekHealthcareNetwork.Models;
 @using GreekHealthcareNetwork.Repositories;
 @{
-    ViewBag.Title = "Pay Subscription";
+    ViewBag.Title = "Pay Subscription Fee";
     var _users = new UsersRepository();
 }
 
@@ -17,7 +17,7 @@
 <section id="PaymentInfo" class="container">
     <p> Implementation pending</p>
     <p> Your paypal account will be charged: @Model.PlanFee.ToString("0.##")&euro;</p>
-    <div id="pay_skip">
+    <div id="pay_skip" class="mt-4">
         <div>
             @using (Html.BeginForm("PaySubscription", "Payments", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
@@ -50,4 +50,19 @@
 
 @section cssScripts {
     <link href="~/Content/registration.css" rel="stylesheet" />
+}
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            const firstRowHeight = +$('#firstRow').css('height').split('px')[0];;
+            console.log(firstRowHeight);
+            $('#firstRow').css('height', 'calc(100vh - 124.4px)');
+            const minHeight = +$('#firstRow').css('height').split('px')[0];;
+            console.log(minHeight);
+            if (firstRowHeight > minHeight) {
+                $('#firstRow').css('height', firstRowHeight);
+            }
+        })
+    </script>
 }

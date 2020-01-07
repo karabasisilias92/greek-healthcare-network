@@ -1,32 +1,77 @@
 ﻿@model GreekHealthcareNetwork.Models.PayInsuredPlanViewModel
-
-@{
-    ViewBag.Title = "Client Registration";
+@using GreekHealthcareNetwork.Repositories
+@using Microsoft.AspNet.Identity;
+@using GreekHealthcareNetwork.Models;
+@{ 
+    DateTime subscriptionEndDate = new DateTime();
 }
 
-<section id="pageHeader" class="container my-3">
-    <img src="https://via.placeholder.com/80x80.png?text=GHNlogo" class="rounded-circle mb-3" />
-    <h2>@ViewBag.Title (2/2)</h2>
-</section>
+@if (!Request.IsAuthenticated)
+{
+    ViewBag.Title = "Client Registration";
+
+    <section id="pageHeader" class="container my-3">
+        <img src="https://via.placeholder.com/80x80.png?text=GHNlogo" class="rounded-circle mb-3" />
+        <h2>@ViewBag.Title (2/2)</h2>
+    </section>
+}
+else
+{
+    var CurrentUserId = User.Identity.GetUserId();
+    using (var db = new ApplicationDbContext())
+    {
+        subscriptionEndDate = db.Users.SingleOrDefault(u => u.Id.Equals(CurrentUserId))
+                                    .SubscriptionEndDate.Date;
+    }
+    if (subscriptionEndDate.ToString("yyyy-MM-dd").Equals("0001-01-01"))
+    {
+        ViewBag.Title = "Buy a plan";
+    }
+    else
+    {
+        ViewBag.Title = "Renew subscription";
+    }
+    <section id="pageHeader" class="container my-3">
+        <h2>@ViewBag.Title</h2>
+    </section>
+}
 
 <section id="insuredPlanInfo" class="container mb-5">
     <h4>Available insurance plans details:</h4>
     <hr class="thicker" />
-    <p>
-        Choose one of the below plans and pay it off immediately or skip choosing for now. 
-        However, if you skip, you will not be able to book any appointments
-        or send messages to doctors, until you choose and pay for a plan.
-    </p>
+    @if (!Request.IsAuthenticated || subscriptionEndDate.ToString("yyyy-MM-dd").Equals("0001-01-01"))
+    {
+        <p>
+            Choose one of the below plans and pay it off immediately or skip choosing for now.
+            However, if you skip, you will not be able to book any appointments
+            or send messages to doctors, until you choose and pay for a plan.
+        </p>
+    }
+    else
+    {
+        <p>
+            Your current subscription ends at @subscriptionEndDate.ToString("dd-MM-yyyy").  
+            Choose one of the below plans to renew it from now.
+            The plan that you will choose will start to be in effect after your current plan expires.
+        </p>
+    }
     <div id="#pay_skipInsured">
         <div>
             @using (Html.BeginForm("ClientPayInsuredPlan", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.HiddenFor(m => m.InsuredId, new { @Value = Model.InsuredId })
+                @Html.HiddenFor(m => m.InsuredId, new { @Value = Model.InsuredId })                
                 <div class="form-group">
                     <div id="skip" class="col-md-12">
-                        <input type="submit" class="btn btn-outline-danger my-3" value="Skip" />
+                        @if (!Request.IsAuthenticated || subscriptionEndDate.ToString("yyyy-MM-dd").Equals("0001-01-01"))
+                        {
+                            <input type="submit" class="btn btn-outline-danger my-3" value="Skip" />
+                        }
+                        else
+                        {
+                            <input type="submit" class="btn btn-outline-danger my-3" value="Back to profile" />
+                        }
                     </div>
                 </div>
             }
@@ -34,12 +79,16 @@
         <div class="row">
             @for (int i = 0; i < Model.InsuredPlans.Count; i++)
             {
-                <div @if (!Model.InsuredPlans[i].Name.Equals("Gold")) { @(new HtmlString("class=\"col-sm-4 pricing-box\"")) ; } else { @(new HtmlString("class=\"col-sm-4 pricing-box\" featured-price")) ; }>
-                    <div class="wow bounceInUp" @if (i == 0) { @(new HtmlString("data-wow-delay=\"0.1s\"")) ; } else if (i == 1) { @(new HtmlString("data-wow-delay=\"0.3s\"")) ; } else { @(new HtmlString("data-wow-delay=\"0.2s\"")) ; }>
+                <div @if (!Model.InsuredPlans[i].Name.Equals("Gold")) { @(new HtmlString("class=\"col-sm-4 pricing-box\""))  ; } else { @(new HtmlString("class=\"col-sm-4 pricing-box\" featured-price")) ; }>
+                    <div class="wow bounceInUp" @if (i == 0) { @(new HtmlString("data-wow-delay=\"0.1s\""))  ; } else if (i == 1) { @(new HtmlString("data-wow-delay=\"0.3s\""))  ; } else { @(new HtmlString("data-wow-delay=\"0.2s\"")) ; }>
 
-                        <div @if (i == 0) { @(new HtmlString("class=\"pricing-content general silver\"")) ; } else if (i == 1) { @(new HtmlString("class=\"pricing-content featured\"")) ; } else { @(new HtmlString("class=\"pricing-content general bronze\"")) ; }>
+                        <div @if (i == 0) { @(new HtmlString("class=\"pricing-content general silver\""))  ; } else if (i == 1) { @(new HtmlString("class=\"pricing-content featured\""))  ; } else { @(new HtmlString("class=\"pricing-content general bronze\"")) ; }>
                             <h2>@Model.InsuredPlans[i].Name Plan</h2>
-                            <h3>@Model.InsuredPlans[i].PlanFee.ToString("0.##")&euro; @if (Model.InsuredPlans[i].PlanDuration == 12) {@(new HtmlString("<span>per year</span>"));}</h3>
+                            <h3>
+                                @Model.InsuredPlans[i].PlanFee.ToString("0.##")&euro; @if (Model.InsuredPlans[i].PlanDuration == 12)
+                                {@(new HtmlString("<span>per year</span>"));
+                            }
+                            </h3>
                             <ul>
                                 @if (Model.InsuredPlans[i].Name.Equals("Gold"))
                                 {

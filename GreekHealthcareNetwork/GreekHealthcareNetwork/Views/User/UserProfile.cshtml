@@ -46,17 +46,24 @@
                     @if (!Model.User.SubscriptionEndDate.ToString("dd-MM-yyyy").Equals("01-01-0001"))
                     {
                         <p>Exp: @Model.User.SubscriptionEndDate.ToString("dd-MM-yyyy")</p>
-                        <button type="button" class="btn btn-info mt-2">Renew</button>
+                        if (User.IsInRole("Insured"))
+                        {
+                            @Html.ActionLink("Renew", "ClientPayInsuredPlan", "Account", new { userId = User.Identity.GetUserId() }, new { @class = "btn btn-info mt-2" });
+                        }
+                        else if (User.IsInRole("Doctor"))
+                        {
+                            @Html.ActionLink("Renew", "DoctorPayDoctorPlan", "Account", new { userId = User.Identity.GetUserId() }, new { @class = "btn btn-info mt-2" });
+                        }
                     }
                     else
                     {
                         if (User.IsInRole("Insured"))
                         {
-                            <button type="button" class="btn btn-info mt-2">Buy a plan</button>
+                            @Html.ActionLink("Buy a plan", "ClientPayInsuredPlan", "Account", new { userId = User.Identity.GetUserId() }, new { @class = "btn btn-info mt-2" });
                         }
                         else if (User.IsInRole("Doctor"))
                         {
-                            <button type="button" class="btn btn-info mt-2">Pay Subscription</button>
+                            @Html.ActionLink("Pay Subscription", "DoctorPayDoctorPlan", "Account", new { userId = User.Identity.GetUserId() }, new { @class = "btn btn-info mt-2" });
                         }
                     }
                 </div>

@@ -1,8 +1,18 @@
 ﻿@model GreekHealthcareNetwork.Models.SearchLoginViewModel
 @using Microsoft.AspNet.Identity;
+@using GreekHealthcareNetwork.Models;
 @{
     Layout = "~/Views/Shared/_CustomScriptsLayout.cshtml";
-    var CurrentUserId = User.Identity.GetUserId();
+    string CurrentUserId = "";
+    bool insuredIsActive = true;
+    if (Request.IsAuthenticated)
+    {
+        CurrentUserId = User.Identity.GetUserId();
+        using (var db = new ApplicationDbContext())
+        {
+            insuredIsActive = db.Users.SingleOrDefault(u => u.Id.Equals(CurrentUserId)).IsActive;
+        }
+    }
 }
 
 <div class="col-12">
@@ -198,6 +208,8 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script>
         $(document).ready(function () {
+            var insuredIsActive = @(insuredIsActive ? "true" : "false");
+            var isUserInsured = @(User.IsInRole("Insured") ? "true" : "false");
             function listAvailableAppointments(date, doctorId) {
                 $.ajax({
                     dataType: 'json',
@@ -406,6 +418,10 @@
                             $('#normalContainerMessage').show();
                             $('#newMessage').modal('show');
                         })
+                        if (isUserInsured && !insuredIsActive) {
+                            $('.showDoctorMessage').prop('disabled', true);
+                            $('.bookAppointments').prop('disabled', true);
+                        }
                         $("#newMessage").on("hidden.bs.modal", function () {
                             $('#Message_Subject').val("");
                             $('#Message_MessageText').val("");

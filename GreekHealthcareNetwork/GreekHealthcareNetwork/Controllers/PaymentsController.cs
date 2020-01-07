@@ -83,9 +83,16 @@ namespace GreekHealthcareNetwork.Controllers
                     _users.ActivateUser(user.Id);
                     _users.UpdateSubscriptionEndDate(user.Id);
                 }
-            }            
-            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-            return RedirectToAction("Index", "Home");
+            }
+            if (!Request.IsAuthenticated)
+            {
+                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return RedirectToAction("UserProfile", "User");
+            }
         }
 
         [Authorize(Roles = "Insured")]

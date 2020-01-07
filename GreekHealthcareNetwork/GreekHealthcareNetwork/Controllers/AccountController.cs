@@ -377,9 +377,9 @@ namespace GreekHealthcareNetwork.Controllers
         [AllowAnonymous]
         public ActionResult DoctorPayDoctorPlan(string userId)
         {
-            DoctorPlan doctorPlan = _doctors.GetDoctorPlan(userId);
-            PayDoctorPlanViewModel model = new PayDoctorPlanViewModel() { DoctorId = userId, DoctorPlan = doctorPlan };
-            return View(model);
+                DoctorPlan doctorPlan = _doctors.GetDoctorPlan(userId);
+                PayDoctorPlanViewModel model = new PayDoctorPlanViewModel() { DoctorId = userId, DoctorPlan = doctorPlan };
+                return View(model);
         }
 
         [HttpPost]
@@ -387,9 +387,16 @@ namespace GreekHealthcareNetwork.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DoctorPayDoctorPlan(PayDoctorPlanViewModel model)
         {
-            var user = _doctors.GetDoctorById(model.DoctorId).User;
-            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-            return RedirectToAction("Index", "Home");
+            if (!Request.IsAuthenticated)
+            {
+                var user = _doctors.GetDoctorById(model.DoctorId).User;
+                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return RedirectToAction("UserProfile", "User");
+            }
         }
 
         // GET: /Account/ClientRegister
@@ -496,9 +503,16 @@ namespace GreekHealthcareNetwork.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ClientPayInsuredPlan(PayInsuredPlanViewModel model)
         {
-            var user = _insureds.GetInsuredById(model.InsuredId).User;
-            await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-            return RedirectToAction("Index", "Home");
+            if (!Request.IsAuthenticated)
+            {
+                var user = _insureds.GetInsuredById(model.InsuredId).User;
+                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return RedirectToAction("UserProfile", "User");
+            }
         }
 
         [AllowAnonymous]
