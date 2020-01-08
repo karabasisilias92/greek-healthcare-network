@@ -23,3 +23,48 @@
 .table-button {
     margin: 0 10px 0 0;
 }
+
+.changeProfPicContainer {
+    position: relative;
+}
+
+.changeProfPicContainer img {
+    display: block;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    max-width: 150px;
+    transition: .3s ease;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.upload-button {
+    color: white;
+    opacity: 0;
+    width: 70px;
+    height: 60px;
+    /*font-size: 30px;*/
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.fa-plus {
+    color: white;
+    font-size: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+}
