@@ -15,30 +15,7 @@ jQuery(document).ready(function ($) {
       $('#headerDoctor').removeClass('header-fixed');
       $('#headerInsured').removeClass('header-fixed');
     }
-  });
-
-    $(window).scroll(function () {
-        $('#nav-menu-container > ul > li').removeClass('menu-active');
-        if ($(this).scrollTop() < (+$('#home').css('height').split('px')[0])) {
-            $('#homeLink').addClass('menu-active');
-        }
-        else if ($(this).scrollTop() < (+$('#home').css('height').split('px')[0]) + (+$('#about').css('height').split('px')[0])) {
-            $('#aboutLink').addClass('menu-active');
-        }
-        else if ($(this).scrollTop() < (+$('#home').css('height').split('px')[0]) + (+$('#about').css('height').split('px')[0]) + (+$('#facts').css('height').split('px')[0])) {
-            $('#factsLink').addClass('menu-active');
-        }
-        else if ($(this).scrollTop() < (+$('#home').css('height').split('px')[0]) + (+$('#about').css('height').split('px')[0]) + (+$('#facts').css('height').split('px')[0]) + (+$('#insurancePlans').css('height').split('px')[0])) {
-            $('#plansLink').addClass('menu-active');
-        }
-        else if ($(this).scrollTop() < (+$('#home').css('height').split('px')[0]) + (+$('#about').css('height').split('px')[0]) + (+$('#facts').css('height').split('px')[0]) + (+$('#insurancePlans').css('height').split('px')[0]) + (+$('#doctors').css('height').split('px')[0])) {
-            $('#doctorsLink').addClass('menu-active');
-        }
-        else {
-            $('#contactLink').addClass('menu-active');
-        }
-
-    });
+  });    
 
   $('.back-to-top').click(function () {
     $('html, body').animate({
