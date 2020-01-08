@@ -20,11 +20,11 @@
                 <h5>You are about to cancel your appointment on @date[0] with the @Model.Doctor.MedicalSpecialty Dr. @Model.Doctor.User.FirstName @Model.Doctor.User.LastName</h5>
                 if (((int)(Model.AppointmentDate - DateTime.Now.Date).Days < 3) && (Model.Insured.InsuredPlan.Name == "Bronze" || Model.Insured.InsuredPlan.Name == "Silver"))
                 {
-                      <h5>Since the appointment is less than 3 day away you will get a refund of @Model.Insured.InsuredPlan.CancelationRefundPercentage% (@Math.Round(refundAmount, 2) &euro;) </h5>
+                      <h5>Since the appointment is less than 3 day away you will get a refund of @Model.Insured.InsuredPlan.CancelationRefundPercentage% (@Math.Round(refundAmount, 2) &euro;).</h5>
                 }
                 else
                 {
-                    <h5>You will get a full refund (@Math.Round(fullRefund, 2) &euro;)</h5>
+                    <h5>You will get a full refund @((Model.Insured.InsuredPlan.Name == "Gold") ? "" : Math.Round(fullRefund, 2) + "\u20AC").</h5>
                 }
             }
             <h5>Do you want to proceed?</h5>
