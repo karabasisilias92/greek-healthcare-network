@@ -158,21 +158,21 @@
                                     const appointmentEnd = appointment.AppointmentEndTime.split(":");
                                     const appointmentUnformatedDate = appointment.AppointmentDate.split("T");
                                     const appointmentDate = appointmentUnformatedDate[0].split("-");
-                                    $('#appointmentsList').append('<tr>')
+                                    const tr = $(document.createElement('tr'));
                                     if (isUserInsured) {
-                                        $('#appointmentsList').append(
+                                        $(tr).append(
                                             '<td><img src="@Url.Content("~/Content/img/Doctors/")' + appointment.Doctor.User.Id + '/' + appointment.Doctor.User.ProfilePicture + '" alt="' + appointment.Doctor.User.ProfilePicture + '"' + 'class="rounded-circle"></td>' +
                                             '<td>' + appointment.Doctor.User.FirstName + ' ' + appointment.Doctor.User.LastName + '</td>' +
                                             '<td>' + appointment.Doctor.MedicalSpecialty + '</td>'
                                         );
                                     }
                                     if (isUserDoctor) {
-                                        $('#appointmentsList').append(
+                                        $(tr).append(
                                             '<td><img src="@Url.Content("~/Content/img/Insureds/")' + appointment.Insured.User.Id + '/' + appointment.Insured.User.ProfilePicture + '" alt="' + appointment.Doctor.User.ProfilePicture + '"' + 'class="rounded-circle"></td>' +
                                             '<td>' + appointment.Insured.User.FirstName + ' ' + appointment.Insured.User.LastName + '</td>'
                                         );
                                     }
-                                    $('#appointmentsList').append(
+                                    $(tr).append(
                                         '<td>' + appointmentDate[2] + "-" + appointmentDate[1] + "-" + appointmentDate[0] + '</td>' +
                                         '<td>' + appointmentStart[0] + ':' + appointmentStart[1] + ' - ' + appointmentEnd[0] + ':' + appointmentEnd[1] + '</td>' +
                                         '<td>' + appointment.AppointmentStatus + '</td>' +
@@ -181,8 +181,9 @@
                                         ((appointment.AppointmentStatus != "Upcoming" && isUserInsured)  ? '<button type="button" class="btn btn-light showAppointmentDetails table-button" data-id="' + appointment.Id + '">View</button>' : '') +
                                         ((appointment.AppointmentStatus == "Upcoming" && isUserInsured) ? '<button type="button" class="btn btn-success table-button" data-toggle="modal" data-target="">Edit</button>' : '') +
                                         ((appointment.AppointmentStatus == "Upcoming") ? '<button class="btn btn-danger table-button cancel-appointment" data-id="' + appointment.Id + '">Cancel</button>' : '') +
-                                        '</td ></tr>'
+                                        '</td>'
                                     );
+                                    $('#appointmentsList').append(tr);
                                 });
                             }
                             $('.sendMessage').click(function (e) {
@@ -334,30 +335,29 @@
                                     data: { "appointmentId": id },
                                     datatype: "json",
                                     success: function (data) {
-                                        debugger;
                                         $('#myModalContent').html(data);
                                         $('#confirm-cancel-modal').modal('show');
                                         $('.btn-ok').attr('data-id', id);
                                         $('.btn-ok').click(function (e) {
-                                console.log('YES clicked')
-                                let id = $(e.target).data('id');
-                                console.log(id)
-                                $.ajax({
-                                    url: '/Appointments/CancelAppointment',
-                                    @*url: '@Url.Action("CancelAppointment", "Appointments")',*@
-                                    type: 'post',
-                                    data: {
-                                        appointmentId: id
-                                    },
-                                    success: function (result) {
-                                        $('#confirm-cancel-modal').modal('hide');
-                                        ListAppointments('', '', -1, '0001-01-01', '@CurrentUserId');
-                                    },
-                                    error: function () {
-                                        alert("error");
-                                    }
-                                });
-                            });
+                                            console.log('YES clicked')
+                                            let id = $(e.target).data('id');
+                                            console.log(id)
+                                            $.ajax({
+                                                url: '/Appointments/CancelAppointment',
+                                                @*url: '@Url.Action("CancelAppointment", "Appointments")',*@
+                                                type: 'post',
+                                                data: {
+                                                    appointmentId: id
+                                                },
+                                                success: function (result) {
+                                                    $('#confirm-cancel-modal').modal('hide');
+                                                    ListAppointments('', '', -1, '0001-01-01', '@CurrentUserId');
+                                                },
+                                                error: function () {
+                                                    alert("error");
+                                                }
+                                            });
+                                        });
                                     },
                                     error: function () {
                                         alert("Dynamic content load failed.");
@@ -370,6 +370,7 @@
                             console.log(error);
                             $('#appointmentsList').empty();
                             $("#appointmentsList").append('<tr><td colspan="7"> Something went wrong. Please try again later. </td></tr>')
+                            fixFooterPosition(0);
                         }
                     })
             }

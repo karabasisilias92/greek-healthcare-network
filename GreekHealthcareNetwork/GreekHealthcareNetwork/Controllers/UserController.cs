@@ -109,7 +109,6 @@ namespace GreekHealthcareNetwork.Controllers
 
             string path = "";
             string fileName = user.User.ProfilePicture;
-            string fileNameExt;
 
             if (modifiedUser.ProfilePicture != null)
             {
@@ -121,24 +120,39 @@ namespace GreekHealthcareNetwork.Controllers
                 }
                 try
                 {
-                    fileNameExt = Path.GetExtension(modifiedUser.ProfilePicture.FileName);
                     if (HttpContext.User.IsInRole("Insured"))
                     {
-                        path = Path.Combine(Server.MapPath("~/Content/img/Insureds/" + userId + "/"), userId + fileNameExt);
+                        System.IO.DirectoryInfo di = new DirectoryInfo(Server.MapPath("~/Content/img/Insureds/" + userId + "/"));
+                        foreach (FileInfo file in di.EnumerateFiles())
+                        {
+                            file.Delete();
+                        }
+                        path = Path.Combine(Server.MapPath("~/Content/img/Insureds/" + userId + "/"), modifiedUser.ProfilePicture.FileName);
                     }
                     else if (HttpContext.User.IsInRole("Doctor"))
                     {
-                        path = Path.Combine(Server.MapPath("~/Content/img/Doctors/" + userId + "/"), userId + fileNameExt);
+                        System.IO.DirectoryInfo di = new DirectoryInfo(Server.MapPath("~/Content/img/Doctors/" + userId + "/"));
+                        foreach (FileInfo file in di.EnumerateFiles())
+                        {
+                            file.Delete();
+                        }
+                        path = Path.Combine(Server.MapPath("~/Content/img/Doctors/" + userId + "/"), modifiedUser.ProfilePicture.FileName);
                     }
                     else
                     {
-                        path = Path.Combine(Server.MapPath("~/Content/img/Admins/" + userId + "/"), userId + fileNameExt);
+                        System.IO.DirectoryInfo di = new DirectoryInfo(Server.MapPath("~/Content/img/Admins/" + userId + "/"));
+                        foreach (FileInfo file in di.EnumerateFiles())
+                        {
+                            file.Delete();
+                        }
+                        path = Path.Combine(Server.MapPath("~/Content/img/Admins/" + userId + "/"), modifiedUser.ProfilePicture.FileName);
                     }
                     modifiedUser.ProfilePicture.SaveAs(path);
                 }
                 catch (Exception ex)
                 {
                     ModelState.AddModelError("", ex.Message);
+                    return View(user);
                 }
             }
             else

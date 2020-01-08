@@ -256,11 +256,13 @@
                                 })
                             });
                         }
+                        fixFooterPosition(data.length);
                     },
                     error: function (error) {
                         console.log(error);
                         $('#messageList').empty();
                         $('#messageList').append('<tr><td colspan="7"> Something went wrong. Please try again later. </td></tr>')
+                        fixFooterPosition(0);
                     }
 
                 })

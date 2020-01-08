@@ -219,8 +219,6 @@ namespace GreekHealthcareNetwork.Controllers
                     fileName = model.ProfilePicture.FileName;
                 }
 
-                string fileNameExt = Path.GetExtension(fileName);
-
                 var user = new ApplicationUser
                 {
                     UserName = model.UserName,
@@ -231,12 +229,12 @@ namespace GreekHealthcareNetwork.Controllers
                     DoB = model.DoB,
                     AMKA = model.AMKA,
                     PaypalAccount = model.PaypalAccount,
+                    ProfilePicture = fileName
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     user = UserManager.FindByName(model.UserName);
-                    fileName = user.Id + fileNameExt;
                     Directory.CreateDirectory(Server.MapPath("~/Content/img/Doctors/" + user.Id));
                     string path = Path.Combine(Server.MapPath("~/Content/img/Doctors/" + user.Id), fileName);
                     if (model.ProfilePicture != null)
@@ -252,8 +250,8 @@ namespace GreekHealthcareNetwork.Controllers
                     {
                         int doctorPlanId = _doctors.GetDoctorPlanId(model.MedicalSpecialty);
                         Doctor doctor = new Doctor { UserId = user.Id, OfficeAddress = model.OfficeAddress, MedicalSpecialty = model.MedicalSpecialty, DoctorPlanId = doctorPlanId };
-                        user.ProfilePicture = fileName;
-                        _users.UpdateUser(user);
+                        //user.ProfilePicture = fileName;
+                        //_users.UpdateUser(user);
                         _doctors.InsertDoctor(doctor);
                     }
                     catch (Exception)
@@ -429,8 +427,6 @@ namespace GreekHealthcareNetwork.Controllers
                     fileName = model.ProfilePicture.FileName;
                 }
 
-                string fileNameExt = Path.GetExtension(fileName);
-
                 var user = new ApplicationUser
                 {
                     UserName = model.UserName,
@@ -441,12 +437,12 @@ namespace GreekHealthcareNetwork.Controllers
                     DoB = model.DoB,
                     AMKA = model.AMKA,
                     PaypalAccount = model.PaypalAccount,
+                    ProfilePicture = fileName
                 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     user = UserManager.FindByName(model.UserName);
-                    fileName = user.Id + fileNameExt;
                     Directory.CreateDirectory(Server.MapPath("~/Content/img/Insureds/" + user.Id));
                     string path = Path.Combine(Server.MapPath("~/Content/img/Insureds/" + user.Id), fileName);
                     if (model.ProfilePicture != null)
@@ -461,8 +457,8 @@ namespace GreekHealthcareNetwork.Controllers
                     try
                     {
                         Insured insured = new Insured { UserId = user.Id, HomeAddress = model.HomeAddress};
-                        user.ProfilePicture = fileName;
-                        _users.UpdateUser(user);
+                        //user.ProfilePicture = fileName;
+                        //_users.UpdateUser(user);
                         _insureds.InsertInsured(insured);
                     }
                     catch (Exception)
