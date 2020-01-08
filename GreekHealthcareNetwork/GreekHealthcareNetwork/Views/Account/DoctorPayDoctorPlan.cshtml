@@ -47,10 +47,20 @@ else
     }
     else
     {
-        <p>
-            The subscription fee corresponding to @(Model.DoctorPlan.MedicalSpecialty)s is @Model.DoctorPlan.Fee.ToString("0.##") euros.
-            Your current subscription ends at @subscriptionEndDate.ToString("dd-MM-yyyy"). You can renew it now for another year after the end of it.
-        </p>
+        if (subscriptionEndDate >= DateTime.Now)
+        {
+            <p>
+                The subscription fee corresponding to @(Model.DoctorPlan.MedicalSpecialty)s is @Model.DoctorPlan.Fee.ToString("0.##") euros.
+                Your subscription is ending at @subscriptionEndDate.ToString("dd-MM-yyyy"). You can extend it now for another year after the end of it.
+            </p>
+        }
+        else
+        {
+            <p>
+                The subscription fee corresponding to @(Model.DoctorPlan.MedicalSpecialty)s is @Model.DoctorPlan.Fee.ToString("0.##") euros.
+                Your subscription ended at @subscriptionEndDate.ToString("dd-MM-yyyy"). You can renew it now for another year starting from today.
+            </p>
+        }
     }
     <div id="pay_skip" class="mt-4">
         <div>

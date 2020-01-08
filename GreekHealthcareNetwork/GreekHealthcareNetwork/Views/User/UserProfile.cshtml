@@ -48,11 +48,28 @@
                         <p>Exp: @Model.User.SubscriptionEndDate.ToString("dd-MM-yyyy")</p>
                         if (User.IsInRole("Insured"))
                         {
-                            @Html.ActionLink("Renew", "ClientPayInsuredPlan", "Account", new { userId = User.Identity.GetUserId() }, new { @class = "btn btn-info mt-2" });
+                            if (Model.User.SubscriptionEndDate < DateTime.Now)
+                            {
+                                @Html.ActionLink("Renew subscription", "ClientPayInsuredPlan", "Account", new { userId = User.Identity.GetUserId() }, new { @class = "btn btn-info mt-2" });
+                            }
+                            else
+                            {
+                                if (!Model.Insured.InsuredPlan.Name.Equals("Gold"))
+                                {
+                                    @Html.ActionLink("Upgrade plan", "ClientPayInsuredPlan", "Account", new { userId = User.Identity.GetUserId() }, new { @class = "btn btn-info mt-2" });
+                                }
+                            }
                         }
                         else if (User.IsInRole("Doctor"))
                         {
-                            @Html.ActionLink("Renew", "DoctorPayDoctorPlan", "Account", new { userId = User.Identity.GetUserId() }, new { @class = "btn btn-info mt-2" });
+                            if (Model.User.SubscriptionEndDate >= DateTime.Now)
+                            {
+                                @Html.ActionLink("Extend subscription", "DoctorPayDoctorPlan", "Account", new { userId = User.Identity.GetUserId() }, new { @class = "btn btn-info mt-2" });
+                            }
+                            else
+                            {
+                                @Html.ActionLink("Renew subscription", "DoctorPayDoctorPlan", "Account", new { userId = User.Identity.GetUserId() }, new { @class = "btn btn-info mt-2" });
+                            }
                         }
                     }
                     else

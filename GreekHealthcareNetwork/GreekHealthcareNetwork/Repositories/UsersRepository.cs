@@ -35,7 +35,14 @@ namespace GreekHealthcareNetwork.Repositories
             using (var db = new ApplicationDbContext())
             {
                 var user = db.Users.Find(userId);
-                user.SubscriptionEndDate = DateTime.Now.AddMonths(12);
+                if (HttpContext.Current.User.IsInRole("Doctor") && !user.SubscriptionEndDate.Date.ToString("yyyy-MM-dd").Equals("0001-01-01") && user.SubscriptionEndDate >= DateTime.Now)
+                {
+                    user.SubscriptionEndDate = user.SubscriptionEndDate.AddMonths(12);
+                }
+                else
+                {
+                    user.SubscriptionEndDate = DateTime.Now.AddMonths(12);
+                }
                 db.SaveChanges();
             }
         }

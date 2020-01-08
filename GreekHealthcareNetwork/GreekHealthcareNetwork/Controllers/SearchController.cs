@@ -98,7 +98,6 @@ namespace GreekHealthcareNetwork.Controllers
             }
             var appointmentSlots = new List<Appointment>();
             var appointments = _appointments.GetDoctorAppointmentsOnDate(appointmentDay, doctorId);
-            var appointmentsStartTime = appointments.Select(app => app.AppointmentStartTime).ToList();
             if (appointments == null || appointments.Count() == 0)
             {
                 foreach (var item in workingHoursOfDay)
@@ -121,6 +120,7 @@ namespace GreekHealthcareNetwork.Controllers
             }
             else
             {
+                var appointmentsStartTime = appointments.Select(app => app.AppointmentStartTime).ToList();
                 foreach (var item in workingHoursOfDay)
                 {
                     var startTime = item.WorkStartTime;

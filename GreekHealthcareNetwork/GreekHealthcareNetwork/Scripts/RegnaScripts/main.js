@@ -1,5 +1,7 @@
 jQuery(document).ready(function ($) {
-
+    $('html, body').animate({
+        scrollTop: 0
+    }, 1500, 'easeInOutExpo');
   // Header fixed and Back to top button
   $(window).scroll(function () {
     if ($(this).scrollTop() > 100) {
@@ -14,6 +16,30 @@ jQuery(document).ready(function ($) {
       $('#headerInsured').removeClass('header-fixed');
     }
   });
+
+    $(window).scroll(function () {
+        $('#nav-menu-container > ul > li').removeClass('menu-active');
+        if ($(this).scrollTop() < (+$('#home').css('height').split('px')[0])) {
+            $('#homeLink').addClass('menu-active');
+        }
+        else if ($(this).scrollTop() < (+$('#home').css('height').split('px')[0]) + (+$('#about').css('height').split('px')[0])) {
+            $('#aboutLink').addClass('menu-active');
+        }
+        else if ($(this).scrollTop() < (+$('#home').css('height').split('px')[0]) + (+$('#about').css('height').split('px')[0]) + (+$('#facts').css('height').split('px')[0])) {
+            $('#factsLink').addClass('menu-active');
+        }
+        else if ($(this).scrollTop() < (+$('#home').css('height').split('px')[0]) + (+$('#about').css('height').split('px')[0]) + (+$('#facts').css('height').split('px')[0]) + (+$('#insurancePlans').css('height').split('px')[0])) {
+            $('#plansLink').addClass('menu-active');
+        }
+        else if ($(this).scrollTop() < (+$('#home').css('height').split('px')[0]) + (+$('#about').css('height').split('px')[0]) + (+$('#facts').css('height').split('px')[0]) + (+$('#insurancePlans').css('height').split('px')[0]) + (+$('#doctors').css('height').split('px')[0])) {
+            $('#doctorsLink').addClass('menu-active');
+        }
+        else {
+            $('#contactLink').addClass('menu-active');
+        }
+
+    });
+
   $('.back-to-top').click(function () {
     $('html, body').animate({
       scrollTop: 0

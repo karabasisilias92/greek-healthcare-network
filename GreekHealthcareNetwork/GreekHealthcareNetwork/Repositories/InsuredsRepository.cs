@@ -67,6 +67,10 @@ namespace GreekHealthcareNetwork.Repositories
             using (var db = new ApplicationDbContext())
             {
                 var user = db.Insureds.Find(userId);
+                if (user.User.SubscriptionEndDate < DateTime.Now)
+                {
+                    user.BookedAppointments = 0;
+                }
                 user.InsuredPlanId = planId;
                 db.SaveChanges();
             }

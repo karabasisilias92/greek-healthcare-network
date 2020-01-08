@@ -54,7 +54,15 @@ namespace GreekHealthcareNetwork.Controllers
             }
             else
             {
-                planFee = _insureds.GetInsuredPlan(planId).PlanFee;
+                var insured = _insureds.GetInsuredById(userId);
+                if (insured.User.SubscriptionEndDate >= DateTime.Now)
+                {
+                    planFee = _insureds.GetInsuredPlan(planId).PlanFee - insured.InsuredPlan.PlanFee;
+                }
+                else
+                {
+                    planFee = _insureds.GetInsuredPlan(planId).PlanFee;
+                }
             }
             PaySubcriptionViewModel model = new PaySubcriptionViewModel() { UserId = userId, PlanId = planId, PlanFee = planFee};
             return View(model);
@@ -80,8 +88,11 @@ namespace GreekHealthcareNetwork.Controllers
                 else if (UserManager.IsInRole(model.UserId, "Insured"))
                 {
                     _insureds.UpdateInsuredPlan(user.Id, model.PlanId);
-                    _users.ActivateUser(user.Id);
-                    _users.UpdateSubscriptionEndDate(user.Id);
+                    if (!user.IsActive)
+                    {
+                        _users.UpdateSubscriptionEndDate(user.Id);
+                        _users.ActivateUser(user.Id);
+                    }                    
                 }
             }
             if (!Request.IsAuthenticated)

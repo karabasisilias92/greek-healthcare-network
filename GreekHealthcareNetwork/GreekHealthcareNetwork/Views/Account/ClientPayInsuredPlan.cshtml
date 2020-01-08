@@ -2,8 +2,14 @@
 @using GreekHealthcareNetwork.Repositories
 @using Microsoft.AspNet.Identity;
 @using GreekHealthcareNetwork.Models;
-@{ 
+@{
     DateTime subscriptionEndDate = new DateTime();
+    var CurrentUserId = User.Identity.GetUserId();
+    Insured insured;
+    using (var db = new ApplicationDbContext())
+    {
+        insured = db.Insureds.Include("InsuredPlan").SingleOrDefault(u => u.UserId.Equals(CurrentUserId));
+    }
 }
 
 @if (!Request.IsAuthenticated)
@@ -17,7 +23,6 @@
 }
 else
 {
-    var CurrentUserId = User.Identity.GetUserId();
     using (var db = new ApplicationDbContext())
     {
         subscriptionEndDate = db.Users.SingleOrDefault(u => u.Id.Equals(CurrentUserId))
@@ -49,11 +54,27 @@ else
     }
     else
     {
-        <p>
-            Your current subscription ends at @subscriptionEndDate.ToString("dd-MM-yyyy").  
-            Choose one of the below plans to renew it from now.
-            The plan that you will choose will start to be in effect after your current plan expires.
-        </p>
+        if (subscriptionEndDate < DateTime.Now)
+        {
+            <p>
+                Your subscription as @insured.InsuredPlan.Name member ended at @subscriptionEndDate.ToString("dd-MM-yyyy").
+                Choose one of the below plans to renew for another year starting from today.
+            </p>
+        }
+        else
+        {
+            if (!insured.InsuredPlan.Name.Equals("Gold"))
+            {
+                <p>
+                    Your subscription as @insured.InsuredPlan.Name member is ending at @subscriptionEndDate.ToString("dd-MM-yyyy").
+                    Choose one of the below plans to upgrade to for the remaining time until the end of it.
+                </p>
+            }
+            else
+            {
+
+            }
+        }
     }
     <div id="#pay_skipInsured">
         <div>
@@ -61,7 +82,7 @@ else
             {
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.HiddenFor(m => m.InsuredId, new { @Value = Model.InsuredId })                
+                @Html.HiddenFor(m => m.InsuredId, new { @Value = Model.InsuredId })
                 <div class="form-group">
                     <div id="skip" class="col-md-12">
                         @if (!Request.IsAuthenticated || subscriptionEndDate.ToString("yyyy-MM-dd").Equals("0001-01-01"))
@@ -76,52 +97,118 @@ else
                 </div>
             }
         </div>
-        <div class="row">
-            @for (int i = 0; i < Model.InsuredPlans.Count; i++)
-            {
-                <div @if (!Model.InsuredPlans[i].Name.Equals("Gold")) { @(new HtmlString("class=\"col-sm-4 pricing-box\""))  ; } else { @(new HtmlString("class=\"col-sm-4 pricing-box\" featured-price")) ; }>
-                    <div class="wow bounceInUp" @if (i == 0) { @(new HtmlString("data-wow-delay=\"0.1s\""))  ; } else if (i == 1) { @(new HtmlString("data-wow-delay=\"0.3s\""))  ; } else { @(new HtmlString("data-wow-delay=\"0.2s\"")) ; }>
+        @if (!Request.IsAuthenticated || subscriptionEndDate < DateTime.Now)
+        {
+            <div class="row">
+                @for (int i = 0; i < Model.InsuredPlans.Count; i++)
+                {
+                    <div @if (!Model.InsuredPlans[i].Name.Equals("Gold")) { @(new HtmlString("class=\"col-sm-4 pricing-box\""))  ; } else { @(new HtmlString("class=\"col-sm-4 pricing-box\" featured-price")) ; }>
+                        <div class="wow bounceInUp" @if (i == 0) { @(new HtmlString("data-wow-delay=\"0.1s\""))  ; } else if (i == 1) { @(new HtmlString("data-wow-delay=\"0.3s\""))  ; } else { @(new HtmlString("data-wow-delay=\"0.2s\"")) ; }>
 
-                        <div @if (i == 0) { @(new HtmlString("class=\"pricing-content general silver\""))  ; } else if (i == 1) { @(new HtmlString("class=\"pricing-content featured\""))  ; } else { @(new HtmlString("class=\"pricing-content general bronze\"")) ; }>
-                            <h2>@Model.InsuredPlans[i].Name Plan</h2>
-                            <h3>
-                                @Model.InsuredPlans[i].PlanFee.ToString("0.##")&euro; @if (Model.InsuredPlans[i].PlanDuration == 12)
-                                {@(new HtmlString("<span>per year</span>"));
-                            }
-                            </h3>
-                            <ul>
-                                @if (Model.InsuredPlans[i].Name.Equals("Gold"))
-                                {
-                                    <li><i class="fa fa-check icon-success"></i><span>@Model.InsuredPlans[i].PlanAppoinments Appointments</span></li>
-                                    <li><i class="fa fa-times icon-danger"></i><span><del>Limited number of Appointments</del></span></li>
-                                    <li><i class="fa fa-check icon-success"></i><span>Charge per appointment: <b>@(Model.InsuredPlans[i].AppointmentRate)&euro;</b></span></li>
-                                    <li><i class="fa fa fa-times icon-danger"></i><span><del>Charge per appointment after limit has been exceeded</del></span></li>
-                                    <li><i class="fa fa-check icon-success"></i><span><b>Free</b> cancellation of appointment <b>until 3 days before</b> the appointment date</span></li>
-                                    <li><i class="fa fa-check icon-success"></i><span><b>Free</b> cancellation of appointment <b>less than 3 days before</b> the appointment date</span></li>
+                            <div @if (i == 0) { @(new HtmlString("class=\"pricing-content general silver\""))  ; } else if (i == 1) { @(new HtmlString("class=\"pricing-content featured\""))  ; } else { @(new HtmlString("class=\"pricing-content general bronze\"")) ; }>
+                                <h2>@Model.InsuredPlans[i].Name Plan</h2>
+                                <h3>
+                                    @Model.InsuredPlans[i].PlanFee.ToString("0.##")&euro; @if (Model.InsuredPlans[i].PlanDuration == 12)
+                                    {@(new HtmlString("<span>per year</span>"));
                                 }
-                                else
-                                {
-                                    <li><i class="fa fa-times icon-danger"></i><span><del>Unlimited Appointments</del></span></li>
-                                    <li><i class="fa fa-check icon-success"></i><span>Limited number of Appointments: <b>@Model.InsuredPlans[i].PlanAppoinments</b></span></li>
-                                    <li><i class="fa fa-check icon-success"></i><span>Charge per appointment: <b>@(Model.InsuredPlans[i].AppointmentRate)% of appointment's total cost</b></span></li>
-                                    <li><i class="fa fa-check icon-success"></i><span>Charge per appointment <b>after limit</b> has been exceeded: <b>@(Model.InsuredPlans[i].ExceededAppointmentRate)% of appointment's total cost</b></span></li>
-                                    <li><i class="fa fa-check icon-success"></i><span><b>Full refund</b> in case of appointment cancellation <b>until 3 days before</b> the appointment date</span></li>
-                                    <li><i class="fa fa-check icon-success"></i><span><b>@(Model.InsuredPlans[i].CancelationRefundPercentage)% refund</b> in case of cancellation <b>less than 3 days before</b> the appointment date</span></li>
-                                }
-                                <li><i class="fa fa-check icon-success"></i><span>Exchange messages with the doctors</span></li>
-                            </ul>
-                            <div class="price-bottom">
-                                @Html.ActionLink("PURCHASE", "PaySubscription", "Payments", new { userId = Model.InsuredId, planId = Model.InsuredPlans[i].Id }, new { id = "pay", @class = "btn btn-skin mb-3" })
+                                </h3>
+                                <ul>
+                                    @if (Model.InsuredPlans[i].Name.Equals("Gold"))
+                                    {
+                                        <li><i class="fa fa-check icon-success"></i><span>@Model.InsuredPlans[i].PlanAppoinments Appointments</span></li>
+                                        <li><i class="fa fa-times icon-danger"></i><span><del>Limited number of Appointments</del></span></li>
+                                        <li><i class="fa fa-check icon-success"></i><span>Charge per appointment: <b>@(Model.InsuredPlans[i].AppointmentRate)&euro;</b></span></li>
+                                        <li><i class="fa fa fa-times icon-danger"></i><span><del>Charge per appointment after limit has been exceeded</del></span></li>
+                                        <li><i class="fa fa-check icon-success"></i><span><b>Free</b> cancellation of appointment <b>until 3 days before</b> the appointment date</span></li>
+                                        <li><i class="fa fa-check icon-success"></i><span><b>Free</b> cancellation of appointment <b>less than 3 days before</b> the appointment date</span></li>
+                                    }
+                                    else
+                                    {
+                                        <li><i class="fa fa-times icon-danger"></i><span><del>Unlimited Appointments</del></span></li>
+                                        <li><i class="fa fa-check icon-success"></i><span>Limited number of Appointments: <b>@Model.InsuredPlans[i].PlanAppoinments</b></span></li>
+                                        <li><i class="fa fa-check icon-success"></i><span>Charge per appointment: <b>@(Model.InsuredPlans[i].AppointmentRate)% of appointment's total cost</b></span></li>
+                                        <li><i class="fa fa-check icon-success"></i><span>Charge per appointment <b>after limit</b> has been exceeded: <b>@(Model.InsuredPlans[i].ExceededAppointmentRate)% of appointment's total cost</b></span></li>
+                                        <li><i class="fa fa-check icon-success"></i><span><b>Full refund</b> in case of appointment cancellation <b>until 3 days before</b> the appointment date</span></li>
+                                        <li><i class="fa fa-check icon-success"></i><span><b>@(Model.InsuredPlans[i].CancelationRefundPercentage)% refund</b> in case of cancellation <b>less than 3 days before</b> the appointment date</span></li>
+                                    }
+                                    <li><i class="fa fa-check icon-success"></i><span>Exchange messages with the doctors</span></li>
+                                </ul>
+                                <div class="price-bottom">
+                                    @Html.ActionLink("PURCHASE", "PaySubscription", "Payments", new { userId = Model.InsuredId, planId = Model.InsuredPlans[i].Id }, new { id = "pay", @class = "btn btn-skin mb-3" })
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            }
-        </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                @for (int i = 0; i < Model.InsuredPlans.Count - 1; i++)
+                {
+                    if (insured.InsuredPlan.PlanFee < Model.InsuredPlans[i].PlanFee && !insured.InsuredPlan.Name.Equals(Model.InsuredPlans[i].Name))
+                    {
+                        <div @if (!Model.InsuredPlans[i].Name.Equals("Gold")) { @(new HtmlString("class=\"col-sm-4 pricing-box\""))  ; } else { @(new HtmlString("class=\"col-sm-4 pricing-box\" featured-price")) ; }>
+                            <div class="wow bounceInUp" @if (i == 0) { @(new HtmlString("data-wow-delay=\"0.1s\""))  ; } else if (i == 1) { @(new HtmlString("data-wow-delay=\"0.3s\""))  ; } else { @(new HtmlString("data-wow-delay=\"0.2s\"")) ; }>
+
+                                <div @if (i == 0) { @(new HtmlString("class=\"pricing-content general silver\""))  ; } else if (i == 1) { @(new HtmlString("class=\"pricing-content featured\""))  ; } else { @(new HtmlString("class=\"pricing-content general bronze\"")) ; }>
+                                    <h2>@Model.InsuredPlans[i].Name Plan</h2>
+                                    <h3>
+                                        @Model.InsuredPlans[i].PlanFee.ToString("0.##")&euro; @if (Model.InsuredPlans[i].PlanDuration == 12)
+                                        {@(new HtmlString("<span>per year</span>"));
+                                    }
+                                    </h3>
+                                    <ul>
+                                        @if (Model.InsuredPlans[i].Name.Equals("Gold"))
+                                        {
+                                            <li><i class="fa fa-check icon-success"></i><span>@Model.InsuredPlans[i].PlanAppoinments Appointments</span></li>
+                                            <li><i class="fa fa-times icon-danger"></i><span><del>Limited number of Appointments</del></span></li>
+                                            <li><i class="fa fa-check icon-success"></i><span>Charge per appointment: <b>@(Model.InsuredPlans[i].AppointmentRate)&euro;</b></span></li>
+                                            <li><i class="fa fa fa-times icon-danger"></i><span><del>Charge per appointment after limit has been exceeded</del></span></li>
+                                            <li><i class="fa fa-check icon-success"></i><span><b>Free</b> cancellation of appointment <b>until 3 days before</b> the appointment date</span></li>
+                                            <li><i class="fa fa-check icon-success"></i><span><b>Free</b> cancellation of appointment <b>less than 3 days before</b> the appointment date</span></li>
+                                        }
+                                        else
+                                        {
+                                            <li><i class="fa fa-times icon-danger"></i><span><del>Unlimited Appointments</del></span></li>
+                                            <li><i class="fa fa-check icon-success"></i><span>Limited number of Appointments: <b>@Model.InsuredPlans[i].PlanAppoinments</b></span></li>
+                                            <li><i class="fa fa-check icon-success"></i><span>Charge per appointment: <b>@(Model.InsuredPlans[i].AppointmentRate)% of appointment's total cost</b></span></li>
+                                            <li><i class="fa fa-check icon-success"></i><span>Charge per appointment <b>after limit</b> has been exceeded: <b>@(Model.InsuredPlans[i].ExceededAppointmentRate)% of appointment's total cost</b></span></li>
+                                            <li><i class="fa fa-check icon-success"></i><span><b>Full refund</b> in case of appointment cancellation <b>until 3 days before</b> the appointment date</span></li>
+                                            <li><i class="fa fa-check icon-success"></i><span><b>@(Model.InsuredPlans[i].CancelationRefundPercentage)% refund</b> in case of cancellation <b>less than 3 days before</b> the appointment date</span></li>
+                                        }
+                                        <li><i class="fa fa-check icon-success"></i><span>Exchange messages with the doctors</span></li>
+                                    </ul>
+                                    <div class="price-bottom">
+                                        @Html.ActionLink("PURCHASE", "PaySubscription", "Payments", new { userId = Model.InsuredId, planId = Model.InsuredPlans[i].Id }, new { id = "pay", @class = "btn btn-skin mb-3" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
     </div>
 </section>
 
 @section cssScripts {
     <link href="~/Content/registration.css" rel="stylesheet" />
+}
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            const firstRowHeight = +$('#firstRow').css('height').split('px')[0];;
+            console.log(firstRowHeight);
+            $('#firstRow').css('height', 'calc(100vh - 124.4px)');
+            const minHeight = +$('#firstRow').css('height').split('px')[0];;
+            console.log(minHeight);
+            if (firstRowHeight > minHeight) {
+                $('#firstRow').css('height', firstRowHeight);
+            }
+        })
+    </script>
 }
 
