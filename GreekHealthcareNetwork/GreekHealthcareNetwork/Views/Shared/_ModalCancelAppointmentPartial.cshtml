@@ -13,7 +13,7 @@
         <div class="modal-body">
             @if (User.IsInRole("Doctor"))
             {
-                <h5>You are about to cancel your appointment on @date with @Model.Insured.User.FirstName @Model.Insured.User.LastName</h5>
+                <h5>You are about to cancel your appointment on @date with @Model.Insured.User.FirstName @Model.Insured.User.LastName<text>.</text></h5>
             }
             @if (User.IsInRole("Insured"))
             {
