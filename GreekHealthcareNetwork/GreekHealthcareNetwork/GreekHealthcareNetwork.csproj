@@ -417,6 +417,7 @@
     <Content Include="Scripts\RegnaScripts\libs\waypoints.min.js" />
     <Content Include="Scripts\RegnaScripts\libs\wow.js" />
     <Content Include="Scripts\RegnaScripts\libs\wow.min.js" />
+    <Content Include="Scripts\setNavItemActive.js" />
     <Content Include="Scripts\src\index.js" />
     <Content Include="Scripts\src\methods\defaults.js" />
     <Content Include="Scripts\src\methods\destroy.js" />
