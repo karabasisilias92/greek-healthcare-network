@@ -4,3 +4,18 @@
 
 <h2>Welcome @ViewBag.FullName</h2>
 
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            const firstRowHeight = +$('#firstRow').css('height').split('px')[0];;
+            console.log(firstRowHeight);
+            $('#firstRow').css('height', 'calc(100vh - 156.4px)');
+            const minHeight = +$('#firstRow').css('height').split('px')[0];;
+            console.log(minHeight);
+            if (firstRowHeight > minHeight) {
+                $('#firstRow').css('height', firstRowHeight);
+            }
+        })
+    </script>
+}
+

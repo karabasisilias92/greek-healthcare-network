@@ -14,12 +14,7 @@
             <div id="logo">
                 <!--<a href="/Home/Index"><img src="@Url.Content("~/Content/img/logo.png")" alt="GHN" title="" /></a>-->
                 <!-- Uncomment below if you prefer to use a text logo -->
-                <h1><a href="/Admin/Index"><img src="@Url.Content("~/Content/img/logo.png")" alt="GHN"/></a></h1>
-            </div>
-            <div id="nav-menu-container">
-                <ul class="nav-menu">
-                    <li>@Html.ActionLink("Home", "Index", "Admin")</li>
-                </ul>
+                <h1><a href="/Admin/Index">GHN</a></h1>
             </div>
             <div id="profilePic">
                 <ul class="nav-menu">
@@ -41,106 +36,50 @@
     </div>
     </header>
 
-    <body>
-        <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-            <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="@Url.Action("Index", "Admin")">GΗΝ</a>
-        </nav>
+  
 
         <div class="container-fluid">
             <div class="row">
-                <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-                    <div class="sidebar-sticky">
+                <nav class="col-md-2 d-none d-md-block sidebar">
+                    <div>
                         @* @Html.Partial("_DoctorListPartial")*@
-                        <div class="btn-group btn-block">
-                            <a role="button" href="#doctors" class="text-left btn btn-lg btn-default col-xs-10">Doctors</a>
-                            <a role="button" href="#insureds" class="text-left btn btn-lg btn-default col-xs-10">Insureds</a>
-                            <a role="button" href="#messages" class="text-left btn btn-lg btn-default col-xs-10">Messages</a>
-                            <a role="button" href="#visitormessages" class="text-left btn btn-lg btn-default col-xs-10">VisitorMessages</a>
-                            <a role="button" href="#insuredplans" class="text-left btn btn-lg btn-default col-xs-10">InsuredPlans</a>
-                            <a role="button" href="#doctorplans" class="text-left btn btn-lg btn-default col-xs-10">DoctorPlans</a>
-                            <a role="button" href="#createotheradmin" class="text-left btn btn-lg btn-default col-xs-10">CreateOtherAdministrators</a>
-                        </div>
+                        <ul class="nav nav-menu flex-column mb-2">
+                            <li>
+                                @Html.ActionLink("Home", "Index", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Doctors", "Doctors", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Insureds", "Insureds", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Messages", "Messages", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Visitor Messages", "VisitorMessages", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Insured Plans", "InsuredPlans", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Doctor Plans", "DoctorPlans", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Appointment Cost Per Specialty", "AppointmentCostPerSpecialty", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Appointments Report Page", "AppointmentsReportPage", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Subscriptions Expired Report Page", "SubscriptionExpired", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Create Admin User", "CreateAdminUser", "Admin")
+                        </ul>
                     </div>
-
-                            @*<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                <span>Saved reports</span>
-                <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
-                    <span data-feather="plus-circle"></span>
-                </a>
-            </h6>
-            <ul class="nav flex-column mb-2">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <span data-feather="file-text"></span>
-                        Current month
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <span data-feather="file-text"></span>
-                        Last quarter
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <span data-feather="file-text"></span>
-                        Social engagement
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <span data-feather="file-text"></span>
-                        Year-end sale
-                    </a>
-                </li>
-            </ul>*@
                  </nav>  
             </div>
          </div>
-
-            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-                @RenderBody()
-            </main>
-            <footer class="footer navbar-fixed-bottom">
-                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-            </footer>
-
-        @*<div class="navbar navbar-inverse navbar-fixed-top">
-                <div class="container">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                    </div>
-                    <div class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav">
-                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                            <li>@Html.ActionLink("About", "About", "Home")</li>
-                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                        </ul>
-                        @Html.Partial("_LoginPartial")
-                    </div>
-                </div>
-            </div>*@
-        @*<div class="container body-content">
-            @RenderBody()
-            <hr />
-            <footer>
-                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-            </footer>*@
-        <nav class="fixed-bottom navbar-light bg-light text-center">
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </nav>
-
-
-        @Scripts.Render("~/bundles/jquery")
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
-        @Scripts.Render("~/bundles/bootstrap")
-        @Scripts.Render("~/bundles/dashboard")
-        @RenderSection("scripts", required: false)
-    </body>
 } 
 

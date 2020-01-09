@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "Doctors";
+}
+@section cssScripts{
+    <link href="@Url.Content("~/Content/adminsNavbar.css")" type="text/css" rel="stylesheet" />
+}
+<div class="container mt-4">
+    <div class="row">
+        <div class="section-header col-md-12">
+            <h1 class="mb-0">Doctors</h1>
+        </div>
+    </div>
+</div>
+
+
+<main id="main" class="col-8 offset-2 mt-5">
+    <div class="page-header">
+        <h1>
+            Doctors
+        </h1>
+    </div>
+    <div>
+        <table class="table mt-4 table-responsive" id="doctorsList">
+            <thead>
+                <tr>
+                    <th scope="col">UserId</th>
+                    <th scope="col">img</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Specialty</th>
+                    <th scope="col">Adrress</th>
+                    <th scope="col">Doctor Plan</th>
+                    <th scope="col">AMKA</th>
+                    <th scope="col">Telephon</th>
+                    <th scope="col">Paypal Account</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+
+@section scripts{
+@Scripts.Render("~/bundles/jqueryval")
+<script>
+
+
+    $(document).ready(function () {
+        function listdoctors() {
+            $.ajax({
+                dataType: 'json',
+                type: 'get',
+                url: '/api/Admin/Doctors',
+                success: function (data) {
+                    $('#doctorsList tbody').empty();
+                    data.forEach(function (doctor) {
+                        $('#doctorslist tbody').append('<tr><td>' + doctor.UserId
+                            + '</td><td>' + doctor.img
+                            + '</td><td>' + doctor.FirstName
+                            + '</td><td>' + doctor.LastName
+                            + '</td><td>' + doctor.MedicalSpecialty
+                            + '</td><td>' + doctor.OfficeAddress
+                            + '</td><td>' + doctor.DoctorPlan
+                            + '</td><td>' + doctor.AMKA
+                            + '</td><td>' + doctor.Telephon
+                            + '</td><td>' + doctor.PatpalAccount
+                            + '</td>' + '<td><button class="btn btn-danger deleteBtn" data-id="' + doctor.UserId + '">Delete</button>' +
+                            '<button class="btn btn-warning updateBtn" data-id="' + doctor.UserId + '" >Update</button></td>' + '</tr>')
+                    });
+                    listdoctors();
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            })
+        }
+    })
+
+
+</script>
+}
+
