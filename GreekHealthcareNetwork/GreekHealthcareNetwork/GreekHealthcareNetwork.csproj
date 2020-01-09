@@ -297,6 +297,10 @@
     <Compile Include="Migrations\202001061753399_CreatePartialIndexForAppointments.Designer.cs">
       <DependentUpon>202001061753399_CreatePartialIndexForAppointments.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001090011441_Script to update IsActive for users when SubEndDate passes.cs" />
+    <Compile Include="Migrations\202001090011441_Script to update IsActive for users when SubEndDate passes.Designer.cs">
+      <DependentUpon>202001090011441_Script to update IsActive for users when SubEndDate passes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -640,6 +644,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001061753399_CreatePartialIndexForAppointments.resx">
       <DependentUpon>202001061753399_CreatePartialIndexForAppointments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001090011441_Script to update IsActive for users when SubEndDate passes.resx">
+      <DependentUpon>202001090011441_Script to update IsActive for users when SubEndDate passes.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
