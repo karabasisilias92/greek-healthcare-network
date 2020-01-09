@@ -1,0 +1,39 @@
+﻿#headerAdmin {
+    background: rgba(52, 59, 64, 0.9);
+    padding: 10px 0;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    transition: all 0.5s;
+    z-index: 997;
+}
+
+    #headerAdmin #logo h1 {
+        font-size: 36px;
+        margin: 0;
+        line-height: 1;
+        font-family: "Roboto", sans-serif;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+
+        #headerAdmin #logo h1 a,
+        #headerAdmin #logo h1 a:hover {
+            color: #fff;
+        }
+
+    #headerAdmin #logo img {
+        padding: 0;
+        margin: 0;
+    }
+
+    #headerAdmin.header-fixed {
+        padding: 5px 0;
+        transition: all 0.5s;
+    }
+
+    #headerAdmin.header-top {
+        background: rgba(52, 59, 64, 0);
+    }

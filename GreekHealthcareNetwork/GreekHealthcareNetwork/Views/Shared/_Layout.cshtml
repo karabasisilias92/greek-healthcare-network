@@ -16,7 +16,7 @@
             const tbody = lines * 104.8;
             $('#firstRow').css('height', 'calc(100vh - 340px)');
             const limit = +$('#firstRow').css('height').split('px')[0];
-            if (tbody < limit) {
+            if (tbody < limit) { 
                 $('#firstRow').css('height', 'calc(100vh - 124.4px)');
             }
             else {
@@ -31,6 +31,10 @@
     @if (User.IsInRole("Doctor"))
     {
         <link href="~/Content/doctorsNavbar.css" rel="stylesheet" />
+    }
+    @if (User.IsInRole("Administrator"))
+    {
+        <link href="~/Content/adminsNavbar.css" rel="stylesheet" />
     }
     @RenderSection("cssScripts", required: false)
 </head>
@@ -48,7 +52,7 @@
         }
         else if (User.IsInRole("Doctor"))
         {
-        @Html.Partial("_DoctorNavBarPartial")
+            @Html.Partial("_DoctorNavBarPartial")
         }
         @if (User.IsInRole("Insured") && !((string)ViewBag.Title).Contains("Home"))
         {
@@ -60,6 +64,18 @@
         {
             @Html.Partial("_InsuredNavBarPartial")
         }
+        @if (User.IsInRole("Administrator") && !((string)ViewBag.Title).Contains("Home"))
+        {
+            <div class="mb-4" style="height: 78px;">
+                @Html.Partial("_AdminNavBarPartial")
+            </div>
+        }
+        else if (User.IsInRole("Admin"))
+        {
+            @Html.Partial("_AdminNavBarPartial")
+        }
+
+
         <div id="mainBody">
             @RenderBody()
         </div>
