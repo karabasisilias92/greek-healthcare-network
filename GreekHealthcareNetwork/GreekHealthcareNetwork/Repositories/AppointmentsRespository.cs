@@ -38,7 +38,7 @@ namespace GreekHealthcareNetwork.Repositories
                 {
                     if (appDay != "0001-01-01" && HttpContext.Current.Request.UrlReferrer.ToString().EndsWith("Appointments"))
                     {
-                        appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.DoctorId == userId && appointment.AppointmentDate == appointmentDay && appointment.AppointmentStatus == AppointmentStatus.Upcoming)
+                        appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.DoctorId == userId && appointment.AppointmentDate == appointmentDay)
                                                                                                                  .Include("Doctor")
                                                                                                                  .Include("Doctor.WorkingHours")
                                                                                                                  .Include("Doctor.AppointmentCost")
@@ -51,7 +51,7 @@ namespace GreekHealthcareNetwork.Repositories
                     }
                     else if (HttpContext.Current.Request.UrlReferrer.ToString().EndsWith("Appointments"))
                     {
-                        appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.DoctorId == userId && appointment.AppointmentStatus == AppointmentStatus.Upcoming)
+                        appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.DoctorId == userId && appointment.AppointmentDate >= DateTime.Today)
                                                                                                                  .Include("Doctor")
                                                                                                                  .Include("Doctor.WorkingHours")
                                                                                                                  .Include("Doctor.AppointmentCost")

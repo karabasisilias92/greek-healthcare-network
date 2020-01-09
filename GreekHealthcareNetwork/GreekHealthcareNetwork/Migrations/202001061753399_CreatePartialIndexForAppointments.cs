@@ -10,7 +10,10 @@ namespace GreekHealthcareNetwork.Migrations
             DropIndex("dbo.Appointments", "IX_DoctorId_AppointmentDate_AppointmentStartTime");
             CreateIndex("dbo.Appointments", "DoctorId");
             CreateIndex("dbo.Appointments", "InsuredId");
-            Sql(@"CREATE UNIQUE NONCLUSTERED INDEX
+            Sql(@"SET ANSI_NULLS ON;
+                SET QUOTED_IDENTIFIER ON;
+                GO
+                CREATE UNIQUE NONCLUSTERED INDEX
              [IX_FilteredIndexDoctorId_AppointmentDate_AppointmentStartTime_Upcoming] ON [dbo].[Appointments]
              (
                 [DoctorId] ASC,

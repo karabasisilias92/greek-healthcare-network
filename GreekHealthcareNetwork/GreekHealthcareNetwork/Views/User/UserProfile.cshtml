@@ -130,7 +130,7 @@
                             {
                                 foreach (var item in Model.Doctor.WorkingHours)
                                 {
-                                    
+
                                     <tr>
                                         <th>@(Model.Doctor.WorkingHours.First() == item ? "Working Hours:" : "")</th>
                                         <td>@item.WorkingDayConcat</td>
@@ -170,4 +170,18 @@
     </div>
 </main>
 
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            const firstRowHeight = +$('#firstRow').css('height').split('px')[0];;
+            console.log(firstRowHeight);
+            $('#firstRow').css('height', 'calc(100vh - 156.4px)');
+            const minHeight = +$('#firstRow').css('height').split('px')[0];;
+            console.log(minHeight);
+            if (firstRowHeight > minHeight) {
+                $('#firstRow').css('height', firstRowHeight);
+            }
+        })
+    </script>
+}
 

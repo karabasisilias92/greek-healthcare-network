@@ -24,12 +24,19 @@
                             @if (User.IsInRole("Doctor"))
                             {
                                 <img src="@Url.Content("~/Content/img/Doctors/" + @User.Identity.GetUserId() + "/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
+                                <div class="rounded-circle w-100 h-100 overlay">
+                                    <i class="fa fa-plus"></i>
+                                    @Html.TextBoxFor(m => m.ProfilePicture, new { @class = "form-control upload-button", type = "file", accept = "image/*", name = "uploadImage", id = "uploadImage" })
+                                </div>
                             }
                             @if (User.IsInRole("Insured"))
                             {
                                 <img src="@Url.Content("~/Content/img/Insureds/" + @User.Identity.GetUserId() + "/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
+                                <div class="rounded-circle w-100 h-100 overlay">
+                                    <i class="fa fa-plus"></i>
+                                    @Html.TextBoxFor(m => m.ProfilePicture, new { @class = "form-control upload-button", type = "file", accept = "image/*", name = "uploadImage", id = "uploadImage" })
+                                </div>
                             }
-                            @Html.TextBoxFor(m => m.ProfilePicture, new { @class = "form-control", type = "file", accept = "image/*", name = "uploadImage", id = "uploadImage" })
                         </div>
                     </div>
                     <div class="col-md-8 align-self-center">
