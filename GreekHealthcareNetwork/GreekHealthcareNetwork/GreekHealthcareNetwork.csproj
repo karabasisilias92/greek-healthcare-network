@@ -551,7 +551,13 @@
     <Content Include="Views\Shared\_AdminNavBarPartial.cshtml" />
     <Content Include="Views\Admin\Doctors.cshtml" />
     <Content Include="Views\Admin\Insureds.cshtml" />
-    <Content Include="Web %282%29.config" />
+    <Content Include="Web.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
