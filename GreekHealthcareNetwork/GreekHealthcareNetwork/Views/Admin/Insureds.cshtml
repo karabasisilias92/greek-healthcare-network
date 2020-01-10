@@ -56,17 +56,17 @@
                 success: function (data) {
                     $('#insuredsList tbody').empty();
                     data.forEach(function (insured) {
-                        $('#doctorslist tbody').append('<tr><td>' + insured.UserId
+                        $('#insuredsList tbody').append('<tr><td>' + insured.UserId
                             + '</td><img src="@Url.Content("~/Content/img/Insureds/")' + insured.User.Id + '/' + insured.User.ProfilePicture + '" alt="' + insured.User.ProfilePicture + '"><td>'
-                            + '</td><td>' + insured.FirstName
-                            + '</td><td>' + insured.LastName
+                            + '</td><td>' + insured.User.FirstName
+                            + '</td><td>' + insured.User.LastName
                             + '</td><td>' + insured.HomeAddress
                             + '</td><td>' + insured.InsuredPlan
-                            + '</td><td>' + insured.AMKA
-                            + '</td><td>' + insured.Telephon
-                            + '</td><td>' + doctor.PaypalAccount
-                            + '</td>' + '<td><button class="btn btn-danger deleteBtn" data-id="' + insured.UserId + '">Delete</button>' +
-                            '<button class="btn btn-warning updateBtn" data-id="' + insured.UserId + '" >Update</button></td>' + '</tr>')
+                            + '</td><td>' + insured.User.AMKA
+                            + '</td><td>' + insured.User.Telephon
+                            + '</td><td>' + doctor.User.PaypalAccount
+                            + '</td>' + '<td><button class="btn btn-danger deleteBtn" data-id="' + insured.User.Id + '">Delete</button>' +
+                            '<button class="btn btn-warning updateBtn" data-id="' + insured.User.Id + '" >Update</button></td>' + '</tr>')
                     });
                     listinsureds();
                 },

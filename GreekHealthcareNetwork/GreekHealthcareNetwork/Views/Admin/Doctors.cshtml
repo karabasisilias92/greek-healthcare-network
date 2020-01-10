@@ -58,17 +58,17 @@
                 success: function (data) {
                     $('#doctorsList tbody').empty();
                     data.forEach(function (doctor) {
-                        $('#doctorslist tbody').append('<tr><td>' + doctor.User.Id
+                        $('#doctorsList tbody').append('<tr><td>' + doctor.User.Id
                             + '</td><img src="@Url.Content("~/Content/img/Doctors/")' + doctor.User.Id + '/' + doctor.User.ProfilePicture + '" alt="' + doctor.User.ProfilePicture + '"><td>'
-                            + '</td><td>' + doctor.FirstName
-                            + '</td><td>' + doctor.LastName
+                            + '</td><td>' + doctor.User.FirstName
+                            + '</td><td>' + doctor.User.LastName
                             + '</td><td>' + doctor.MedicalSpecialty
                             + '</td><td>' + doctor.OfficeAddress
                             + '</td><td>' + doctor.DoctorPlan
-                            + '</td><td>' + doctor.AMKA
-                            + '</td><td>' + doctor.Telephon
-                            + '</td><td>' + doctor.PatpalAccount
-                            + '</td>' + '<td><button class="btn btn-danger deleteBtn" data-id="' + doctor.UserId + '">Delete</button>' +
+                            + '</td><td>' + doctor.User.AMKA
+                            + '</td><td>' + doctor.User.Telephon
+                            + '</td><td>' + doctor.User.PaypalAccount
+                            + '</td>' + '<td><button class="btn btn-danger deleteBtn" data-id="' + doctor.User.Id + '">Delete</button>' +
                             '<button class="btn btn-warning updateBtn" data-id="' + doctor.UserId + '" >Update</button></td>' + '</tr>')
                     });
                     listdoctors();
