@@ -10,11 +10,18 @@
 --------------------------------------------------------------*/
 
 body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     line-height: 1.42857143;
     background-color: #fff;
     color: #666666;
     font-family: "Roboto", sans-serif;
     font-size: 14px;
+}
+
+#firstRow {
+    flex: 1 1 auto;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
