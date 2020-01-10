@@ -11,7 +11,7 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
-    <script>
+    @*<script>
         function fixFooterPosition(lines) {
             const tbody = lines * 104.8;
             $('#firstRow').css('height', 'calc(100vh - 340px)');
@@ -23,7 +23,7 @@
                 $('#firstRow').css('height', 'initial');
             }
         }
-    </script>
+    </script>*@
     @if (User.IsInRole("Insured"))
     {
         <link href="~/Content/insuredsNavbar.css" rel="stylesheet" />
