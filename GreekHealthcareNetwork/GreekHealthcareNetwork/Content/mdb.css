@@ -1714,7 +1714,7 @@ a {
 }
 
 a:hover {
-    color: #0056b3;
+    /*color: #0056b3;*/
     text-decoration: none;
     -webkit-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out

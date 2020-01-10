@@ -421,6 +421,7 @@
     <Content Include="Scripts\RegnaScripts\libs\waypoints.min.js" />
     <Content Include="Scripts\RegnaScripts\libs\wow.js" />
     <Content Include="Scripts\RegnaScripts\libs\wow.min.js" />
+    <Content Include="Scripts\setNavItemActive.js" />
     <Content Include="Scripts\src\index.js" />
     <Content Include="Scripts\src\methods\defaults.js" />
     <Content Include="Scripts\src\methods\destroy.js" />
@@ -488,13 +489,6 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
-    <Content Include="Web.config" />
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -558,6 +552,13 @@
     <Content Include="Views\Payments\PayAppointmentCharge.cshtml" />
     <Content Include="Views\Insureds\CancelledBooking.cshtml" />
     <Content Include="Views\Insureds\CancelledBookingDueToNotPayingOnTime.cshtml" />
+    <Content Include="Web.config" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

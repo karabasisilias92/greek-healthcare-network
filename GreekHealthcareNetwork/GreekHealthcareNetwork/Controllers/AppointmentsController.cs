@@ -47,14 +47,14 @@ namespace GreekHealthcareNetwork.Controllers
                 model.Message.SenderId = appointment.Insured.User.Id;
                 model.Message.RecipientId = appointment.Doctor.User.Id;
                 model.Message.MessageText = "[AUTOMATED MESSAGE] \n " +
-                                            "Client cancelled the appointment on " + appointment.AppointmentDate.Date.ToString("dd-MM-yyyy") + " at " + appointment.AppointmentStartTime + "-" + appointment.AppointmentEndTime + "!";
+                                            "Client cancelled the appointment on " + appointment.AppointmentDate.Date.ToString("dd-MM-yyyy") + " at " + appointment.AppointmentTime + "!";
             }
             if (User.IsInRole("Doctor"))
             {
                 model.Message.SenderId = appointment.Doctor.User.Id;
                 model.Message.RecipientId = appointment.Insured.User.Id;
                 model.Message.MessageText = "[AUTOMATED MESSAGE] \n" +
-                                            "Doctor cancelled the appointment on " + appointment.AppointmentDate.Date.ToString("dd-MM-yyyy") + " at " + appointment.AppointmentStartTime + "-" + appointment.AppointmentEndTime + "!";
+                                            "Doctor cancelled the appointment on " + appointment.AppointmentDate.Date.ToString("dd-MM-yyyy") + " at " + appointment.AppointmentTime + "!";
             }
             model.Message.Subject = "Appointment Cancellation";
             model.Message.SentDate = DateTime.Now.Date;
