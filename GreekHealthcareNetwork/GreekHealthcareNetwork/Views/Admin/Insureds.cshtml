@@ -57,7 +57,7 @@
                     $('#insuredsList tbody').empty();
                     data.forEach(function (insured) {
                         $('#doctorslist tbody').append('<tr><td>' + insured.UserId
-                            + '</td><td>' + insured.img
+                            + '</td><img src="@Url.Content("~/Content/img/Insureds/")' + insured.User.Id + '/' + insured.User.ProfilePicture + '" alt="' + insured.User.ProfilePicture + '"><td>'
                             + '</td><td>' + insured.FirstName
                             + '</td><td>' + insured.LastName
                             + '</td><td>' + insured.HomeAddress
