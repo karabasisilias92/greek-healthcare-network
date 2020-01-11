@@ -195,7 +195,6 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\PaymentController.cs" />
-    <Compile Include="Controllers\PaymentsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Global.asax.cs">
@@ -538,9 +537,9 @@
     <Content Include="Views\Shared\_NewMessage.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Account\RegisterDoctorWorkingHours.cshtml" />
-    <Content Include="Views\Payments\PaySubscription.cshtml" />
-    <Content Include="Views\Payments\PayDoctor.cshtml" />
-    <Content Include="Views\Payments\RefundPatient.cshtml" />
+    <Content Include="Views\Payment\PaySubscription.cshtml" />
+    <Content Include="Views\Payment\PayDoctor.cshtml" />
+    <Content Include="Views\Payment\RefundPatient.cshtml" />
     <Content Include="Views\Account\DoctorPayDoctorPlan.cshtml" />
     <Content Include="Views\User\EditProfile.cshtml" />
     <Content Include="Views\Account\ClientPayInsuredPlan.cshtml" />
@@ -549,7 +548,7 @@
     <Content Include="Views\Shared\_AppointmentsList.cshtml" />
     <Content Include="Views\Shared\_ModalCancelAppointmentPartial.cshtml" />
     <Content Include="Views\Insureds\SuccessfulBooking.cshtml" />
-    <Content Include="Views\Payments\PayAppointmentCharge.cshtml" />
+    <Content Include="Views\Payment\PayAppointmentCharge.cshtml" />
     <Content Include="Views\Insureds\CancelledBooking.cshtml" />
     <Content Include="Views\Insureds\CancelledBookingDueToNotPayingOnTime.cshtml" />
     <Content Include="Web.config" />
@@ -566,7 +565,6 @@
     <Folder Include="Content\img\Doctors\" />
     <Folder Include="Content\img\Insureds\" />
     <Folder Include="Views\Appointments\" />
-    <Folder Include="Views\Payment\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

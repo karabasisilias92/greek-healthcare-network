@@ -134,7 +134,7 @@ else
                                     <li><i class="fa fa-check icon-success"></i><span>Exchange messages with the doctors</span></li>
                                 </ul>
                                 <div class="price-bottom">
-                                    @Html.ActionLink("PURCHASE", "PaySubscription", "Payments", new { userId = Model.InsuredId, planId = Model.InsuredPlans[i].Id }, new { id = "pay", @class = "btn btn-skin mb-3" })
+                                    @Html.ActionLink("PURCHASE", "PaySubscription", "Payment", new { userId = Model.InsuredId, planId = Model.InsuredPlans[i].Id }, new { id = "pay", @class = "btn btn-skin mb-3" })
                                 </div>
                             </div>
                         </div>
@@ -181,7 +181,7 @@ else
                                         <li><i class="fa fa-check icon-success"></i><span>Exchange messages with the doctors</span></li>
                                     </ul>
                                     <div class="price-bottom">
-                                        @Html.ActionLink("PURCHASE", "PaySubscription", "Payments", new { userId = Model.InsuredId, planId = Model.InsuredPlans[i].Id }, new { id = "pay", @class = "btn btn-skin mb-3" })
+                                        @Html.ActionLink("PURCHASE", "PaySubscription", "Payment", new { userId = Model.InsuredId, planId = Model.InsuredPlans[i].Id }, new { id = "pay", @class = "btn btn-skin mb-3" })
                                     </div>
                                 </div>
                             </div>

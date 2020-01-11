@@ -78,7 +78,7 @@ namespace GreekHealthcareNetwork.Controllers
                         }
                         insured.BookedAppointments++;
                         _insureds.UpdateInsured(insured);
-                        return Ok(new { action = "PayAppointmentCharge", controller = "Payments", id = id, appointmentCharge = appointment.InsuredAppointmentCharge });
+                        return Ok(new { action = "PayAppointmentCharge", controller = "Payment", id = id, appointmentCharge = appointment.InsuredAppointmentCharge });
                     }
                     catch (Exception)
                     {

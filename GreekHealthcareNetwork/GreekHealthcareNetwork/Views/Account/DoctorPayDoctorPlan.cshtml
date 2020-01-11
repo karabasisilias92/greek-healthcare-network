@@ -83,7 +83,7 @@ else
                 </div>
             }
         </div>
-        @Html.ActionLink("Pay", "PaySubscription", "Payments", new { userId = Model.DoctorId, planId = Model.DoctorPlan.Id }, new { id = "pay", @class = "btn btn-outline-success mb-3" })
+        @Html.ActionLink("Pay", "PaySubscription", "Payment", new { userId = Model.DoctorId, planId = Model.DoctorPlan.Id }, new { id = "pay", @class = "btn btn-outline-success mb-3" })
     </div>
 </section>
 
