@@ -47,6 +47,12 @@ namespace GreekHealthcareNetwork.Controllers
             var insured = _insureds.GetInsuredById(insuredId);
             insured.BookedAppointments--;
             _insureds.UpdateInsured(insured);
+            Session.Remove("appointmentId");
+            Session.Remove("paymentFor");
+            Session.Remove("insuredId");
+            Session.Remove("paymentItemName");
+            Session.Remove("Transaction description");
+            Session.Remove("price");
             return View(appointment);
         }
 
@@ -61,6 +67,12 @@ namespace GreekHealthcareNetwork.Controllers
             var insured = _insureds.GetInsuredById(insuredId);
             insured.BookedAppointments--;
             _insureds.UpdateInsured(insured);
+            Session.Remove("appointmentId");
+            Session.Remove("paymentFor");
+            Session.Remove("insuredId");
+            Session.Remove("paymentItemName");
+            Session.Remove("Transaction description");
+            Session.Remove("price");
             return View(appointment);
         }
 

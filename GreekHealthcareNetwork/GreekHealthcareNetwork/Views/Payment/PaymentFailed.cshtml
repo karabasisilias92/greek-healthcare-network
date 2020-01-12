@@ -29,11 +29,14 @@
                 if (paymentFor.Equals("Subscription"))
                 {
                     @Html.ActionLink("Back to profile page", "UserProfile", "User", null, new { id = "backToProfile", @class = "btn btn-outline-success" })
+                    Session.Remove("userId");
                 }
                 else
                 {
                     @Html.ActionLink("Back to Book Appointment", "BookAppointment", "Insureds", null, new { id = "backToBookAppointment", @class = "btn btn-outline-success" })
+                    Session.Remove("insuredId");
                 }
+                Session.Remove("paymentFor");
             }
         }
     </div>

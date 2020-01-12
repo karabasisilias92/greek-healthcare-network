@@ -130,6 +130,12 @@ namespace GreekHealthcareNetwork.Controllers
                         }
                     }
                 }
+                Session.Remove("paymentFor");
+                Session.Remove("userId");
+                Session.Remove("planId");
+                Session.Remove("paymentItemName");
+                Session.Remove("Transaction description");
+                Session.Remove("price");
                 if (!Request.IsAuthenticated)
                 {
                     SignInManager.SignIn(user, isPersistent: false, rememberBrowser: false);
@@ -143,6 +149,12 @@ namespace GreekHealthcareNetwork.Controllers
             else
             {
                 int appointmentId = (int)Session["appointmentId"];
+                Session.Remove("appointmentId");
+                Session.Remove("paymentFor");
+                Session.Remove("insuredId");
+                Session.Remove("paymentItemName");
+                Session.Remove("Transaction description");
+                Session.Remove("price");
                 return RedirectToAction("SuccessfulBooking", "Insureds", new { id = appointmentId });
             }
             
@@ -265,7 +277,15 @@ namespace GreekHealthcareNetwork.Controllers
             if (userId == null)
             {
                 userId = (string)Session["insuredId"];
+                Session.Remove("appointmentId");                
             }
+            else
+            {
+                Session.Remove("planId");
+            }
+            Session.Remove("paymentItemName");
+            Session.Remove("Transaction description");
+            Session.Remove("price");
             ViewBag.UserId = userId;
             if (!Request.IsAuthenticated)
             {
