@@ -118,6 +118,12 @@
         </div>*@
     </div>
 </div>
+
+<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="edit-modalLabel" aria-hidden="true">
+    <div id="myEditModalContent">
+        
+    </div>
+</div>
 @Html.Partial("_NewMessage")
 @section AppointmentScripts{
     @Scripts.Render("~/bundles/jqueryval")
@@ -128,7 +134,65 @@
 
             console.log('isUserDoctor:' + isUserDoctor);
             console.log('isUserInsured:' + isUserInsured);
-
+            function listAvailableAppointments(currentSlot, currentDate, date, doctorId) {
+                $.ajax({
+                    dataType: 'json',
+                    type: 'get',
+                    url: '/api/Search/GetAvailableAppointmentSlots?appointmentDay=' + date + '&doctorId=' + doctorId,
+                    success: function (data) {
+                        $('#myEditModalContent #NoWorkingDay').hide();
+                        if (data.length == 0) {
+                            $('#myEditModalContent #appointmentTime').hide();
+                            $('#myEditModalContent #insuredComments').hide();
+                            $('#myEditModalContent #bookAppointmentButton').hide();
+                            $('#myEditModalContent #NoAvailableAppointments').show();
+                        }
+                        else {
+                            $('#myEditModalContent #NoAvailableAppointments').hide();
+                            $('#myEditModalContent #appointmentTime').show();
+                            $('#myEditModalContent #insuredComments').show();
+                            $('#myEditModalContent #bookAppointmentButton').show();
+                            const selectTime = $('#myEditModalContent #AppointmentStartTime');
+                            $(selectTime).children().remove();
+                            let found = false;
+                            const chosenDate = data[0].AppointmentDate.split('T')[0];
+                            const reformedCurrentDate = currentDate.split('-')[2] + '-' + currentDate.split('-')[1] + '-' + currentDate.split('-')[0];
+                            const currentStartTime = currentSlot.split(' - ')[0];
+                            const currentEndTime = currentSlot.split(' - ')[1];
+                            const currentSlotValue = currentStartTime + ':00';
+                            data.forEach(function (appointmentSlot) {
+                                const splittedStartTime = appointmentSlot.AppointmentStartTime.split(':');
+                                const splittedEndTime = appointmentSlot.AppointmentEndTime.split(':');
+                                const option = $(document.createElement('option'));
+                                if (chosenDate == reformedCurrentDate) {                                    
+                                    if (currentStartTime < (splittedStartTime[0] + ':' + splittedStartTime[1]) && !found) {
+                                        found = true;
+                                        const selectedOption = $(document.createElement('option'));
+                                        $(selectedOption).text(currentStartTime + ' - ' + currentEndTime);
+                                        $(selectedOption).val(currentSlotValue);
+                                        $(selectedOption).prop('selected', true);
+                                        $(selectTime).append(selectedOption);
+                                    }
+                                }
+                                $(option).text(splittedStartTime[0] + ':' + splittedStartTime[1] + ' - ' + splittedEndTime[0] + ':' + splittedEndTime[1]);
+                                $(option).val(appointmentSlot.AppointmentStartTime);
+                                $(selectTime).append(option);
+                            });
+                        }
+                        $('#myEditModalContent #normalContainerBook').show();
+                        $('#edit-modal').modal('show');
+                    },
+                    error: function () {
+                        $('#myEditModalContent #appointmentTime').hide();
+                        $('#myEditModalContent #insuredComments').hide();
+                        $('#myEditModalContent #bookAppointmentButton').hide();
+                        $('#myEditModalContent #NoAvailableAppointments').hide();
+                        $('#myEditModalContent #NoWorkingDay').show();
+                        $('#myEditModalContent #normalContainerBook').show();
+                        $('#edit-modal').modal('show');
+                    }
+                })
+            }
             function ListAppointments(firstName, lastName, specialty, appointmentDate, userId) {
                     if (appointmentDate == "") {
                         appointmentDate = "0001-01-01";
@@ -179,7 +243,7 @@
                                         '<td>' +
                                         (isUserDoctor ? '<button type="button" class="btn btn-light showAppointmentDetails table-button" data-id="' + appointment.Id + '">View</button><button class="btn btn-light table-button sendMessage" data-id="' + appointment.Insured.User.Id + '">Message</button>' : '<button class="btn btn-light table-button sendMessage" data-id="' + appointment.Doctor.User.Id + '">Message</button>') +
                                         ((appointment.AppointmentStatus != "Upcoming" && isUserInsured)  ? '<button type="button" class="btn btn-light showAppointmentDetails table-button" data-id="' + appointment.Id + '">View</button>' : '') +
-                                        ((appointment.AppointmentStatus == "Upcoming" && isUserInsured) ? '<button type="button" class="btn btn-success table-button" data-toggle="modal" data-target="">Edit</button>' : '') +
+                                        ((appointment.AppointmentStatus == "Upcoming" && isUserInsured) ? '<button type="button" class="btn btn-success editAppointmentDetails table-button" data-id="' + appointment.Id + '">Edit</button>' : '') +
                                         ((appointment.AppointmentStatus == "Upcoming") ? '<button class="btn btn-danger table-button cancel-appointment" data-id="' + appointment.Id + '">Cancel</button>' : '') +
                                         '</td>'
                                     );
@@ -326,6 +390,154 @@
                                     }
                                 })
                             });
+                            $('.editAppointmentDetails').click(function (e) {
+                                let id = $(e.target).data('id');
+                                $.ajax({
+                                    type: "GET",
+                                    url: '/Appointments/EditAppointmentDetails',
+                                    contentType: "application/json; charset=utf-8",
+                                    data: { "appointmentId": id },
+                                    datatype: "json",
+                                    success: function (data) {
+                                        $('#myEditModalContent').html(data);
+                                        let doctorId = $('#myEditModalContent #DoctorId').val()
+                                        $.ajax({
+                                            url: '/api/Search/SearchDoctorById/' + doctorId,
+                                            type: 'get',
+                                            dataType: 'json',
+                                            success: function (doctor) {
+                                                $('#myEditModalContent #errorContainerBook').hide();
+                                                $('#myEditModalContent #profilepictureBook img').attr('src', '@Url.Content("~/Content/img/Doctors/")' + doctor.User.Id + '/' + doctor.User.ProfilePicture);
+                                                $('#myEditModalContent #firstNameBook').text(doctor.User.FirstName);
+                                                $('#myEditModalContent #lastNameBook').text(doctor.User.LastName);
+                                                $('#myEditModalContent #medicalSpecialtyBook').text(doctor.MedicalSpecialty);
+                                                $('#myEditModalContent #officeAddressBook').text(doctor.OfficeAddress);
+                                                let elem = $('#myEditModalContent #officeAddressBookTR');
+                                                while ($(elem).next()[0].id != 'doctorEmailBookTR') {
+                                                    const next = $(elem).next();
+                                                    $(next).remove();
+                                                }
+                                                if (doctor.WorkingHours.length == 0) {
+                                                    $(elem).after('<tr><th>Working hours:</th><td> Doctor has not declared any working hours yet. </td></tr>');
+                                                }
+                                                else {
+                                                    for (let i = 0; i < doctor.WorkingHours.length; i++) {
+                                                        if (i == 0) {
+                                                            const workStartTime = doctor.WorkingHours[i].WorkStartTime.split(':');
+                                                            const workEndTime = doctor.WorkingHours[i].WorkEndTime.split(':');
+                                                            $(elem).after('<tr><th>Working hours:</th><td>' + doctor.WorkingHours[i].Day + ', ' + workStartTime[0] + ':' + workStartTime[1] + '-' + workEndTime[0] + ':' + workEndTime[1] + '</td></tr>')
+                                                        }
+                                                        else {
+                                                            const workStartTime = doctor.WorkingHours[i].WorkStartTime.split(':');
+                                                            const workEndTime = doctor.WorkingHours[i].WorkEndTime.split(':');
+                                                            $(elem).after('<tr><th></th><td>' + doctor.WorkingHours[i].Day + ', ' + workStartTime[0] + ':' + workStartTime[1] + '-' + workEndTime[0] + ':' + workEndTime[1] + '</td></tr>')
+                                                        }
+                                                        elem = $(elem).next();
+                                                    }
+                                                }                                                
+                                                $('#myEditModalContent #doctorEmailBook').text(doctor.User.Email);
+                                                $('#myEditModalContent #doctorTelephoneBook').text(doctor.User.PhoneNumber);
+                                                const today = new Date();
+                                                const day = String(today.getDate()).padStart(2, '0');
+                                                const month = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                                                const year = today.getFullYear();
+                                                $('#myEditModalContent #AppointmentDate').attr('min', year + '-' + month + '-' + day); 
+                                                $('#myEditModalContent #AppointmentDate').off('change');
+                                                $('#myEditModalContent #AppointmentDate').on('change', function () {
+                                                    $('#myEditModalContent #bookAppointmentForm div.validation-summary-errors > ul').children().remove();
+                                                    const appointmentDate = $('#myEditModalContent #AppointmentDate').val();
+                                                    if (appointmentDate == "") {
+                                                        $('#myEditModalContent #appointmentTime').hide();
+                                                        $('#myEditModalContent #insuredComments').hide();
+                                                        $('#myEditModalContent #bookAppointmentButton').hide();
+                                                        $('#myEditModalContent #NoAvailableAppointments').hide();
+                                                        $('#myEditModalContent #NoWorkingDay').hide();
+                                                    }
+                                                    else {
+                                                        const currentSlot = $(e.target).parent().prev().prev().text();
+                                                        const currentDate = $(e.target).parent().prev().prev().prev().text();
+                                                        listAvailableAppointments(currentSlot, currentDate, appointmentDate, $('#myEditModalContent #DoctorId').val());
+                                                    }
+                                                })
+                                                $('#myEditModalContent #bookAppointment').off('click');
+                                                $('#myEditModalContent #bookAppointment').on('click', function (e) {
+                                                    e.preventDefault();
+                                                    const $form = $('#myEditModalContent #bookAppointmentForm');
+                                                    $.validator.unobtrusive.parse($form);
+                                                    $form.validate();
+                                                    if ($form.valid()) {
+                                                        let model = new Object();
+                                                        model.Id = $('#myEditModalContent #Id').val();
+                                                        model.DoctorId = $('#myEditModalContent #DoctorId').val();
+                                                        model.InsuredId = $('#myEditModalContent #InsuredId').val();
+                                                        model.AppointmentDate = $('#myEditModalContent #AppointmentDate').val();
+                                                        model.AppointmentStartTime = $('#myEditModalContent #AppointmentStartTime').val();
+                                                        model.InsuredComments = $('#myEditModalContent #InsuredComments').val();
+                                                        model.InsuredAppointmentCharge = $('#myEditModalContent #InsuredAppointmentCharge').val();
+                                                        model = JSON.stringify(model)
+                                                        $.ajax({
+                                                            contentType: 'application/json',
+                                                            type: 'put',
+                                                            url: '/api/BookAppointment',
+                                                            data: model,
+                                                            cache: false,
+                                                            processData: false,
+                                                            success: function (response) {
+                                                                $('#myEditModalContent #bookAppointmentForm div.validation-summary-errors > ul').children().remove();
+                                                                $('#myEditModalContent #InsuredComments').val('');
+                                                                $('#edit-modal').modal('hide');
+                                                                ListAppointments('', '', -1, '0001-01-01', '@CurrentUserId');
+                                                            },
+                                                            error: function (error) {
+                                                                const errorObject = error.responseJSON.ModelState;
+                                                                $('#myEditModalContent #bookAppointmentForm div.validation-summary-errors > ul').children().remove();
+                                                                for (var property in errorObject) {
+                                                                    if (errorObject.hasOwnProperty(property)) {
+                                                                        if (property == '') {
+                                                                            $('#myEditModalContent #bookAppointmentForm div.validation-summary-errors > ul').append('<li>' + errorObject[property] + '</li>')
+                                                                        }
+                                                                    }
+                                                                }
+                                                                const $form = $('#myEditModalContent #bookAppointmentForm');
+                                                                $.validator.unobtrusive.parse($form);
+                                                                $form.validate();
+                                                                if (!$form.valid()) {
+                                                                    $.each($form.validate().errorList, function (key, value) {
+                                                                        const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                                                                        $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                                                                        $errorSpan.show();
+                                                                    });
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                    else {
+                                                        console.log($form.validate().errorList);
+                                                        $.each($form.validate().errorList, function (key, value) {
+                                                            console.log(value);
+                                                            const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                                                            $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                                                            $errorSpan.show();
+                                                        });
+                                                    }
+                                                })
+                                                const appointmentDate = $('#myEditModalContent #AppointmentDate').val();
+                                                const currentSlot = $(e.target).parent().prev().prev().text();
+                                                const currentDate = $(e.target).parent().prev().prev().prev().text(); 
+                                                listAvailableAppointments(currentSlot, currentDate, appointmentDate, doctor.UserId);
+                                            },
+                                            error: function () {
+                                                $('#myEditModalContent #normalContainerBook').hide();
+                                                $('#myEditModalContent #errorContainerBook').show();                                                
+                                                $('#edit-modal').modal('show');
+                                            }
+                                        })
+                                    },
+                                    error: function () {
+                                        alert("Dynamic content load failed.");
+                                    }
+                                });
+                            })
                             $('.cancel-appointment').click(function (e) {
                                 let id = $(e.target).data('id');
                                 $.ajax({
@@ -387,6 +599,21 @@
                 if (isUserDoctor) {
                     ListAppointments(e.target[0].value, e.target[1].value, -1, e.target[2].value, '@CurrentUserId');
                 }
+            })       
+            $('#search').on('submit', function (e) {
+                e.preventDefault();
+                if (e.target[3].type == 'date') {
+                    ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value, e.target[3].value);
+                }
+                else {
+                    ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value, '0001-01-01');
+                }
+            })
+            $('#edit-modal').on('hidden.bs.modal', function () {
+                $('#myEditModalContent #NoAvailableAppointments').hide();
+                $('#myEditModalContent #NoWorkingDay').hide();
+                $('#myEditModalContent #InsuredComments').val('');
+                $('#myEditModalContent #bookAppointmentForm div.validation-summary-errors > ul').children().remove();
             })
         })
     </script>
