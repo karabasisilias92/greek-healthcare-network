@@ -5,19 +5,20 @@
     var CurrentUserId = User.Identity.GetUserId();
 }
 
-<section id="PaymentInfo" class="container">
-    <h2 class="my-3">@ViewBag.Title</h2>
-    <p> Implementation pending</p>
-    <p> Your paypal account will be charged: @Model.AppointmentCharge.ToString("0.##")&euro;</p>
-    @using (Html.BeginForm("PayAppointmentCharge", "Payment", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-    {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(m => m.AppointmentId, new { @Value = Model.AppointmentId })
-        <input id="pay" type="submit" class="btn btn-outline-success mb-3" value="Pay" />
-    }
-    @Html.ActionLink("Cancel Booking", "CancelledBooking", "Insureds", new { appointmentId = Model.AppointmentId, insuredId = CurrentUserId }, new { id = "cancel", @class = "btn btn-outline-danger mb-3" })
-</section>
+    <section id="PaymentInfo" class="container">
+        <h2 class="my-3">@ViewBag.Title</h2>
+        <p> Your paypal account will be charged: @Model.AppointmentCharge.ToString("0.00")&euro;</p>
+        @{
+            Session["paymentFor"] = "Appointment Booking";
+            Session["appointmentId"] = Model.AppointmentId;
+            Session["insuredId"] = CurrentUserId;
+            Session["paymentItemName"] = "Appointment Booking Fee";
+            Session["Transaction description"] = "This transaction is related to the redemption of the fee regarding your appointment booking.";
+            Session["price"] = Model.AppointmentCharge.ToString("0.00");
+            @Html.ActionLink("Pay", "PayWithPayPal", "Payment", null, new { @class = "btn btn-outline-success mb-3 mr-3" });
+        }
+        @Html.ActionLink("Cancel Booking", "CancelledBooking", "Insureds", new { appointmentId = Model.AppointmentId, insuredId = CurrentUserId }, new { id = "cancel", @class = "btn btn-outline-danger mb-3" })
+    </section>
 
 @section scripts {
     @*<script>

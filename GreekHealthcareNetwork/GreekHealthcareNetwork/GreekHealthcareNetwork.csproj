@@ -323,6 +323,7 @@
     <Compile Include="Models\InsuredPlan.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\PayAppointmentChargeViewModel.cs" />
+    <Compile Include="Models\PaypalConfiguration.cs" />
     <Compile Include="Models\ProfileDetailsViewModel.cs" />
     <Compile Include="Repositories\MessagesRepository.cs" />
     <Compile Include="Models\SearchLoginViewModel.cs" />
@@ -552,6 +553,8 @@
     <Content Include="Views\Insureds\CancelledBooking.cshtml" />
     <Content Include="Views\Insureds\CancelledBookingDueToNotPayingOnTime.cshtml" />
     <Content Include="Web.config" />
+    <Content Include="Views\Payment\PaymentFailed.cshtml" />
+    <Content Include="Views\Payment\PaySubscriptionCancelled.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

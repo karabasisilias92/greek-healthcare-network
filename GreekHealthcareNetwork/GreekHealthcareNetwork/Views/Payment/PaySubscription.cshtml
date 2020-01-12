@@ -15,34 +15,38 @@
 </section>
 
 <section id="PaymentInfo" class="container">
-    <p> Implementation pending</p>
-    <p> Your paypal account will be charged: @Model.PlanFee.ToString("0.##")&euro;</p>
+    <p> Your paypal account will be charged: @Model.PlanFee.ToString("0.00")&euro;</p>
     <div id="pay_skip" class="mt-4">
         <div>
-            @using (Html.BeginForm("PaySubscription", "Payment", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                @Html.HiddenFor(m => m.UserId, new { @Value = Model.UserId })
-                @Html.HiddenFor(m => m.PlanId, new { @Value = Model.PlanId })
-                <div class="form-group">
-                    <div id="skip" class="col-md-12">
-                        <input type="submit" class="btn btn-outline-success" value="Pay" />
-                    </div>
-                </div>
-            }
+            @{                 
+                var user = _users.GetUserById(Model.UserId);
+                string doctorRoleId = _users.GetRoleIdByName("Doctor");
+                string insuredRoleId = _users.GetRoleIdByName("Insured");
+                Session["paymentFor"] = "Subscription";
+                Session["userId"] = Model.UserId;
+                Session["planId"] = Model.PlanId;
+                if (user.Roles.Any(r => r.RoleId.Equals(doctorRoleId)))
+                {
+                    Session["paymentItemName"] = "Doctor Subscription Fee";
+                    Session["Transaction description"] = "This transaction is related to the redemption of the subscription fee regarding your medical specialty.";
+                }
+                else if (user.Roles.Any(r => r.RoleId.Equals(insuredRoleId)))
+                {
+                    Session["paymentItemName"] = "Insurance Plan Fee";
+                    Session["Transaction description"] = "This transaction is related to the redemption of the subscription fee regarding your insurance plan.";
+                }
+                Session["price"] = Model.PlanFee.ToString("0.00");
+                @Html.ActionLink("Pay", "PayWithPayPal", "Payment", null, new { @class = "btn btn-outline-success mr-3" });
+            }            
         </div>
         @{
-            var user = _users.GetUserById(Model.UserId);
-            string doctorRoleId = _users.GetRoleIdByName("Doctor");
-            string insuredRoleId = _users.GetRoleIdByName("Insured");
             if (user.Roles.Any(r => r.RoleId.Equals(doctorRoleId)))
             {
-                @Html.ActionLink("Back to previous page", "DoctorPayDoctorPlan", "Account", new { userId = Model.UserId }, new { id = "backToPreviousPage", @class = "btn btn-outline-danger mb-3" })
+                @Html.ActionLink("Back to previous page", "DoctorPayDoctorPlan", "Account", new { userId = Model.UserId }, new { id = "backToPreviousPage", @class = "btn btn-outline-danger" })
             }
             else if (user.Roles.Any(r => r.RoleId.Equals(insuredRoleId)))
             {
-                @Html.ActionLink("Back to previous page", "ClientPayInsuredPlan", "Account", new { userId = Model.UserId }, new { id = "backToPreviousPage", @class = "btn btn-outline-danger mb-3" })
+                @Html.ActionLink("Back to previous page", "ClientPayInsuredPlan", "Account", new { userId = Model.UserId }, new { id = "backToPreviousPage", @class = "btn btn-outline-danger" })
             }
         }
     </div>
