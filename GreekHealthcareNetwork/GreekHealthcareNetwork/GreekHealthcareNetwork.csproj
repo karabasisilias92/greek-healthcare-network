@@ -538,7 +538,7 @@
     <Content Include="Views\Shared\_NewMessage.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Account\RegisterDoctorWorkingHours.cshtml" />
-    <Content Include="Views\Payment\PaySubscription.cshtml" />
+    <Content Include="Views\Payment\PayInsuredSubscription.cshtml" />
     <Content Include="Views\Payment\PayDoctor.cshtml" />
     <Content Include="Views\Payment\RefundPatient.cshtml" />
     <Content Include="Views\Account\DoctorPayDoctorPlan.cshtml" />

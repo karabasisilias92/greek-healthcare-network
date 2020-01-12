@@ -168,7 +168,7 @@ namespace GreekHealthcareNetwork.Controllers
             {
                 items = new List<Item>()
             };
-            decimal price = 0.85m * Convert.ToDecimal(Session["price"]);
+            decimal price = Math.Floor(0.85m * Convert.ToDecimal(Session["price"]) * 100) / 100;
             string priceString = price.ToString("0.00");
             //Adding Item Details like name, currency, price etc  
             itemList.items.Add(new Item()
@@ -186,14 +186,14 @@ namespace GreekHealthcareNetwork.Controllers
             // Configure Redirect Urls here with RedirectUrls object
             string paymentFor = (string)Session["paymentFor"];
             string cancelUrl;
-            int appointmentId = (int)Session["appointmentId"];
-            string insuredId = (string)Session["insuredId"];
             if (paymentFor.Equals("Subscription"))
             {
-                cancelUrl = "https://localhost:44310/Payment/PaySubcriptionCancelled";
+                cancelUrl = "https://localhost:44310/Payment/PaySubscriptionCancelled";
             }
             else
             {
+                int appointmentId = (int)Session["appointmentId"];
+                string insuredId = (string)Session["insuredId"];
                 cancelUrl = "https://localhost:44310/Insureds/CancelledBooking?appointmentId=" + appointmentId + "&insuredId=" + insuredId;
             }
             var redirUrls = new RedirectUrls()
@@ -236,24 +236,17 @@ namespace GreekHealthcareNetwork.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult PaySubscription(string userId, int planId)
+        public ActionResult PayInsuredSubscription(string userId, int planId)
         {
-            decimal planFee;
-            if (UserManager.IsInRole(userId, "Doctor"))
+            decimal planFee;            
+            var insured = _insureds.GetInsuredById(userId);
+            if (insured.User.SubscriptionEndDate >= DateTime.Now)
             {
-                planFee = _doctors.GetDoctorPlan(userId).Fee;
+                planFee = _insureds.GetInsuredPlan(planId).PlanFee - insured.InsuredPlan.PlanFee;
             }
             else
             {
-                var insured = _insureds.GetInsuredById(userId);
-                if (insured.User.SubscriptionEndDate >= DateTime.Now)
-                {
-                    planFee = _insureds.GetInsuredPlan(planId).PlanFee - insured.InsuredPlan.PlanFee;
-                }
-                else
-                {
-                    planFee = _insureds.GetInsuredPlan(planId).PlanFee;
-                }
+                planFee = _insureds.GetInsuredPlan(planId).PlanFee;
             }
             PaySubcriptionViewModel model = new PaySubcriptionViewModel() { UserId = userId, PlanId = planId, PlanFee = planFee };
             return View(model);
@@ -266,13 +259,33 @@ namespace GreekHealthcareNetwork.Controllers
             return View(model);
         }
 
-        public ActionResult PaymentFailed()
+        public async Task<ActionResult> PaymentFailed()
         {
+            string userId = (string)Session["userId"];
+            if (userId == null)
+            {
+                userId = (string)Session["insuredId"];
+            }
+            ViewBag.UserId = userId;
+            if (!Request.IsAuthenticated)
+            {
+                var user = _users.GetUserById(userId);
+                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                return RedirectToAction("PaymentFailed");
+            }
             return View();
         }
 
-        public ActionResult PaySubcriptionCancelled()
+        public async Task<ActionResult> PaySubscriptionCancelled()
         {
+            string userId = (string)Session["userId"];
+            ViewBag.UserId = userId;
+            if (!Request.IsAuthenticated)
+            {
+                var user = _users.GetUserById(userId);
+                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                return RedirectToAction("PaySubscriptionCancelled");
+            } 
             return View();
         }
 

@@ -18,37 +18,17 @@
     <p> Your paypal account will be charged: @Model.PlanFee.ToString("0.00")&euro;</p>
     <div id="pay_skip" class="mt-4">
         <div>
-            @{                 
-                var user = _users.GetUserById(Model.UserId);
-                string doctorRoleId = _users.GetRoleIdByName("Doctor");
-                string insuredRoleId = _users.GetRoleIdByName("Insured");
+            @{
                 Session["paymentFor"] = "Subscription";
                 Session["userId"] = Model.UserId;
                 Session["planId"] = Model.PlanId;
-                if (user.Roles.Any(r => r.RoleId.Equals(doctorRoleId)))
-                {
-                    Session["paymentItemName"] = "Doctor Subscription Fee";
-                    Session["Transaction description"] = "This transaction is related to the redemption of the subscription fee regarding your medical specialty.";
-                }
-                else if (user.Roles.Any(r => r.RoleId.Equals(insuredRoleId)))
-                {
-                    Session["paymentItemName"] = "Insurance Plan Fee";
-                    Session["Transaction description"] = "This transaction is related to the redemption of the subscription fee regarding your insurance plan.";
-                }
+                Session["paymentItemName"] = "Insurance Plan Fee";
+                Session["Transaction description"] = "This transaction is related to the redemption of the subscription fee regarding your insurance plan.";
                 Session["price"] = Model.PlanFee.ToString("0.00");
                 @Html.ActionLink("Pay", "PayWithPayPal", "Payment", null, new { @class = "btn btn-outline-success mr-3" });
             }            
-        </div>
-        @{
-            if (user.Roles.Any(r => r.RoleId.Equals(doctorRoleId)))
-            {
-                @Html.ActionLink("Back to previous page", "DoctorPayDoctorPlan", "Account", new { userId = Model.UserId }, new { id = "backToPreviousPage", @class = "btn btn-outline-danger" })
-            }
-            else if (user.Roles.Any(r => r.RoleId.Equals(insuredRoleId)))
-            {
-                @Html.ActionLink("Back to previous page", "ClientPayInsuredPlan", "Account", new { userId = Model.UserId }, new { id = "backToPreviousPage", @class = "btn btn-outline-danger" })
-            }
-        }
+        </div>       
+        @Html.ActionLink("Back", "ClientPayInsuredPlan", "Account", new { userId = Model.UserId }, new { id = "backToPreviousPage", @class = "btn btn-outline-danger" })
     </div>
 </section>
 

@@ -1,7 +1,41 @@
-﻿
+﻿@using GreekHealthcareNetwork.Models;
+@using GreekHealthcareNetwork.Repositories;
 @{
-    ViewBag.Title = "PaymentFailed";
+    ViewBag.Title = "Payment Failed";
+    var userId = (string)ViewBag.UserId;    
+    var _users = new UsersRepository();
+    var user = _users.GetUserById(userId);
+    string doctorRoleId = _users.GetRoleIdByName("Doctor");
+    string insuredRoleId = _users.GetRoleIdByName("Insured");
 }
 
-<h2>PaymentFailed</h2>
+<section class="container py-3">
+    <h2>@ViewBag.Title</h2>
+</section>
+
+<section class="container">
+    <p class="mb-0">
+        Your payment has not completed successfully. Please try again later.
+    </p>
+    <div id="pay_skip" class="d-flex mt-4">
+        @{
+            if (user.SubscriptionEndDate.Date.ToString("yyyy-MM-dd").Equals("0001-01-01"))
+            {
+                @Html.ActionLink("Go to home page", "Index", "Home", null, new { id = "GoToProfile", @class = "btn btn-outline-success" })
+            }
+            else
+            {
+                string paymentFor = (string)Session["paymentFor"];
+                if (paymentFor.Equals("Subscription"))
+                {
+                    @Html.ActionLink("Back to profile page", "UserProfile", "User", null, new { id = "backToProfile", @class = "btn btn-outline-success" })
+                }
+                else
+                {
+                    @Html.ActionLink("Back to Book Appointment", "BookAppointment", "Insureds", null, new { id = "backToBookAppointment", @class = "btn btn-outline-success" })
+                }
+            }
+        }
+    </div>
+</section>
 
