@@ -154,6 +154,43 @@ namespace GreekHealthcareNetwork.Repositories
             }
         }
 
+        public void UpdateWorkingHoursEntry(WorkingHours workingHoursEntry)
+        {
+            if (workingHoursEntry == null)
+            {
+                throw new ArgumentNullException("workingHoursEntry");
+            }
+            using (var db = new ApplicationDbContext())
+            {
+                db.WorkingHours.Attach(workingHoursEntry);
+                db.Entry(workingHoursEntry).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+
+        public void DeleteWorkingHoursEntry(int id)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var entry = db.WorkingHours.Find(id);
+                if (entry == null)
+                {
+                    throw new ArgumentException("id");
+                }
+                var doctorId = entry.DoctorId;
+                db.WorkingHours.Remove(entry);
+                db.SaveChanges();
+                var count = db.WorkingHours.Count(i => i.DoctorId.Equals(doctorId));
+                ApplicationUser user;
+                if (count == 0)
+                {
+                    user = db.Users.Find(doctorId);
+                    user.IsActive = false;
+                }
+                db.SaveChanges();
+            }
+        }
+
         public int GetDoctorPlanId(MedicalSpecialty? medicalSpecialty)
         {
             int doctorPlanId;

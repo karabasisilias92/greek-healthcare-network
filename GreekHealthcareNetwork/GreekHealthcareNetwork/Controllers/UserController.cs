@@ -54,11 +54,6 @@ namespace GreekHealthcareNetwork.Controllers
             if (HttpContext.User.IsInRole("Doctor"))
             {
                 updatedUser.Doctor.MedicalSpecialty = modifiedUser.Doctor.MedicalSpecialty;
-                if(modifiedUser.Doctor.WorkingHours != null)
-                {
-                    updatedUser.Doctor.WorkingHours = modifiedUser.Doctor.WorkingHours;
-                }
-                updatedUser.Doctor.OfficeAddress = modifiedUser.Doctor.OfficeAddress;
             }
             if (HttpContext.User.IsInRole("Insured"))
             {
@@ -70,8 +65,13 @@ namespace GreekHealthcareNetwork.Controllers
         // GET: Profile
         public ActionResult UserProfile()
         {
-
-            return View(GetCurrentUser());
+            var user = GetCurrentUser();
+            if (user.User == null)
+            {
+                return HttpNotFound();
+            }
+            user.Doctor.WorkingHours = user.Doctor.WorkingHours.OrderBy(i => i.Day).ThenBy(i => i.WorkStartTime).ToList();
+            return View(user);
         }
 
         public ActionResult AppointmentsHistory(SearchLoginViewModel searchLoginViewModel)
@@ -91,7 +91,19 @@ namespace GreekHealthcareNetwork.Controllers
 
         public ActionResult EditProfile()
         {
-            return View(GetCurrentUser());
+            var user = GetCurrentUser();
+            if (user.User == null)
+            {
+                return HttpNotFound();
+            }
+            user.Days = new List<DayOfWeek>();
+            for (int i = 1; i < Enum.GetNames(typeof(DayOfWeek)).Length; i++)
+            {
+                user.Days.Add((DayOfWeek)i);
+            }
+            user.Days.Add((DayOfWeek)0);
+            user.WorkingHours = user.Doctor.WorkingHours.OrderBy(i => i.Day).ThenBy(i => i.WorkStartTime).ToList();
+            return View(user);
         }
 
         [HttpPost]
@@ -104,10 +116,17 @@ namespace GreekHealthcareNetwork.Controllers
 
             if (!ModelState.IsValid)
             {
+                user.Days = new List<DayOfWeek>();
+                for (int i = 1; i < Enum.GetNames(typeof(DayOfWeek)).Length; i++)
+                {
+                    user.Days.Add((DayOfWeek)i);
+                }
+                user.Days.Add((DayOfWeek)0);
+                user.WorkingHours = user.Doctor.WorkingHours.OrderBy(i => i.Day).ThenBy(i => i.WorkStartTime).ToList();
                 return View(user);
             }
 
-            string path = "";
+            string path;
             string fileName = user.User.ProfilePicture;
 
             if (modifiedUser.ProfilePicture != null)
@@ -116,6 +135,13 @@ namespace GreekHealthcareNetwork.Controllers
                 if (image.Width != image.Height || image.Width < 237.5)
                 {
                     ModelState.AddModelError("", "The profile picture width must be equal to its height and the width must be also over 237.5 pixels");
+                    user.Days = new List<DayOfWeek>();
+                    for (int i = 1; i < Enum.GetNames(typeof(DayOfWeek)).Length; i++)
+                    {
+                        user.Days.Add((DayOfWeek)i);
+                    }
+                    user.Days.Add((DayOfWeek)0);
+                    user.WorkingHours = user.Doctor.WorkingHours.OrderBy(i => i.Day).ThenBy(i => i.WorkStartTime).ToList();
                     return View(user);
                 }
                 try
@@ -152,6 +178,13 @@ namespace GreekHealthcareNetwork.Controllers
                 catch (Exception ex)
                 {
                     ModelState.AddModelError("", ex.Message);
+                    user.Days = new List<DayOfWeek>();
+                    for (int i = 1; i < Enum.GetNames(typeof(DayOfWeek)).Length; i++)
+                    {
+                        user.Days.Add((DayOfWeek)i);
+                    }
+                    user.Days.Add((DayOfWeek)0);
+                    user.WorkingHours = user.Doctor.WorkingHours.OrderBy(i => i.Day).ThenBy(i => i.WorkStartTime).ToList();
                     return View(user);
                 }
             }
@@ -169,6 +202,13 @@ namespace GreekHealthcareNetwork.Controllers
             catch (Exception error)
             {
                 ModelState.AddModelError("", error.Message);
+                user.Days = new List<DayOfWeek>();
+                for (int i = 1; i < Enum.GetNames(typeof(DayOfWeek)).Length; i++)
+                {
+                    user.Days.Add((DayOfWeek)i);
+                }
+                user.Days.Add((DayOfWeek)0);
+                user.WorkingHours = user.Doctor.WorkingHours.OrderBy(i => i.Day).ThenBy(i => i.WorkStartTime).ToList();
                 return View(user);
             }
 

@@ -163,9 +163,9 @@
             function addNewEntry(e) {
                 e.preventDefault();
                 count++;
-                $('#entriesList').append(
-                        '<input Value="' + '@Model.DoctorId' + '" id="WorkingHours_' + (count-1) + '__DoctorId" name="WorkingHours[' + (count-1) + '].DoctorId" type="hidden" value="" />' +
-                        '<div class= "form-row">' +
+                $('#entriesList').append(                        
+                    '<div class= "form-row">' +
+                                '<input Value="' + '@Model.DoctorId' + '" id="WorkingHours_' + (count-1) + '__DoctorId" name="WorkingHours[' + (count-1) + '].DoctorId" type="hidden" value="" />' +
                                 '<div class="form-group col-md-3">' +
                                     '<label class="col-md-12 control-label" for="WorkingHours_' + (count-1) + '__Day">Day</label>' +
                                     '<div class="col-md-10">' +
@@ -210,7 +210,7 @@
                                     '</div>' +
                                 '</div>' +
                                 '<div class="form-group col-md-2 d-flex align-items-md-end">' +
-                                    '<button class="btn btn-outline-danger deleteEntry">Delete Entry</button>' +
+                                    '<button class="btn btn-outline-danger ml-3 deleteEntry">Delete Entry</button>' +
                                 '</div>' +
                         '</div>'
                 );
