@@ -1,6 +1,7 @@
 ﻿using GreekHealthcareNetwork.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -8,6 +9,40 @@ namespace GreekHealthcareNetwork.Repositories
 {
     public class InsuredsRepository
     {
+        public IEnumerable<Insured> GetFilteredInsureds(string insuredsFirstName, string insuredsLastName)
+        {
+            IEnumerable<Insured> insureds;
+            IEnumerable<ApplicationUser> users;
+            using (var db = new ApplicationDbContext())
+            {
+                if (!string.IsNullOrWhiteSpace(insuredsFirstName) && !string.IsNullOrWhiteSpace(insuredsLastName))
+                {
+                    users = db.Users.Where(user => user.FirstName.Contains(insuredsFirstName) && user.LastName.Contains(insuredsLastName));
+                }
+                else if (!string.IsNullOrWhiteSpace(insuredsFirstName))
+                {
+                    users = db.Users.Where(user => user.FirstName.Contains(insuredsFirstName));
+                }
+                else if (!string.IsNullOrWhiteSpace(insuredsLastName))
+                {
+                    users = db.Users.Where(user => user.LastName.Contains(insuredsLastName));
+                }
+                else
+                {
+                    users = db.Users;
+                }
+                insureds = db.Insureds.Where(insured => users.Any(user => user.Id == insured.UserId))
+                                .Include("User")
+                                .Include("User.Roles")
+                                .Include("InsuredPlan")
+                                .OrderBy(i => i.User.LastName)
+                                .ThenBy(i => i.User.FirstName)
+                                .ToList();
+            }
+
+            return insureds;
+        }
+
         public Insured GetInsuredById(string insuredId)
         {
             Insured insured;

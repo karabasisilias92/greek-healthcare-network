@@ -3,34 +3,24 @@
     ViewBag.Title = "Doctors";
 }
 @section cssScripts{
-    <link href="@Url.Content("~/Content/adminsNavbar.css")" type="text/css" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
 }
-<div class="container mt-4">
-    <div class="row">
-        <div class="section-header col-md-12">
-            <h1 class="mb-0">Doctors</h1>
-        </div>
-    </div>
-</div>
 
-
-<main id="main" class="col-8 offset-2 mt-5">
+<main id="main" class="col-8 offset-3 mt-5">
     <div class="page-header">
         <h1>
             Doctors
         </h1>
     </div>
-    <div>
-        <table class="table mt-4 table-responsive" id="doctorsList">
+    <div class="table-responsive">
+        <table class="table mt-4" id="doctorsList">
             <thead>
                 <tr>
-                    <th scope="col">UserId</th>
-                    <th scope="col">img</th>
+                    <th scope="col">Image</th>
                     <th scope="col">First Name</th>
                     <th scope="col">Last Name</th>
                     <th scope="col">Specialty</th>
                     <th scope="col">Adrress</th>
-                    <th scope="col">Doctor Plan</th>
                     <th scope="col">AMKA</th>
                     <th scope="col">Telephon</th>
                     <th scope="col">Paypal Account</th>
@@ -45,33 +35,40 @@
 
 
 @section scripts{
-@Scripts.Render("~/bundles/jqueryval")
-<script>
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
 
 
     $(document).ready(function () {
-        function listdoctors() {
+        ListDoctors('', '', -1);
+        var counter = 0;
+        function ListDoctors(firstName, lastName, specialty) {
             $.ajax({
                 dataType: 'json',
                 type: 'get',
-                url: '/api/Admin/Doctors',
+                url: '/api/Search/AdminSearchDoctorResults?doctorsFirstName=' + firstName + '&doctorsLastName=' + lastName + '&doctorsSpecialty=' + specialty + '&appointmentDate=0001-01-01',
                 success: function (data) {
+                    console.log(data);
+                    console.log(data.length);
                     $('#doctorsList tbody').empty();
                     data.forEach(function (doctor) {
-                        $('#doctorsList tbody').append('<tr><td>' + doctor.User.Id
-                            + '</td><img src="@Url.Content("~/Content/img/Doctors/")' + doctor.User.Id + '/' + doctor.User.ProfilePicture + '" alt="' + doctor.User.ProfilePicture + '"><td>'
+                        console.log('counter= ' + ++counter);
+                        $('#doctorsList tbody').append(
+                              '<tr><td><img src="@Url.Content("~/Content/img/Doctors/")' + doctor.User.Id + '/' + doctor.User.ProfilePicture + '" alt="' + doctor.User.ProfilePicture + '"' + 'class="rounded-circle">'
                             + '</td><td>' + doctor.User.FirstName
                             + '</td><td>' + doctor.User.LastName
                             + '</td><td>' + doctor.MedicalSpecialty
                             + '</td><td>' + doctor.OfficeAddress
-                            + '</td><td>' + doctor.DoctorPlan
                             + '</td><td>' + doctor.User.AMKA
-                            + '</td><td>' + doctor.User.Telephon
+                            + '</td><td>' + doctor.User.PhoneNumber
                             + '</td><td>' + doctor.User.PaypalAccount
-                            + '</td>' + '<td><button class="btn btn-danger deleteBtn" data-id="' + doctor.User.Id + '">Delete</button>' +
-                            '<button class="btn btn-warning updateBtn" data-id="' + doctor.UserId + '" >Update</button></td>' + '</tr>')
+                            + '</td>'
+                            + '<td><button class="btn btn-danger deleteBtn" data-id="' + doctor.User.Id + '">Delete</button>'
+                            + '<button class="btn btn-warning updateBtn" data-id="' + doctor.UserId + '" >Update</button>'
+                            + '<button class="btn btn-success sentMessageBtn" data-id="' + doctor.UserId + '" >Sent Message</button>'
+                            + ((doctor.User.IsActive == true) ? '<button class="btn btn-warning setActiveBtn" data-id="' + doctor.UserId + '">Inactive</button></td>' : '<button class="btn btn-warning setActiveBtn" data-id="' + doctor.UserId + '">Active</button></td>')
+                            + '</tr>')
                     });
-                    listdoctors();
                 },
                 error: function (error) {
                     console.log(error)
@@ -81,6 +78,6 @@
     })
 
 
-</script>
+    </script>
 }
 
