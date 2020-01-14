@@ -15,6 +15,18 @@ namespace GreekHealthcareNetwork.Controllers
         private readonly DoctorsRepository _doctors = new DoctorsRepository();
         private readonly UsersRepository _users = new UsersRepository();
 
+        [System.Web.Http.HttpGet]
+        [System.Web.Mvc.Authorize(Roles = "Doctor")]
+        public IHttpActionResult GetWorkingHours(string doctorId)
+        {
+            if (doctorId == null)
+            {
+                return BadRequest("Wrong doctorId given");
+            }
+
+            return Ok(_doctors.GetWorkingHours(doctorId));
+        }
+
         [System.Web.Http.HttpPost]
         [ValidateAntiForgeryToken]
         [System.Web.Mvc.Authorize(Roles = "Doctor")]
@@ -90,7 +102,7 @@ namespace GreekHealthcareNetwork.Controllers
             return Ok();
         }
 
-        [System.Web.Http.HttpGet]
+        [System.Web.Http.HttpGet] // just to suppress error with not matching correctly to UpdateWorkingHours
         public bool CheckIfWorkingHoursEntriesAreValid(List<WorkingHours> workingHourList)
         {
             bool result = true;
@@ -107,7 +119,7 @@ namespace GreekHealthcareNetwork.Controllers
             return result;
         }
 
-        [System.Web.Http.HttpGet]
+        [System.Web.Http.HttpGet] // just to suppress error with not matching correctly to UpdateWorkingHours
         public bool CheckIfWorkingHourEntriesIntecept(List<WorkingHours> workingHoursList)
         {
             bool result = false;

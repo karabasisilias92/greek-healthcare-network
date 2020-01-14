@@ -31,7 +31,8 @@ namespace GreekHealthcareNetwork.Controllers
         public IHttpActionResult SearchDoctorById(string doctorId)
         {
             var doctor = _doctors.GetDoctorById(doctorId);
-            if(doctor == null)
+            doctor.WorkingHours = doctor.WorkingHours.OrderBy(i => i.Day).ThenBy(i => i.WorkStartTime).ToList();
+            if (doctor == null)
             {
                 return NotFound();
             }

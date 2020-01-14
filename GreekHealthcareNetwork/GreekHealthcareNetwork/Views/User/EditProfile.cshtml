@@ -107,7 +107,7 @@
                                 <td>@Html.TextBoxFor(m => m.User.AMKA, new { @class = "form-control" })</td>
                                 <td>@Html.ValidationMessageFor(m => m.User.AMKA, "", new { @class = "text-danger" }) </td>
                             </tr>
-                            <tr class="form-group">
+                            <tr class="form-group" id="beforeWorkingHoursTR">
                                 <th>@Html.LabelFor(m => m.User.PaypalAccount):</th>
                                 <td>@Html.TextBoxFor(m => m.User.PaypalAccount, new { @class = "form-control" })</td>
                                 <td>@Html.ValidationMessageFor(m => m.User.PaypalAccount, "", new { @class = "text-danger" })</td>
@@ -126,12 +126,6 @@
                                 {
                                     for (int i = 0; i < Model.WorkingHours.Count; i++)
                                     {
-                                        @Html.HiddenFor(m => m.WorkingHours[i].Id);
-                                        @Html.HiddenFor(m => m.WorkingHours[i].DoctorId);
-                                        @Html.HiddenFor(m => m.WorkingHours[i].Day);
-                                        @Html.HiddenFor(m => m.WorkingHours[i].WorkStartTime);
-                                        @Html.HiddenFor(m => m.WorkingHours[i].WorkEndTime);
-                                        @Html.HiddenFor(m => m.WorkingHours[i].AppointmentDuration);
                                         <tr>
                                             @if (i == 0)
                                             {
@@ -141,7 +135,7 @@
                                             {
                                                 <th></th>
                                             }
-                                            <td>@Html.TextBoxFor(m => m.WorkingHours[i].WorkingDayConcat, new { @class = "form-control", @readonly = "readonly" })</td>
+                                            <td>@Model.WorkingHours[i].WorkingDayConcat</td>
                                             @if (i == (Model.WorkingHours.Count - 1))
                                             {
                                                 <td><button id="editWorkingHours" class="btn btn-danger">Edit Working Hours</button></td>
@@ -150,7 +144,7 @@
                                     }
                                 }
                             }
-                            <tr class="form-group">
+                            <tr class="form-group" id="afterWorkingHoursTR">
                                 @if (User.IsInRole("Doctor"))
                                 {
                                     <th>@Html.LabelFor(m => m.Doctor.OfficeAddress):</th>
@@ -198,15 +192,15 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            @if (Model.WorkingHours.Count == 0)
-            {
-                Model.WorkingHours.Add(new WorkingHours());
-            }
             <div class="modal-body">
                 <div class="container">
                     <form id="workingHoursForm" class="form-horizontal">
                         @Html.AntiForgeryToken()
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="validation-summary-errors">
+                            <ul class="text-danger">
+
+                            </ul>
+                        </div>
                         <div id="entriesList">
                             @for (int i = 0; i < Model.WorkingHours.Count(); i++)
                             {
@@ -341,6 +335,13 @@
                     reader.readAsDataURL($(this)[0].files[0]);
                 }
             })
+            $('#editWorkingHoursModal').on('hidden.bs.modal', function () {
+                console.log(@Model.WorkingHours.Count);
+                console.log(count);
+                $('#workingHoursForm div.validation-summary-errors > ul').children().remove();
+                $('#workingHoursForm').trigger("reset");
+                $('#workingHoursForm div.validation-summary-valid').removeClass('validation-summary-valid').addClass('validation-summary-errors');
+            })
             $('#editWorkingHours').click(function (e) {
                 e.preventDefault();
                 $('#editWorkingHoursModal').modal('show');
@@ -433,13 +434,14 @@
             }
             $('#addNewEntry').on('click', addNewEntry);
             $('#updateWorkingHours').on('click', function (e) {
+                debugger;
                 e.preventDefault();
                 const $form = $('#workingHoursForm');
                 $.validator.unobtrusive.parse($form);
                 $form.validate();
                 if ($form.valid()) {
                     let model = [];
-                    const formRows = $('#entriesList').children();
+                    const formRows = $('#entriesList').children();                    
                     for (let i = 0; i < formRows.length; i++) {
                         let entry = new Object();
                         const entryValues = $(formRows[i]).children();
@@ -460,15 +462,78 @@
                         cache: false,
                         processData: false,
                         success: function () {
+                            $.ajax({
+                                dataType: 'json',
+                                type: 'get',
+                                url: '/api/WorkingHours?doctorId=' + '@Model.User.Id',
+                                success: function (data) {
+                                    let elem = $('#beforeWorkingHoursTR');
+                                    while ($(elem).next()[0].id != 'afterWorkingHoursTR') {
+                                        const next = $(elem).next();
+                                        $(next).remove();
+                                    }
+                                    if (data.length == 0) {
+                                        const tr = $(document.createElement('tr'));
+                                        const th = $(document.createElement('th'));
+                                        $(th).text('Working Hours:');
+                                        const td1 = $(document.createElement('td'));
+                                        $(td1).text('You have not declared any working hours');
+                                        const td2 = $(document.createElement('td'));
+                                        $(td2).html('<button id="editWorkingHours" class="btn btn-danger">Edit Working Hours</button>');
+                                        $(tr).append(th);
+                                        $(tr).append(td1);
+                                        $(tr).append(td2);                                        
+                                        $(elem).after(tr);
+                                    }                                    
+                                    else {
+                                        for (let i = 0; i < data.length; i++) {
+                                            const tr = $(document.createElement('tr'));
+                                            const th = $(document.createElement('th'));
+                                            if (i == 0) {
+                                                $(th).text('Working Hours:')
+                                            }
+                                            else {
+                                                $(th).text('');
+                                            }
+                                            $(tr).append(th);
+                                            const td1 = $(document.createElement('td'));
+                                            $(td1).text(data[i].WorkingDayConcat);
+                                            $(tr).append(td1);
+                                            if (i == (data.length - 1)) {
+                                                const td2 = $(document.createElement('td'));
+                                                $(td2).html('<button id="editWorkingHours" class="btn btn-danger">Edit Working Hours</button>');
+                                                $(tr).append(td2);
+                                            }
+                                            $(elem).after(tr);
+                                            elem = $(elem).next();
+                                        }
+                                    }
+                                    $('#editWorkingHours').click(function (e) {
+                                        e.preventDefault();
+                                        $('#editWorkingHoursModal').modal('show');
+                                    })
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                }
+                            })
                             $('#editWorkingHoursModal').modal("hide");
                         },
-                        error: function (error) {
+                        error: function (error) {                                  
+                            debugger;
+                            console.log(error.responseJSON.ModelState);
                             const errorObject = error.responseJSON.ModelState;
                             $('#workingHoursForm div.validation-summary-errors > ul').children().remove();
                             for (var property in errorObject) {
                                 if (errorObject.hasOwnProperty(property)) {
+                                    console.log(property);
                                     if (property == '') {
                                         $('#workingHoursForm div.validation-summary-errors > ul').append('<li>' + errorObject[property] + '</li>')
+                                    }
+                                    else {
+                                        const $errorSpan = $("span[data-valmsg-for='" + property + "']");
+                                        $($errorSpan).html("<span style='color:red'>" + errorObject[property] + "</span>");
+                                        $($errorSpan).show();
                                     }
                                 }
                             }
@@ -490,8 +555,8 @@
                     $.each($form.validate().errorList, function (key, value) {
                         console.log(value);
                         const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
-                        $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
-                        $errorSpan.show();
+                        $($errorSpan).html("<span style='color:red'>" + value.message + "</span>");
+                        $($errorSpan).show();
                     });
                 }
             })

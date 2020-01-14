@@ -138,6 +138,23 @@ namespace GreekHealthcareNetwork.Repositories
             }
         }
 
+        public IEnumerable<WorkingHours> GetWorkingHours(string doctorId)
+        {
+            if (doctorId == null)
+            {
+                throw new ArgumentNullException("doctorId");
+            }
+
+            IEnumerable<WorkingHours> workingHours;
+
+            using (var db = new ApplicationDbContext())
+            {
+                workingHours = db.WorkingHours.Where(i => i.DoctorId.Equals(doctorId)).OrderBy(i => i.Day).ThenBy(i => i.WorkStartTime).ToList();
+            }
+
+            return workingHours;
+        }
+
         public void InsertWorkingHoursEntry(WorkingHours workingHoursEntry)
         {
             if (workingHoursEntry == null)
