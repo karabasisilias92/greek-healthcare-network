@@ -18,9 +18,14 @@ namespace GreekHealthcareNetwork.Controllers
         // GET: Appointments
         public ActionResult CancelAppointmentDetails(int appointmentId)
         {
-            var appointment = new Appointment();
-            appointment = _appointmentsRespository.GetAppointmentById(appointmentId);
+            var appointment = _appointmentsRespository.GetAppointmentById(appointmentId);
             return PartialView("_ModalCancelAppointmentPartial", appointment);
+        }
+
+        public ActionResult EditAppointmentDetails(int appointmentId)
+        {
+            var appointment = _appointmentsRespository.GetAppointmentById(appointmentId);
+            return PartialView("_ModalEditAppointmentPartial", appointment);
         }
 
         [HttpPost]

@@ -78,7 +78,7 @@ namespace GreekHealthcareNetwork.Controllers
                         }
                         insured.BookedAppointments++;
                         _insureds.UpdateInsured(insured);
-                        return Ok(new { action = "PayAppointmentCharge", controller = "Payments", id = id, appointmentCharge = appointment.InsuredAppointmentCharge });
+                        return Ok(new { action = "PayAppointmentCharge", controller = "Payment", id = id, appointmentCharge = appointment.InsuredAppointmentCharge });
                     }
                     catch (Exception)
                     {
@@ -87,7 +87,25 @@ namespace GreekHealthcareNetwork.Controllers
                     }
                 }
             }
-            return BadRequest(ModelState); ;
+            return BadRequest(ModelState);
+        }
+
+        [System.Web.Http.HttpPut, System.Web.Http.HttpPatch]
+        [ValidateAntiForgeryToken]
+        public IHttpActionResult EditAppointment(Appointment appointment)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Doctor doctor = _doctors.GetDoctorById(appointment.DoctorId);
+            byte appointmentDuration = doctor.WorkingHours.SingleOrDefault(d => d.Day == appointment.AppointmentDate.DayOfWeek && d.WorkStartTime <= appointment.AppointmentStartTime && d.WorkEndTime >= appointment.AppointmentStartTime).AppointmentDuration;
+            appointment.AppointmentEndTime = appointment.AppointmentStartTime + new TimeSpan(0, appointmentDuration, 0);
+            appointment.AppointmentStatus = AppointmentStatus.Upcoming;
+            _appointments.UpdateAppointment(appointment);
+
+            return Ok();
         }
     }
 }

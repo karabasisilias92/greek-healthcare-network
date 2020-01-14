@@ -1,0 +1,133 @@
+﻿@model GreekHealthcareNetwork.Models.Appointment
+@{
+    string date = Model.AppointmentDate.Date.ToString("dd-MM-yyyy");
+}
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>Edit Appointment Details</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            @if ((int)(Model.AppointmentDate - DateTime.Now.Date).Days < 3)
+            {
+                <h6 class="text-danger">Since the appointment is less than 3 days away you cannot edit its details anymore.</h6>
+            }
+            else
+            {
+                <div id="errorContainerBook" class="container">
+                    <div class="row">
+                        <p> Something went wrong. Please try again later. </p>
+                    </div>
+                </div>
+                <div id="normalContainerBook" class="container">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="row" id="profilepictureBook">
+                                <div class="col-md-12">
+                                    <img src="" class="rounded-circle w-100 h-100" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row" id="bookapointmentsection">
+                                <div class="col-md-12">
+                                    <form id="bookAppointmentForm">
+                                        @Html.AntiForgeryToken()
+                                        <div class="validation-summary-errors text-danger">
+                                            <ul>
+                                            </ul>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.HiddenFor(m => m.Id)
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.HiddenFor(m => m.DoctorId)
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.HiddenFor(m => m.InsuredId)
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.HiddenFor(m => m.InsuredAppointmentCharge)
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.AppointmentDate, new { @class = "col-md-12 control-label" })
+                                            <div class="col-md-10">
+                                                @Html.TextBoxFor(m => m.AppointmentDate, new { @class = "form-control", type = "date", @Value = Model.AppointmentDate.Date.ToString("yyyy-MM-dd") })
+                                                @Html.ValidationMessageFor(m => m.AppointmentDate, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div id="NoAvailableAppointments" class="form-group">
+                                            <div class="row">
+                                                <p> We are sorry but all the doctor's appointments are booked on this day. Please try choose another day. </p>
+                                            </div>
+                                        </div>
+                                        <div id="NoWorkingDay" class="form-group">
+                                            <div class="row">
+                                                <p> We are sorry but the doctor does not work on this day. Please try choose another day. </p>
+                                            </div>
+                                        </div>
+                                        <div id="appointmentTime" class="form-group">
+                                            @Html.LabelFor(m => m.AppointmentStartTime, new { @class = "col-md-12 control-label" })
+                                            <div class="col-md-10">
+                                                @Html.DropDownListFor(m => m.AppointmentStartTime, new SelectList(new List<Object>()), new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(m => m.AppointmentStartTime, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div id="insuredComments" class="form-group">
+                                            @Html.LabelFor(m => m.InsuredComments, new { @class = "col-md-12 control-label" })
+                                            <div class="col-md-10">
+                                                @Html.TextAreaFor(m => m.InsuredComments, new { @class = "form-control" })
+                                                @Html.ValidationMessageFor(m => m.InsuredComments, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                        <div id="bookAppointmentButton" class="form-group">
+                                            <div class="col-md-offset-2 col-md-10">
+                                                <input id="bookAppointment" type="submit" class="btn btn-outline-dark" value="Book Appointment" />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="profilesectionBook" class="col-md-12">
+                            <table class="table table-borderless mt-2">
+                                <tbody>
+                                    <tr>
+                                        <th>First Name:</th>
+                                        <td id="firstNameBook"> </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Last Name:</th>
+                                        <td id="lastNameBook"> </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Medical Specialty:</th>
+                                        <td id="medicalSpecialtyBook"> </td>
+                                    </tr>
+                                    <tr id="officeAddressBookTR">
+                                        <th>Office Address:</th>
+                                        <td id="officeAddressBook"> </td>
+                                    </tr>
+                                    <tr id="doctorEmailBookTR">
+                                        <th>Email:</th>
+                                        <td id="doctorEmailBook"> </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Telephone:</th>
+                                        <td id="doctorTelephoneBook"> </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

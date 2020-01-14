@@ -108,7 +108,7 @@ else
                             <div @if (i == 0) { @(new HtmlString("class=\"pricing-content general silver\""))  ; } else if (i == 1) { @(new HtmlString("class=\"pricing-content featured\""))  ; } else { @(new HtmlString("class=\"pricing-content general bronze\"")) ; }>
                                 <h2>@Model.InsuredPlans[i].Name Plan</h2>
                                 <h3>
-                                    @Model.InsuredPlans[i].PlanFee.ToString("0.##")&euro; @if (Model.InsuredPlans[i].PlanDuration == 12)
+                                    @Model.InsuredPlans[i].PlanFee.ToString("0.00")&euro; @if (Model.InsuredPlans[i].PlanDuration == 12)
                                     {@(new HtmlString("<span>per year</span>"));
                                 }
                                 </h3>
@@ -134,7 +134,7 @@ else
                                     <li><i class="fa fa-check icon-success"></i><span>Exchange messages with the doctors</span></li>
                                 </ul>
                                 <div class="price-bottom">
-                                    @Html.ActionLink("PURCHASE", "PaySubscription", "Payments", new { userId = Model.InsuredId, planId = Model.InsuredPlans[i].Id }, new { id = "pay", @class = "btn btn-skin mb-3" })
+                                    @Html.ActionLink("PURCHASE", "PayInsuredSubscription", "Payment", new { userId = Model.InsuredId, planId = Model.InsuredPlans[i].Id }, new { id = "pay", @class = "btn btn-skin mb-3" })
                                 </div>
                             </div>
                         </div>
@@ -155,7 +155,7 @@ else
                                 <div @if (i == 0) { @(new HtmlString("class=\"pricing-content general silver\""))  ; } else if (i == 1) { @(new HtmlString("class=\"pricing-content featured\""))  ; } else { @(new HtmlString("class=\"pricing-content general bronze\"")) ; }>
                                     <h2>@Model.InsuredPlans[i].Name Plan</h2>
                                     <h3>
-                                        @Model.InsuredPlans[i].PlanFee.ToString("0.##")&euro; @if (Model.InsuredPlans[i].PlanDuration == 12)
+                                        @Model.InsuredPlans[i].PlanFee.ToString("0.00")&euro; @if (Model.InsuredPlans[i].PlanDuration == 12)
                                         {@(new HtmlString("<span>per year</span>"));
                                     }
                                     </h3>
@@ -181,7 +181,7 @@ else
                                         <li><i class="fa fa-check icon-success"></i><span>Exchange messages with the doctors</span></li>
                                     </ul>
                                     <div class="price-bottom">
-                                        @Html.ActionLink("PURCHASE", "PaySubscription", "Payments", new { userId = Model.InsuredId, planId = Model.InsuredPlans[i].Id }, new { id = "pay", @class = "btn btn-skin mb-3" })
+                                        @Html.ActionLink("PURCHASE", "PayInsuredSubscription", "Payment", new { userId = Model.InsuredId, planId = Model.InsuredPlans[i].Id }, new { id = "pay", @class = "btn btn-skin mb-3" })
                                     </div>
                                 </div>
                             </div>

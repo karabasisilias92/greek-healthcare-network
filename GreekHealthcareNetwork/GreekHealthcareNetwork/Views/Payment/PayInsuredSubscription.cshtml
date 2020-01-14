@@ -1,0 +1,52 @@
+﻿@model GreekHealthcareNetwork.Models.PaySubcriptionViewModel
+@using GreekHealthcareNetwork.Models;
+@using GreekHealthcareNetwork.Repositories;
+@{
+    ViewBag.Title = "Pay Subscription Fee";
+    var _users = new UsersRepository();
+}
+
+<section id="pageHeader" class="container py-3">
+    @if (!Request.IsAuthenticated)
+    {
+        <img src="https://via.placeholder.com/80x80.png?text=GHNlogo" class="rounded-circle mb-3" />
+    }
+    <h2>@ViewBag.Title</h2>
+</section>
+
+<section id="PaymentInfo" class="container">
+    <p> Your paypal account will be charged: @Model.PlanFee.ToString("0.00")&euro;</p>
+    <div id="pay_skip" class="mt-4">
+        <div>
+            @{
+                Session["paymentFor"] = "Subscription";
+                Session["userId"] = Model.UserId;
+                Session["planId"] = Model.PlanId;
+                Session["paymentItemName"] = "Insurance Plan Fee";
+                Session["Transaction description"] = "This transaction is related to the redemption of the subscription fee regarding your insurance plan.";
+                Session["price"] = Model.PlanFee.ToString("0.00");
+                @Html.ActionLink("Pay", "PayWithPayPal", "Payment", null, new { @class = "btn btn-outline-success mr-3" });
+            }            
+        </div>       
+        @Html.ActionLink("Back", "ClientPayInsuredPlan", "Account", new { userId = Model.UserId }, new { id = "backToPreviousPage", @class = "btn btn-outline-danger" })
+    </div>
+</section>
+
+@section cssScripts {
+    <link href="~/Content/registration.css" rel="stylesheet" />
+}
+
+@*@section scripts {
+    <script>
+        $(document).ready(function () {
+            const firstRowHeight = +$('#firstRow').css('height').split('px')[0];;
+            console.log(firstRowHeight);
+            $('#firstRow').css('height', 'calc(100vh - 156.4px)');
+            const minHeight = +$('#firstRow').css('height').split('px')[0];;
+            console.log(minHeight);
+            if (firstRowHeight > minHeight) {
+                $('#firstRow').css('height', firstRowHeight);
+            }
+        })
+    </script>
+}*@

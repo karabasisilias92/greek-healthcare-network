@@ -1,4 +1,5 @@
 ﻿using GreekHealthcareNetwork.Models;
+using GreekHealthcareNetwork.Models.Enums;
 using GreekHealthcareNetwork.Repositories;
 using System;
 using System.Collections.Generic;
@@ -41,10 +42,17 @@ namespace GreekHealthcareNetwork.Controllers
             {
                 return RedirectToAction("BookAppointment");
             }
-            _appointments.DeleteAppointment(appointmentId);
+            appointment.AppointmentStatus = AppointmentStatus.Canceled;
+            _appointments.UpdateAppointment(appointment);
             var insured = _insureds.GetInsuredById(insuredId);
             insured.BookedAppointments--;
             _insureds.UpdateInsured(insured);
+            Session.Remove("appointmentId");
+            Session.Remove("paymentFor");
+            Session.Remove("insuredId");
+            Session.Remove("paymentItemName");
+            Session.Remove("Transaction description");
+            Session.Remove("price");
             return View(appointment);
         }
 
@@ -59,6 +67,12 @@ namespace GreekHealthcareNetwork.Controllers
             var insured = _insureds.GetInsuredById(insuredId);
             insured.BookedAppointments--;
             _insureds.UpdateInsured(insured);
+            Session.Remove("appointmentId");
+            Session.Remove("paymentFor");
+            Session.Remove("insuredId");
+            Session.Remove("paymentItemName");
+            Session.Remove("Transaction description");
+            Session.Remove("price");
             return View(appointment);
         }
 

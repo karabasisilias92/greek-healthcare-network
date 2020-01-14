@@ -1,0 +1,57 @@
+﻿@using GreekHealthcareNetwork.Models;
+@using GreekHealthcareNetwork.Repositories;
+@{
+    ViewBag.Title = "Pay Subscription Cancelled";
+    var userId = (string)ViewBag.UserId;    
+    var _users = new UsersRepository();
+    var user = _users.GetUserById(userId);
+    string doctorRoleId = _users.GetRoleIdByName("Doctor");
+    string insuredRoleId = _users.GetRoleIdByName("Insured");
+}
+
+<section class="container py-3">
+    <h2>@ViewBag.Title</h2>
+</section>
+
+<section class="container">
+    @if (user.SubscriptionEndDate.Date.ToString("yyyy-MM-dd").Equals("0001-01-01") && user.Roles.Any(r => r.RoleId.Equals(insuredRoleId)))
+    {
+        <p class="mb-0">
+            You have cancelled your payment so your account has been set to inactive, which means you will not be able to book any appointments
+            or send messages to doctors, until you choose and pay for a plan. However, you will be able to access your profile to our site.
+        </p>
+    }
+    else if (user.SubscriptionEndDate.Date.ToString("yyyy-MM-dd").Equals("0001-01-01") && user.Roles.Any(r => r.RoleId.Equals(doctorRoleId)))
+    {
+        <p class="mb-0">
+            You have cancelled your payment so your account has been set to inactive, which means you will not be visible to patients
+            so that they can book appointments, until you pay your subscription fee. However, you will be able to access your profile to our site.
+        </p>
+    }
+    else
+    {
+        <p class="mb-0">
+            You have cancelled your payment so your plan subscription remains the same as before.</p>
+    }
+<div id="pay_skip" class="d-flex mt-4">
+    @{
+        if (user.SubscriptionEndDate.Date.ToString("yyyy-MM-dd").Equals("0001-01-01"))
+        {
+            @Html.ActionLink("Go to home page", "Index", "Home", null, new { id = "GoToProfile", @class = "btn btn-outline-success" })
+        }
+        else
+        {
+            if (user.Roles.Any(r => r.RoleId.Equals(doctorRoleId)))
+            {
+                @Html.ActionLink("Back to profile page", "UserProfile", "User", null, new { id = "backToProfile", @class = "btn btn-outline-success" })
+            }
+            else if (user.Roles.Any(r => r.RoleId.Equals(insuredRoleId)))
+            {
+                @Html.ActionLink("Back to profile page", "UserProfile", "User", null, new { id = "backToProfile", @class = "btn btn-outline-success" })
+            }
+        }
+    }
+</div>
+</section>
+
+
