@@ -202,108 +202,7 @@
                             </ul>
                         </div>
                         <div id="entriesList">
-                            @for (int i = 0; i < Model.WorkingHours.Count(); i++)
-                            {
-                                <div class="form-row">
-                                    @Html.HiddenFor(m => m.WorkingHours[i].Id, new { @Value = Model.WorkingHours[i].Id })
-                                    @Html.HiddenFor(m => m.WorkingHours[i].DoctorId, new { @Value = Model.User.Id })
-                                    <div class="form-group col-md-3">
-                                        @Html.LabelFor(m => m.WorkingHours[i].Day, new { @class = "col-md-12 control-label" })
-                                        <div class="col-md-10">
-                                            <select id="@("WorkingHours_" + i + "__Day")" name="@("WorkingHours[" + i + "].Day")" class="form-control mr-2" data-val="true" data-val-required="The Day field is required." required>
-                                                <option>Choose day</option>
-                                                @foreach (var item in Model.Days)
-                                                {
-                                                    if (Model.WorkingHours[i].Day == item)
-                                                    {
-                                                        <option value="@((int)item)" selected>@item</option>
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@((int)item)">@item</option>
-                                                    }
-                                                }
-                                            </select>
-                                            @Html.ValidationMessageFor(m => m.WorkingHours[i].Day, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        @Html.LabelFor(m => m.WorkingHours[i].WorkStartTime, new { @class = "col-md-12 control-label" })
-                                        <div class="col-md-10">
-                                            @Html.TextBoxFor(m => m.WorkingHours[i].WorkStartTime, new { @class = "form-control", type = "time" })
-                                            @Html.ValidationMessageFor(m => m.WorkingHours[i].WorkStartTime, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        @Html.LabelFor(m => m.WorkingHours[i].WorkEndTime, new { @class = "col-md-12 control-label" })
-                                        <div class="col-md-10">
-                                            @Html.TextBoxFor(m => m.WorkingHours[i].WorkEndTime, new { @class = "form-control", type = "time" })
-                                            @Html.ValidationMessageFor(m => m.WorkingHours[i].WorkStartTime, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        @Html.LabelFor(m => m.WorkingHours[i].AppointmentDuration, new { @class = "col-md-12 control-label" })
-                                        <div class="col-md-10">
-                                            <select id="@("WorkingHours_" + i + "__AppointmentDuration")" name="@("WorkingHours[" + i + "].AppointmentDuration")" class="form-control mr-2" data-val="true" data-val-required="The Appointment Duration field is required." required>
-                                                @{
-                                                    switch (Model.WorkingHours[i].AppointmentDuration)
-                                                    {
-                                                        case 15:
-                                                            {
-                                                                <option>Choose duration</option>
-                                                                <option value="15" selected>15 minutes</option>
-                                                                <option value="30">30 minutes</option>
-                                                                <option value="45">45 minutes</option>
-                                                                <option value="60">60 minutes</option>
-                                                                break;
-                                                            }
-                                                        case 30:
-                                                            {
-                                                                <option>Choose duration</option>
-                                                                <option value="15">15 minutes</option>
-                                                                <option value="30" selected>30 minutes</option>
-                                                                <option value="45">45 minutes</option>
-                                                                <option value="60">60 minutes</option>
-                                                                break;
-                                                            }
-                                                        case 45:
-                                                            {
-                                                                <option>Choose duration</option>
-                                                                <option value="15">15 minutes</option>
-                                                                <option value="30">30 minutes</option>
-                                                                <option value="45" selected>45 minutes</option>
-                                                                <option value="60">60 minutes</option>
-                                                                break;
-                                                            }
-                                                        case 60:
-                                                            {
-                                                                <option>Choose duration</option>
-                                                                <option value="15">15 minutes</option>
-                                                                <option value="30">30 minutes</option>
-                                                                <option value="45">45 minutes</option>
-                                                                <option value="60" selected>60 minutes</option>
-                                                                break;
-                                                            }
-                                                        default:
-                                                            {
-                                                                <option>Choose duration</option>
-                                                                <option value="15">15 minutes</option>
-                                                                <option value="30">30 minutes</option>
-                                                                <option value="45">45 minutes</option>
-                                                                <option value="60">60 minutes</option>
-                                                                break;
-                                                            }
-                                                    }
-                                                }
-                                            </select>
-                                            @Html.ValidationMessageFor(m => m.WorkingHours[i].AppointmentDuration, "", new { @class = "text-danger" })
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-2 d-flex align-items-md-end">
-                                        <button class="btn btn-outline-danger ml-3 deleteEntry">Delete Entry</button>
-                                    </div>
-                                </div>
-                            }
+
                         </div>
 
                         <button id="addNewEntry" class="btn btn-outline-primary ml-3 mb-3">Add new entry</button>
@@ -336,16 +235,11 @@
                 }
             })
             $('#editWorkingHoursModal').on('hidden.bs.modal', function () {
-                console.log(@Model.WorkingHours.Count);
-                console.log(count);
+                elems = $('#entriesList').children().remove();
                 $('#workingHoursForm div.validation-summary-errors > ul').children().remove();
-                $('#workingHoursForm').trigger("reset");
                 $('#workingHoursForm div.validation-summary-valid').removeClass('validation-summary-valid').addClass('validation-summary-errors');
             })
-            $('#editWorkingHours').click(function (e) {
-                e.preventDefault();
-                $('#editWorkingHoursModal').modal('show');
-            })
+            $('#editWorkingHours').click(GetWorkingHourEntries);
             var count = @Model.WorkingHours.Count;
             function deleteEntry(e) {
                 e.preventDefault();
@@ -374,6 +268,77 @@
             function addListenerToDeleteButtons() {
                 $('.deleteEntry').off('click', deleteEntry);
                 $('.deleteEntry').on('click', deleteEntry);
+            }
+            function GetWorkingHourEntries (e) {
+                e.preventDefault();
+                $.ajax({
+                    dataType: 'json',
+                    type: 'get',
+                    url: '/api/WorkingHours?doctorId=' + '@Model.User.Id',
+                    success: function (data) {
+                        console.log(data.length);
+                        for (let i = 0; i < data.length; i++) {
+                                $('#entriesList').append(
+                                        '<div class= "form-row">' +
+                                            '<input value="' + data[i].Id + '" id="WorkingHours_' + i + '__Id" name="WorkingHours[' + i + '].Id" type="hidden"/>' +
+                                            '<input value="' + '@Model.User.Id' + '" id="WorkingHours_' + i + '__DoctorId" name="WorkingHours[' + i + '].DoctorId" type="hidden"/>' +                        
+                                            '<div class="form-group col-md-3">' +
+                                                '<label class="col-md-12 control-label" for="WorkingHours_' + i + '__Day">Day</label>' +
+                                                '<div class="col-md-10">' +
+                                                    '<select id="WorkingHours_' + i + '__Day" name="WorkingHours[' + i + '].Day" class="form-control mr-2" data-val="true" data-val-required="The Day field is required." required>' +
+                                                        '<option>Choose day</option>' +
+                                                        (data[i].Day == 'Monday' ? '<option value="1" selected>Monday</option>' : '<option value="1">Monday</option>') +
+                                                        (data[i].Day == 'Tuesday' ? '<option value="2" selected>Tuesday</option>' : '<option value="2">Tuesday</option>') +
+                                                        (data[i].Day == 'Wednesday' ? '<option value="3" selected>Wednesday</option>' : '<option value="4">Wednesday</option>') +
+                                                        (data[i].Day == 'Thursday' ? '<option value="4" selected>Thursday</option>' : '<option value="4">Thursday</option>') +
+                                                        (data[i].Day == 'Friday' ? '<option value="5" selected>Friday</option>' : '<option value="5">Friday</option>') +
+                                                        (data[i].Day == 'Saturday' ? '<option value="6" selected>Saturday</option>' : '<option value="6">Saturday</option>') +
+                                                        (data[i].Day == 'Sunday' ? '<option value="0" selected>Sunday</option>' : '<option value="0">Sunday</option>') +
+                                                    '</select>' +
+                                                    '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + i + '].Day" data-valmsg-replace="true"></span>' +
+                                                '</div>' +
+                                            '</div>' +
+                                            '<div class="form-group col-md-2">' +
+                                                '<label class="col-md-12 control-label" for="WorkingHours_' + i + '__WorkStartTime">Work Start Time</label>' +
+                                                '<div class="col-md-10">' +
+                                                    '<input value="' + data[i].WorkStartTime + '" class="form-control" data-val="true" data-val-required="The Work Start Time field is required." id="WorkingHours_' + i + '__WorkStartTime" name="WorkingHours[' + i + '].WorkStartTime" type="time" value="" />' +
+                                                    '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + i + '].WorkStartTime" data-valmsg-replace="true"></span>' +
+                                                '</div>' +
+                                            '</div>' +
+                                            '<div class="form-group col-md-2">' +
+                                                '<label class="col-md-12 control-label" for="WorkingHours_' + i + '__WorkEndTime">Work End Time</label>' +
+                                                '<div class="col-md-10">' +
+                                                    '<input value="' + data[i].WorkEndTime + '" class="form-control" data-val="true" data-val-required="The Work End Time field is required." id="WorkingHours_' + i + '__WorkEndTime" name="WorkingHours[' + i + '].WorkEndTime" type="time" value="" />' +
+                                                    '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + i + '].WorkEndTime" data-valmsg-replace="true"></span>' +
+                                                '</div>' +
+                                            '</div>' +
+                                            '<div class="form-group col-md-3">' +
+                                                '<label class="col-md-12 control-label" for="WorkingHours_' + i + '__AppointmentDuration">Appointment Duration</label>' +
+                                                '<div class="col-md-10">' +
+                                                    '<select id="WorkingHours_' + i + '__AppointmentDuration" name="WorkingHours[' + i + '].AppointmentDuration" class="form-control mr-2" data-val="true" data-val-required="The Appointment Duration field is required." required>' +
+                                                        '<option>Choose duration</option>' +
+                                                        (data[i].AppointmentDuration == 15 ? '<option value="15" selected>15 minutes</option>' : '<option value="15">15 minutes</option>') +
+                                                        (data[i].AppointmentDuration == 30 ? '<option value="30" selected>30 minutes</option>' : '<option value="30">30 minutes</option>') +
+                                                        (data[i].AppointmentDuration == 45 ? '<option value="45" selected>45 minutes</option>' : '<option value="45">45 minutes</option>') +
+                                                        (data[i].AppointmentDuration == 60 ? '<option value="60" selected>60 minutes</option>' : '<option value="60">60 minutes</option>') +
+                                                    '</select>'+
+                                                    '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + i + '].AppointmentDuration" data-valmsg-replace="true"></span>' +
+                                                '</div>' +
+                                            '</div>' +
+                                            '<div class="form-group col-md-2 d-flex align-items-md-end">' +
+                                                '<button class="btn btn-outline-danger ml-3 deleteEntry">Delete Entry</button>' +
+                                            '</div>' +
+                                    '</div>'
+                            );
+                        };                        
+                        addListenerToDeleteButtons();
+                    },
+                    error: function (error) {
+                        console.log('in')
+                        console.log(error);
+                    }
+                });
+                $('#editWorkingHoursModal').modal('show');
             }
             function addNewEntry(e) {
                 e.preventDefault();
@@ -508,10 +473,7 @@
                                             elem = $(elem).next();
                                         }
                                     }
-                                    $('#editWorkingHours').click(function (e) {
-                                        e.preventDefault();
-                                        $('#editWorkingHoursModal').modal('show');
-                                    })
+                                    $('#editWorkingHours').click(GetWorkingHourEntries);
                                 },
                                 error: function (error) {
                                     console.log(error);
@@ -560,7 +522,6 @@
                     });
                 }
             })
-            addListenerToDeleteButtons();
         })
     </script>
 

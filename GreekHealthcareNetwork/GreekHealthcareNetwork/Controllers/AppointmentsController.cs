@@ -8,6 +8,8 @@ using System.Web.Mvc;
 
 namespace GreekHealthcareNetwork.Controllers
 {
+    [Authorize(Roles = "Insured")]
+    [Authorize(Roles = "Doctor")]
     public class AppointmentsController : Controller
     {
         private readonly AppointmentsRespository _appointmentsRespository = new AppointmentsRespository();
