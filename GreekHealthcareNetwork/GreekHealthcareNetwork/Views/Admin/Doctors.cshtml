@@ -1,4 +1,4 @@
-﻿
+﻿@using GreekHealthcareNetwork.Models.Enums
 @{
     ViewBag.Title = "Doctors";
 }
@@ -68,11 +68,38 @@
                             + '</td><td>' + doctor.User.PhoneNumber
                             + '</td><td>' + doctor.User.PaypalAccount
                             + '</td>'                           
-                            + '<td><button class="btn btn-success table-button updateBtn" data-id="' + doctor.UserId + '" >Update</button>'
+                            + '<td><button class="btn btn-success table-button editBtn" data-id="' + doctor.UserId + '" >Edit</button>'
                             + ((doctor.User.IsActive == true) ? '<button class="btn btn-danger table-button setActiveBtn" data-id="' + doctor.UserId + '">Deactivate</button>' : '<button class="btn btn-danger table-button setActiveBtn" data-id="' + doctor.UserId + '">Activate</button>')
                             + '<button class="btn btn-primary table-button sentMessageBtn" data-id="' + doctor.UserId + '" >Message</button>'
                             + '<button class= "btn btn-secondary table-button payBtn" data - id="' + doctor.User.Id + '" >Pay</button></td>'                            
                             + '</tr>')
+                    });
+                    $('.editBtn').on('click', function (e) {
+                        var grandParent = $(this).parent().parent();
+                        var firstName = grandParent.children('td:nth-child(2)').html();
+                        grandParent.children('td:nth-child(2)').html("");
+                        grandParent.children('td:nth-child(2)').append('<input type="text" value="' + firstName + '">');
+                        var lastName = grandParent.children('td:nth-child(3)').html();
+                        grandParent.children('td:nth-child(3)').html("");
+                        grandParent.children('td:nth-child(3)').append('<input type="text" value="' + lastName + '">');
+                        //var specialty = grandParent.children('td:nth-child(4)').html();
+                        //grandParent.children('td:nth-child(4)').html("");
+                        //grandParent.children('td:nth-child(4)').append('<input type="text" value="' + specialty + '">');
+                        var address = grandParent.children('td:nth-child(5)').html();
+                        grandParent.children('td:nth-child(5)').html("");
+                        grandParent.children('td:nth-child(5)').append('<input type="text" value="' + address + '">');
+                        var amka = grandParent.children('td:nth-child(6)').html();
+                        grandParent.children('td:nth-child(6)').html("");
+                        grandParent.children('td:nth-child(6)').append('<input type="text" value="' + amka + '">');
+                        var tel = grandParent.children('td:nth-child(7)').html();
+                        grandParent.children('td:nth-child(7)').html("");
+                        grandParent.children('td:nth-child(7)').append('<input type="text" value="' + tel + '">');
+                        var paypalAccount = grandParent.children('td:nth-child(8)').html();
+                        grandParent.children('td:nth-child(8)').html("");
+                        grandParent.children('td:nth-child(8)').append('<input type="text" value="' + paypalAccount + '">');
+                        var id = $(this).data('id');
+                        grandParent.children('td:nth-child(9)').children().hide();
+                        grandParent.children('td:nth-child(9)').append('<button class="btn btn-success updateBtn" data-id="' + id + '" >Update</button>');
                     });
                 },
                 error: function (error) {
