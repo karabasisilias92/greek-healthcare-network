@@ -1,8 +1,9 @@
 ﻿@using GreekHealthcareNetwork.Models;
 @using GreekHealthcareNetwork.Repositories;
+@using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Payment Failed";
-    var userId = (string)ViewBag.UserId;    
+    var userId = User.Identity.GetUserId();
     var _users = new UsersRepository();
     var user = _users.GetUserById(userId);
     string doctorRoleId = _users.GetRoleIdByName("Doctor");

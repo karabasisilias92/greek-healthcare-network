@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace GreekHealthcareNetwork.Controllers
 {
+    [Authorize(Roles = "Doctor")]
     public class DoctorsController : Controller
     {
         // GET: Doctors

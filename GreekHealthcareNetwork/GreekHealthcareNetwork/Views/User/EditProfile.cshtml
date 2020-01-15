@@ -1,4 +1,5 @@
 ﻿@model GreekHealthcareNetwork.Models.ProfileDetailsViewModel
+@using GreekHealthcareNetwork.Models
 @using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Edit Profile";
@@ -106,39 +107,44 @@
                                 <td>@Html.TextBoxFor(m => m.User.AMKA, new { @class = "form-control" })</td>
                                 <td>@Html.ValidationMessageFor(m => m.User.AMKA, "", new { @class = "text-danger" }) </td>
                             </tr>
-                            <tr class="form-group">
+                            <tr class="form-group" id="beforeWorkingHoursTR">
                                 <th>@Html.LabelFor(m => m.User.PaypalAccount):</th>
                                 <td>@Html.TextBoxFor(m => m.User.PaypalAccount, new { @class = "form-control" })</td>
                                 <td>@Html.ValidationMessageFor(m => m.User.PaypalAccount, "", new { @class = "text-danger" })</td>
                             </tr>
                             @if (User.IsInRole("Doctor"))
                             {
-                                if (Model.Doctor.WorkingHours.Count == 0)
+                                if (Model.WorkingHours.Count == 0)
                                 {
                                     <tr>
-                                        <th>@Html.LabelFor(m => m.Doctor.WorkingHours):</th>
-                                        <td>Doctor has not declared any working hours yet.</td>
+                                        <th>@Html.LabelFor(m => m.WorkingHours):</th>
+                                        <td>You have not declared any working hours</td>
+                                        <td><button id="editWorkingHours" class="btn btn-danger">Edit Working Hours</button></td>
                                     </tr>
                                 }
                                 else
                                 {
-                                    for (int i = 0; i < Model.Doctor.WorkingHours.Count; i++)
+                                    for (int i = 0; i < Model.WorkingHours.Count; i++)
                                     {
                                         <tr>
                                             @if (i == 0)
                                             {
-                                                <th>@Html.LabelFor(m => m.Doctor.WorkingHours):</th>
+                                                <th>@Html.LabelFor(m => m.WorkingHours):</th>
                                             }
                                             else
                                             {
                                                 <th></th>
                                             }
-                                            <td>@Html.TextBoxFor(m => m.Doctor.WorkingHours.ToList()[i].WorkingDayConcat, new { @class = "form-control", @readonly = "readonly" })</td>
+                                            <td>@Model.WorkingHours[i].WorkingDayConcat</td>
+                                            @if (i == (Model.WorkingHours.Count - 1))
+                                            {
+                                                <td><button id="editWorkingHours" class="btn btn-danger">Edit Working Hours</button></td>
+                                            }
                                         </tr>
                                     }
                                 }
                             }
-                            <tr class="form-group">
+                            <tr class="form-group" id="afterWorkingHoursTR">
                                 @if (User.IsInRole("Doctor"))
                                 {
                                     <th>@Html.LabelFor(m => m.Doctor.OfficeAddress):</th>
@@ -177,6 +183,41 @@
         </div>
     </main>
 }
+<div class="modal fade" id="editWorkingHoursModal" tabindex="-1" role="dialog" aria-labelledby="editWorkingHoursModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editWorkingHoursModalLabel">Edit Working Hours</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form id="workingHoursForm" class="form-horizontal">
+                        @Html.AntiForgeryToken()
+                        <div class="validation-summary-errors">
+                            <ul class="text-danger">
+
+                            </ul>
+                        </div>
+                        <div id="entriesList">
+
+                        </div>
+
+                        <button id="addNewEntry" class="btn btn-outline-primary ml-3 mb-3">Add new entry</button>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input id="updateWorkingHours" type="submit" class="btn btn-outline-dark" value="Update" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts{
     @Scripts.Render("~/bundles/jqueryval")
@@ -191,6 +232,295 @@
                         $('.changeProfPicContainer img').attr("src", e.target.result);
                     }
                     reader.readAsDataURL($(this)[0].files[0]);
+                }
+            })
+            $('#editWorkingHoursModal').on('hidden.bs.modal', function () {
+                elems = $('#entriesList').children().remove();
+                updateWorkingHoursTRs()
+                $('#workingHoursForm div.validation-summary-errors > ul').children().remove();
+                $('#workingHoursForm div.validation-summary-valid').removeClass('validation-summary-valid').addClass('validation-summary-errors');
+            })
+            $('#editWorkingHours').click(GetWorkingHourEntries);
+            var count = @Model.WorkingHours.Count;
+            function deleteEntry(e) {
+                e.preventDefault();
+                const elem = $(e.target).parent();
+                const id = $($(elem).parent().children()[0]).val();
+                if (id != 0) {
+                    $.ajax({
+                        type: 'delete',
+                        url: '/api/WorkingHours/' + id,
+                        success: function () {                            
+                            $(elem).parent().remove();
+                            $(elem).remove();
+                            count--;
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                }
+                else {
+                    $(elem).parent().remove();
+                    $(elem).remove();
+                    count--;
+                }
+            }
+            function addListenerToDeleteButtons() {
+                $('.deleteEntry').off('click', deleteEntry);
+                $('.deleteEntry').on('click', deleteEntry);
+            }
+            function GetWorkingHourEntries (e) {
+                e.preventDefault();
+                $.ajax({
+                    dataType: 'json',
+                    type: 'get',
+                    url: '/api/WorkingHours?doctorId=' + '@Model.User.Id',
+                    success: function (data) {
+                        console.log(data.length);
+                        for (let i = 0; i < data.length; i++) {
+                            $('#entriesList').append(
+                                '<div class= "form-row">' +
+                                    '<input value="' + data[i].Id + '" id="WorkingHours_' + i + '__Id" name="WorkingHours[' + i + '].Id" type="hidden"/>' +
+                                    '<input value="' + '@Model.User.Id' + '" id="WorkingHours_' + i + '__DoctorId" name="WorkingHours[' + i + '].DoctorId" type="hidden"/>' +                        
+                                    '<div class="form-group col-md-3">' +
+                                        '<label class="col-md-12 control-label" for="WorkingHours_' + i + '__Day">Day</label>' +
+                                        '<div class="col-md-10">' +
+                                            '<select id="WorkingHours_' + i + '__Day" name="WorkingHours[' + i + '].Day" class="form-control mr-2" data-val="true" data-val-required="The Day field is required." required>' +
+                                                '<option>Choose day</option>' +
+                                                (data[i].Day == 'Monday' ? '<option value="1" selected>Monday</option>' : '<option value="1">Monday</option>') +
+                                                (data[i].Day == 'Tuesday' ? '<option value="2" selected>Tuesday</option>' : '<option value="2">Tuesday</option>') +
+                                                (data[i].Day == 'Wednesday' ? '<option value="3" selected>Wednesday</option>' : '<option value="3">Wednesday</option>') +
+                                                (data[i].Day == 'Thursday' ? '<option value="4" selected>Thursday</option>' : '<option value="4">Thursday</option>') +
+                                                (data[i].Day == 'Friday' ? '<option value="5" selected>Friday</option>' : '<option value="5">Friday</option>') +
+                                                (data[i].Day == 'Saturday' ? '<option value="6" selected>Saturday</option>' : '<option value="6">Saturday</option>') +
+                                                (data[i].Day == 'Sunday' ? '<option value="0" selected>Sunday</option>' : '<option value="0">Sunday</option>') +
+                                            '</select>' +
+                                            '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + i + '].Day" data-valmsg-replace="true"></span>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="form-group col-md-2">' +
+                                        '<label class="col-md-12 control-label" for="WorkingHours_' + i + '__WorkStartTime">Work Start Time</label>' +
+                                        '<div class="col-md-10">' +
+                                            '<input value="' + data[i].WorkStartTime + '" class="form-control" data-val="true" data-val-required="The Work Start Time field is required." id="WorkingHours_' + i + '__WorkStartTime" name="WorkingHours[' + i + '].WorkStartTime" type="time" value="" />' +
+                                            '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + i + '].WorkStartTime" data-valmsg-replace="true"></span>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="form-group col-md-2">' +
+                                        '<label class="col-md-12 control-label" for="WorkingHours_' + i + '__WorkEndTime">Work End Time</label>' +
+                                        '<div class="col-md-10">' +
+                                            '<input value="' + data[i].WorkEndTime + '" class="form-control" data-val="true" data-val-required="The Work End Time field is required." id="WorkingHours_' + i + '__WorkEndTime" name="WorkingHours[' + i + '].WorkEndTime" type="time" value="" />' +
+                                            '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + i + '].WorkEndTime" data-valmsg-replace="true"></span>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="form-group col-md-3">' +
+                                        '<label class="col-md-12 control-label" for="WorkingHours_' + i + '__AppointmentDuration">Appointment Duration</label>' +
+                                        '<div class="col-md-10">' +
+                                            '<select id="WorkingHours_' + i + '__AppointmentDuration" name="WorkingHours[' + i + '].AppointmentDuration" class="form-control mr-2" data-val="true" data-val-required="The Appointment Duration field is required." required>' +
+                                                '<option>Choose duration</option>' +
+                                                (data[i].AppointmentDuration == 15 ? '<option value="15" selected>15 minutes</option>' : '<option value="15">15 minutes</option>') +
+                                                (data[i].AppointmentDuration == 30 ? '<option value="30" selected>30 minutes</option>' : '<option value="30">30 minutes</option>') +
+                                                (data[i].AppointmentDuration == 45 ? '<option value="45" selected>45 minutes</option>' : '<option value="45">45 minutes</option>') +
+                                                (data[i].AppointmentDuration == 60 ? '<option value="60" selected>60 minutes</option>' : '<option value="60">60 minutes</option>') +
+                                            '</select>'+
+                                            '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + i + '].AppointmentDuration" data-valmsg-replace="true"></span>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="form-group col-md-2 d-flex align-items-md-end">' +
+                                        '<button class="btn btn-outline-danger ml-3 deleteEntry">Delete Entry</button>' +
+                                    '</div>' +
+                                '</div>'
+                            );
+                        };                        
+                        addListenerToDeleteButtons();
+                    },
+                    error: function (error) {
+                        console.log('in')
+                        console.log(error);
+                    }
+                });
+                $('#editWorkingHoursModal').modal('show');
+            }
+            function addNewEntry(e) {
+                e.preventDefault();
+                count++;
+                $('#entriesList').append(
+                            '<div class= "form-row">' +
+                                '<input Value="0" id="WorkingHours_' + (count - 1) + '__Id" name="WorkingHours[' + (count - 1) + '].Id" type="hidden" value="" />' +
+                                '<input Value="' + '@Model.User.Id' + '" id="WorkingHours_' + (count-1) + '__DoctorId" name="WorkingHours[' + (count-1) + '].DoctorId" type="hidden" value="" />' +                        
+                                '<div class="form-group col-md-3">' +
+                                    '<label class="col-md-12 control-label" for="WorkingHours_' + (count-1) + '__Day">Day</label>' +
+                                    '<div class="col-md-10">' +
+                                        '<select id="WorkingHours_' + (count-1) + '__Day" name="WorkingHours[' + (count-1) + '].Day" class="form-control mr-2" data-val="true" data-val-required="The Day field is required." required>' +
+                                            '<option>Choose day</option>' +
+                                            '<option value="1">Monday</option>' +
+                                            '<option value="2">Tuesday</option>' +
+                                            '<option value="3">Wednesday</option>' +
+                                            '<option value="4">Thursday</option>' +
+                                            '<option value="5">Friday</option>' +
+                                            '<option value="6">Saturday</option>' +
+                                            '<option value="0">Sunday</option>' +
+                                        '</select>' +
+                                        '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + (count-1) + '].Day" data-valmsg-replace="true"></span>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div class="form-group col-md-2">' +
+                                    '<label class="col-md-12 control-label" for="WorkingHours_' + (count-1) + '__WorkStartTime">Work Start Time</label>' +
+                                    '<div class="col-md-10">' +
+                                        '<input class="form-control" data-val="true" data-val-required="The Work Start Time field is required." id="WorkingHours_' + (count-1) + '__WorkStartTime" name="WorkingHours[' + (count-1) + '].WorkStartTime" type="time" value="" />' +
+                                        '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + (count-1) + '].WorkStartTime" data-valmsg-replace="true"></span>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div class="form-group col-md-2">' +
+                                    '<label class="col-md-12 control-label" for="WorkingHours_' + (count-1) + '__WorkEndTime">Work End Time</label>' +
+                                    '<div class="col-md-10">' +
+                                        '<input class="form-control" data-val="true" data-val-required="The Work End Time field is required." id="WorkingHours_' + (count-1) + '__WorkEndTime" name="WorkingHours[' + (count-1) + '].WorkEndTime" type="time" value="" />' +
+                                        '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + (count-1) + '].WorkEndTime" data-valmsg-replace="true"></span>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div class="form-group col-md-3">' +
+                                    '<label class="col-md-12 control-label" for="WorkingHours_' + (count-1) + '__AppointmentDuration">Appointment Duration</label>' +
+                                    '<div class="col-md-10">' +
+                                        '<select id="WorkingHours_' + (count-1) + '__AppointmentDuration" name="WorkingHours[' + (count-1) + '].AppointmentDuration" class="form-control mr-2" data-val="true" data-val-required="The Appointment Duration field is required." required>' +
+                                            '<option>Choose duration</option>' +
+                                            '<option value="15">15 minutes</option>' +
+                                            '<option value="30">30 minutes</option>' +
+                                            '<option value="45">45 minutes</option>' +
+                                            '<option value="60">60 minutes</option>' +
+                                        '</select>'+
+                                        '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + (count-1) + '].AppointmentDuration" data-valmsg-replace="true"></span>' +
+                                    '</div>' +
+                                '</div>' +
+                                '<div class="form-group col-md-2 d-flex align-items-md-end">' +
+                                    '<button class="btn btn-outline-danger ml-3 deleteEntry">Delete Entry</button>' +
+                                '</div>' +
+                        '</div>'
+                );
+                addListenerToDeleteButtons();
+            }
+            function updateWorkingHoursTRs() {
+                $.ajax({
+                    dataType: 'json',
+                    type: 'get',
+                    url: '/api/WorkingHours?doctorId=' + '@Model.User.Id',
+                    success: function (data) {
+                        let elem = $('#beforeWorkingHoursTR');
+                        while ($(elem).next()[0].id != 'afterWorkingHoursTR') {
+                            const next = $(elem).next();
+                            $(next).remove();
+                        }
+                        if (data.length == 0) {
+                            const tr = $(document.createElement('tr'));
+                            const th = $(document.createElement('th'));
+                            $(th).text('Working Hours:');
+                            const td1 = $(document.createElement('td'));
+                            $(td1).text('You have not declared any working hours');
+                            const td2 = $(document.createElement('td'));
+                            $(td2).html('<button id="editWorkingHours" class="btn btn-danger">Edit Working Hours</button>');
+                            $(tr).append(th);
+                            $(tr).append(td1);
+                            $(tr).append(td2);                                        
+                            $(elem).after(tr);
+                        }                                    
+                        else {
+                            for (let i = 0; i < data.length; i++) {
+                                const tr = $(document.createElement('tr'));
+                                const th = $(document.createElement('th'));
+                                if (i == 0) {
+                                    $(th).text('Working Hours:')
+                                }
+                                else {
+                                    $(th).text('');
+                                }
+                                $(tr).append(th);
+                                const td1 = $(document.createElement('td'));
+                                $(td1).text(data[i].WorkingDayConcat);
+                                $(tr).append(td1);
+                                if (i == (data.length - 1)) {
+                                    const td2 = $(document.createElement('td'));
+                                    $(td2).html('<button id="editWorkingHours" class="btn btn-danger">Edit Working Hours</button>');
+                                    $(tr).append(td2);
+                                }
+                                $(elem).after(tr);
+                                elem = $(elem).next();
+                            }
+                        }
+                        $('#editWorkingHours').click(GetWorkingHourEntries);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            }
+            $('#addNewEntry').on('click', addNewEntry);
+            $('#updateWorkingHours').on('click', function (e) {
+                e.preventDefault();
+                const $form = $('#workingHoursForm');
+                $.validator.unobtrusive.parse($form);
+                $form.validate();
+                if ($form.valid()) {
+                    let model = [];
+                    const formRows = $('#entriesList').children();                    
+                    for (let i = 0; i < formRows.length; i++) {
+                        let entry = new Object();
+                        const entryValues = $(formRows[i]).children();
+                        entry.Id = $(entryValues[0]).val();
+                        entry.DoctorId = $(entryValues[1]).val();
+                        entry.Day = $($(entryValues[2]).children()[1]).children()[0].value;
+                        entry.WorkStartTime = $($(entryValues[3]).children()[1]).children()[0].value;
+                        entry.WorkEndTime = $($(entryValues[4]).children()[1]).children()[0].value;
+                        entry.AppointmentDuration = $($(entryValues[5]).children()[1]).children()[0].value
+                        model.push(entry);
+                    }
+                    model = JSON.stringify(model)
+                    $.ajax({
+                        contentType: 'application/json',
+                        type: 'post',
+                        url: '/api/WorkingHours',
+                        data: model,
+                        cache: false,
+                        processData: false,
+                        success: function () {
+                            updateWorkingHoursTRs();
+                            $('#editWorkingHoursModal').modal("hide");
+                        },
+                        error: function (error) { 
+                            console.log(error.responseJSON.ModelState);
+                            const errorObject = error.responseJSON.ModelState;
+                            $('#workingHoursForm div.validation-summary-errors > ul').children().remove();
+                            for (var property in errorObject) {
+                                if (errorObject.hasOwnProperty(property)) {
+                                    console.log(property);
+                                    if (property == '') {
+                                        $('#workingHoursForm div.validation-summary-errors > ul').append('<li>' + errorObject[property] + '</li>')
+                                    }
+                                    else {
+                                        if (errorObject[property][1]) {                                            
+                                            $('#workingHoursForm div.validation-summary-errors > ul').append('<li>Entry ' + (+property[13] + 1) + ': ' + errorObject[property][1] + '</li>')
+                                        }
+                                    }
+                                }
+                            }
+                            const $form = $('#workingHoursForm');
+                            $.validator.unobtrusive.parse($form);
+                            $form.validate();
+                            if (!$form.valid()) {
+                                $.each($form.validate().errorList, function (key, value) {
+                                    const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                                    $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                                    $errorSpan.show();
+                                });
+                            }
+                        }
+                    });
+                }
+                else {
+                    console.log($form.validate().errorList);
+                    $.each($form.validate().errorList, function (key, value) {
+                        const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                        $($errorSpan).html("<span style='color:red'>" + value.message + "</span>");
+                        $($errorSpan).show();
+                    });
                 }
             })
         })

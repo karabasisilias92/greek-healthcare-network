@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Home Page";
     var messages = new MessagesRepository();
-    var adminId = messages.AdminWithLessVisitorMessagesUnreplied();  
+    var adminId = messages.AdminWithLessVisitorMessagesUnreplied();
 }
 @Html.Partial("_IndexPartial")
 
@@ -51,6 +51,25 @@
                         $('.back-to-top').fadeOut('slow');
                         $('#headerInsured').removeClass('header-fixed');
                         $('#headerInsured').addClass('header-top');
+                    }
+                })
+            })
+        </script>
+    }
+    @if (User.IsInRole("Administrator"))
+    {
+        <script>
+            $(document).ready(function () {
+                $('#headerAdmin').addClass('header-top');
+                $(window).scroll(function () {
+                    if ($(this).scrollTop() > 100) {
+                        $('.back-to-top').fadeIn('slow');
+                        $('#headerAdmin').removeClass('header-top')
+                        $('#headerAdmin').addClass('header-fixed');
+                    } else {
+                        $('.back-to-top').fadeOut('slow');
+                        $('#headerAdmin').removeClass('header-fixed');
+                        $('#headerAdmin').addClass('header-top');
                     }
                 })
             })
@@ -129,7 +148,7 @@
                                         $errorSpan.show();
                                     });
                                 }
-                            }                    
+                            }
                         });
                     }
                     else {
@@ -143,7 +162,7 @@
                         });
                     }
                     setTimeout(function() {
-                        $('#sendContactForm').removeClass("noClick");          
+                        $('#sendContactForm').removeClass("noClick");
                     }, 4000);
                 }
             })

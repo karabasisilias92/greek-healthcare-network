@@ -58,6 +58,25 @@
             })
         </script>
     }
+    @if (User.IsInRole("Administrator"))
+    {
+        <script>
+            $(document).ready(function () {
+                $('#headerAdmin').addClass('header-top');
+                $(window).scroll(function () {
+                    if ($(this).scrollTop() > 100) {
+                        $('.back-to-top').fadeIn('slow');
+                        $('#headerAdmin').removeClass('header-top')
+                        $('#headerAdmin').addClass('header-fixed');
+                    } else {
+                        $('.back-to-top').fadeOut('slow');
+                        $('#headerAdmin').removeClass('header-fixed');
+                        $('#headerAdmin').addClass('header-top');
+                    }
+                })
+            })
+        </script>
+    }
     <script>
         $(document).ready(function () {
             $('#sendContactForm').click(function (e) {
@@ -145,7 +164,7 @@
                         });
                     }
                     setTimeout(function() {
-                        $('#sendContactForm').removeClass("noClick");          
+                        $('#sendContactForm').removeClass("noClick");
                     }, 4000);
                 }
             })
