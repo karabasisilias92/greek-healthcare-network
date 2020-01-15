@@ -1,0 +1,85 @@
+﻿@using Microsoft.AspNet.Identity;
+@using GreekHealthcareNetwork.Repositories;
+@{
+    var userId = @User.Identity.GetUserId();
+    var users = new UsersRepository();
+    var profilePicture = users.GetUserById(userId).ProfilePicture;
+}
+@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+{
+    @Html.AntiForgeryToken()
+    <header id="headerAdmin">
+        <div class="container d-flex flex-row align-items-center justify-content-between">
+
+            <div id="logo">
+                <!--<a href="/Home/Index"><img src="@Url.Content("~/Content/img/logo.png")" alt="GHN" title="" /></a>-->
+                <!-- Uncomment below if you prefer to use a text logo -->
+                <h1><a href="/Admin/Index">GHN</a></h1>
+            </div>
+            <div id="profilePic">
+                <ul class="nav-menu">
+                    <li class="nav-menu menu-has-children">
+                        <a href="#">
+                            <img src="@Url.Content("~/Content/img/Admins/" + userId + "/" + profilePicture)" class="rounded-circle mt-2" style="max-height:40px; max-width:40px" alt="User" title="" />
+                        </a>
+                        <ul>
+                            <li>
+                                @Html.ActionLink("Profile", "UserProfile", "User")
+                            <a href="javascript:document.getElementById('logoutForm').submit()">
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    </header>
+
+  
+
+        <div class="container-fluid">
+            <div class="row">
+                <nav class="col-md-2 d-none d-md-block sidebar">
+                    <div>
+                        @* @Html.Partial("_DoctorListPartial")*@
+                        <ul class="nav nav-menu flex-column mb-2">
+                            <li>
+                                @Html.ActionLink("Home", "Index", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Doctors", "Doctors", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Insureds", "Insureds", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Messages", "Messages", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Visitor Messages", "VisitorMessages", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Insured Plans", "InsuredPlans", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Doctor Plans", "DoctorPlans", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Appointment Cost Per Specialty", "AppointmentCostPerSpecialty", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Appointments Report Page", "AppointmentsReportPage", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Subscriptions Expired Report Page", "SubscriptionExpired", "Admin")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Create Admin User", "CreateAdminUser", "Admin")
+                        </ul>
+                    </div>
+                 </nav>  
+            </div>
+         </div>
+} 
+

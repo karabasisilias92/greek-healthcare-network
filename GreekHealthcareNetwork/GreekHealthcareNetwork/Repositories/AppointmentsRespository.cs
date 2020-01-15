@@ -45,6 +45,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                                  .Include("Doctor.User")
                                                                                                                  .Include("Doctor.User.Roles")
                                                                                                                  .Include("Insured")
+                                                                                                                 .Include("Insured.InsuredPlan")
                                                                                                                  .Include("Insured.User")
                                                                                                                  .Include("Insured.User.Roles")
                                                                                                                  .ToList();
@@ -58,6 +59,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                                  .Include("Doctor.User")
                                                                                                                  .Include("Doctor.User.Roles")
                                                                                                                  .Include("Insured")
+                                                                                                                 .Include("Insured.InsuredPlan")
                                                                                                                  .Include("Insured.User")
                                                                                                                  .Include("Insured.User.Roles")
                                                                                                                  .ToList();
@@ -71,6 +73,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                                  .Include("Doctor.User")
                                                                                                                  .Include("Doctor.User.Roles")
                                                                                                                  .Include("Insured")
+                                                                                                                 .Include("Insured.InsuredPlan")
                                                                                                                  .Include("Insured.User")
                                                                                                                  .Include("Insured.User.Roles")
                                                                                                                  .ToList();
@@ -84,6 +87,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                                  .Include("Doctor.User")
                                                                                                                  .Include("Doctor.User.Roles")
                                                                                                                  .Include("Insured")
+                                                                                                                 .Include("Insured.InsuredPlan")
                                                                                                                  .Include("Insured.User")
                                                                                                                  .Include("Insured.User.Roles")
                                                                                                                  .ToList();
@@ -101,6 +105,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                   .Include("Doctor.AppointmentCost")
                                                   .Include("Doctor.WorkingHours")
                                                   .Include("Insured")
+                                                  .Include("Insured.InsuredPlan")
                                                   .Include("Insured.User")
                                                   .Include("Insured.User.Roles")
                                                   .ToList();
@@ -114,6 +119,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                   .Include("Doctor.AppointmentCost")
                                                   .Include("Doctor.WorkingHours")
                                                   .Include("Insured")
+                                                  .Include("Insured.InsuredPlan")
                                                   .Include("Insured.User")
                                                   .Include("Insured.User.Roles")
                                                   .ToList();
@@ -127,6 +133,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                   .Include("Doctor.AppointmentCost")
                                                   .Include("Doctor.WorkingHours")
                                                   .Include("Insured")
+                                                  .Include("Insured.InsuredPlan")
                                                   .Include("Insured.User")
                                                   .Include("Insured.User.Roles")
                                                   .ToList();
@@ -140,6 +147,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                   .Include("Doctor.AppointmentCost")
                                                   .Include("Doctor.WorkingHours")
                                                   .Include("Insured")
+                                                  .Include("Insured.InsuredPlan")
                                                   .Include("Insured.User")
                                                   .Include("Insured.User.Roles")
                                                   .ToList();
@@ -266,6 +274,7 @@ namespace GreekHealthcareNetwork.Repositories
                                              .Include("Doctor.User")
                                              .Include("Doctor.User.Roles")
                                              .Include("Insured")
+                                             .Include("Insured.InsuredPlan")
                                              .Include("Insured.User")
                                              .Include("Insured.InsuredPlan")
                                              .Include("Insured.User.Roles")
@@ -285,6 +294,7 @@ namespace GreekHealthcareNetwork.Repositories
                                               .Include("Doctor.User")
                                               .Include("Doctor.User.Roles")
                                               .Include("Insured")
+                                              .Include("Insured.InsuredPlan")
                                               .Include("Insured.User")
                                               .Include("Insured.User.Roles")
                                               .Where(app => app.AppointmentDate == date && app.AppointmentStatus == AppointmentStatus.Upcoming && app.DoctorId.Equals(doctorId))

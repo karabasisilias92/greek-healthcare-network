@@ -1,0 +1,78 @@
+﻿@{
+    ViewBag.Title = "Insureds";
+}
+@section cssScripts{
+    <link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
+}
+
+<main id="main" class="col-8 offset-3 mt-5">
+    <div class="page-header">
+        <h1>
+            Insureds
+        </h1>
+    </div>
+    <div class="table-responsive">
+        <table class="table mt-4" id="insuredsList">
+            <thead>
+                <tr>
+                    <th scope="col">Image</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Adrress</th>
+                    <th scope="col">Insured Plan</th>
+                    <th scope="col">AMKA</th>
+                    <th scope="col">Telephon</th>
+                    <th scope="col">Paypal Account</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+    $(document).ready(function () {
+        ListInsureds('', '');
+        var counter = 0;
+        function ListInsureds(firstName, lastName) {
+            $.ajax({
+                dataType: 'json',
+                type: 'get',
+                url: '/api/Search/SearchInsuredResults?insuredsFirstName=' + firstName + '&insuredsLastName=' + lastName ,
+                success: function (data) {
+                    console.log(data);
+                    console.log(data.length);
+                    $('#insuredsList tbody').empty();
+                    data.forEach(function (insured) {
+                        console.log('counter= ' + ++counter);
+                        $('#insuredsList tbody').append(
+                              '<tr><td><img src="@Url.Content("~/Content/img/Insureds/")' + insured.User.Id + '/' + insured.User.ProfilePicture + '" alt="' + insured.User.ProfilePicture + '"' + 'class="rounded-circle">'
+                            + '</td><td>' + insured.User.FirstName
+                            + '</td><td>' + insured.User.LastName
+                            + '</td><td>' + insured.HomeAddress
+                            + ((insured.InsuredPlan == null) ? '</td><td>No Plan' : '</td><td>' + insured.InsuredPlan.Name)
+                            + '</td><td>' + insured.User.AMKA
+                            + '</td><td>' + insured.User.PhoneNumber
+                            + '</td><td>' + insured.User.PaypalAccount
+                            + '</td>'
+                            + '<td><button class="btn btn-danger deleteBtn" data-id="' + insured.User.Id + '">Delete</button>'
+                            + '<button class="btn btn-warning updateBtn" data-id="' + insured.UserId + '" >Update</button>'
+                            + '<button class="btn btn-success sentMessageBtn" data-id="' + insured.UserId + '" >Sent Message</button>'
+                            + ((insured.User.IsActive == true) ? '<button class="btn btn-warning setActiveBtn" data-id="' + insured.UserId + '">Inactive</button></td>' : '<button class="btn btn-warning setActiveBtn" data-id="' + insured.UserId + '">Active</button></td>')
+                            + '</tr >')
+                    });
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            })
+        }
+    })
+
+    </script>
+}

@@ -33,5 +33,13 @@ namespace GreekHealthcareNetwork.Controllers
             ViewBag.FullName = user.FirstName + " " + user.LastName;
             return View();
         }
+        public ActionResult Doctors()
+        {
+            return View();
+        }
+        public ActionResult Insureds()
+        {
+            return View();
+        }
     }
 }

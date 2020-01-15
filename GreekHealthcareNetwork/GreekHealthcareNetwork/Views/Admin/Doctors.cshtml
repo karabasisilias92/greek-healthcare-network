@@ -1,0 +1,83 @@
+﻿
+@{
+    ViewBag.Title = "Doctors";
+}
+@section cssScripts{
+    <link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
+}
+
+<main id="main" class="col-8 offset-3 mt-5">
+    <div class="page-header">
+        <h1>
+            Doctors
+        </h1>
+    </div>
+    <div class="table-responsive">
+        <table class="table mt-4" id="doctorsList">
+            <thead>
+                <tr>
+                    <th scope="col">Image</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Specialty</th>
+                    <th scope="col">Adrress</th>
+                    <th scope="col">AMKA</th>
+                    <th scope="col">Telephon</th>
+                    <th scope="col">Paypal Account</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+
+
+    $(document).ready(function () {
+        ListDoctors('', '', -1);
+        var counter = 0;
+        function ListDoctors(firstName, lastName, specialty) {
+            $.ajax({
+                dataType: 'json',
+                type: 'get',
+                url: '/api/Search/AdminSearchDoctorResults?doctorsFirstName=' + firstName + '&doctorsLastName=' + lastName + '&doctorsSpecialty=' + specialty + '&appointmentDate=0001-01-01',
+                success: function (data) {
+                    console.log(data);
+                    console.log(data.length);
+                    $('#doctorsList tbody').empty();
+                    data.forEach(function (doctor) {
+                        console.log('counter= ' + ++counter);
+                        $('#doctorsList tbody').append(
+                              '<tr><td><img src="@Url.Content("~/Content/img/Doctors/")' + doctor.User.Id + '/' + doctor.User.ProfilePicture + '" alt="' + doctor.User.ProfilePicture + '"' + 'class="rounded-circle">'
+                            + '</td><td>' + doctor.User.FirstName
+                            + '</td><td>' + doctor.User.LastName
+                            + '</td><td>' + doctor.MedicalSpecialty
+                            + '</td><td>' + doctor.OfficeAddress
+                            + '</td><td>' + doctor.User.AMKA
+                            + '</td><td>' + doctor.User.PhoneNumber
+                            + '</td><td>' + doctor.User.PaypalAccount
+                            + '</td>'
+                            + '<td><button class="btn btn-danger deleteBtn" data-id="' + doctor.User.Id + '">Delete</button>'
+                            + '<button class="btn btn-warning updateBtn" data-id="' + doctor.UserId + '" >Update</button>'
+                            + '<button class="btn btn-success sentMessageBtn" data-id="' + doctor.UserId + '" >Sent Message</button>'
+                            + ((doctor.User.IsActive == true) ? '<button class="btn btn-warning setActiveBtn" data-id="' + doctor.UserId + '">Inactive</button></td>' : '<button class="btn btn-warning setActiveBtn" data-id="' + doctor.UserId + '">Active</button></td>')
+                            + '</tr>')
+                    });
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            })
+        }
+    })
+
+
+    </script>
+}
+

@@ -19,7 +19,6 @@ namespace GreekHealthcareNetwork.Models
         public int? InsuredPlanId { get; set; }
 
         [ForeignKey("InsuredPlanId")]
-        [JsonIgnore]
         public virtual InsuredPlan InsuredPlan { get; set; }
 
         [Required]

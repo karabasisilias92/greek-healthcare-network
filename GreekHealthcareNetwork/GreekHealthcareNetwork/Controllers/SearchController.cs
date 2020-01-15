@@ -12,7 +12,20 @@ namespace GreekHealthcareNetwork.Controllers
     public class SearchController : ApiController
     {
         private readonly DoctorsRepository _doctors = new DoctorsRepository();
+        private readonly InsuredsRepository _insureds = new InsuredsRepository();
         private readonly AppointmentsRespository _appointments = new AppointmentsRespository();
+
+        [HttpGet]
+        [Route("api/Search/AdminSearchDoctorResults")]
+        public IHttpActionResult AdminSearchResults(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty, DateTime appointmentDate)
+        {
+            var doctors = _doctors.AdminGetFilteredDoctors(doctorsFirstName, doctorsLastName, doctorsSpecialty, appointmentDate);
+            if (doctors == null)
+            {
+                return NotFound();
+            }
+            return Ok(doctors);
+        }
 
         [HttpGet]
         [Route("api/Search/SearchDoctorResults")]
@@ -24,6 +37,18 @@ namespace GreekHealthcareNetwork.Controllers
                 return NotFound();
             }
             return Ok(doctors);
+        }
+
+        [HttpGet]
+        [Route("api/Search/SearchInsuredResults")]
+        public IHttpActionResult SearchResultsInsureds(string insuredsFirstName, string insuredsLastName)
+        {
+            var insureds = _insureds.GetFilteredInsureds(insuredsFirstName, insuredsLastName);
+            if (insureds == null)
+            {
+                return NotFound();
+            }
+            return Ok(insureds);
         }
 
         [HttpGet]
@@ -74,6 +99,7 @@ namespace GreekHealthcareNetwork.Controllers
         //    }
         //    return Ok(appointments);
         //}
+
 
         [HttpGet]
         [Route("api/Search/SearchAppointmentById/{appointmentId}")]
