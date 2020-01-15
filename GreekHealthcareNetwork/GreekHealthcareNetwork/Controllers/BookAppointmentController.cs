@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace GreekHealthcareNetwork.Controllers
 {
+    [System.Web.Mvc.Authorize(Roles = "Insured")]
     public class BookAppointmentController : ApiController
     {
         private readonly DoctorsRepository _doctors = new DoctorsRepository();

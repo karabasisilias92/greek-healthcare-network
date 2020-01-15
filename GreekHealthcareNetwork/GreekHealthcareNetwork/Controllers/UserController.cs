@@ -70,7 +70,10 @@ namespace GreekHealthcareNetwork.Controllers
             {
                 return HttpNotFound();
             }
-            user.Doctor.WorkingHours = user.Doctor.WorkingHours.OrderBy(i => i.Day).ThenBy(i => i.WorkStartTime).ToList();
+            if (user.Doctor != null)
+            {
+                user.Doctor.WorkingHours = user.Doctor.WorkingHours.OrderBy(i => i.Day).ThenBy(i => i.WorkStartTime).ToList();
+            }
             return View(user);
         }
 

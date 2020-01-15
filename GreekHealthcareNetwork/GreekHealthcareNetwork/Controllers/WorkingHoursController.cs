@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace GreekHealthcareNetwork.Controllers
 {
+    [System.Web.Mvc.Authorize(Roles = "Doctor")]
     public class WorkingHoursController : ApiController
     {
         private readonly DoctorsRepository _doctors = new DoctorsRepository();
@@ -30,30 +31,29 @@ namespace GreekHealthcareNetwork.Controllers
         [System.Web.Http.HttpPost]
         [ValidateAntiForgeryToken]
         [System.Web.Mvc.Authorize(Roles = "Doctor")]
-        public IHttpActionResult UpdateWorkingHours(List<WorkingHours> workingHoursList)
+        public IHttpActionResult UpdateWorkingHours(List<WorkingHours> WorkingHours)
         {
-            AccountController accountController = new AccountController();
             if (ModelState.IsValid)
             {
-                if (!CheckIfWorkingHoursEntriesAreValid(workingHoursList))
+                if (!CheckIfWorkingHoursEntriesAreValid(WorkingHours))
                 {
                     return BadRequest(ModelState);
                 }
-                if (CheckIfWorkingHourEntriesIntecept(workingHoursList))
+                if (CheckIfWorkingHourEntriesIntecept(WorkingHours))
                 {
                     return BadRequest(ModelState);
                 }
-                for (int i = 0; i < workingHoursList.Count; i++)
+                for (int i = 0; i < WorkingHours.Count; i++)
                 {
                     var workingHoursEntry = new WorkingHours
                     {
-                        Day = workingHoursList[i].Day,
-                        WorkStartTime = workingHoursList[i].WorkStartTime,
-                        WorkEndTime = workingHoursList[i].WorkEndTime,
-                        AppointmentDuration = workingHoursList[i].AppointmentDuration,
-                        DoctorId = workingHoursList[i].DoctorId
+                        Day = WorkingHours[i].Day,
+                        WorkStartTime = WorkingHours[i].WorkStartTime,
+                        WorkEndTime = WorkingHours[i].WorkEndTime,
+                        AppointmentDuration = WorkingHours[i].AppointmentDuration,
+                        DoctorId = WorkingHours[i].DoctorId
                     };
-                    if (workingHoursList[i].Id == 0)
+                    if (WorkingHours[i].Id == 0)
                     {
                         try
                         {
@@ -67,7 +67,7 @@ namespace GreekHealthcareNetwork.Controllers
                     }
                     else
                     {
-                        workingHoursEntry.Id = workingHoursList[i].Id;
+                        workingHoursEntry.Id = WorkingHours[i].Id;
                         try
                         {
                             _doctors.UpdateWorkingHoursEntry(workingHoursEntry);
@@ -78,7 +78,7 @@ namespace GreekHealthcareNetwork.Controllers
                             return BadRequest(ModelState);
                         }
                     }
-                    _users.ActivateUser(workingHoursList[0].DoctorId);
+                    _users.ActivateUser(WorkingHours[0].DoctorId);
                 }
                 return Ok();
             }

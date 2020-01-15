@@ -12,6 +12,7 @@ using System.Web.WebPages;
 
 namespace GreekHealthcareNetwork.Controllers
 {
+    [System.Web.Mvc.Authorize]
     public class MessagesController : ApiController
     {
         private readonly MessagesRepository _message = new MessagesRepository();

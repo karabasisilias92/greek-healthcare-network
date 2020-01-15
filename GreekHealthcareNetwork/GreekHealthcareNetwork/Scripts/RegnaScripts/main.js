@@ -9,11 +9,13 @@ jQuery(document).ready(function ($) {
       $('#header').addClass('header-fixed');
       $('#headerDoctor').addClass('header-fixed');
       $('#headerInsured').addClass('header-fixed');
+      $('#headerAdmin').addClass('header-fixed');
     } else {
       $('.back-to-top').fadeOut('slow');
       $('#header').removeClass('header-fixed');
       $('#headerDoctor').removeClass('header-fixed');
       $('#headerInsured').removeClass('header-fixed');
+      $('#headerAdmin').removeClass('header-fixed');
     }
   });    
 

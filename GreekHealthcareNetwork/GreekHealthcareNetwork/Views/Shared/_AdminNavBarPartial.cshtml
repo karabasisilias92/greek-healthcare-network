@@ -25,24 +25,23 @@
                         <ul>
                             <li>
                                 @Html.ActionLink("Profile", "UserProfile", "User")
-                            <a href="javascript:document.getElementById('logoutForm').submit()">
-                                Logout
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+                                <a href="javascript:document.getElementById('logoutForm').submit()">
+                                    Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
     </header>
-
-  
-
+    
+    if (!((string)ViewBag.Title).Contains("Home"))
+    {
         <div class="container-fluid">
             <div class="row">
                 <nav class="col-md-2 d-none d-md-block sidebar">
                     <div>
-                        @* @Html.Partial("_DoctorListPartial")*@
                         <ul class="nav nav-menu flex-column mb-2">
                             <li>
                                 @Html.ActionLink("Home", "Index", "Admin")
@@ -76,10 +75,12 @@
                             </li>
                             <li>
                                 @Html.ActionLink("Create Admin User", "CreateAdminUser", "Admin")
+                            </li>
                         </ul>
                     </div>
-                 </nav>  
+                </nav>
             </div>
-         </div>
-} 
+        </div>
+    }
+}
 
