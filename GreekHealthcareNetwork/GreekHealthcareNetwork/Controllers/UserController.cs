@@ -13,6 +13,7 @@ namespace GreekHealthcareNetwork.Controllers
 {
 
     [OutputCache(NoStore = true, Duration = 0)]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly AppointmentsRespository _appointmentsRespository = new AppointmentsRespository();
