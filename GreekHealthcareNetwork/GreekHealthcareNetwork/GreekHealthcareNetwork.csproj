@@ -309,6 +309,10 @@
     <Compile Include="Migrations\202001090747522_Script to set AppointmentStatus to Complete automatically.Designer.cs">
       <DependentUpon>202001090747522_Script to set AppointmentStatus to Complete automatically.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001152211593_Add property AppointmentChargePaid to Appointment.cs" />
+    <Compile Include="Migrations\202001152211593_Add property AppointmentChargePaid to Appointment.Designer.cs">
+      <DependentUpon>202001152211593_Add property AppointmentChargePaid to Appointment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -669,6 +673,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001090747522_Script to set AppointmentStatus to Complete automatically.resx">
       <DependentUpon>202001090747522_Script to set AppointmentStatus to Complete automatically.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001152211593_Add property AppointmentChargePaid to Appointment.resx">
+      <DependentUpon>202001152211593_Add property AppointmentChargePaid to Appointment.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
