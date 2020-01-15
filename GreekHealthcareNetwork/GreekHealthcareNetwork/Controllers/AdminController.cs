@@ -36,6 +36,11 @@ namespace GreekHealthcareNetwork.Controllers
         {
             return View();
         }
+        //
+        public ActionResult UpdateDoctors()
+        {
+            return View();
+        }
         public ActionResult Insureds()
         {
             return View();
