@@ -1,8 +1,9 @@
 ﻿@using GreekHealthcareNetwork.Models;
 @using GreekHealthcareNetwork.Repositories;
+@using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Pay Subscription Cancelled";
-    var userId = (string)ViewBag.UserId;    
+    var userId = User.Identity.GetUserId();
     var _users = new UsersRepository();
     var user = _users.GetUserById(userId);
     string doctorRoleId = _users.GetRoleIdByName("Doctor");
@@ -31,27 +32,28 @@
     else
     {
         <p class="mb-0">
-            You have cancelled your payment so your plan subscription remains the same as before.</p>
+            You have cancelled your payment so your plan subscription remains the same as before.
+        </p>
     }
-<div id="pay_skip" class="d-flex mt-4">
-    @{
-        if (user.SubscriptionEndDate.Date.ToString("yyyy-MM-dd").Equals("0001-01-01"))
-        {
-            @Html.ActionLink("Go to home page", "Index", "Home", null, new { id = "GoToProfile", @class = "btn btn-outline-success" })
-        }
-        else
-        {
-            if (user.Roles.Any(r => r.RoleId.Equals(doctorRoleId)))
+    <div id="pay_skip" class="d-flex mt-4">
+        @{
+            if (user.SubscriptionEndDate.Date.ToString("yyyy-MM-dd").Equals("0001-01-01"))
             {
-                @Html.ActionLink("Back to profile page", "UserProfile", "User", null, new { id = "backToProfile", @class = "btn btn-outline-success" })
+                @Html.ActionLink("Go to home page", "Index", "Home", null, new { id = "GoToProfile", @class = "btn btn-outline-success" })
             }
-            else if (user.Roles.Any(r => r.RoleId.Equals(insuredRoleId)))
+            else
             {
-                @Html.ActionLink("Back to profile page", "UserProfile", "User", null, new { id = "backToProfile", @class = "btn btn-outline-success" })
+                if (user.Roles.Any(r => r.RoleId.Equals(doctorRoleId)))
+                {
+                    @Html.ActionLink("Back to profile page", "UserProfile", "User", null, new { id = "backToProfile", @class = "btn btn-outline-success" })
+                }
+                else if (user.Roles.Any(r => r.RoleId.Equals(insuredRoleId)))
+                {
+                    @Html.ActionLink("Back to profile page", "UserProfile", "User", null, new { id = "backToProfile", @class = "btn btn-outline-success" })
+                }
             }
         }
-    }
-</div>
+    </div>
 </section>
 
 

@@ -286,7 +286,6 @@ namespace GreekHealthcareNetwork.Controllers
             Session.Remove("paymentItemName");
             Session.Remove("Transaction description");
             Session.Remove("price");
-            ViewBag.UserId = userId;
             if (!Request.IsAuthenticated)
             {
                 var user = _users.GetUserById(userId);
@@ -299,7 +298,6 @@ namespace GreekHealthcareNetwork.Controllers
         public async Task<ActionResult> PaySubscriptionCancelled()
         {
             string userId = (string)Session["userId"];
-            ViewBag.UserId = userId;
             if (!Request.IsAuthenticated)
             {
                 var user = _users.GetUserById(userId);
