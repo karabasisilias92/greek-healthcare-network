@@ -35,6 +35,7 @@ namespace GreekHealthcareNetwork.Controllers
                 if (insuredPlan.Name.Equals("Gold"))
                 {
                     appointment.InsuredAppointmentCharge = 0;
+                    appointment.AppointmentChargePaid = true;
                     try
                     {
                         if (id == 0)
@@ -58,6 +59,7 @@ namespace GreekHealthcareNetwork.Controllers
                 }
                 else
                 {
+                    appointment.AppointmentChargePaid = false;
                     if (insured.BookedAppointments < Convert.ToInt32(insuredPlan.PlanAppoinments))
                     {
                         appointment.InsuredAppointmentCharge = appointmentCost * Convert.ToDecimal(insuredPlan.AppointmentRate / 100);

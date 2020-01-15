@@ -62,6 +62,8 @@ namespace GreekHealthcareNetwork.Models
         [JsonConverter(typeof(StringEnumConverter))]
         public AppointmentStatus AppointmentStatus { get; set; }
 
+        public bool AppointmentChargePaid { get; set; }
+
         [Display(Name = "Comments for doctor")]
         public string InsuredComments { get; set; }
 
