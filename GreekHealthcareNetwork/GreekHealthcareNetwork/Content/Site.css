@@ -39,6 +39,7 @@ textarea {
 }
 
 .nav > li > a {
+    width: max-content;
     color: white;
     position: relative;
     display: block;
