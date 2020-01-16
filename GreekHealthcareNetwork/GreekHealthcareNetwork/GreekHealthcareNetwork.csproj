@@ -375,6 +375,7 @@
     <Content Include="Content\img\employees-885338_1920-e1565727877609-1500x630.jpg" />
     <Content Include="Content\img\favicon.png" />
     <Content Include="Content\img\GHN_Logo.png" />
+    <Content Include="Content\img\GHN_Logo_dark.png" />
     <Content Include="Content\img\Healthcare-Background-Pics.jpg" />
     <Content Include="Content\insuredsNavbar.css" />
     <Content Include="Content\mdb.css" />

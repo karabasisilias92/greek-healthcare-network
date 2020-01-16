@@ -33,6 +33,10 @@ namespace GreekHealthcareNetwork.Controllers
         [AllowAnonymous]
         public IHttpActionResult SearchResults(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty, DateTime appointmentDate)
         {
+            if (appointmentDate.Date.ToString("yyyy-MM-dd") != "0001-01-01" && appointmentDate.Date < DateTime.Now.Date)
+            {
+                return Ok(new List<Doctor>());
+            }
             var doctors = _doctors.GetFilteredDoctors(doctorsFirstName, doctorsLastName, doctorsSpecialty, appointmentDate);
             if (doctors == null)
             {

@@ -136,7 +136,7 @@ namespace GreekHealthcareNetwork.Repositories
                 {
                     if (doctorsSpecialty >= 0 && doctorsSpecialty < Enum.GetNames(typeof(MedicalSpecialty)).Length)
                     {
-                        doctors = db.Doctors.Where(doctor => users.Any(user => user.IsActive == true && user.Id == doctor.UserId) 
+                        doctors = db.Doctors.Where(doctor => users.Any(user => DbFunctions.DiffDays(appointmentDate, user.SubscriptionEndDate) >= 0 && user.IsActive == true && user.Id == doctor.UserId) 
                                                                                                      && (int)doctor.MedicalSpecialty == doctorsSpecialty
                                                                                                      && doctor.WorkingHours.Any(w => w.Day == appointmentDate.DayOfWeek
                                                                                                      && (DbFunctions.DiffMinutes(w.WorkStartTime, w.WorkEndTime) / w.AppointmentDuration) > db.Appointments.Where(app => app.AppointmentStatus == AppointmentStatus.Upcoming 
@@ -156,7 +156,7 @@ namespace GreekHealthcareNetwork.Repositories
                     }
                     else
                     {
-                        doctors = db.Doctors.Where(doctor => users.Any(user => user.IsActive == true && user.Id == doctor.UserId)
+                        doctors = db.Doctors.Where(doctor => users.Any(user => DbFunctions.DiffDays(appointmentDate, user.SubscriptionEndDate) >= 0 && user.IsActive == true && user.Id == doctor.UserId)
                                                                                                      && doctor.WorkingHours.Any(w => w.Day == appointmentDate.DayOfWeek
                                                                                                      && (DbFunctions.DiffMinutes(w.WorkStartTime, w.WorkEndTime) / w.AppointmentDuration) > db.Appointments.Where(app => app.AppointmentStatus == AppointmentStatus.Upcoming 
                                                                                                      && app.DoctorId.Equals(doctor.UserId)

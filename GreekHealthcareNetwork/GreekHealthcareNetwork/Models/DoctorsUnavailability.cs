@@ -25,6 +25,16 @@ namespace GreekHealthcareNetwork.Models
         [Display(Name = "Unavailable From Time")]
         public TimeSpan UnavailableFromTime { get; set; }
 
+        [Display(Name = "Unavailable From")]
+        [NotMapped]
+        public string UnavailableFrom
+        {
+            get
+            {
+                return UnavailableFromDate.ToString("dd-MM-yyyy") + " " + UnavailableFromTime.ToString(@"hh\:mm");
+            }
+        }
+
         [Required]
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
@@ -37,6 +47,16 @@ namespace GreekHealthcareNetwork.Models
         [DataType(DataType.Time)]
         [Display(Name = "Unavailable Until Time")]
         public TimeSpan UnavailableUntilTime { get; set; }
+
+        [Display(Name = "Unavailable From")]
+        [NotMapped]
+        public string UnavailableUntil
+        {
+            get
+            {
+                return UnavailableUntilDate.ToString("dd-MM-yyyy") + " " + UnavailableUntilTime.ToString(@"hh\:mm");
+            }
+        }
 
         [Required]
         public string DoctorId { get; set; }
