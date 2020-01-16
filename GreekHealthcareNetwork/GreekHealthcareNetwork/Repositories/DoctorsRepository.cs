@@ -354,5 +354,19 @@ namespace GreekHealthcareNetwork.Repositories
             }
             return appointmentCost;
         }
+
+        public IEnumerable<DoctorsUnavailability> GetUnavailabilities(string doctorId)
+        {
+            if (doctorId == null)
+            {
+                throw new ArgumentNullException("doctorId");
+            }
+            IEnumerable<DoctorsUnavailability> doctorsUnavailabilities;
+            using ( ApplicationDbContext db = new ApplicationDbContext())
+            {
+                doctorsUnavailabilities = db.DoctorsUnavailabilities.Where(u => u.DoctorId.Equals(doctorId)).ToList();
+            }
+            return doctorsUnavailabilities;
+        }
     }
 }

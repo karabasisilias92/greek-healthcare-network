@@ -1,4 +1,7 @@
-﻿using System;
+﻿using GreekHealthcareNetwork.Models;
+using GreekHealthcareNetwork.Repositories;
+using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -9,6 +12,7 @@ namespace GreekHealthcareNetwork.Controllers
     [Authorize(Roles = "Doctor")]
     public class DoctorsController : Controller
     {
+        private readonly DoctorsRepository _doctors = new DoctorsRepository();
         // GET: Doctors
         public ActionResult Index()
         {
@@ -17,6 +21,12 @@ namespace GreekHealthcareNetwork.Controllers
         public ActionResult Appointments()
         {
             return View();
+        }
+
+        public ActionResult Unavailabilities()
+        {
+            IEnumerable<DoctorsUnavailability> doctorsUnavailabilities = _doctors.GetUnavailabilities(User.Identity.GetUserId());
+            return View(doctorsUnavailabilities);
         }
     }
 }

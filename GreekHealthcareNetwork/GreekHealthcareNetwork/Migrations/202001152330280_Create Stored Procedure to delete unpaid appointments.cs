@@ -15,7 +15,7 @@ namespace GreekHealthcareNetwork.Migrations
 	                @AppointmentId INT
                 AS
                 BEGIN
-	                WAITFOR DELAY '00:10:10';
+	                WAITFOR DELAY '00:10:03';
 	                DECLARE @AppointmentChargePaid BIT;
 	                SELECT @AppointmentChargePaid = AppointmentChargePaid FROM Appointments WHERE Id = @AppointmentId;
 	                If @AppointmentChargePaid = 0 

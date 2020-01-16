@@ -575,6 +575,7 @@
     <Content Include="Views\Payment\PaySubscriptionCancelled.cshtml" />
     <Content Include="Views\Shared\_ModalEditAppointmentPartial.cshtml" />
     <Content Include="Views\Admin\UpdateDoctors.cshtml" />
+    <Content Include="Views\Doctors\Unavailabilities.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

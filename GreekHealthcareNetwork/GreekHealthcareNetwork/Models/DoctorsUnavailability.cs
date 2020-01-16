@@ -13,9 +13,11 @@ namespace GreekHealthcareNetwork.Models
         public int Id { get; set; }
 
         [Required]
+        [Display(Name= "Unavailable From")]
         public DateTime UnavailableFrom { get; set; }
 
         [Required]
+        [Display(Name = "Unavailable Until")]
         public DateTime UnavailableUntil { get; set; }
 
         [Required]
