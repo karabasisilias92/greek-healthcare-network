@@ -321,6 +321,10 @@
     <Compile Include="Migrations\202001152343124_Create trigger after insert at appointments table.Designer.cs">
       <DependentUpon>202001152343124_Create trigger after insert at appointments table.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001160858382_Update DoctorUnavailability Entity.cs" />
+    <Compile Include="Migrations\202001160858382_Update DoctorUnavailability Entity.Designer.cs">
+      <DependentUpon>202001160858382_Update DoctorUnavailability Entity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -691,6 +695,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001152343124_Create trigger after insert at appointments table.resx">
       <DependentUpon>202001152343124_Create trigger after insert at appointments table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001160858382_Update DoctorUnavailability Entity.resx">
+      <DependentUpon>202001160858382_Update DoctorUnavailability Entity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

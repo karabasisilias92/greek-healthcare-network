@@ -6,8 +6,8 @@
 
 @section cssScripts{
     <link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
-    <style>           
-        .modal-lg  {
+    <style>
+        .modal-lg {
             max-width: 600px;
         }
     </style>
@@ -22,7 +22,7 @@
                 <button id="declareUnavailability" class="btn btn-outline-dark">Declare unavailability period</button>
             </p>
         </div>
-        
+
         <div class="table-responsive">
             <table class="table">
                 <tr>
@@ -81,32 +81,36 @@
                 <div class="container">
                     <form id="unavailabilityForm" class="form-horizontal">
                         <div class="form-row mb-3">
-                            <p class="col-md-4 control-label" style="padding-top: 25px;">Unavailable From:</p>
+                            <p class="col-md-3 control-label" style="padding-top: 25px;">Unavailable From:</p>
                             <div class="form-group">
                                 <label for="fromDate" class="col-md-12 control-label">Date</label>
-                                <div class="col-md-10">
-                                    <input id="fromDate" name="fromdate" class="form-control" type="date">
+                                <div class="col-md-12">
+                                    <input id="fromDate" name="fromDate" class="form-control" type="date">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="fromDate" data-valmsg-replace="true"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="fromTime" class="col-md-12 control-label">Time</label>
-                                <div class="col-md-10">
+                                <div class="col-md-12">
                                     <input id="fromTime" name="fromTime" class="form-control" type="Time">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="fromTime" data-valmsg-replace="true"></span>
                                 </div>
                             </div>
                         </div>
                         <div class="form-row mb-3">
-                            <p class="col-md-4 control-label" style="padding-top: 25px;">Unavailable Until:</p>
+                            <p class="col-md-3 control-label" style="padding-top: 25px;">Unavailable Until:</p>
                             <div class="form-group">
                                 <label for="untilDate" class="col-md-12 control-label">Date</label>
-                                <div class="col-md-10">
+                                <div class="col-md-12">
                                     <input id="untilDate" name="untilDate" class="form-control" type="date">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="untilDate" data-valmsg-replace="true"></span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="untilTime" class="col-md-12 control-label">Time</label>
-                                <div class="col-md-10">
+                                <div class="col-md-12">
                                     <input id="untilTime" name="untilTime" class="form-control" type="Time">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="untilTime" data-valmsg-replace="true"></span>
                                 </div>
                             </div>
                         </div>
@@ -119,9 +123,63 @@
 </div>
 
 @section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
     <script>
         $(document).ready(function () {
             $('#declareUnavailability').click(() => $('#declareUnavailabilityModal').modal('show'));
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            const year = today.getFullYear();
+            const date = year + '-' + month + '-' + day
+            $('#fromDate').attr('min', date);
+            $('#untilDate').attr('min', date);
+            $('#fromDate').change(function () {
+                const value = $(this).val();
+                if ($('#untilDate').val() == value) {
+                    if ($('#untilTime').val() < $('#fromTime').val()) {
+                        $('#untilTime').val($('#fromTime').val());
+                    }
+                }
+                if ($('#untilDate').val() < value) {
+                    $('#untilDate').val(value);
+                }
+                $('#untilDate').attr('min', value);
+            });
+            $('#untilDate').change(function () {
+                const value = $(this).val();
+                if ($('#fromDate').val() == value) {
+                    if ($('#untilTime').val() < $('#fromTime').val()) {
+                        $('#untilTime').val($('#fromTime').val());
+                    }
+                }
+            });
+            $('#fromTime').change(function () {
+                const value = $(this).val();
+                if ($('#fromDate').val() == $('#untilDate').val()) {
+                    $('#untilTime').val(value);
+                    $('#untilTime').attr('min', value);
+                }
+                else {
+                    $('#untilTime').removeAttr('min');
+                }
+            });
+            $('#declare').click(function (e) {
+                e.preventDefault();
+                const $form = $('#unavailabilityForm');
+                $.validator.unobtrusive.parse($form);
+                $form.validate();
+                console.log($form.validate().errorList);
+                if (!$form.valid()) {
+                    console.log($form.validate().errorList);
+                    $.each($form.validate().errorList, function (key, value) {
+                        console.log(value);
+                        const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                        $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                        $errorSpan.show();
+                    });
+                }
+            });
         })
     </script>
 }

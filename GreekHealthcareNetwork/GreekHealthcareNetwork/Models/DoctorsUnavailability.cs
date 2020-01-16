@@ -11,14 +11,32 @@ namespace GreekHealthcareNetwork.Models
     {
         [Key]
         public int Id { get; set; }
+        
+        [Required]
+        [Column(TypeName = "date")]
+        [DataType(DataType.Date)]
+        [Display(Name= "Unavailable From Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime UnavailableFromDate { get; set; }
 
         [Required]
-        [Display(Name= "Unavailable From")]
-        public DateTime UnavailableFrom { get; set; }
+        [Column(TypeName = "time")]
+        [DataType(DataType.Time)]
+        [Display(Name = "Unavailable From Time")]
+        public TimeSpan UnavailableFromTime { get; set; }
 
         [Required]
-        [Display(Name = "Unavailable Until")]
-        public DateTime UnavailableUntil { get; set; }
+        [Column(TypeName = "date")]
+        [DataType(DataType.Date)]
+        [Display(Name = "Unavailable Until Date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime UnavailableUntilDate { get; set; }
+
+        [Required]
+        [Column(TypeName = "time")]
+        [DataType(DataType.Time)]
+        [Display(Name = "Unavailable Until Time")]
+        public TimeSpan UnavailableUntilTime { get; set; }
 
         [Required]
         public string DoctorId { get; set; }
