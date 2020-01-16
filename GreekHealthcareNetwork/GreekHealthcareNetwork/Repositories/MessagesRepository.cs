@@ -11,6 +11,7 @@ namespace GreekHealthcareNetwork.Repositories
 {
     public class MessagesRepository
     {
+
         public Message FindById(long id)
         {
             Message message;
