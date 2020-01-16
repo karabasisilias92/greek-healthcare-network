@@ -9,7 +9,7 @@
 <section id="pageHeader" class="container py-3">
     @if (!Request.IsAuthenticated)
     {
-        <img src="https://via.placeholder.com/80x80.png?text=GHNlogo" class="rounded-circle mb-3" />
+        <img src="@Url.Content("~/Content/img/GHN_Logo_dark.png")" class="mb-3" />
     }
     <h2>@ViewBag.Title</h2>
 </section>
@@ -25,7 +25,7 @@
                 Session["paymentItemName"] = "Insurance Plan Fee";
                 Session["Transaction description"] = "This transaction is related to the redemption of the subscription fee regarding your insurance plan.";
                 Session["price"] = Model.PlanFee.ToString("0.00");
-                @Html.ActionLink("Pay", "PayWithPayPal", "Payment", null, new { @class = "btn btn-outline-success mr-3" });
+                @Html.ActionLink("Pay", "PayWithPayPal", "Payment", new { appointmentId = 0 }, new { @class = "btn btn-outline-success mr-3" });
             }            
         </div>       
         @Html.ActionLink("Back", "ClientPayInsuredPlan", "Account", new { userId = Model.UserId }, new { id = "backToPreviousPage", @class = "btn btn-outline-danger" })

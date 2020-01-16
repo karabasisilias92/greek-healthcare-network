@@ -313,6 +313,18 @@
     <Compile Include="Migrations\202001152211593_Add property AppointmentChargePaid to Appointment.Designer.cs">
       <DependentUpon>202001152211593_Add property AppointmentChargePaid to Appointment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001152330280_Create Stored Procedure to delete unpaid appointments.cs" />
+    <Compile Include="Migrations\202001152330280_Create Stored Procedure to delete unpaid appointments.Designer.cs">
+      <DependentUpon>202001152330280_Create Stored Procedure to delete unpaid appointments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001152343124_Create trigger after insert at appointments table.cs" />
+    <Compile Include="Migrations\202001152343124_Create trigger after insert at appointments table.Designer.cs">
+      <DependentUpon>202001152343124_Create trigger after insert at appointments table.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001160858382_Update DoctorUnavailability Entity.cs" />
+    <Compile Include="Migrations\202001160858382_Update DoctorUnavailability Entity.Designer.cs">
+      <DependentUpon>202001160858382_Update DoctorUnavailability Entity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -363,6 +375,7 @@
     <Content Include="Content\img\employees-885338_1920-e1565727877609-1500x630.jpg" />
     <Content Include="Content\img\favicon.png" />
     <Content Include="Content\img\GHN_Logo.png" />
+    <Content Include="Content\img\GHN_Logo_dark.png" />
     <Content Include="Content\img\Healthcare-Background-Pics.jpg" />
     <Content Include="Content\insuredsNavbar.css" />
     <Content Include="Content\mdb.css" />
@@ -567,6 +580,7 @@
     <Content Include="Views\Payment\PaySubscriptionCancelled.cshtml" />
     <Content Include="Views\Shared\_ModalEditAppointmentPartial.cshtml" />
     <Content Include="Views\Admin\UpdateDoctors.cshtml" />
+    <Content Include="Views\Doctors\Unavailabilities.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -676,6 +690,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001152211593_Add property AppointmentChargePaid to Appointment.resx">
       <DependentUpon>202001152211593_Add property AppointmentChargePaid to Appointment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001152330280_Create Stored Procedure to delete unpaid appointments.resx">
+      <DependentUpon>202001152330280_Create Stored Procedure to delete unpaid appointments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001152343124_Create trigger after insert at appointments table.resx">
+      <DependentUpon>202001152343124_Create trigger after insert at appointments table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001160858382_Update DoctorUnavailability Entity.resx">
+      <DependentUpon>202001160858382_Update DoctorUnavailability Entity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

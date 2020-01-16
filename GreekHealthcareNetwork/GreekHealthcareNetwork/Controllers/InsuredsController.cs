@@ -43,6 +43,7 @@ namespace GreekHealthcareNetwork.Controllers
             {
                 return RedirectToAction("BookAppointment");
             }
+            appointment.AppointmentChargePaid = true; // in order not to be deleted by db stored procedure
             appointment.AppointmentStatus = AppointmentStatus.Canceled;
             _appointments.UpdateAppointment(appointment);
             var insured = _insureds.GetInsuredById(insuredId);
@@ -59,21 +60,16 @@ namespace GreekHealthcareNetwork.Controllers
 
         public ActionResult CancelledBookingDueToNotPayingOnTime(int appointmentId, string insuredId)
         {
-            var appointment = _appointments.GetAppointmentById(appointmentId);
-            if (appointment == null)
-            {
-                return RedirectToAction("BookAppointment");
-            }
-            _appointments.DeleteAppointment(appointmentId);
+            var appointment = (Appointment)Session["appointment" + appointmentId];
             var insured = _insureds.GetInsuredById(insuredId);
             insured.BookedAppointments--;
             _insureds.UpdateInsured(insured);
-            Session.Remove("appointmentId");
+            Session.Remove("timestamp" + appointmentId);
             Session.Remove("paymentFor");
             Session.Remove("insuredId");
             Session.Remove("paymentItemName");
             Session.Remove("Transaction description");
-            Session.Remove("price");
+            Session.Remove("price" + appointmentId);
             return View(appointment);
         }
 
