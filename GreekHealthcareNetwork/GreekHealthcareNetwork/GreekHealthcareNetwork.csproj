@@ -313,6 +313,14 @@
     <Compile Include="Migrations\202001152211593_Add property AppointmentChargePaid to Appointment.Designer.cs">
       <DependentUpon>202001152211593_Add property AppointmentChargePaid to Appointment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001152330280_Create Stored Procedure to delete unpaid appointments.cs" />
+    <Compile Include="Migrations\202001152330280_Create Stored Procedure to delete unpaid appointments.Designer.cs">
+      <DependentUpon>202001152330280_Create Stored Procedure to delete unpaid appointments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001152343124_Create trigger after insert at appointments table.cs" />
+    <Compile Include="Migrations\202001152343124_Create trigger after insert at appointments table.Designer.cs">
+      <DependentUpon>202001152343124_Create trigger after insert at appointments table.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -676,6 +684,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001152211593_Add property AppointmentChargePaid to Appointment.resx">
       <DependentUpon>202001152211593_Add property AppointmentChargePaid to Appointment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001152330280_Create Stored Procedure to delete unpaid appointments.resx">
+      <DependentUpon>202001152330280_Create Stored Procedure to delete unpaid appointments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001152343124_Create trigger after insert at appointments table.resx">
+      <DependentUpon>202001152343124_Create trigger after insert at appointments table.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
