@@ -9,7 +9,7 @@
     Session["planId"] = Model.DoctorPlan.Id;
     Session["paymentItemName"] = "Doctor Subscription Fee";
     Session["Transaction description"] = "This transaction is related to the redemption of the subscription fee regarding your medical specialty.";
-    Session["price"] = Model.DoctorPlan.Fee.ToString("0.00");    
+    Session["price"] = Model.DoctorPlan.Fee.ToString("0.00");
 }
 
 @if (!Request.IsAuthenticated)
@@ -69,7 +69,14 @@ else
         }
     }
 <div id="pay_skip" class="mt-4">
-    @Html.ActionLink("Pay", "PayWithPayPal", "Payment", new { userId = Model.DoctorId, planId = Model.DoctorPlan.Id }, new { id = "pay", @class = "btn btn-outline-success mr-3 mb-3" })
+    @{  
+        Session["paymentFor"] = "Subscription";
+        Session["userId"] = Model.DoctorId;
+        Session["paymentItemName"] = "Subscription Fee";
+        Session["Transaction description"] = "This transaction is related to the redemption of the fee regarding your subscription.";
+        Session["price"] = Model.DoctorPlan.Fee.ToString("0.00"); 
+    }
+    @Html.ActionLink("Pay", "PayWithPayPal", "Payment", new { appointmentId = 0 }, new { id = "pay", @class = "btn btn-outline-success mr-3 mb-3" })
     <div>
         @using (Html.BeginForm("DoctorPayDoctorPlan", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {

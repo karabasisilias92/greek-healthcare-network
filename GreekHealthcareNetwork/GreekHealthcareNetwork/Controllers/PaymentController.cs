@@ -20,6 +20,7 @@ namespace GreekHealthcareNetwork.Controllers
         private readonly DoctorsRepository _doctors = new DoctorsRepository();
         private readonly InsuredsRepository _insureds = new InsuredsRepository();
         private readonly UsersRepository _users = new UsersRepository();
+        private readonly AppointmentsRespository _appointments = new AppointmentsRespository();
 
         public ApplicationSignInManager SignInManager
         {
@@ -47,11 +48,11 @@ namespace GreekHealthcareNetwork.Controllers
         private Payment payment;
 
         // GET: Payment
-        public ActionResult PayWithPayPal()
+        public ActionResult PayWithPayPal(int appointmentId)
         {
             // Get context from the paypal based on clientId and clientSecret for payment
             APIContext apiContext = PaypalConfiguration.GetAPIContext();
-
+            string paymentFor = "";
             try
             {
                 //A resource representing a Payer that funds a payment Payment Method as paypal  
@@ -63,13 +64,13 @@ namespace GreekHealthcareNetwork.Controllers
                     //it is returned by the create function call of the payment class  
                     // Creating a payment  
                     // baseURL is the url on which paypal sendsback the data.  
-                    string baseURI = Request.Url.Scheme + "://" + Request.Url.Authority + "/Payment/PayWithPayPal?";
+                    string baseURI = Request.Url.Scheme + "://" + Request.Url.Authority + "/Payment/PayWithPayPal?appointmentId=" + appointmentId;
                     //here we are generating guid for storing the paymentID received in session  
                     //which will be used in the payment execution  
                     var guid = Convert.ToString((new Random()).Next(10000000));
                     //CreatePayment function gives us the payment approval url  
                     //on which payer is redirected for paypal account payment  
-                    var createdPayment = CreatePayment(apiContext, baseURI + "guid=" + guid);
+                    var createdPayment = CreatePayment(apiContext, baseURI + "&guid=" + guid, appointmentId);
                     //get links returned from paypal in response to Create function call  
                     var links = createdPayment.links.GetEnumerator();
                     string paypalRedirectUrl = null;
@@ -90,6 +91,16 @@ namespace GreekHealthcareNetwork.Controllers
                 {
                     // This function exectues after receving all parameters for the payment  
                     var guid = Request.Params["guid"];
+                    paymentFor = (string)Session["paymentFor"];
+                    if (!paymentFor.Equals("Subscription"))
+                    {
+                        var timestamp = (DateTime)Session["timestamp" + appointmentId];
+                        if (DateTime.Now - timestamp > new TimeSpan(0,10,0) )
+                        {
+                            var insuredId = (string)Session["insuredId"];
+                            return RedirectToAction("CancelledBookingDueToNotPayingOnTime", "Insureds", new { appointmentId = appointmentId, insuredId = insuredId });
+                        }
+                    }
                     var executedPayment = ExecutePayment(apiContext, payerId, Session[guid] as string);
                     //If executed payment failed then we will show payment failure message to user  
                     if (executedPayment.state.ToLower() != "approved")
@@ -102,8 +113,7 @@ namespace GreekHealthcareNetwork.Controllers
             {
                 return View("PaymentFailed");
             }
-
-            string paymentFor = (string)Session["paymentFor"];
+            
             if (paymentFor.Equals("Subscription"))
             {
                 string userId = (string)Session["userId"];
@@ -128,11 +138,11 @@ namespace GreekHealthcareNetwork.Controllers
                             _users.UpdateSubscriptionEndDate(user.Id);
                             _users.ActivateUser(user.Id);
                         }
+                        Session.Remove("planId");
                     }
                 }
                 Session.Remove("paymentFor");
                 Session.Remove("userId");
-                Session.Remove("planId");
                 Session.Remove("paymentItemName");
                 Session.Remove("Transaction description");
                 Session.Remove("price");
@@ -148,13 +158,15 @@ namespace GreekHealthcareNetwork.Controllers
             }
             else
             {
-                int appointmentId = (int)Session["appointmentId"];
-                Session.Remove("appointmentId");
+                var appointment = _appointments.GetAppointmentById(appointmentId);
+                appointment.AppointmentChargePaid = true;
+                _appointments.UpdateAppointment(appointment);
+                Session.Remove("timestamp" + appointmentId);
                 Session.Remove("paymentFor");
                 Session.Remove("insuredId");
                 Session.Remove("paymentItemName");
                 Session.Remove("Transaction description");
-                Session.Remove("price");
+                Session.Remove("price" + appointmentId);
                 return RedirectToAction("SuccessfulBooking", "Insureds", new { id = appointmentId });
             }
             
@@ -173,14 +185,22 @@ namespace GreekHealthcareNetwork.Controllers
             return this.payment.Execute(apiContext, paymentExecution);
         }
 
-        private Payment CreatePayment(APIContext apiContext, string redirectUrl)
+        private Payment CreatePayment(APIContext apiContext, string redirectUrl, int appointmentId)
         {
             //create itemlist and add item objects to it  
             var itemList = new ItemList()
             {
                 items = new List<Item>()
             };
-            decimal price = Math.Floor(0.85m * Convert.ToDecimal(Session["price"]) * 100) / 100;
+            decimal price;
+            if (appointmentId == 0)
+            {
+                price = Math.Floor(0.85m * Convert.ToDecimal(Session["price"]) * 100) / 100;
+            }
+            else
+            {
+                price = Math.Floor(0.85m * Convert.ToDecimal(Session["price" + appointmentId]) * 100) / 100;
+            }
             string priceString = price.ToString("0.00");
             //Adding Item Details like name, currency, price etc  
             itemList.items.Add(new Item()
@@ -204,7 +224,6 @@ namespace GreekHealthcareNetwork.Controllers
             }
             else
             {
-                int appointmentId = (int)Session["appointmentId"];
                 string insuredId = (string)Session["insuredId"];
                 cancelUrl = "https://localhost:44310/Insureds/CancelledBooking?appointmentId=" + appointmentId + "&insuredId=" + insuredId;
             }
@@ -216,7 +235,7 @@ namespace GreekHealthcareNetwork.Controllers
             // Adding Tax, shipping and Subtotal details  
             var details = new Details()
             {
-                tax = (0.15m * Convert.ToDecimal(Session["price"])).ToString("0.00"),
+                tax = appointmentId == 0 ? (0.15m * Convert.ToDecimal(Session["price"])).ToString("0.00") : (0.15m * Convert.ToDecimal(Session["price" + appointmentId])).ToString("0.00"),
                 shipping = "0",
                 subtotal = priceString
             };
@@ -267,6 +286,8 @@ namespace GreekHealthcareNetwork.Controllers
         [Authorize(Roles = "Insured")]
         public ActionResult PayAppointmentCharge(int id, decimal appointmentCharge)
         {
+            var appointment = _appointments.GetAppointmentById(id);
+            Session["appointment" + id] = appointment;
             PayAppointmentChargeViewModel model = new PayAppointmentChargeViewModel() { AppointmentId = id, AppointmentCharge = appointmentCharge };
             return View(model);
         }

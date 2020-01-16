@@ -13,6 +13,7 @@ namespace GreekHealthcareNetwork.Controllers
 {
 
     [OutputCache(NoStore = true, Duration = 0)]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly AppointmentsRespository _appointmentsRespository = new AppointmentsRespository();
@@ -99,13 +100,16 @@ namespace GreekHealthcareNetwork.Controllers
             {
                 return HttpNotFound();
             }
-            user.Days = new List<DayOfWeek>();
-            for (int i = 1; i < Enum.GetNames(typeof(DayOfWeek)).Length; i++)
+            if (User.IsInRole("Doctor"))
             {
-                user.Days.Add((DayOfWeek)i);
+                user.Days = new List<DayOfWeek>();
+                for (int i = 1; i < Enum.GetNames(typeof(DayOfWeek)).Length; i++)
+                {
+                    user.Days.Add((DayOfWeek)i);
+                }
+                user.Days.Add((DayOfWeek)0);
+                user.WorkingHours = user.Doctor.WorkingHours.OrderBy(i => i.Day).ThenBy(i => i.WorkStartTime).ToList();
             }
-            user.Days.Add((DayOfWeek)0);
-            user.WorkingHours = user.Doctor.WorkingHours.OrderBy(i => i.Day).ThenBy(i => i.WorkStartTime).ToList();
             return View(user);
         }
 

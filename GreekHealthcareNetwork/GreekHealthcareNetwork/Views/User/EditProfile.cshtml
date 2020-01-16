@@ -38,6 +38,14 @@
                                     @Html.TextBoxFor(m => m.ProfilePicture, new { @class = "form-control upload-button", type = "file", accept = "image/*", name = "uploadImage", id = "uploadImage" })
                                 </div>
                             }
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <img src="@Url.Content("~/Content/img/Admins/" + @User.Identity.GetUserId() + "/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
+                                <div class="rounded-circle w-100 h-100 overlay">
+                                    <i class="fa fa-plus"></i>
+                                    @Html.TextBoxFor(m => m.ProfilePicture, new { @class = "form-control upload-button", type = "file", accept = "image/*", name = "uploadImage", id = "uploadImage" })
+                                </div>
+                            }
                         </div>
                     </div>
                     <div class="col-md-8 align-self-center">
@@ -241,7 +249,10 @@
                 $('#workingHoursForm div.validation-summary-valid').removeClass('validation-summary-valid').addClass('validation-summary-errors');
             })
             $('#editWorkingHours').click(GetWorkingHourEntries);
-            var count = @Model.WorkingHours.Count;
+            @if(User.IsInRole("Doctor"))
+            {
+                var count = @Model.WorkingHours.Count;
+            }
             function deleteEntry(e) {
                 e.preventDefault();
                 const elem = $(e.target).parent();

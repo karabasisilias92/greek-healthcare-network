@@ -17,6 +17,7 @@ namespace GreekHealthcareNetwork.Controllers
 
         [HttpGet]
         [Route("api/Search/AdminSearchDoctorResults")]
+        [Authorize(Roles = "Administrator")]
         public IHttpActionResult AdminSearchResults(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty, DateTime appointmentDate)
         {
             var doctors = _doctors.AdminGetFilteredDoctors(doctorsFirstName, doctorsLastName, doctorsSpecialty, appointmentDate);
@@ -29,6 +30,7 @@ namespace GreekHealthcareNetwork.Controllers
 
         [HttpGet]
         [Route("api/Search/SearchDoctorResults")]
+        [AllowAnonymous]
         public IHttpActionResult SearchResults(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty, DateTime appointmentDate)
         {
             var doctors = _doctors.GetFilteredDoctors(doctorsFirstName, doctorsLastName, doctorsSpecialty, appointmentDate);
@@ -41,6 +43,7 @@ namespace GreekHealthcareNetwork.Controllers
 
         [HttpGet]
         [Route("api/Search/SearchInsuredResults")]
+        [Authorize(Roles = "Administrator")]
         public IHttpActionResult SearchResultsInsureds(string insuredsFirstName, string insuredsLastName)
         {
             var insureds = _insureds.GetFilteredInsureds(insuredsFirstName, insuredsLastName);
@@ -53,19 +56,21 @@ namespace GreekHealthcareNetwork.Controllers
 
         [HttpGet]
         [Route("api/Search/SearchDoctorById/{doctorId}")]
+        [AllowAnonymous]
         public IHttpActionResult SearchDoctorById(string doctorId)
         {
             var doctor = _doctors.GetDoctorById(doctorId);
-            doctor.WorkingHours = doctor.WorkingHours.OrderBy(i => i.Day).ThenBy(i => i.WorkStartTime).ToList();
             if (doctor == null)
             {
                 return NotFound();
             }
+            doctor.WorkingHours = doctor.WorkingHours.OrderBy(i => i.Day).ThenBy(i => i.WorkStartTime).ToList();            
             return Ok(doctor);
         }
 
         [HttpGet]
         [Route("api/Search/AppointmentsSearchResults")]
+        [Authorize]
         public IHttpActionResult SearchResults(string firstName, string lastName, int doctorsSpecialty, DateTime appointmentDay, string userId)
         {
             var appointments = _appointments.GetFilteredAppointments(firstName, lastName, doctorsSpecialty, appointmentDay, userId);
@@ -103,6 +108,7 @@ namespace GreekHealthcareNetwork.Controllers
 
         [HttpGet]
         [Route("api/Search/SearchAppointmentById/{appointmentId}")]
+        [Authorize]
         public IHttpActionResult SearchAppointmentById(int appointmentId)
         {
             var appointment = _appointments.GetAppointmentById(appointmentId);
@@ -115,6 +121,7 @@ namespace GreekHealthcareNetwork.Controllers
 
         [HttpGet]
         [Route("api/Search/GetAvailableAppointmentSlots")]
+        [Authorize]
         public IHttpActionResult GetAvailableAppointmentSlots(DateTime appointmentDay, string doctorId)
         {
             var doctor = _doctors.GetDoctorById(doctorId);

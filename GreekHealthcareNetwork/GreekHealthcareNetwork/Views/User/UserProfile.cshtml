@@ -24,6 +24,10 @@
                     {
                         <img src="@Url.Content("~/Content/img/Insureds/" + @User.Identity.GetUserId() + "/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
                     }
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <img src="@Url.Content("~/Content/img/Admins/" + @User.Identity.GetUserId() + "/")@Model.User.ProfilePicture" class="rounded-circle w-100 h-100" alt="">
+                    }
                 </div>
                 <div class="col-md-8 align-self-center">
                     <h4>
@@ -138,19 +142,22 @@
                                 }
                             }
                         }
-                        <tr>
-                            <th>Address:</th>
-                            <td>
-                                @if (User.IsInRole("Doctor"))
-                                {
-                                    @Model.Doctor.OfficeAddress
-                                }
-                                @if (User.IsInRole("Insured"))
-                                {
-                                    @Model.Insured.HomeAddress
-                                }
-                            </td>
-                        </tr>
+                        @if (!User.IsInRole("Administrator"))
+                        {
+                            <tr>
+                                <th>Address:</th>
+                                <td>
+                                    @if (User.IsInRole("Doctor"))
+                                    {
+                                        @Model.Doctor.OfficeAddress
+                                    }
+                                    @if (User.IsInRole("Insured"))
+                                    {
+                                        @Model.Insured.HomeAddress
+                                    }
+                                </td>
+                            </tr>
+                        }
                         <tr>
                             <th>Email:</th>
                             <td>@Model.User.Email</td>
