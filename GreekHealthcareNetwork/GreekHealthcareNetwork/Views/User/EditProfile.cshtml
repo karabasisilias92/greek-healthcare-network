@@ -241,7 +241,10 @@
                 $('#workingHoursForm div.validation-summary-valid').removeClass('validation-summary-valid').addClass('validation-summary-errors');
             })
             $('#editWorkingHours').click(GetWorkingHourEntries);
-            var count = @Model.WorkingHours.Count;
+            @if(User.IsInRole("Doctor"))
+            {
+                var count = @Model.WorkingHours.Count;
+            }
             function deleteEntry(e) {
                 e.preventDefault();
                 const elem = $(e.target).parent();
