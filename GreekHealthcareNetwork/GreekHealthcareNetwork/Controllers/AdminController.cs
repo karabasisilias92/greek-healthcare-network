@@ -41,5 +41,10 @@ namespace GreekHealthcareNetwork.Controllers
         {
             return View();
         }
+
+        public ActionResult VisitorMessages()
+        {
+            return View();
+        }
     }
 }

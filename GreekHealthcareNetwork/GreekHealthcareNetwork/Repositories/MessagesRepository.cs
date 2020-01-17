@@ -84,6 +84,7 @@ namespace GreekHealthcareNetwork.Repositories
                                   .OrderByDescending(m => m.SentDate)
                                   .ThenByDescending(m => m.SentTime)
                                   .Include("Sender")
+                                  .Include("Sender.Roles")
                                   .Include("Recipient")
                                   .Include("Recipient.Roles")
                                   .ToList();
