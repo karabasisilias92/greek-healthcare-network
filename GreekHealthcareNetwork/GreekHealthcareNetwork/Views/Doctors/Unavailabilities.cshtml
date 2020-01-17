@@ -83,34 +83,34 @@
                         <div class="form-row mb-3">
                             <p class="col-md-3 control-label" style="padding-top: 25px;">Unavailable From:</p>
                             <div class="form-group">
-                                <label for="fromDate" class="col-md-12 control-label">Date</label>
+                                <label for="UnavailableFromDate" class="col-md-12 control-label">Date</label>
                                 <div class="col-md-12">
-                                    <input id="fromDate" name="fromDate" class="form-control" type="date">
-                                    <span class="field-validation-valid text-danger" data-valmsg-for="fromDate" data-valmsg-replace="true"></span>
+                                    <input id="UnavailableFromDate" name="UnavailableFromDate" class="form-control" type="date" data-val="true" data-val-required="Required field" data-val-min="Min value violation">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="UnavailableFromDate" data-valmsg-replace="true"></span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="fromTime" class="col-md-12 control-label">Time</label>
+                                <label for="UnavailableFromTime" class="col-md-12 control-label">Time</label>
                                 <div class="col-md-12">
-                                    <input id="fromTime" name="fromTime" class="form-control" type="Time">
-                                    <span class="field-validation-valid text-danger" data-valmsg-for="fromTime" data-valmsg-replace="true"></span>
+                                    <input id="UnavailableFromTime" name="UnavailableFromTime" class="form-control" type="Time" data-val="true" data-val-required="Required field">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="UnavailableFromTime" data-valmsg-replace="true"></span>
                                 </div>
                             </div>
                         </div>
                         <div class="form-row mb-3">
                             <p class="col-md-3 control-label" style="padding-top: 25px;">Unavailable Until:</p>
                             <div class="form-group">
-                                <label for="untilDate" class="col-md-12 control-label">Date</label>
+                                <label for="UnavailableUntilDate" class="col-md-12 control-label">Date</label>
                                 <div class="col-md-12">
-                                    <input id="untilDate" name="untilDate" class="form-control" type="date">
-                                    <span class="field-validation-valid text-danger" data-valmsg-for="untilDate" data-valmsg-replace="true"></span>
+                                    <input id="UnavailableUntilDate" name="UnavailableUntilDate" class="form-control" type="date" data-val="true" data-val-required="Required field">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="UnavailableUntilDate" data-valmsg-replace="true"></span>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="untilTime" class="col-md-12 control-label">Time</label>
+                                <label for="UnavailableUntilTime" class="col-md-12 control-label">Time</label>
                                 <div class="col-md-12">
-                                    <input id="untilTime" name="untilTime" class="form-control" type="Time">
-                                    <span class="field-validation-valid text-danger" data-valmsg-for="untilTime" data-valmsg-replace="true"></span>
+                                    <input id="UnavailableUntilTime" name="UnavailableUntilTime" class="form-control" type="Time" data-val="true" data-val-required="Required field" data-val-min="Min value violation">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="UnavailableUntilTime" data-valmsg-replace="true"></span>
                                 </div>
                             </div>
                         </div>
@@ -125,6 +125,27 @@
 @section scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
+        jQuery.extend(jQuery.validator.messages, {
+            required: "This field is required.",
+            remote: "Please fix this field.",
+            email: "Please enter a valid email address.",
+            url: "Please enter a valid URL.",
+            date: "Please enter a valid date.",
+            dateISO: "Please enter a valid date (ISO).",
+            number: "Please enter a valid number.",
+            digits: "Please enter only digits.",
+            creditcard: "Please enter a valid credit card number.",
+            equalTo: "Please enter the same value again.",
+            accept: "Please enter a value with a valid extension.",
+            maxlength: jQuery.validator.format("Please enter no more than {0} characters."),
+            minlength: jQuery.validator.format("Please enter at least {0} characters."),
+            rangelength: jQuery.validator.format("Please enter a value between {0} and {1} characters long."),
+            range: jQuery.validator.format("Please enter a value between {0} and {1}."),
+            max: jQuery.validator.format("Max value violation"),
+            min: jQuery.validator.format("Min value violation")
+        });
+    </script>
+    <script>
         $(document).ready(function () {
             $('#declareUnavailability').click(() => $('#declareUnavailabilityModal').modal('show'));
             const today = new Date();
@@ -132,36 +153,35 @@
             const month = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
             const year = today.getFullYear();
             const date = year + '-' + month + '-' + day
-            $('#fromDate').attr('min', date);
-            $('#untilDate').attr('min', date);
-            $('#fromDate').change(function () {
+            $('#UnavailableFromDate').attr('min', date);
+            $('#UnavailableUntilDate').attr('min', date);
+            $('#UnavailableFromDate').change(function () {
                 const value = $(this).val();
-                if ($('#untilDate').val() == value) {
-                    if ($('#untilTime').val() < $('#fromTime').val()) {
-                        $('#untilTime').val($('#fromTime').val());
+                if ($('#UnavailableUntilDate').val() == value) {
+                    if ($('#UnavailableUntilTime').val() < $('#UnavailableFromTime').val()) {
+                        $('#UnavailableUntilTime').val($('#UnavailableFromTime').val());
+                    }
+                } else if ($('#UnavailableUntilDate').val() < value) {
+                    $('#UnavailableUntilDate').val(value);
+                }
+                $('#UnavailableUntilDate').attr('min', value);
+            });
+            $('#UnavailableUntilDate').change(function () {
+                const value = $(this).val();
+                if ($('#UnavailableFromDate').val() == value) {
+                    if ($('#UnavailableUntilTime').val() < $('#UnavailableFromTime').val()) {
+                        $('#UnavailableUntilTime').val($('#UnavailableFromTime').val());
                     }
                 }
-                if ($('#untilDate').val() < value) {
-                    $('#untilDate').val(value);
-                }
-                $('#untilDate').attr('min', value);
             });
-            $('#untilDate').change(function () {
+            $('#UnavailableFromDate').change(function () {
                 const value = $(this).val();
-                if ($('#fromDate').val() == value) {
-                    if ($('#untilTime').val() < $('#fromTime').val()) {
-                        $('#untilTime').val($('#fromTime').val());
-                    }
-                }
-            });
-            $('#fromTime').change(function () {
-                const value = $(this).val();
-                if ($('#fromDate').val() == $('#untilDate').val()) {
-                    $('#untilTime').val(value);
-                    $('#untilTime').attr('min', value);
+                if ($('#UnavailableFromDate').val() == $('#UnavailableUntilDate').val()) {
+                    $('#UnavailableUntilTime').val(value);
+                    $('#UnavailableUntilTime').attr('min', value);
                 }
                 else {
-                    $('#untilTime').removeAttr('min');
+                    $('#UnavailableUntilTime').removeAttr('min');
                 }
             });
             $('#declare').click(function (e) {
