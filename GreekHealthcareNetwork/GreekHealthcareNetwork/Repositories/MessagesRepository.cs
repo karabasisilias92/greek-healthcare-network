@@ -11,6 +11,7 @@ namespace GreekHealthcareNetwork.Repositories
 {
     public class MessagesRepository
     {
+
         public Message FindById(long id)
         {
             Message message;
@@ -55,7 +56,31 @@ namespace GreekHealthcareNetwork.Repositories
             }
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
-                messages = db.Messages.Where(m => m.RecipientId.Equals(UserId) || m.SenderId.Equals(UserId))
+                var visitorId = db.Users.SingleOrDefault(u => u.Email.Equals("visitor@ghn.gr")).Id;
+                messages = db.Messages.Where(m => m.RecipientId.Equals(UserId) && !m.SenderId.Equals(visitorId) || m.SenderId.Equals(UserId))
+                                  .OrderByDescending(m => m.SentDate)
+                                  .ThenByDescending(m => m.SentTime)
+                                  .Include("Sender")
+                                  .Include("Sender.Roles")
+                                  .Include("Recipient")
+                                  .Include("Recipient.Roles")
+                                  .ToList();
+            }
+            return messages;
+        }
+
+        //
+        public IEnumerable<Message> GetAllVisitorMessages(string UserId)
+        {
+            IEnumerable<Message> messages;
+            if (UserId == null)
+            {
+                throw new ArgumentNullException("UserId");
+            }
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                var visitorId = db.Users.SingleOrDefault(u => u.Email.Equals("visitor@ghn.gr")).Id;
+                messages = db.Messages.Where(m => m.RecipientId.Equals(UserId) && m.SenderId.Equals(visitorId))
                                   .OrderByDescending(m => m.SentDate)
                                   .ThenByDescending(m => m.SentTime)
                                   .Include("Sender")

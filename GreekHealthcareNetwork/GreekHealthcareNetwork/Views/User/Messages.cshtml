@@ -14,9 +14,7 @@
 }
 
 <main id="main">
-    <div>
-    </div>
-    <div class="col-8 offset-2 mt-5">
+    <div id="mainDiv1" class="col-8 mt-5">
         <div class="page-header">
             <h1>
                 Messages
@@ -123,7 +121,7 @@
 
 @section scripts{
     @Scripts.Render("~/bundles/jqueryval")
-    <script>
+<script>
 
         $(document).ready(function () {
             function listMessages(UserId) {
@@ -195,7 +193,7 @@
                                     $(view).text('View');
                                     $(view).addClass('btn btn-light viewBtn');
                                     $(view).attr('data-id', message.Id);
-                                
+
 
                                     $(action).append(view);
 
@@ -266,6 +264,14 @@
 
                 })
             }
+            @if(User.IsInRole("Administrator"))
+            {
+                @:$('#mainDiv1').addClass('offset-3');
+            }
+            else
+            {
+                @:$('#mainDiv1').addClass('offset-2');
+            }
             $('#reply').click(function (e) {
                 e.preventDefault();
                 const $form = $('#sentmessagearea');
@@ -291,7 +297,7 @@
                     model.VisitorMessage = null;
                     model = JSON.stringify(model)
                     $.ajax({
-                        contentType: 'application/json',
+                    contentType: 'application/json',
                         type: 'post',
                         url: '/api/Messages',
                         data: model,
@@ -300,7 +306,7 @@
                         success: function () {
                             let id = $('#reply').data('id');
                             $.ajax({
-                                dataType: 'json',
+                            dataType: 'json',
                                 type: 'get',
                                 url: '/api/Messages?&id=' + id,
                                 success: function (message) {
@@ -312,9 +318,9 @@
                                     }
                                     let m = message;
                                     m.MessageStatus = 'Replied';
-                                    m = JSON.stringify(m);                           
+                                    m = JSON.stringify(m);
                                     $.ajax({
-                                        contentType: 'application/json',
+                                    contentType: 'application/json',
                                         type: 'put',
                                         data: m,
                                         url: '/api/Messages',
@@ -330,7 +336,7 @@
                                     console.log(error)
                                 }
 
-                            });                                
+                            });
                             $('#Message_MessageText').val("");
                             $('#normalContainerSentMessage').hide();
                             $('#errorContainerSentMessage').hide();
@@ -378,7 +384,7 @@
             listMessages('@CurrentUserId');
         })
 
-    </script>
+</script>
 
 }
 
