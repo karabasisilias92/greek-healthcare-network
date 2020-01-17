@@ -251,7 +251,7 @@
             $('#editWorkingHours').click(GetWorkingHourEntries);
             @if(User.IsInRole("Doctor"))
             {
-                var count = @Model.WorkingHours.Count;
+                @:var count = @Model.WorkingHours.Count;
             }
             function deleteEntry(e) {
                 e.preventDefault();

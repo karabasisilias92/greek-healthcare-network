@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -48,7 +49,7 @@ namespace GreekHealthcareNetwork.Models
         [Display(Name = "Unavailable Until Time")]
         public TimeSpan UnavailableUntilTime { get; set; }
 
-        [Display(Name = "Unavailable From")]
+        [Display(Name = "Unavailable Until")]
         [NotMapped]
         public string UnavailableUntil
         {
@@ -62,6 +63,7 @@ namespace GreekHealthcareNetwork.Models
         public string DoctorId { get; set; }
 
         [ForeignKey("DoctorId")]
+        [JsonIgnore]
         public virtual Doctor Doctor { get; set; }
     }
 }

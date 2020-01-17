@@ -15,6 +15,23 @@
     }
 }
 
+@section cssScripts {
+    <style>
+        @@media (min-width: 1200px){
+            .modal-xl {
+                max-width: 1011px;
+            }
+        }
+        
+        @@media (min-width: 992px) {
+            .modal-xl {
+                max-width: 1000px;
+            }
+        }
+
+    </style>    
+}
+
 <div class="col-12">
     @Html.Partial("_SearchPartial")
 </div>
@@ -39,7 +56,7 @@
                 </div>
                 <div id="normalContainer" class="container">
                     <div class="row" id="profileSection">
-                        <div class="col-md-4">
+                        <div class="col-4 offset-4">
                             <img src="" class="rounded-circle w-100 h-100" alt="">
                         </div>
                     </div>
@@ -86,116 +103,116 @@
 }
 
 <div class="modal fade" id="bookAppointments" tabindex="-1" role="dialog" aria-labelledby="bookAppointmentsLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="bookAppointmentLabel">Book Appointment</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">×</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div id="errorContainerBook" class="container">
+                <div id="errorContainerBook" class="container" style="display: none;">
                     <div class="row">
                         <p> Something went wrong. Please try again later. </p>
                     </div>
                 </div>
                 <div id="normalContainerBook" class="container">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-lg-2">
                             <div class="row" id="profilepictureBook">
-                                <div class="col-md-12">
-                                    <img src="" class="rounded-circle w-100 h-100" alt="">
+                                <div class="col-6 col-lg-12 offset-3 offset-lg-0">
+                                    <img src="/Content/img/Doctors/08e6d3e4-9526-4e40-97fb-52ca512a26ef/08e6d3e4-9526-4e40-97fb-52ca512a26ef.jpg" class="rounded-circle w-100 h-100" alt="">
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-8">
+                        <div id="profilesectionBook" class="col-lg-6">
+                            <table class="table table-borderless mt-2">
+                                <tbody>
+                                    <tr>
+                                        <th>First Name:</th>
+                                        <td id="firstNameBook">Peter</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Last Name:</th>
+                                        <td id="lastNameBook">Crouch</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Medical Specialty:</th>
+                                        <td id="medicalSpecialtyBook">Allergist</td>
+                                    </tr>
+                                    <tr id="officeAddressBookTR">
+                                        <th>Office Address:</th>
+                                        <td id="officeAddressBook">Andrea Papandreou 26, Athens</td>
+                                    </tr>
+                                    <tr><th>Working hours:</th><td>Tuesday, 17:00-21:00</td></tr>
+                                    <tr><th></th><td>Thursday, 17:00-21:00</td></tr>
+                                    <tr><th></th><td>Friday, 17:00-21:00</td></tr>
+                                    <tr id="doctorEmailBookTR">
+                                        <th>Email:</th>
+                                        <td id="doctorEmailBook">doctor8@ghn.gr</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Telephone:</th>
+                                        <td id="doctorTelephoneBook">+306986765234</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-lg-4">
                             <div class="row" id="bookapointmentsection">
                                 <div class="col-md-12">
-                                    <form id="bookAppointmentForm">
-                                        @Html.AntiForgeryToken()
+                                    <form id="bookAppointmentForm" novalidate="novalidate">
+                                        <input name="__RequestVerificationToken" type="hidden" value="5CuwLvTOCFoebjSXzNX7U6AWCREnlkcfr4_JFDuv01vegpvDUDojVrn4rh1xq9x4hwOtxw5dJptuQhJIPWVnIowM_KbaC8V-RM_nZoyO6M3nYVTzGcerOf58D6sDk2LKIZI5y4pMpoAbMOo_J4e85w2">
                                         <div class="validation-summary-errors text-danger">
                                             <ul>
-
                                             </ul>
                                         </div>
                                         <div class="form-group">
-                                            @Html.HiddenFor(m => m.Appointment.DoctorId)
+                                            <input data-val="true" data-val-required="The Doctor field is required." id="Appointment_DoctorId" name="Appointment.DoctorId" type="hidden" value="08e6d3e4-9526-4e40-97fb-52ca512a26ef">
                                         </div>
                                         <div class="form-group">
-                                            @Html.HiddenFor(m => m.Appointment.InsuredId)
+                                            <input data-val="true" data-val-required="The Patient field is required." id="Appointment_InsuredId" name="Appointment.InsuredId" type="hidden" value="9b62f3b7-59ea-479b-8270-4eca13a55b48">
                                         </div>
                                         <div class="form-group">
-                                            @Html.LabelFor(m => m.Appointment.AppointmentDate, new { @class = "col-md-12 control-label" })
+                                            <label class="col-md-12 control-label" for="Appointment_AppointmentDate">Appointment date</label>
                                             <div class="col-md-10">
-                                                @Html.TextBoxFor(m => m.Appointment.AppointmentDate, new { @class = "form-control", type = "date" })
-                                                @Html.ValidationMessageFor(m => m.Appointment.AppointmentDate, "", new { @class = "text-danger" })
+                                                <input class="form-control valid" data-val="true" data-val-date="The field Appointment date must be a date." data-val-required="The Appointment date field is required." id="Appointment_AppointmentDate" name="Appointment.AppointmentDate" type="date" value="" min="2020-01-17" aria-describedby="Appointment_AppointmentDate-error" aria-invalid="false">
+                                                <span class="text-danger field-validation-valid" data-valmsg-for="Appointment.AppointmentDate" data-valmsg-replace="true"></span>
                                             </div>
                                         </div>
-                                        <div id="NoAvailableAppointments" class="form-group">
+                                        <div id="NoAvailableAppointments" class="form-group" style="display: none;">
                                             <div class="row">
                                                 <p> We are sorry but all the doctor's appointments are booked on this day. Please try choose another day. </p>
                                             </div>
                                         </div>
-                                        <div id="NoWorkingDay" class="form-group">
+                                        <div id="NoWorkingDay" class="form-group" style="display: none;">
                                             <div class="row">
                                                 <p> We are sorry but the doctor does not work on this day. Please try choose another day. </p>
                                             </div>
                                         </div>
-                                        <div id="appointmentTime" class="form-group">
-                                            @Html.LabelFor(m => m.Appointment.AppointmentStartTime, new { @class = "col-md-12 control-label" })
+                                        <div id="appointmentTime" class="form-group" style="">
+                                            <label class="col-md-12 control-label" for="Appointment_AppointmentStartTime">Appointment time</label>
                                             <div class="col-md-10">
-                                                @Html.DropDownListFor(m => m.Appointment.AppointmentStartTime, new SelectList(new List<Object>()), new { @class = "form-control" })
-                                                @Html.ValidationMessageFor(m => m.Appointment.AppointmentStartTime, "", new { @class = "text-danger" })
+                                                <select class="form-control" data-val="true" data-val-required="The Appointment time field is required." id="Appointment_AppointmentStartTime" name="Appointment.AppointmentStartTime"><option value="18:00:00">18:00 - 18:30</option><option value="18:30:00">18:30 - 19:00</option><option value="19:00:00">19:00 - 19:30</option><option value="20:00:00">20:00 - 20:30</option><option value="20:30:00">20:30 - 21:00</option></select>
+                                                <span class="field-validation-valid text-danger" data-valmsg-for="Appointment.AppointmentStartTime" data-valmsg-replace="true"></span>
                                             </div>
                                         </div>
-                                        <div id="insuredComments" class="form-group">
-                                            @Html.LabelFor(m => m.Appointment.InsuredComments, new { @class = "col-md-12 control-label" })
+                                        <div id="insuredComments" class="form-group" style="">
+                                            <label class="col-md-12 control-label" for="Appointment_InsuredComments">Comments for doctor</label>
                                             <div class="col-md-10">
-                                                @Html.TextAreaFor(m => m.Appointment.InsuredComments, new { @class = "form-control" })
-                                                @Html.ValidationMessageFor(m => m.Appointment.InsuredComments, "", new { @class = "text-danger" })
+                                                <textarea class="form-control" cols="20" id="Appointment_InsuredComments" name="Appointment.InsuredComments" rows="2"></textarea>
+                                                <span class="field-validation-valid text-danger" data-valmsg-for="Appointment.InsuredComments" data-valmsg-replace="true"></span>
                                             </div>
                                         </div>
-                                        <div id="bookAppointmentButton" class="form-group">
+                                        <div id="bookAppointmentButton" class="form-group" style="">
                                             <div class="col-md-offset-2 col-md-10">
-                                                <input id="bookAppointment" type="submit" class="btn btn-outline-dark" value="Book Appointment" />
+                                                <input id="bookAppointment" type="submit" class="btn btn-outline-dark" value="Book Appointment">
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div id="profilesectionBook" class="col-md-12">
-                            <table class="table table-borderless mt-2">
-                                <tbody>
-                                    <tr>
-                                        <th>First Name:</th>
-                                        <td id="firstNameBook"> </td>
-                                    </tr>
-                                    <tr>
-                                        <th>Last Name:</th>
-                                        <td id="lastNameBook"> </td>
-                                    </tr>
-                                    <tr>
-                                        <th>Medical Specialty:</th>
-                                        <td id="medicalSpecialtyBook"> </td>
-                                    </tr>
-                                    <tr id="officeAddressBookTR">
-                                        <th>Office Address:</th>
-                                        <td id="officeAddressBook"> </td>
-                                    </tr>
-                                    <tr id="doctorEmailBookTR">
-                                        <th>Email:</th>
-                                        <td id="doctorEmailBook"> </td>
-                                    </tr>
-                                    <tr>
-                                        <th>Telephone:</th>
-                                        <td id="doctorTelephoneBook"> </td>
-                                    </tr>
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
@@ -359,7 +376,7 @@
                                     });
                                 }
                                 setTimeout(function() {
-                                    $('#send').removeClass("noClick");          
+                                    $('#send').removeClass("noClick");
                                 }, 4000);
                             }
                         })
@@ -507,7 +524,7 @@
             const month = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
             const year = today.getFullYear();
             $('#AppointmentDate').attr('min', year + '-' + month + '-' + day);
-            $('#Appointment_AppointmentDate').attr('min', year + '-' + month + '-' + day);        
+            $('#Appointment_AppointmentDate').attr('min', year + '-' + month + '-' + day);
             $('#search').on('submit', function (e) {
                 e.preventDefault();
                 if (e.target[3].type == 'date') {
