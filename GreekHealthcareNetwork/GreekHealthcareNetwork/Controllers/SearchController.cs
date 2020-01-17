@@ -124,7 +124,7 @@ namespace GreekHealthcareNetwork.Controllers
                         if (!unavailabilityEntries.Any(u => (u.UnavailableFromDate < appointmentDay && appointmentDay < u.UnavailableUntilDate) 
                                                          || (u.UnavailableFromDate == appointmentDay && appointmentDay == u.UnavailableUntilDate && u.UnavailableFromTime <= startTime && startTime < u.UnavailableUntilTime)
                                                          || (u.UnavailableFromDate == appointmentDay && appointmentDay < u.UnavailableUntilDate && u.UnavailableFromTime <= startTime)
-                                                         || (u.UnavailableUntilDate == appointmentDay && appointmentDay > u.UnavailableFromDate && startTime < u.UnavailableUntilTime)))
+                                                         || (u.UnavailableFromDate < appointmentDay && appointmentDay == u.UnavailableUntilDate && startTime < u.UnavailableUntilTime)))
                         {
                             var appointment = new Appointment();
                             appointment.Doctor = null;
