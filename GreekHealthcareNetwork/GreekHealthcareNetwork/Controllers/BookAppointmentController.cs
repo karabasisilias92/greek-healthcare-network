@@ -106,6 +106,7 @@ namespace GreekHealthcareNetwork.Controllers
             byte appointmentDuration = doctor.WorkingHours.SingleOrDefault(d => d.Day == appointment.AppointmentDate.DayOfWeek && d.WorkStartTime <= appointment.AppointmentStartTime && d.WorkEndTime >= appointment.AppointmentStartTime).AppointmentDuration;
             appointment.AppointmentEndTime = appointment.AppointmentStartTime + new TimeSpan(0, appointmentDuration, 0);
             appointment.AppointmentStatus = AppointmentStatus.Upcoming;
+            appointment.AppointmentChargePaid = true;
             _appointments.UpdateAppointment(appointment);
 
             return Ok();

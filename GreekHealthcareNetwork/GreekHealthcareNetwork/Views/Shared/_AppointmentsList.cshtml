@@ -398,7 +398,6 @@
                                     data: { "appointmentId": id },
                                     datatype: "json",
                                     success: function (data) {
-                                        debugger;
                                         console.log(data);
                                         $('#myEditModalContent').html(data);
                                         let doctorId = $('#myEditModalContent #DoctorId').val()

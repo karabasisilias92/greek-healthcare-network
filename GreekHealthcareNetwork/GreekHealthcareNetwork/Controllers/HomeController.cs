@@ -13,6 +13,10 @@ namespace GreekHealthcareNetwork.Controllers
         private readonly InsuredsRepository _insureds = new InsuredsRepository();
         public ActionResult Index(SearchLoginViewModel searchLoginViewModel)
         {
+            if (User.IsInRole("Administrator"))
+            {
+                return RedirectToAction("Index", "Admin");
+            }
             ViewBag.ReturnUrl = string.Empty;
             searchLoginViewModel.MedicalSpecialties = new List<MedicalSpecialty>();
             for(int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
