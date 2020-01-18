@@ -241,9 +241,8 @@
                                         '<td>' + appointmentStart[0] + ':' + appointmentStart[1] + ' - ' + appointmentEnd[0] + ':' + appointmentEnd[1] + '</td>' +
                                         '<td>' + appointment.AppointmentStatus + '</td>' +
                                         '<td>' +
-                                        (isUserDoctor ? '<button type="button" class="btn btn-light showAppointmentDetails table-button" data-id="' + appointment.Id + '">View</button><button class="btn btn-light table-button sendMessage" data-id="' + appointment.Insured.User.Id + '">Message</button>' : '<button class="btn btn-light table-button sendMessage" data-id="' + appointment.Doctor.User.Id + '">Message</button>') +
-                                        ((appointment.AppointmentStatus != "Upcoming" && isUserInsured)  ? '<button type="button" class="btn btn-light showAppointmentDetails table-button" data-id="' + appointment.Id + '">View</button>' : '') +
-                                        ((appointment.AppointmentStatus == "Upcoming" && isUserInsured) ? '<button type="button" class="btn btn-success editAppointmentDetails table-button" data-id="' + appointment.Id + '">Edit</button>' : '') +
+                                        (isUserDoctor ? '<button type="button" class="btn btn-success showAppointmentDetails table-button" data-id="' + appointment.Id + '">View</button><button class="btn btn-secondary table-button sendMessage" data-id="' + appointment.Insured.User.Id + '">Message</button>' : '<button type="button" class="btn btn-success showAppointmentDetails table-button" data-id="' + appointment.Id + '">View</button><button class="btn btn-secondary table-button sendMessage" data-id="' + appointment.Doctor.User.Id + '">Message</button>') +
+                                        ((appointment.AppointmentStatus == "Upcoming" && isUserInsured) ? '<button type="button" class="btn btn-warning editAppointmentDetails table-button" data-id="' + appointment.Id + '">Edit</button>' : '') +
                                         ((appointment.AppointmentStatus == "Upcoming") ? '<button class="btn btn-danger table-button cancel-appointment" data-id="' + appointment.Id + '">Cancel</button>' : '') +
                                         '</td>'
                                     );

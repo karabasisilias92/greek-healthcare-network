@@ -193,7 +193,7 @@
                                     const action = $(document.createElement('td'));
                                     const view = $(document.createElement('button'));
                                     $(view).text('View');
-                                    $(view).addClass('btn btn-light viewBtn');
+                                    $(view).addClass('btn btn-success viewBtn');
                                     $(view).attr('data-id', message.Id);
 
 
@@ -399,8 +399,15 @@
                     }
                 });
             })
+            $('#viewMessage').on('hidden.bs.modal', function () {
+                $('#sentmessagearea').trigger('reset');
+                $('#sentmessagearea span[data-valmsg-for="Message.MessageText"]').children().remove();
+                $('#sentmessagearea div.validation-summary-errors > ul').children().remove();
+            })
             $('#newMessage').on('hidden.bs.modal', function () {
                 $('#messagearea').trigger('reset');
+                $('#messagearea span[data-valmsg-for="Message.Subject"]').children().remove();
+                $('#messagearea span[data-valmsg-for="Message.MessageText"]').children().remove();
                 $('#messagearea div.validation-summary-errors > ul').children().remove();
             })
             $('#messagearea #send').click(function (e) {

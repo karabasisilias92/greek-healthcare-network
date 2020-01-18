@@ -445,10 +445,12 @@
                             $('#bookAppointment').prop('disabled', true);
                             $('#bookAppointment').off('click');
                         }
-                        $("#newMessage").on("hidden.bs.modal", function () {
-                            $('#Message_Subject').val("");
-                            $('#Message_MessageText').val("");
-                        });
+                        $('#newMessage').on('hidden.bs.modal', function () {
+                            $('#messagearea').trigger('reset');
+                            $('#messagearea span[data-valmsg-for="Message.Subject"]').children().remove();
+                            $('#messagearea span[data-valmsg-for="Message.MessageText"]').children().remove();
+                            $('#messagearea div.validation-summary-errors > ul').children().remove();
+                        })
                         $('.bookAppointments').click(function (e) {
                             let id = $(e.target).data('id');
                             $.ajax({
