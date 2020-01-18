@@ -1,4 +1,5 @@
 ﻿using GreekHealthcareNetwork.Models;
+using GreekHealthcareNetwork.Repositories;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System;
@@ -45,6 +46,14 @@ namespace GreekHealthcareNetwork.Controllers
         public ActionResult VisitorMessages()
         {
             return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult AdminWithLessVisitorMessagesUnreplied()
+        {
+            var messages = new MessagesRepository();
+            var adminId = messages.AdminWithLessVisitorMessagesUnreplied();
+            return Json(new { adminId = adminId}, JsonRequestBehavior.AllowGet);
         }
     }
 }

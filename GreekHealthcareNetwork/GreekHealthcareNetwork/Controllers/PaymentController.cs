@@ -52,7 +52,7 @@ namespace GreekHealthcareNetwork.Controllers
         {
             // Get context from the paypal based on clientId and clientSecret for payment
             APIContext apiContext = PaypalConfiguration.GetAPIContext();
-            string paymentFor = "";
+            string paymentFor;
             try
             {
                 //A resource representing a Payer that funds a payment Payment Method as paypal  
