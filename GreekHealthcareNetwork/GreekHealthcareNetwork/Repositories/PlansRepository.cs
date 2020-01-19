@@ -1,6 +1,7 @@
 ﻿using GreekHealthcareNetwork.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -59,12 +60,42 @@ namespace GreekHealthcareNetwork.Repositories
                 }
                 else
                 {
+                    var doctorUsers = db.Users.Where(u => db.Doctors.Where(d => d.DoctorPlanId == id).Select(d => d.UserId).Contains(u.Id)).ToList();
                     db.DoctorPlans.Remove(entry);
-                    db.SaveChanges();
+                    db.SaveChanges();                    
+                    foreach(var user in doctorUsers) {
+                        var receivedMessages = db.Messages.Where(m => m.RecipientId.Equals(user.Id));
+                        foreach(var message in receivedMessages)
+                        {
+                            db.Messages.Remove(message);
+                        }
+                        DirectoryInfo directory = new DirectoryInfo(HttpContext.Current.Server.MapPath("~/Content/img/Doctors/" + user.Id));
+                        EmptyFolder(directory);
+                        Directory.Delete(HttpContext.Current.Server.MapPath("~/Content/img/Doctors/" + user.Id));
+                        db.SaveChanges();
+                        db.Users.Remove(user);
+                        db.SaveChanges();
+                    }
                     result = true;
                 }
             }
             return result;
+        }
+
+        private void EmptyFolder(DirectoryInfo directory)
+        {
+
+            foreach (FileInfo file in directory.GetFiles())
+            {
+                file.Delete();
+            }
+
+            foreach (DirectoryInfo subdirectory in directory.GetDirectories())
+            {
+                EmptyFolder(subdirectory);
+                subdirectory.Delete();
+            }
+
         }
     }
 }

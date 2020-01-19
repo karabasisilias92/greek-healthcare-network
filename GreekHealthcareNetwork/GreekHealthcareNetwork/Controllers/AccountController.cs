@@ -262,6 +262,9 @@ namespace GreekHealthcareNetwork.Controllers
                             model.MedicalSpecialties.Add((MedicalSpecialty)i);
                         }
                         await UserManager.DeleteAsync(user);
+                        DirectoryInfo directory = new DirectoryInfo(Server.MapPath("~/Content/img/Doctors/" + user.Id));
+                        EmptyFolder(directory);
+                        Directory.Delete(Server.MapPath("~/Content/img/Doctors/" + user.Id));
                         // If we could not create doctor for some reason, something failed, redisplay form
 
                         ModelState.AddModelError("", "Something went wrong, please try again.");
@@ -464,6 +467,9 @@ namespace GreekHealthcareNetwork.Controllers
                     catch (Exception)
                     {
                         await UserManager.DeleteAsync(user);
+                        DirectoryInfo directory = new DirectoryInfo(Server.MapPath("~/Content/img/Doctors/" + user.Id));
+                        EmptyFolder(directory);
+                        Directory.Delete(Server.MapPath("~/Content/img/Doctors/" + user.Id));
                         // If we could not create doctor for some reason, something failed, redisplay form
 
                         ModelState.AddModelError("", "Something went wrong, please try again.");
@@ -787,6 +793,22 @@ namespace GreekHealthcareNetwork.Controllers
                 return Redirect(returnUrl);
             }
             return RedirectToAction("Index", "Home");
+        }
+
+        private void EmptyFolder(DirectoryInfo directory)
+        {
+
+            foreach (FileInfo file in directory.GetFiles())
+            {
+                file.Delete();
+            }
+
+            foreach (DirectoryInfo subdirectory in directory.GetDirectories())
+            {
+                EmptyFolder(subdirectory);
+                subdirectory.Delete();
+            }
+
         }
 
 
