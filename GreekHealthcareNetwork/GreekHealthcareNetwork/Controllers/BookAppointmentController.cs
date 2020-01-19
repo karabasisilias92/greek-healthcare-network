@@ -29,7 +29,7 @@ namespace GreekHealthcareNetwork.Controllers
                 byte appointmentDuration = doctor.WorkingHours.SingleOrDefault(d => d.Day == appointment.AppointmentDate.DayOfWeek && d.WorkStartTime <= appointment.AppointmentStartTime && d.WorkEndTime >= appointment.AppointmentStartTime).AppointmentDuration;
                 appointment.AppointmentEndTime = appointment.AppointmentStartTime + new TimeSpan(0, appointmentDuration, 0);
                 appointment.AppointmentStatus = AppointmentStatus.Upcoming;
-                var appointmentCost = doctor.AppointmentCost.AppointmentCost;
+                var appointmentCost = doctor.DoctorPlan.AppointmentCost;
                 var insuredPlan = insured.InsuredPlan;
                 int id = _appointments.AppointmentEntryExists(insured.UserId, doctor.UserId, appointment.AppointmentDate, appointment.AppointmentStartTime);
                 if (insuredPlan.Name.Equals("Gold"))

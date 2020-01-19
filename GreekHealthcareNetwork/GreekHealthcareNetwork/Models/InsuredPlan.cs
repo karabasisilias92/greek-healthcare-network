@@ -19,6 +19,7 @@ namespace GreekHealthcareNetwork.Models
 
         [Required]
         [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "{0:0,0.00}")]
         [Column(TypeName = "money")]
         [Display(Name = "Plan fee")]
         public decimal PlanFee { get; set; }

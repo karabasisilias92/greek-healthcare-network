@@ -4,7 +4,7 @@
 @using GreekHealthcareNetwork.Repositories;
 @using Microsoft.AspNet.Identity;
 @{
-    ViewBag.Title = "VisitorsMessages";
+    ViewBag.Title = "Visitor Messages";
     var CurrentUserId = User.Identity.GetUserId();
     var Users = new UsersRepository();
 }
@@ -16,7 +16,7 @@
     <div class="col-8 offset-3 mt-5">
         <div class="page-header">
             <h1>
-                Visitors Messages
+                @ViewBag.Title
             </h1>
         </div>
         <div>

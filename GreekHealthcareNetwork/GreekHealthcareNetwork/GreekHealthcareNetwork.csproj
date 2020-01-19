@@ -189,6 +189,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AppointmentsController.cs" />
     <Compile Include="Controllers\BookAppointmentController.cs" />
+    <Compile Include="Controllers\DoctorPlansController.cs" />
     <Compile Include="Controllers\DoctorsController.cs" />
     <Compile Include="Controllers\DoctorUnavailabilitiesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -326,12 +327,20 @@
     <Compile Include="Migrations\202001160858382_Update DoctorUnavailability Entity.Designer.cs">
       <DependentUpon>202001160858382_Update DoctorUnavailability Entity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001182239241_Unique index for Medical Specialty in Doctor Plans table.cs" />
+    <Compile Include="Migrations\202001182239241_Unique index for Medical Specialty in Doctor Plans table.Designer.cs">
+      <DependentUpon>202001182239241_Unique index for Medical Specialty in Doctor Plans table.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001191034383_Drop table Appointment Cost Per Specialty. Add appointment cost to doctor plan..cs" />
+    <Compile Include="Migrations\202001191034383_Drop table Appointment Cost Per Specialty. Add appointment cost to doctor plan..Designer.cs">
+      <DependentUpon>202001191034383_Drop table Appointment Cost Per Specialty. Add appointment cost to doctor plan..cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
-    <Compile Include="Models\AppointmentCostPerSpecialty.cs" />
     <Compile Include="Models\Doctor.cs" />
+    <Compile Include="Models\DoctorPlansViewModel.cs" />
     <Compile Include="Models\DoctorsUnavailability.cs" />
     <Compile Include="Models\Enums\AppointmentStatus.cs" />
     <Compile Include="Models\Appointment.cs" />
@@ -353,6 +362,7 @@
     <Compile Include="Repositories\AppointmentsRespository.cs" />
     <Compile Include="Repositories\DoctorsRepository.cs" />
     <Compile Include="Repositories\InsuredsRepository.cs" />
+    <Compile Include="Repositories\PlansRepository.cs" />
     <Compile Include="Repositories\UsersRepository.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Models\PaySubcriptionViewModel.cs" />
@@ -584,6 +594,7 @@
     <Content Include="Views\Admin\VisitorMessages.cshtml" />
     <Content Include="Views\Admin\CreateAdminUser.cshtml" />
     <Content Include="Views\Admin\AdminUserCreatedSuccessfully.cshtml" />
+    <Content Include="Views\Admin\DoctorPlans.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -702,6 +713,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001160858382_Update DoctorUnavailability Entity.resx">
       <DependentUpon>202001160858382_Update DoctorUnavailability Entity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001182239241_Unique index for Medical Specialty in Doctor Plans table.resx">
+      <DependentUpon>202001182239241_Unique index for Medical Specialty in Doctor Plans table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001191034383_Drop table Appointment Cost Per Specialty. Add appointment cost to doctor plan..resx">
+      <DependentUpon>202001191034383_Drop table Appointment Cost Per Specialty. Add appointment cost to doctor plan..cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

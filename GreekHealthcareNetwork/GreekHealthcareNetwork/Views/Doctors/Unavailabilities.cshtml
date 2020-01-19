@@ -160,6 +160,11 @@
         $(document).ready(function () {
             $('#unavailabilityModal').on('hidden.bs.modal', function () {
                 $('#Id').val('');
+                $('span[data-valmsg-for="UnavailableFromDate"]').children().remove();
+                $('span[data-valmsg-for="UnavailableFromTime"]').children().remove();
+                $('span[data-valmsg-for="UnavailableUntilDate"]').children().remove();
+                $('span[data-valmsg-for="UnavailableUntilTime"]').children().remove();
+                $('.validation-summary-errors ul').children().remove();
                 $('#unavailabilityForm').trigger('reset');
             })
             $('#declareUnavailability').click(() => $('#unavailabilityModal').modal('show'));
