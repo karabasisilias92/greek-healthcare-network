@@ -85,31 +85,6 @@ namespace GreekHealthcareNetwork.Controllers
             return Ok(appointments);
         }
 
-        //[HttpGet]
-        //[Route("api/Search/InsuredAppointmentsSearchResults")]
-        //public IHttpActionResult SearchResults(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty, DateTime appointmentDay, string userId)
-        //{
-        //    var appointments = _appointments.GetDoctorFilteredAppointments(doctorsFirstName, doctorsLastName, doctorsSpecialty, appointmentDay, userId);
-        //    if (appointments == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(appointments);
-        //}
-
-        //[HttpGet]
-        //[Route("api/Search/DoctorAppointmentsSearchResults")]
-        //public IHttpActionResult searchResults(string insuredsFirstName, string insuredsLastName, DateTime appointmentDate, string userId)
-        //{
-        //    var appointments = _appointments.GetInsuredFilteredAppointments(insuredsFirstName, insuredsLastName, appointmentDate, userId);
-        //    if (appointments == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(appointments);
-        //}
-
-
         [HttpGet]
         [Route("api/Search/SearchAppointmentById/{appointmentId}")]
         [Authorize]
@@ -136,6 +111,7 @@ namespace GreekHealthcareNetwork.Controllers
             }
             var appointmentSlots = new List<Appointment>();
             var appointments = _appointments.GetDoctorAppointmentsOnDate(appointmentDay, doctorId);
+            var unavailabilityEntries = _doctors.GetUnavailabilitiesForDate(appointmentDay, doctorId).ToList();
             if (appointments == null || appointments.Count() == 0)
             {
                 foreach (var item in workingHoursOfDay)
@@ -145,14 +121,20 @@ namespace GreekHealthcareNetwork.Controllers
                     var appDuration = item.AppointmentDuration;
                     while (startTime < endTime)
                     {
-                        var appointment = new Appointment();
-                        appointment.Doctor = null;
-                        appointment.Insured = null;
-                        appointment.AppointmentDate = appointmentDay;
-                        appointment.AppointmentStartTime = (TimeSpan)startTime;
-                        appointment.AppointmentEndTime = (TimeSpan)startTime + new TimeSpan(0, appDuration, 0);
-                        appointmentSlots.Add(appointment);
-                        startTime = appointment.AppointmentEndTime;
+                        if (!unavailabilityEntries.Any(u => (u.UnavailableFromDate < appointmentDay && appointmentDay < u.UnavailableUntilDate) 
+                                                         || (u.UnavailableFromDate == appointmentDay && appointmentDay == u.UnavailableUntilDate && u.UnavailableFromTime <= startTime && startTime < u.UnavailableUntilTime)
+                                                         || (u.UnavailableFromDate == appointmentDay && appointmentDay < u.UnavailableUntilDate && u.UnavailableFromTime <= startTime)
+                                                         || (u.UnavailableFromDate < appointmentDay && appointmentDay == u.UnavailableUntilDate && startTime < u.UnavailableUntilTime)))
+                        {
+                            var appointment = new Appointment();
+                            appointment.Doctor = null;
+                            appointment.Insured = null;
+                            appointment.AppointmentDate = appointmentDay;
+                            appointment.AppointmentStartTime = (TimeSpan)startTime;
+                            appointment.AppointmentEndTime = (TimeSpan)startTime + new TimeSpan(0, appDuration, 0);
+                            appointmentSlots.Add(appointment);
+                        }
+                        startTime += new TimeSpan(0, appDuration, 0);
                     }
                 }
             }
@@ -168,13 +150,16 @@ namespace GreekHealthcareNetwork.Controllers
                     {   
                         if (!appointmentsStartTime.Contains((TimeSpan)startTime))
                         {
-                            var appointment = new Appointment();
-                            appointment.Doctor = null;
-                            appointment.Insured = null;
-                            appointment.AppointmentDate = appointmentDay;
-                            appointment.AppointmentStartTime = (TimeSpan)startTime;
-                            appointment.AppointmentEndTime = (TimeSpan)startTime + new TimeSpan(0, appDuration, 0);
-                            appointmentSlots.Add(appointment);
+                            if (!unavailabilityEntries.Any(u => u.UnavailableFromTime <= startTime && startTime < u.UnavailableUntilTime))
+                            {
+                                var appointment = new Appointment();
+                                appointment.Doctor = null;
+                                appointment.Insured = null;
+                                appointment.AppointmentDate = appointmentDay;
+                                appointment.AppointmentStartTime = (TimeSpan)startTime;
+                                appointment.AppointmentEndTime = (TimeSpan)startTime + new TimeSpan(0, appDuration, 0);
+                                appointmentSlots.Add(appointment);
+                            }
                         }
                         startTime += new TimeSpan(0, appDuration, 0);
                     }

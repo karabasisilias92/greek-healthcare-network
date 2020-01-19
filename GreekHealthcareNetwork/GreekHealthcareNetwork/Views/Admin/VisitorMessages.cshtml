@@ -1,0 +1,76 @@
+﻿@model GreekHealthcareNetwork.Models.SearchLoginViewModel
+@using Microsoft.AspNet.Identity;
+@using GreekHealthcareNetwork.Models;
+@using GreekHealthcareNetwork.Repositories;
+@using Microsoft.AspNet.Identity;
+@{
+    ViewBag.Title = "Visitor Messages";
+    var CurrentUserId = User.Identity.GetUserId();
+    var Users = new UsersRepository();
+}
+
+@section cssScripts{
+    <link href="@Url.Content("~/Content/messages.css")" type="text/css" rel="stylesheet" />
+}
+<main id="main">
+    <div class="col-8 offset-3 mt-5">
+        <div class="page-header">
+            <h1>
+                @ViewBag.Title
+            </h1>
+        </div>
+        <div>
+            <table class="table mt-4">
+                <thead>
+                    <tr>
+                        <th scope="col">From</th>
+                        <th scope="col">To</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="visitorMessageList">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            function listVisitorMesssages(UserId) {
+                $.ajax({
+                    dataType: 'json',
+                    type: 'get',
+                    url: '/api/Admin/GetVisitorMessages?UserId=' + UserId,
+                    success: function (data) {
+                        $('#visitorMessageList tbody').empty();
+                        data.forEach(function (message) {
+                            const datePart = message.SentDate.split('T')[0];
+                            const datePartSplitted = datePart.split('-');
+                            $('#visitorMessageList').append(
+                                '<tr><td>' + message.Sender.FirstName + ' ' + message.Sender.LastName
+                                + '</td><td>' + message.Recipient.FirstName + ' ' + message.Recipient.LastName
+                                + '</td><td>' + message.Email
+                                + '</td><td>' + (datePartSplitted[2] + '-' + datePartSplitted[1] + '-' + datePartSplitted[0])
+                                + '</td><td>' + (message.SentTime.split(':')[0] + ':' + message.SentTime.split(':')[1])
+                                + '</td>'
+                                + '<td><button class="btn btn-success table-button viewBtn">View</button>'
+                                + '</tr>')
+                        });
+                    },
+                    error: function (error) {
+                        console.log(error)
+                    }
+                })
+
+            }
+            listVisitorMesssages('@CurrentUserId');
+
+        })
+    </script>
+}

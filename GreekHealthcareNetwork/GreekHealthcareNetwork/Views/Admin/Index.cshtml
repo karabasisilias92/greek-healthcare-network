@@ -2,20 +2,6 @@
     ViewBag.Title = "Index";
 }
 
-<h1 style="margin: 30vh 37vw;">Welcome @ViewBag.FullName</h1>
+<h1 class="text-center" style="margin-top: 30vh;">Welcome @ViewBag.FullName</h1>
 
-@section scripts {
-    <script>
-        $(document).ready(function () {
-            const firstRowHeight = +$('#firstRow').css('height').split('px')[0];;
-            console.log(firstRowHeight);
-            $('#firstRow').css('height', 'calc(100vh - 156.4px)');
-            const minHeight = +$('#firstRow').css('height').split('px')[0];;
-            console.log(minHeight);
-            if (firstRowHeight > minHeight) {
-                $('#firstRow').css('height', firstRowHeight);
-            }
-        })
-    </script>
-}
 

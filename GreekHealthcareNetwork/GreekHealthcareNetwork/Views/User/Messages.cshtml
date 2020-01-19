@@ -1,12 +1,10 @@
 ﻿@model GreekHealthcareNetwork.Models.SearchLoginViewModel
-@using Microsoft.AspNet.Identity;
-@using GreekHealthcareNetwork.Models;
 @using GreekHealthcareNetwork.Repositories;
 @using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Messages";
     var CurrentUserId = User.Identity.GetUserId();
-    var Users = new UsersRepository();
+    var Users = new UsersRepository();    
 }
 
 @section cssScripts{
@@ -14,13 +12,15 @@
 }
 
 <main id="main">
-    <div>
-    </div>
-    <div class="col-8 offset-2 mt-5">
-        <div class="page-header">
+    <div id="mainDiv1" class="col-8 mt-5">
+        <div class="page-header d-flex justify-content-between align-items-center">
             <h1>
                 Messages
             </h1>
+            @if (User.IsInRole("Doctor") || User.IsInRole("Insured"))
+            {
+                <button id="contactAdmin" class="btn btn-secondary">Contact Support</button>
+            }
         </div>
         <div>
             <table class="table mt-4">
@@ -61,7 +61,7 @@
                 <div class="modal-body">
                     <h5 id="subject"></h5>
                     <h5 class="mb-1"><b>Message:</b></h5>
-                    <p class="mb-3" id="messagetext"></p>
+                    <pre class="mb-3" id="messagetext"></pre>
                     <hr />
                     <div class="form-group">
                         <div id="errorContainerSentMessage" class="container">
@@ -119,12 +119,12 @@
     </div>
 </div>
 
+@Html.Partial("_NewMessage")
 
 
 @section scripts{
     @Scripts.Render("~/bundles/jqueryval")
     <script>
-
         $(document).ready(function () {
             function listMessages(UserId) {
                 $.ajax({
@@ -193,9 +193,9 @@
                                     const action = $(document.createElement('td'));
                                     const view = $(document.createElement('button'));
                                     $(view).text('View');
-                                    $(view).addClass('btn btn-light viewBtn');
+                                    $(view).addClass('btn btn-success viewBtn');
                                     $(view).attr('data-id', message.Id);
-                                
+
 
                                     $(action).append(view);
 
@@ -209,14 +209,14 @@
                                     type: 'get',
                                     url: '/api/Messages?&id=' + id,
                                     success: function (message) {
-                                        $('#errorContainerMessage').hide();
-                                        $('#successContainerMessage').show();
-                                        $('#successContainerSentMessage').hide();
-                                        $('#errorContainerSentMessage').hide();
-                                        $('#normalContainerSentMessage').show();
-                                        $('#Message_ConversationId').val(message.ConversationId);
-                                        $('#Message_Subject').val(message.Subject);
-                                        $('#reply').attr('data-id', message.Id);
+                                        $('#viewMessage #errorContainerMessage').hide();
+                                        $('#viewMessage #successContainerMessage').show();
+                                        $('#viewMessage #successContainerSentMessage').hide();
+                                        $('#viewMessage #errorContainerSentMessage').hide();
+                                        $('#viewMessage #normalContainerSentMessage').show();
+                                        $('#viewMessage #Message_ConversationId').val(message.ConversationId);
+                                        $('#viewMessage #Message_Subject').val(message.Subject);
+                                        $('#viewMessage #reply').attr('data-id', message.Id);
                                         $(e.target).parent().parent().removeClass('font-weight-bold');
                                         let model = message;
                                         model.MessageStatus = 'Read';
@@ -233,29 +233,28 @@
                                                 console.log('error')
                                             }
                                         })
-                                        let elem = $('#messageFor');
+                                        let elem = $('#viewMessage #messageFor');
                                         if (message.SenderId == "@CurrentUserId") {
-                                            $('#Message_SenderId').val(message.SenderId);
-                                            $('#Message_RecipientId').val(message.RecipientId);
+                                            $('#viewMessage #Message_SenderId').val(message.SenderId);
+                                            $('#viewMessage #Message_RecipientId').val(message.RecipientId);
                                             $(elem).html('<b>Message to:</b> ' + message.Recipient.FirstName + ' ' + message.Recipient.LastName)
                                         }
                                         else {
-                                            $('#Message_SenderId').val(message.RecipientId);
-                                            $('#Message_RecipientId').val(message.SenderId);
+                                            $('#viewMessage #Message_SenderId').val(message.RecipientId);
+                                            $('#viewMessage #Message_RecipientId').val(message.SenderId);
                                             $(elem).html('<b>Message from:</b> ' + message.Sender.FirstName + ' ' + message.Sender.LastName)
                                         }
-                                        $('#subject').html('<b>Subject:</b> ' + message.Subject);
-                                        $('#messagetext').text(message.MessageText);
+                                        $('#viewMessage #subject').html('<b>Subject:</b> ' + message.Subject);
+                                        $('#viewMessage #messagetext').text(message.MessageText);
                                         $('#viewMessage').modal('show');
                                     },
                                     error: function (error) {
-                                        $('#errorContainerMessage').show();
-                                        $('#successContainerMessage').hide();
+                                        $('#viewMessage #errorContainerMessage').show();
+                                        $('#viewMessage #successContainerMessage').hide();
                                     }
                                 })
                             });
                         }
-                        fixFooterPosition(data.length);
                     },
                     error: function (error) {
                         console.log(error);
@@ -266,6 +265,14 @@
 
                 })
             }
+            @if(User.IsInRole("Administrator"))
+            {
+                @:$('#mainDiv1').addClass('offset-3');
+            }
+            else
+            {
+                @:$('#mainDiv1').addClass('offset-2');
+            }
             $('#reply').click(function (e) {
                 e.preventDefault();
                 const $form = $('#sentmessagearea');
@@ -274,24 +281,24 @@
                 if ($form.valid()) {
                     let model = new Object();
                     model.Message = new Object();
-                    model.Message.ConversationId = $('#Message_ConversationId').val();
-                    model.Message.SenderId = $('#Message_SenderId').val();
-                    model.Message.RecipientId = $('#Message_RecipientId').val();
-                    model.Message.Subject = $('#Message_Subject').val();
-                    model.Message.MessageText = $('#Message_MessageText').val();
+                    model.Message.ConversationId = $('#sentmessagearea #Message_ConversationId').val();
+                    model.Message.SenderId = $('#sentmessagearea #Message_SenderId').val();
+                    model.Message.RecipientId = $('#sentmessagearea #Message_RecipientId').val();
+                    model.Message.Subject = $('#sentmessagearea #Message_Subject').val();
+                    model.Message.MessageText = $('#sentmessagearea #Message_MessageText').val();
                     model.FirstName = "";
                     model.LastName = "";
                     model.InsuredPlans = [];
                     model.DoctorSpecialty = -1;
                     model.MedicalSpecialties = [];
                     model.AppointmentDate = null;
-                    model.UserName = $('#UserName1').val();
-                    model.Password = $('#Password1').val();
+                    model.UserName = $('#sentmessagearea #UserName1').val();
+                    model.Password = $('#sentmessagearea #Password1').val();
                     model.RememberMe = false;
                     model.VisitorMessage = null;
                     model = JSON.stringify(model)
                     $.ajax({
-                        contentType: 'application/json',
+                    contentType: 'application/json',
                         type: 'post',
                         url: '/api/Messages',
                         data: model,
@@ -300,7 +307,7 @@
                         success: function () {
                             let id = $('#reply').data('id');
                             $.ajax({
-                                dataType: 'json',
+                            dataType: 'json',
                                 type: 'get',
                                 url: '/api/Messages?&id=' + id,
                                 success: function (message) {
@@ -312,9 +319,9 @@
                                     }
                                     let m = message;
                                     m.MessageStatus = 'Replied';
-                                    m = JSON.stringify(m);                           
+                                    m = JSON.stringify(m);
                                     $.ajax({
-                                        contentType: 'application/json',
+                                    contentType: 'application/json',
                                         type: 'put',
                                         data: m,
                                         url: '/api/Messages',
@@ -330,17 +337,17 @@
                                     console.log(error)
                                 }
 
-                            });                                
-                            $('#Message_MessageText').val("");
-                            $('#normalContainerSentMessage').hide();
-                            $('#errorContainerSentMessage').hide();
-                            $('#successContainerSentMessage').show();
+                            });
+                            $('#sentmessagearea #Message_MessageText').val("");
+                            $('#viewMessage #normalContainerSentMessage').hide();
+                            $('#viewMessage #errorContainerSentMessage').hide();
+                            $('#viewMessage #successContainerSentMessage').show();
                             setTimeout(function () {
                                 $('#viewMessage').modal("hide");
                             }, 3000)
                         },
                         error: function (error) {
-                            $('#errorContainerSentMessage').show();
+                            $('#viewMessage #errorContainerSentMessage').show();
                             const errorObject = error.responseJSON.ModelState;
                             $('#sentmessagearea div.validation-summary-errors > ul').children().remove();
                             for (var property in errorObject) {
@@ -364,7 +371,7 @@
                     });
                 }
                 else {
-                    $('#errorContainerSentMessage').show();
+                    $('#viewMessage #errorContainerSentMessage').show();
                     console.log($form.validate().errorList);
                     $.each($form.validate().errorList, function (key, value) {
                         console.log(value);
@@ -374,11 +381,123 @@
                     });
                 }
             })
-
+            $('#contactAdmin').click(function () {
+                $.ajax({
+                    type: 'get',
+                    dataType: 'json',
+                    url: '/Admin/AdminWithLessNonVisitorMessagesUnreplied',
+                    success: function (data) {
+                        console.log('in');
+                        $('#newMessage #errorContainerMessage').hide();
+                        $('#newMessage #successContainerMessage').hide();
+                        $('#messagearea #Message_RecipientId').val(data.adminId);
+                        $('#newMessage #normalContainerMessage').show();
+                        $('#newMessage').modal('show');
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            })
+            $('#viewMessage').on('hidden.bs.modal', function () {
+                $('#sentmessagearea').trigger('reset');
+                $('#sentmessagearea span[data-valmsg-for="Message.MessageText"]').children().remove();
+                $('#sentmessagearea div.validation-summary-errors > ul').children().remove();
+            })
+            $('#newMessage').on('hidden.bs.modal', function () {
+                $('#messagearea').trigger('reset');
+                $('#messagearea span[data-valmsg-for="Message.Subject"]').children().remove();
+                $('#messagearea span[data-valmsg-for="Message.MessageText"]').children().remove();
+                $('#messagearea div.validation-summary-errors > ul').children().remove();
+            })
+            $('#messagearea #send').click(function (e) {
+                if ($('#messagearea #send').hasClass("noClick")) {
+                    e.preventDefault();
+                }
+                else {
+                    $('#messagearea #send').addClass("noClick");
+                    const $form = $('#messagearea');
+                    $.validator.unobtrusive.parse($form);
+                    $form.validate();
+                    if ($form.valid()) {
+                        let model = new Object();
+                        model.Message = new Object();
+                        model.Message.ConversationId = 0;
+                        model.Message.SenderId = $('#messagearea #Message_SenderId').val();
+                        model.Message.RecipientId = $('#messagearea #Message_RecipientId').val();
+                        model.Message.Subject = $('#messagearea #Message_Subject').val();
+                        model.Message.MessageText = $('#messagearea #Message_MessageText').val();
+                        model.FirstName = "";
+                        model.LastName = "";
+                        model.InsuredPlans = [];
+                        model.DoctorSpecialty = -1;
+                        model.MedicalSpecialties = [];
+                        model.AppointmentDate = null;
+                        model.UserName = $('#messagearea #UserName1').val();
+                        model.Password = $('#messagearea #Password1').val();
+                        model.RememberMe = false;
+                        model.VisitorMessage = null;
+                        model = JSON.stringify(model)
+                        $.ajax({
+                            contentType: 'application/json',
+                            type: 'post',
+                            url: '/api/Messages',
+                            data: model,
+                            cache: false,
+                            processData: false,
+                            success: function () {
+                                $('#messagearea #Message_Subject').val("");
+                                $('#messagearea #Message_MessageText').val("");
+                                $('#newMessage #normalContainerMessage').hide();
+                                $('#newMessage #errorContainerMessage').hide();
+                                $('#newMessage #successContainerMessage').show();
+                                setTimeout(function () {
+                                    $('#newMessage').modal("hide");
+                                }, 3000)
+                            },
+                            error: function (error) {
+                                $('#newMessage #errorContainerMessage').show();
+                                const errorObject = error.responseJSON.ModelState;
+                                $('#messagearea div.validation-summary-errors > ul').children().remove();
+                                for (var property in errorObject) {
+                                    if (errorObject.hasOwnProperty(property)) {
+                                        if (property == '') {
+                                            $('#messagearea div.validation-summary-errors > ul').append('<li>' + errorObject[property] + '</li>')
+                                        }
+                                    }
+                                }
+                                const $form = $('#messagearea');
+                                $.validator.unobtrusive.parse($form);
+                                $form.validate();
+                                if (!$form.valid()) {
+                                    $.each($form.validate().errorList, function (key, value) {
+                                        const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                                        $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                                        $errorSpan.show();
+                                    });
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        $('#newMessage #errorContainerMessage').show();
+                        console.log($form.validate().errorList);
+                        $.each($form.validate().errorList, function (key, value) {
+                            console.log(value);
+                            const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                            $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                            $errorSpan.show();
+                        });
+                    }
+                    setTimeout(function() {
+                        $('#newMessage #send').removeClass("noClick");
+                    }, 4000);
+                }
+            })
             listMessages('@CurrentUserId');
         })
 
-    </script>
+</script>
 
 }
 

@@ -30,6 +30,7 @@ namespace GreekHealthcareNetwork.Models
         public virtual Insured Insured { get; set; }
 
         [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "{0:0,0.00}")]
         [Column(TypeName = "money")]
         public decimal InsuredAppointmentCharge { get; set; }
 

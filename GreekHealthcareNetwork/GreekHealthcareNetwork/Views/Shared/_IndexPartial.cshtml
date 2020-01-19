@@ -1,11 +1,12 @@
 ﻿@model GreekHealthcareNetwork.Models.SearchLoginViewModel
 @using GreekHealthcareNetwork.Models
-@{ 
+@using System.Globalization;
+@{
     string visitorUserId;
     int doctors;
     int insureds;
     int appointments;
-    using(var db = new ApplicationDbContext())
+    using (var db = new ApplicationDbContext())
     {
         visitorUserId = db.Users.SingleOrDefault(u => u.Email.Equals("visitor@ghn.gr")).Id;
         doctors = db.Doctors.Include("User").Where(d => d.User.IsActive == true).Count();
@@ -108,12 +109,14 @@
 
                 @for (int i = 0; i < Model.InsuredPlans.Count; i++)
                 {
-                    <div @if (!Model.InsuredPlans[i].Name.Equals("Gold")) { @(new HtmlString("class=\"col-sm-4 pricing-box\"")); } else { @(new HtmlString("class=\"col-sm-4 pricing-box\" featured-price")); }>
-                        <div class="wow bounceInUp" @if (i == 0) { @(new HtmlString("data-wow-delay=\"0.1s\"")); } else if (i == 1) { @(new HtmlString("data-wow-delay=\"0.3s\"")); } else { @(new HtmlString("data-wow-delay=\"0.2s\"")); }>
+                    <div @if (!Model.InsuredPlans[i].Name.Equals("Gold")) { @(new HtmlString("class=\"col-sm-4 pricing-box\"")) ; } else { @(new HtmlString("class=\"col-sm-4 pricing-box\" featured-price")) ; }>
+                        <div class="wow bounceInUp" @if (i == 0) { @(new HtmlString("data-wow-delay=\"0.1s\"")) ; } else if (i == 1) { @(new HtmlString("data-wow-delay=\"0.3s\"")) ; } else { @(new HtmlString("data-wow-delay=\"0.2s\"")) ; }>
 
-                            <div @if (i == 0) { @(new HtmlString("class=\"pricing-content general silver\"")); } else if (i == 1) { @(new HtmlString("class=\"pricing-content gold\"")); } else { @(new HtmlString("class=\"pricing-content general bronze\"")); }>
+                            <div @if (i == 0) { @(new HtmlString("class=\"pricing-content general silver\"")) ; } else if (i == 1) { @(new HtmlString("class=\"pricing-content gold\"")) ; } else { @(new HtmlString("class=\"pricing-content general bronze\"")) ; }>
                                 <h2>@Model.InsuredPlans[i].Name Plan</h2>
-                                <h3>@Model.InsuredPlans[i].PlanFee.ToString("0.00")&euro; @if (Model.InsuredPlans[i].PlanDuration == 12) { @(new HtmlString("<span>per year</span>")); }</h3>
+                                <h3>@Model.InsuredPlans[i].PlanFee.ToString("0.00", new CultureInfo("en-US"))&euro; @if (Model.InsuredPlans[i].PlanDuration == 12)
+                                {@(new HtmlString("<span>per year</span>"));
+                            }</h3>
                                 <ul>
                                     @if (Model.InsuredPlans[i].Name.Equals("Gold"))
                                     {
@@ -122,7 +125,8 @@
                                         <li><i class="fa fa-check icon-success"></i><span>Charge per appointment: <b>@(Model.InsuredPlans[i].AppointmentRate)&euro;</b></span></li>
                                         <li><i class="fa fa fa-times icon-danger"></i><span><del>Charge per appointment after limit has been exceeded</del></span></li>
                                         <li><i class="fa fa-check icon-success"></i><span><b>Free</b> cancellation of appointment <b>until 3 days before</b> the appointment date</span></li>
-                                        <li><i class="fa fa-check icon-success"></i><span><b>Free</b> cancellation of appointment <b>less than 3 days before</b> the appointment date</span></li>                                    
+                                        <li><i class="fa fa-check icon-success"></i><span><b>Free</b> cancellation of appointment <b>less than 3 days before</b> the appointment date</span></li>
+
                                     }
                                     else
                                     {
@@ -263,7 +267,7 @@
                     }
                 </div>
 
-                    </div>
+            </div>
 
         </div>
     </section><!-- #contact -->
@@ -282,7 +286,7 @@
             </div>
             <div class="modal-body">
                 <p>Your message was sent successfully!</p>
-             </div>
+            </div>
         </div>
     </div>
 </div>
@@ -402,5 +406,5 @@
                 }
             });
         })
-    </script>    
+    </script>
 }

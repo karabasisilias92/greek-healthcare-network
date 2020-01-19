@@ -1,8 +1,5 @@
-﻿@using GreekHealthcareNetwork.Repositories
-@{
+﻿@{
     ViewBag.Title = "Home Page";
-    var messages = new MessagesRepository();
-    var adminId = messages.AdminWithLessVisitorMessagesUnreplied();
 }
 @Html.Partial("_IndexPartial")
 
@@ -84,74 +81,85 @@
                     e.preventDefault();
                 }
                 else {
-                    $('#sendContactForm').addClass("noClick");
                     e.preventDefault();
+                    $('#sendContactForm').addClass("noClick");
                     const $form = $('#contact form');
                     $.validator.unobtrusive.parse($form);
                     $form.validate();
                     if ($form.valid()) {
-                        let model = new Object();
-                        model.VisitorMessage = new Object();
-                        model.VisitorMessage.SenderId = $('#VisitorMessage_SenderId').val();
-                        model.VisitorMessage.RecipientId = '@adminId';
-                        model.VisitorMessage.FirstName = $('#VisitorMessage_FirstName').val();
-                        model.VisitorMessage.LastName = $('#VisitorMessage_LastName').val();
-                        model.VisitorMessage.Email = $('#VisitorMessage_Email').val();
-                        model.VisitorMessage.Subject = $('#VisitorMessage_Subject').val();
-                        model.VisitorMessage.MessageText = $('#VisitorMessage_MessageText').val();
-                        model.FirstName = "";
-                        model.LastName = "";
-                        model.InsuredPlans = [];
-                        model.DoctorSpecialty = -1;
-                        model.MedicalSpecialties = [];
-                        model.AppointmentDate = null;
-                        model.UserName = "testUserName"
-                        model.Password = "testPassword"
-                        model.RememberMe = false;
-                        model.Message = null;
-                        model = JSON.stringify(model)
                         $.ajax({
-                            contentType: 'application/json',
-                            type: 'post',
-                            url: '/api/Messages',
-                            data: model,
-                            cache: false,
-                            processData: false,
-                            success: function () {
-                                $('#errorContainerMessage').hide();
-                                $('#VisitorMessage_FirstName').val("");
-                                $('#VisitorMessage_LastName').val("");
-                                $('#VisitorMessage_Email').val("");
-                                $('#VisitorMessage_Subject').val("");
-                                $('#VisitorMessage_MessageText').val("");
-                                $('#VisitorMessageSent').modal('show');
-                                setTimeout(function () {
-                                    $('#VisitorMessageSent').modal("hide");
-                                }, 3000)
-                            },
-                            error: function (error) {
-                                $('#errorContainerMessage').show();
-                                const errorObject = error.responseJSON.ModelState;
-                                $('#contact div.validation-summary-errors > ul').children().remove();
-                                for (var property in errorObject) {
-                                    if (errorObject.hasOwnProperty(property)) {
-                                        if (property == '') {
-                                            $('#contact div.validation-summary-errors > ul').append('<li>' + errorObject[property] + '</li>')
+                            type: 'get',
+                            dataType: 'json',
+                            url: '/Admin/AdminWithLessVisitorMessagesUnreplied',
+                            success: function (data) {
+                                console.log(data);
+                                let model = new Object();
+                                model.VisitorMessage = new Object();
+                                model.VisitorMessage.SenderId = $('#VisitorMessage_SenderId').val();
+                                model.VisitorMessage.RecipientId = data.adminId;
+                                model.VisitorMessage.FirstName = $('#VisitorMessage_FirstName').val();
+                                model.VisitorMessage.LastName = $('#VisitorMessage_LastName').val();
+                                model.VisitorMessage.Email = $('#VisitorMessage_Email').val();
+                                model.VisitorMessage.Subject = $('#VisitorMessage_Subject').val();
+                                model.VisitorMessage.MessageText = $('#VisitorMessage_MessageText').val();
+                                model.FirstName = "";
+                                model.LastName = "";
+                                model.InsuredPlans = [];
+                                model.DoctorSpecialty = -1;
+                                model.MedicalSpecialties = [];
+                                model.AppointmentDate = null;
+                                model.UserName = "testUserName"
+                                model.Password = "testPassword"
+                                model.RememberMe = false;
+                                model.Message = null;
+                                model = JSON.stringify(model)
+                                $.ajax({
+                                    contentType: 'application/json',
+                                    type: 'post',
+                                    url: '/api/Messages',
+                                    data: model,
+                                    cache: false,
+                                    processData: false,
+                                    success: function () {
+                                        $('#errorContainerMessage').hide();
+                                        $('#VisitorMessage_FirstName').val("");
+                                        $('#VisitorMessage_LastName').val("");
+                                        $('#VisitorMessage_Email').val("");
+                                        $('#VisitorMessage_Subject').val("");
+                                        $('#VisitorMessage_MessageText').val("");
+                                        $('#VisitorMessageSent').modal('show');
+                                        setTimeout(function () {
+                                            $('#VisitorMessageSent').modal("hide");
+                                        }, 3000)
+                                    },
+                                    error: function (error) {
+                                        $('#errorContainerMessage').show();
+                                        const errorObject = error.responseJSON.ModelState;
+                                        $('#contact div.validation-summary-errors > ul').children().remove();
+                                        for (var property in errorObject) {
+                                            if (errorObject.hasOwnProperty(property)) {
+                                                if (property == '') {
+                                                    $('#contact div.validation-summary-errors > ul').append('<li>' + errorObject[property] + '</li>')
+                                                }
+                                            }
+                                        }
+                                        const $form = $('#contact form');
+                                        $.validator.unobtrusive.parse($form);
+                                        $form.validate();
+                                        if (!$form.valid()) {
+                                            $.each($form.validate().errorList, function (key, value) {
+                                                const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                                                $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                                                $errorSpan.show();
+                                            });
                                         }
                                     }
-                                }
-                                const $form = $('#contact form');
-                                $.validator.unobtrusive.parse($form);
-                                $form.validate();
-                                if (!$form.valid()) {
-                                    $.each($form.validate().errorList, function (key, value) {
-                                        const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
-                                        $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
-                                        $errorSpan.show();
-                                    });
-                                }
+                                });
+                            },
+                            error: function (error) {
+                                console.log(error);
                             }
-                        });
+                        })                        
                     }
                     else {
                         $('#errorContainerMessage').show();

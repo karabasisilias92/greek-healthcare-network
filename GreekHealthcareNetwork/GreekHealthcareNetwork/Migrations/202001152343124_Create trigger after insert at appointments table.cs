@@ -48,11 +48,16 @@ namespace GreekHealthcareNetwork.Migrations
                         END
                     ELSE
                         BEGIN
-                            SET @jobname = CONCAT('DeleteIfAppointmentIsNotPaidOnTime', @Id);
-                            exec msdb.dbo.sp_stop_job   
-                            @job_name = @jobname
-                            exec msdb.dbo.sp_delete_job
-                            @job_name = @jobname
+							SET @jobname = CONCAT('DeleteIfAppointmentIsNotPaidOnTime', @Id);
+							DECLARE @jobId binary(16)
+							SELECT @jobId = job_id FROM msdb.dbo.sysjobs WHERE name = @jobname
+							IF (@jobId IS NOT NULL)
+							BEGIN
+								exec msdb.dbo.sp_stop_job   
+								@job_name = @jobname
+								exec msdb.dbo.sp_delete_job
+								@job_name = @jobname
+							END                       
                         END
                 END;"
             );

@@ -11,6 +11,7 @@ namespace GreekHealthcareNetwork.Repositories
 {
     public class MessagesRepository
     {
+
         public Message FindById(long id)
         {
             Message message;
@@ -55,7 +56,31 @@ namespace GreekHealthcareNetwork.Repositories
             }
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
-                messages = db.Messages.Where(m => m.RecipientId.Equals(UserId) || m.SenderId.Equals(UserId))
+                var visitorId = db.Users.SingleOrDefault(u => u.Email.Equals("visitor@ghn.gr")).Id;
+                messages = db.Messages.Where(m => m.RecipientId.Equals(UserId) && !m.SenderId.Equals(visitorId) || m.SenderId.Equals(UserId))
+                                  .OrderByDescending(m => m.SentDate)
+                                  .ThenByDescending(m => m.SentTime)
+                                  .Include("Sender")
+                                  .Include("Sender.Roles")
+                                  .Include("Recipient")
+                                  .Include("Recipient.Roles")
+                                  .ToList();
+            }
+            return messages;
+        }
+
+        //
+        public IEnumerable<Message> GetAllVisitorMessages(string UserId)
+        {
+            IEnumerable<Message> messages;
+            if (UserId == null)
+            {
+                throw new ArgumentNullException("UserId");
+            }
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                var visitorId = db.Users.SingleOrDefault(u => u.Email.Equals("visitor@ghn.gr")).Id;
+                messages = db.Messages.Where(m => m.RecipientId.Equals(UserId) && m.SenderId.Equals(visitorId))
                                   .OrderByDescending(m => m.SentDate)
                                   .ThenByDescending(m => m.SentTime)
                                   .Include("Sender")
@@ -85,7 +110,37 @@ namespace GreekHealthcareNetwork.Repositories
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
-                using (SqlCommand cmd = new SqlCommand("Select RecipientId FROM Messages WHERE MessageStatus = 1 AND Discriminator = 'VisitorMessage' GROUP BY RecipientId Having COUNT(*) = (SELECT Min(MessagesNumber) FROM (SELECT Count(*) MessagesNumber FROM Messages WHERE MessageStatus = 1 AND Discriminator = 'VisitorMessage' GROUP BY RecipientId) AS q1)", conn))
+                using (SqlCommand cmd = new SqlCommand("SELECT TOP(1) u.Id FROM AspNetUsers u JOIN AspNetUserRoles ur ON u.Id = ur.UserId JOIN AspNetRoles r ON ur.RoleId = r.Id LEFT JOIN Messages m ON u.Id = m.RecipientId WHERE r.Name = 'Administrator' GROUP BY u.Id Having COUNT(case when Discriminator = 'VisitorMessage' AND MessageStatus = 1 then 1 else null end) = (SELECT Min(MessagesNumber) FROM (SELECT COUNT(case when Discriminator = 'VisitorMessage' AND MessageStatus = 1 then 1 else null end) MessagesNumber FROM AspNetUsers u JOIN AspNetUserRoles ur ON u.Id = ur.UserId JOIN AspNetRoles r ON ur.RoleId = r.Id LEFT JOIN Messages m ON u.Id = m.RecipientId WHERE r.Name = 'Administrator' GROUP BY u.Id) AS q1)", conn))
+                {
+                    try
+                    {
+                        string result = (string)cmd.ExecuteScalar();
+                        if (result != null)
+                        {
+                            id = result;
+                        }
+                    }
+                    catch (SqlException e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                }
+            }
+            return id;
+        }
+
+        public string AdminWithLessNonVisitorMessagesUnreplied()
+        {
+            string id = "c0c59e7b-4e90-42bd-922b-ffc699dd6305";
+            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["GHNConnection"].ConnectionString;
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                using (SqlCommand cmd = new SqlCommand("SELECT TOP(1) u.Id FROM AspNetUsers u JOIN AspNetUserRoles ur ON u.Id = ur.UserId JOIN AspNetRoles r ON ur.RoleId = r.Id LEFT JOIN Messages m ON u.Id = m.RecipientId WHERE r.Name = 'Administrator' GROUP BY u.Id Having COUNT(case when Discriminator = 'Message' AND MessageStatus = 1 then 1 else null end) = (SELECT Min(MessagesNumber) FROM (SELECT COUNT(case when Discriminator = 'Message' AND MessageStatus = 1 then 1 else null end) MessagesNumber FROM AspNetUsers u JOIN AspNetUserRoles ur ON u.Id = ur.UserId JOIN AspNetRoles r ON ur.RoleId = r.Id LEFT JOIN Messages m ON u.Id = m.RecipientId WHERE r.Name = 'Administrator' GROUP BY u.Id) AS q1)", conn))
                 {
                     try
                     {

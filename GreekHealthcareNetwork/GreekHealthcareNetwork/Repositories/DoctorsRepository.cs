@@ -49,7 +49,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                      .Include("User.Messages")
                                                                                                      .Include("User.Roles")
                                                                                                      .Include("WorkingHours")
-                                                                                                     .Include("AppointmentCost")
+                                                                                                     .Include("DoctorPlan")
                                                                                                      .OrderBy(i => i.MedicalSpecialty)
                                                                                                      .ThenBy(i => i.User.LastName)
                                                                                                      .ThenBy(i => i.User.FirstName)
@@ -68,7 +68,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                      .Include("User.Messages")
                                                                                                      .Include("User.Roles")
                                                                                                      .Include("WorkingHours")
-                                                                                                     .Include("AppointmentCost")
+                                                                                                     .Include("DoctorPlan")
                                                                                                      .OrderBy(i => i.MedicalSpecialty)
                                                                                                      .ThenBy(i => i.User.LastName)
                                                                                                      .ThenBy(i => i.User.FirstName)
@@ -84,7 +84,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                       .Include("User.Messages")
                                                                                                       .Include("User.Roles")
                                                                                                       .Include("WorkingHours")
-                                                                                                      .Include("AppointmentCost")
+                                                                                                      .Include("DoctorPlan")
                                                                                                       .OrderBy(i => i.MedicalSpecialty)
                                                                                                       .ThenBy(i => i.User.LastName)
                                                                                                       .ThenBy(i => i.User.FirstName)
@@ -97,7 +97,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                      .Include("User.Messages")
                                                                                                      .Include("User.Roles")
                                                                                                      .Include("WorkingHours")
-                                                                                                     .Include("AppointmentCost")
+                                                                                                     .Include("DoctorPlan")
                                                                                                      .OrderBy(i => i.MedicalSpecialty)
                                                                                                      .ThenBy(i => i.User.LastName)
                                                                                                      .ThenBy(i => i.User.FirstName)
@@ -136,7 +136,12 @@ namespace GreekHealthcareNetwork.Repositories
                 {
                     if (doctorsSpecialty >= 0 && doctorsSpecialty < Enum.GetNames(typeof(MedicalSpecialty)).Length)
                     {
-                        doctors = db.Doctors.Where(doctor => users.Any(user => DbFunctions.DiffDays(appointmentDate, user.SubscriptionEndDate) >= 0 && user.IsActive == true && user.Id == doctor.UserId) 
+                        doctors = db.Doctors.Where(doctor => !doctor.DoctorsUnavailability.Any(u => (DbFunctions.DiffDays(u.UnavailableFromDate, appointmentDate) > 0 && DbFunctions.DiffDays(u.UnavailableUntilDate, appointmentDate) < 0) 
+                                                                                                    || (DbFunctions.DiffDays(u.UnavailableFromDate, appointmentDate) == 0 && DbFunctions.DiffDays(u.UnavailableUntilDate, appointmentDate) == 0 && doctor.WorkingHours.Any(w => w.Day == appointmentDate.DayOfWeek && DbFunctions.DiffMinutes(w.WorkStartTime, u.UnavailableFromTime) <= 0 && DbFunctions.DiffMinutes(w.WorkEndTime, u.UnavailableUntilTime) >= 0)) 
+                                                                                                    || (DbFunctions.DiffDays(u.UnavailableFromDate, appointmentDate) == 0 && DbFunctions.DiffDays(u.UnavailableUntilDate, appointmentDate) < 0 && doctor.WorkingHours.Any(w => w.Day == appointmentDate.DayOfWeek && DbFunctions.DiffMinutes(w.WorkStartTime, u.UnavailableFromTime) <= 0))
+                                                                                                    || (DbFunctions.DiffDays(u.UnavailableFromDate, appointmentDate) > 0 && DbFunctions.DiffDays(u.UnavailableUntilDate, appointmentDate) == 0 && doctor.WorkingHours.Any(w => w.Day == appointmentDate.DayOfWeek && DbFunctions.DiffMinutes(w.WorkEndTime, u.UnavailableUntilTime) >= 0)))
+                                                                                                     && users.Any(user => DbFunctions.DiffDays(appointmentDate, user.SubscriptionEndDate) >= 0 
+                                                                                                     && user.IsActive == true && user.Id == doctor.UserId) 
                                                                                                      && (int)doctor.MedicalSpecialty == doctorsSpecialty
                                                                                                      && doctor.WorkingHours.Any(w => w.Day == appointmentDate.DayOfWeek
                                                                                                      && (DbFunctions.DiffMinutes(w.WorkStartTime, w.WorkEndTime) / w.AppointmentDuration) > db.Appointments.Where(app => app.AppointmentStatus == AppointmentStatus.Upcoming 
@@ -148,7 +153,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                      .Include("User.Messages")
                                                                                                      .Include("User.Roles")
                                                                                                      .Include("WorkingHours")
-                                                                                                     .Include("AppointmentCost")
+                                                                                                     .Include("DoctorPlan")
                                                                                                      .OrderBy(i => i.MedicalSpecialty)
                                                                                                      .ThenBy(i => i.User.LastName)
                                                                                                      .ThenBy(i => i.User.FirstName)
@@ -156,7 +161,9 @@ namespace GreekHealthcareNetwork.Repositories
                     }
                     else
                     {
-                        doctors = db.Doctors.Where(doctor => users.Any(user => DbFunctions.DiffDays(appointmentDate, user.SubscriptionEndDate) >= 0 && user.IsActive == true && user.Id == doctor.UserId)
+                        doctors = db.Doctors.Where(doctor => !doctor.DoctorsUnavailability.Any(i => DbFunctions.DiffDays(appointmentDate, i.UnavailableFromDate) <= 0 && DbFunctions.DiffDays(appointmentDate, i.UnavailableUntilDate) >= 0 && !doctor.WorkingHours.Any(w => w.Day == appointmentDate.DayOfWeek && !(DbFunctions.DiffMinutes(w.WorkStartTime, i.UnavailableFromTime) <= 0 && DbFunctions.DiffMinutes(w.WorkEndTime, i.UnavailableUntilTime) >= 0)))
+                                                                                                     && users.Any(user => DbFunctions.DiffDays(appointmentDate, user.SubscriptionEndDate) >= 0 
+                                                                                                     && user.IsActive == true && user.Id == doctor.UserId)
                                                                                                      && doctor.WorkingHours.Any(w => w.Day == appointmentDate.DayOfWeek
                                                                                                      && (DbFunctions.DiffMinutes(w.WorkStartTime, w.WorkEndTime) / w.AppointmentDuration) > db.Appointments.Where(app => app.AppointmentStatus == AppointmentStatus.Upcoming 
                                                                                                      && app.DoctorId.Equals(doctor.UserId)
@@ -167,7 +174,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                      .Include("User.Messages")
                                                                                                      .Include("User.Roles")
                                                                                                      .Include("WorkingHours")
-                                                                                                     .Include("AppointmentCost")
+                                                                                                     .Include("DoctorPlan")
                                                                                                      .OrderBy(i => i.MedicalSpecialty)
                                                                                                      .ThenBy(i => i.User.LastName)
                                                                                                      .ThenBy(i => i.User.FirstName)
@@ -183,7 +190,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                       .Include("User.Messages")
                                                                                                       .Include("User.Roles")
                                                                                                       .Include("WorkingHours")
-                                                                                                      .Include("AppointmentCost")
+                                                                                                      .Include("DoctorPlan")
                                                                                                       .OrderBy(i => i.MedicalSpecialty)
                                                                                                       .ThenBy(i => i.User.LastName)
                                                                                                       .ThenBy(i => i.User.FirstName)
@@ -196,7 +203,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                      .Include("User.Messages")
                                                                                                      .Include("User.Roles")
                                                                                                      .Include("WorkingHours")
-                                                                                                     .Include("AppointmentCost")
+                                                                                                     .Include("DoctorPlan")
                                                                                                      .OrderBy(i => i.MedicalSpecialty)
                                                                                                      .ThenBy(i => i.User.LastName)
                                                                                                      .ThenBy(i => i.User.FirstName)
@@ -217,7 +224,7 @@ namespace GreekHealthcareNetwork.Repositories
                                    .Include("User.Messages")
                                    .Include("User.Roles")
                                    .Include("WorkingHours")
-                                   .Include("AppointmentCost")
+                                   .Include("DoctorPlan")
                                    .SingleOrDefault(d => d.UserId.Equals(doctorId));
             }
             return doctor;
@@ -350,7 +357,7 @@ namespace GreekHealthcareNetwork.Repositories
 
             using (var db = new ApplicationDbContext())
             {
-                appointmentCost = db.AppointmentCostPerSpecialty.SingleOrDefault(appCost => appCost.MedicalSpecialty == medicalSpecialty).AppointmentCost;
+                appointmentCost = db.DoctorPlans.SingleOrDefault(appCost => appCost.MedicalSpecialty == medicalSpecialty).AppointmentCost;
             }
             return appointmentCost;
         }
@@ -364,9 +371,88 @@ namespace GreekHealthcareNetwork.Repositories
             IEnumerable<DoctorsUnavailability> doctorsUnavailabilities;
             using ( ApplicationDbContext db = new ApplicationDbContext())
             {
-                doctorsUnavailabilities = db.DoctorsUnavailabilities.Where(u => u.DoctorId.Equals(doctorId)).ToList();
+                doctorsUnavailabilities = db.DoctorsUnavailabilities.Where(u => u.DoctorId.Equals(doctorId)).OrderByDescending(i => i.UnavailableFromDate).ThenByDescending(i => i.UnavailableFromTime).ToList();
             }
             return doctorsUnavailabilities;
+        }
+
+        public IEnumerable<DoctorsUnavailability> GetUnavailabilitiesForDate(DateTime appointmentDate, string doctorId)
+        {
+            if (appointmentDate == null)
+            {
+                throw new ArgumentNullException("appointmentDate");
+            }
+
+            if (doctorId == null)
+            {
+                throw new ArgumentNullException("doctorId");
+            }
+
+            IEnumerable<DoctorsUnavailability> doctorsUnavailabilities;
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                doctorsUnavailabilities = db.DoctorsUnavailabilities.Where(u => u.DoctorId.Equals(doctorId) && DbFunctions.DiffDays(u.UnavailableFromDate,appointmentDate) >= 0 && DbFunctions.DiffDays(u.UnavailableUntilDate, appointmentDate) <= 0).OrderByDescending(i => i.UnavailableFromDate).ThenByDescending(i => i.UnavailableFromTime).ToList();
+            }
+            return doctorsUnavailabilities;
+        }
+
+        public DoctorsUnavailability GetDoctorsUnavailability(int id)
+        {
+            DoctorsUnavailability unavailability;
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                unavailability = db.DoctorsUnavailabilities.Find(id);
+            }
+            return unavailability;
+        }
+
+        public int DeclareUnavailability(DoctorsUnavailability unavailability)
+        {
+            if (unavailability == null)
+            {
+                throw new ArgumentNullException("unavailability");
+            }
+
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                db.DoctorsUnavailabilities.Add(unavailability);                
+                db.SaveChanges();
+            }
+            return unavailability.Id;
+        }
+
+        public void EditUnavailability(DoctorsUnavailability unavailability)
+        {
+            if (unavailability == null)
+            {
+                throw new ArgumentNullException("unavailability");
+            }
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                db.DoctorsUnavailabilities.Attach(unavailability);
+                db.Entry(unavailability).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+
+        public bool DeleteUnavailability(int id)
+        {
+            bool result;
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                var entry = db.DoctorsUnavailabilities.Find(id);
+                if (entry == null)
+                {
+                    result = false;
+                }
+                else
+                {
+                    db.DoctorsUnavailabilities.Remove(entry);
+                    db.SaveChanges();
+                    result = true;
+                }
+            }
+            return result;
         }
     }
 }

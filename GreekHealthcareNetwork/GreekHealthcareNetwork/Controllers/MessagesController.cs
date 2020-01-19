@@ -32,6 +32,13 @@ namespace GreekHealthcareNetwork.Controllers
             return Ok(_message.GetAllMessages(UserId));
         }
 
+        //
+        [System.Web.Http.Route("api/Admin/GetVisitorMessages")]
+        public IHttpActionResult GetVisitorMessages(string UserId)
+        {
+            return Ok(_message.GetAllVisitorMessages(UserId));
+        }
+
         [System.Web.Http.HttpPost]
         [ValidateAntiForgeryToken]
         [System.Web.Mvc.AllowAnonymous]
