@@ -17,6 +17,7 @@ namespace GreekHealthcareNetwork.Controllers
     public class AdminController : Controller
     {
         private ApplicationUserManager _userManager;
+        private PlansRepository _plans = new PlansRepository();
 
         public ApplicationUserManager UserManager
         {
@@ -65,6 +66,18 @@ namespace GreekHealthcareNetwork.Controllers
             var messages = new MessagesRepository();
             var adminId = messages.AdminWithLessNonVisitorMessagesUnreplied();
             return Json(new { adminId = adminId }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DoctorPlans()
+        {
+            DoctorPlansViewModel model = new DoctorPlansViewModel();
+            model.MedicalSpecialties = new List<MedicalSpecialty>();
+            for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
+            {
+                model.MedicalSpecialties.Add((MedicalSpecialty)i);
+            }
+            model.DoctorPlans = _plans.GetDoctorPlans();
+            return View(model);
         }
 
         public ActionResult CreateAdminUser()

@@ -16,6 +16,7 @@ namespace GreekHealthcareNetwork.Models
 
         [Column(TypeName = "money")]
         [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "{0:0,0.00}")]
         public decimal AppointmentCost { get; set; }
 
         [JsonIgnore]

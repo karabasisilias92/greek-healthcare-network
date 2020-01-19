@@ -1,0 +1,271 @@
+﻿@model GreekHealthcareNetwork.Models.DoctorPlansViewModel
+
+@{
+    ViewBag.Title = "Doctor Plans";
+}
+
+@section cssScripts{
+    <link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
+}
+
+<main id="main" class="mt-4">
+    <div class="col-8 offset-3">
+        <div class="page-header d-flex justify-content-between">
+            <h1>
+                @ViewBag.Title
+            </h1>
+            <p>
+                <button id="createDoctorPlan" class="btn btn-secondary">Create New Plan</button>
+            </p>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.DoctorPlans.First().MedicalSpecialty)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.DoctorPlans.First().Fee)
+                        </th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="doctorPlansList">
+                    @if (Model.DoctorPlans.Count() == 0)
+                    {
+                        <tr>
+                            <td colspan="3">
+                                You have not created any doctor plans yet.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var item in Model.DoctorPlans)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MedicalSpecialty)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Fee) &euro;
+                                </td>
+                                <td>
+                                    <button class="btn btn-warning table-button editButton" data-id="@item.Id">Edit</button>
+                                    <button class="btn btn-danger table-button deleteButton" data-id="@item.Id">Delete</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</main>
+
+<div class="modal fade" id="doctorPlanModal" tabindex="-1" role="dialog" aria-labelledby="doctorPlanModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="doctorPlanModalLabel">New Doctor Plan</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form id="doctorPlanForm" class="form-horizontal">
+                        @Html.AntiForgeryToken()
+                        <div class="validation-summary-errors">
+                            <ul class="text-danger">
+                            </ul>
+                        </div>
+                        <div class="form-group">
+                            <label for="MedicalSpecialty" class="col-md-12 control-label">Medical Specialty</label>
+                            <div class="col-md-10">
+                                <select id="MedicalSpecialty" name="MedicalSpecialty" class="form-control" data-val="true" data-val-required="The Medical Specialty field is required." required>
+                                    <option>Choose Medical Specialty</option>
+                                    @foreach (var item in Model.MedicalSpecialties)
+                                    {
+                                        <option value="@((int)item)">@item</option>
+                                    }
+                                </select>
+                                <span class="field-validation-valid text-danger" data-valmsg-for="MedicalSpecialty" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="Fee" class="col-md-12 control-label">Plan Fee</label>
+                            <div class="col-md-12">
+                                <input id="Fee" name="Fee" class="form-control" data-val="true" data-val-required="The Fee field is required.">
+                                <span class="field-validation-valid text-danger" data-valmsg-for="Fee" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-success ml-3" id="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $('#doctorPlanModal').on('hidden.bs.modal', function () {
+                $('span[data-valmsg-for="MedicalSpecialty"]').children().remove();
+                $('span[data-valmsg-for="Fee"]').children().remove();                
+                $('.validation-summary-errors ul').children().remove();
+                $('#doctorPlanForm').trigger('reset');
+            });
+            $('#createDoctorPlan').click(() => $('#doctorPlanModal').modal('show'));
+            $('.editButton').click(editDoctorPlanEntry);
+            $('.deleteButton').click(deleteDoctorPlanEntry);
+            $('#submit').click(function (e) {
+                e.preventDefault();
+                const $form = $('#doctorPlanForm');
+                $.validator.unobtrusive.parse($form);
+                $form.validate();
+                if ($form.valid()) {
+                    let model = new Object();
+                    model.MedicalSpecialty = $('#MedicalSpecialty').val();
+                    model.Fee = $('#Fee').val();
+                    model = JSON.stringify(model);
+                    $.ajax({
+                        contentType: 'application/json',
+                        type: 'post',
+                        url: '/api/DoctorPlans',
+                        data: model,
+                        cache: false,
+                        processData: false,
+                        success: function (data) {
+                            if (@Model.DoctorPlans.Count() == 0) {
+                                $('#doctorPlansList').children().remove();
+                            }
+                            const tr = $(document.createElement('tr'));
+                            const td1 = $(document.createElement('td'));
+                            $(td1).text(data.MedicalSpecialty);
+                            $(tr).append(td1);
+                            const td2 = $(document.createElement('td'));
+                            let fee = parseFloat(data.Fee);
+                            $(td2).html(fee.toFixed(2) + ' &euro;');
+                            $(tr).append(td2);
+                            const td3 = $(document.createElement('td'));
+                            const editButton = $(document.createElement('button'));
+                            $(editButton).addClass('btn btn-warning table-button editButton');
+                            $(editButton).text('Edit');
+                            $(editButton).attr('data-id', data.Id);
+                            $(editButton).click(editDoctorPlanEntry);
+                            $(td3).append(editButton);
+                            const deleteButton = $(document.createElement('button'));
+                            $(deleteButton).addClass('btn btn-danger table-button deleteButton');
+                            $(deleteButton).text('Delete');
+                            $(deleteButton).attr('data-id', data.Id);
+                            $(deleteButton).click(deleteDoctorPlanEntry);
+                            $(td3).append(deleteButton);
+                            $(tr).append(td3);
+                            if (@Model.DoctorPlans.Count() == 0) {
+                                $('#doctorPlansList').append(tr);
+                            }
+                            else {
+                                let count = 1;
+                                const childrenNum = $('#doctorPlansList').children().length;
+                                let line = $('#doctorPlansList').children().first();
+                                while ($(line).children().first().text().trim() < $(td1).text() && count < childrenNum) {
+                                    line = $(line).next();
+                                    count = count + 1;
+                                }
+                                if ($(line).children().first().text().trim() < $(td1).text()) {
+                                    $(line).after(tr);
+                                }
+                                else {
+                                    $(line).before(tr);
+                                }
+                            }
+                            $('#doctorPlanModal').modal('hide');
+                        },
+                        error: function (error) {
+                            const errorObject = error.responseJSON.ModelState;
+                            $('#doctorPlanForm div.validation-summary-errors > ul').children().remove();
+                            for (var property in errorObject) {
+                                if (errorObject.hasOwnProperty(property)) {
+                                    console.log(property);
+                                    if (property == '') {
+                                        $('#doctorPlanForm div.validation-summary-errors > ul').append('<li>' + errorObject[property] + '</li>');
+                                    }
+                                    else {
+                                        if (property == 'model.MedicalSpecialty') {
+                                            $('#doctorPlanForm div.validation-summary-errors > ul').append('<li>Please choose a medical specialty</li>');
+                                        }
+                                        else {
+                                            $('#doctorPlanForm div.validation-summary-errors > ul').append('<li>The Fee must have either 0 or 2 decimal places exactly</li>');
+                                        }
+                                    }
+                                }
+                            }
+                            const $form = $('#doctorPlanForm');
+                            $.validator.unobtrusive.parse($form);
+                            $form.validate();
+                            if (!$form.valid()) {
+                                $.each($form.validate().errorList, function (key, value) {
+                                    const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                                    $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                                    $errorSpan.show();
+                                });
+                            }
+                        }
+                    });
+                    
+                }
+                else {
+                    console.log($form.validate().errorList);
+                    $.each($form.validate().errorList, function (key, value) {
+                        console.log(value);
+                        const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                        $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                        $errorSpan.show();
+                    });
+                }
+            });
+            function editDoctorPlanEntry(e) {
+                var grandParent = $(this).parent().parent();
+                var fee = grandParent.children('td:nth-child(2)').html().trim();
+                grandParent.children('td:nth-child(2)').html("");
+                grandParent.children('td:nth-child(2)').append('<input id="Fee" name="Fee" class="form-control col-6" data-val="true" data-val-required="The Fee field is required." value="' + fee + '">' +
+                                                                '<span class="field-validation-valid text-danger" data-valmsg-for="Fee" data-valmsg-replace="true"></span>');               
+                var id = $(this).data('id');
+                grandParent.children('td:nth-child(3)').children().hide();
+                grandParent.children('td:nth-child(3)').append('<button class="btn btn-success updateBtn" data-id="' + id + '" >Update</button>');  
+                grandParent.children('td:nth-child(2)').focus();
+            }
+            function deleteDoctorPlanEntry(e) {
+                const id = $(e.target).data('id');
+                $.ajax({
+                    type: 'delete',
+                    url: '/api/DoctorPlans/' + id,
+                    success: function () {
+                        $('button[data-id=' + id + ']').parent().parent().remove();
+                        if ($('#doctorPlansList').children().length == 0) {
+                            $('#doctorPlansList').append('<tr>' +
+                                                                '<td colspan="3">' +
+                                                                    'You have not created any doctor plans yet.' +
+                                                                '</td>' +
+                                                            '</tr>');
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            }
+        })
+    </script>    
+}

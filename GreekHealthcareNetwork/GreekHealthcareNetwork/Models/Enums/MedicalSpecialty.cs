@@ -4,12 +4,11 @@ namespace GreekHealthcareNetwork.Models
 {
     public enum MedicalSpecialty
     { 
-
        Allergist, Cardiologist,
        Dermatologist, Endocrinologist, Gastroenterologist,
-       Hematologist, Neurologist, Gynecologist, Oncologist,
+       Gynecologist, Hematologist, Neurologist, Oncologist,
        Ophthalmologist, Osteopath, Otolaryngologist, Pathologist,
-       Pediatrician, Physiatrist, PlasticSurgeon, Rheumatologist,
-       Urologist
+       Pediatrician, Physiatrist, PlasticSurgeon, Psychiatrist, 
+       Rheumatologist, Urologist
     }
 }

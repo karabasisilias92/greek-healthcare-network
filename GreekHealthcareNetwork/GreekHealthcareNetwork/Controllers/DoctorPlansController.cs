@@ -10,29 +10,25 @@ using System.Web.Mvc;
 
 namespace GreekHealthcareNetwork.Controllers
 {
-    [System.Web.Mvc.Authorize(Roles = "Doctor")]
-    public class DoctorUnavailabilitiesController : ApiController
+    [System.Web.Mvc.Authorize(Roles = "Administrator")]
+    public class DoctorPlansController : ApiController
     {
-        private readonly DoctorsRepository _doctors = new DoctorsRepository();
-
-        [System.Web.Http.HttpGet]
-        public IHttpActionResult GetUnavailability(int id)
-        {
-            DoctorsUnavailability entry = _doctors.GetDoctorsUnavailability(id);
-            if (entry == null)
-            {
-                return NotFound();
-            }
-            return Ok(entry);
-        }
-
+        private readonly PlansRepository _plans = new PlansRepository();
         [System.Web.Http.HttpPost]
         [ValidateAntiForgeryToken]
-        public IHttpActionResult DeclareUnavailability(DoctorsUnavailability model)
+        public IHttpActionResult CreateDoctorPlan(DoctorPlan model)
         {
             if (ModelState.IsValid)
             {
-                model.Id = _doctors.DeclareUnavailability(model);
+                try
+                {
+                    model.Id = _plans.InsertDoctorPlan(model);
+                }
+                catch(Exception)
+                {
+                    ModelState.AddModelError("", "A plan for this medical specialty has already been created. Please choose another one.");
+                    return BadRequest(ModelState);
+                }
                 return Ok(model);
             }
             return BadRequest(ModelState);
@@ -40,11 +36,11 @@ namespace GreekHealthcareNetwork.Controllers
 
         [System.Web.Http.HttpPut]
         [ValidateAntiForgeryToken]
-        public IHttpActionResult EditUnavailability(DoctorsUnavailability model)
+        public IHttpActionResult EditUnavailability(DoctorPlan model)
         {
             if (ModelState.IsValid)
             {
-                _doctors.EditUnavailability(model);
+                _plans.EditDoctorPlan(model);
                 return Ok(model);
             }
             return BadRequest(ModelState);
@@ -52,9 +48,9 @@ namespace GreekHealthcareNetwork.Controllers
 
         [System.Web.Http.HttpDelete]
         [ValidateAntiForgeryToken]
-        public IHttpActionResult DeleteUnavailability(int id)
-        {                
-            bool result = _doctors.DeleteUnavailability(id);
+        public IHttpActionResult DeleteDoctorPlan(int id)
+        {
+            bool result = _plans.DeleteDoctorPlan(id);
             if (result)
             {
                 return Ok();
