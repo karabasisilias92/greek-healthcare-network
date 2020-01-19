@@ -75,6 +75,7 @@
                     });
                     $('.editBtn').on('click', function (e) {
                         var grandParent = $(this).parent().parent();
+                        grandParent.append('<form id="__AjaxAntiForgeryForm" action="#" method="post">@Html.AntiForgeryToken()</form>');
                         var firstName = grandParent.children('td:nth-child(2)').html();
                         grandParent.children('td:nth-child(2)').html("");
                         grandParent.children('td:nth-child(2)').append('<input type="text" value="' + firstName + '">');
@@ -96,46 +97,58 @@
                         var id = $(this).data('id');
                         grandParent.children('td:nth-child(9)').children().hide();
                         grandParent.children('td:nth-child(9)').append('<button class="btn btn-success updateBtn" data-id="' + id + '" >Update</button>');
+                        updateButtonClicked();
                     });
-                    $('.updateBtn').on('click', function (e) {
-                        var grandParent = $(this).parent().parent();
-                        var firstName = grandParent.children('td:nth-child(2)').html();
-                        var lastName = grandParent.children('td:nth-child(3)').html();
-                        var specialty = grandParent.children('td:nth-child(4)').html();
-                        var address = grandParent.children('td:nth-child(5)').html();
-                        var amka = grandParent.children('td:nth-child(6)').html();
-                        var tel = grandParent.children('td:nth-child(7)').html();
-                        var paypalAccount = grandParent.children('td:nth-child(8)').html();
-                        var id = $(this).data('id');
-
-                        var modifiedUser = {
-                            User: {
-                                Id = id,
-                                FirstName = firstName,
-                                LastName = lastName,
-                                AMKA = amka,
-                                PaypalAccount = paypalAccount,
-                                PhoneNumber = tel
-                            }
-                        };
-
-                        $.ajax({
-                            url: '@Url.Action("EditProfile", "User")',
-                            type: 'POST',
-                            data: modifiedUser,
-                            success: function (data) {
-
-                            },
-                            error: function (error) {
-                                console.log(error);
-                            }
-                        });
-                    });
+                    
                 },
                 error: function (error) {
                     console.log(error)
                 }
             })
+        }
+        function AddAntiForgeryToken (data) {
+            data.__RequestVerificationToken = $('#__AjaxAntiForgeryForm input[name=__RequestVerificationToken]').val();
+            return data;
+        };
+        function updateButtonClicked() {
+            $('.updateBtn').on('click', function (e) {
+                var grandParent = $(this).parent().parent();
+                var firstName = grandParent.children('td:nth-child(2)').children('input').val();
+                var lastName = grandParent.children('td:nth-child(3)').children('input').val();
+                var specialty = grandParent.children('td:nth-child(4)').html();
+                var address = grandParent.children('td:nth-child(5)').children('input').val();
+                var amka = grandParent.children('td:nth-child(6)').children('input').val();
+                var tel = grandParent.children('td:nth-child(7)').children('input').val();
+                var paypalAccount = grandParent.children('td:nth-child(8)').children('input').val();
+                var id = $(this).data('id');
+                debugger;
+                var modifiedUser = {
+                    User: {
+                        Id : id,
+                        FirstName : firstName,
+                        LastName : lastName,
+                        AMKA : amka,
+                        PaypalAccount : paypalAccount,
+                        PhoneNumber: tel,
+                    },
+                    Doctor: {
+                        MedicalSpecialty: specialty,
+                        OfficeAddress: address
+                    }
+                };
+
+                $.ajax({
+                    url: '@Url.Action("UpdateUser", "Admin")',
+                    type: 'POST',
+                    data: AddAntiForgeryToken(modifiedUser),
+                    success: function (data) {
+                        alert('sucess');
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            });
         }
     })
 
