@@ -9,6 +9,7 @@ using GreekHealthcareNetwork.Repositories;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace GreekHealthcareNetwork.Controllers
 {
@@ -109,7 +110,7 @@ namespace GreekHealthcareNetwork.Controllers
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return View("PaymentFailed");
             }
@@ -201,7 +202,7 @@ namespace GreekHealthcareNetwork.Controllers
             {
                 price = Math.Floor(0.85m * Convert.ToDecimal(Session["price" + appointmentId]) * 100) / 100;
             }
-            string priceString = price.ToString("0.00");
+            string priceString = price.ToString("0.00", new CultureInfo("en-US"));
             //Adding Item Details like name, currency, price etc  
             itemList.items.Add(new Item()
             {
@@ -235,7 +236,7 @@ namespace GreekHealthcareNetwork.Controllers
             // Adding Tax, shipping and Subtotal details  
             var details = new Details()
             {
-                tax = appointmentId == 0 ? (0.15m * Convert.ToDecimal(Session["price"])).ToString("0.00") : (0.15m * Convert.ToDecimal(Session["price" + appointmentId])).ToString("0.00"),
+                tax = appointmentId == 0 ? (0.15m * Convert.ToDecimal(Session["price"])).ToString("0.00", new CultureInfo("en-US")) : (0.15m * Convert.ToDecimal(Session["price" + appointmentId])).ToString("0.00", new CultureInfo("en-US")),
                 shipping = "0",
                 subtotal = priceString
             };
@@ -243,7 +244,7 @@ namespace GreekHealthcareNetwork.Controllers
             var amount = new Amount()
             {
                 currency = "EUR",
-                total = (Convert.ToDecimal(details.tax) + Convert.ToDecimal(details.shipping) + Convert.ToDecimal(details.subtotal)).ToString("0.00"), // Total must be equal to sum of tax, shipping and subtotal.  
+                total = (Convert.ToDecimal(details.tax, new CultureInfo("en-US")) + Convert.ToDecimal(details.shipping, new CultureInfo("en-US")) + Convert.ToDecimal(details.subtotal, new CultureInfo("en-US"))).ToString("0.00", new CultureInfo("en-US")), // Total must be equal to sum of tax, shipping and subtotal.  
                 details = details
             };
             var transactionList = new List<Transaction>();

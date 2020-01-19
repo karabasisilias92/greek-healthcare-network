@@ -2,6 +2,7 @@
 @using GreekHealthcareNetwork.Repositories
 @using Microsoft.AspNet.Identity;
 @using GreekHealthcareNetwork.Models;
+@using System.Globalization;
 @{
     DateTime subscriptionEndDate = new DateTime();
     var CurrentUserId = User.Identity.GetUserId();
@@ -108,7 +109,7 @@ else
                             <div @if (i == 0) { @(new HtmlString("class=\"pricing-content general silver\""))  ; } else if (i == 1) { @(new HtmlString("class=\"pricing-content featured\""))  ; } else { @(new HtmlString("class=\"pricing-content general bronze\"")) ; }>
                                 <h2>@Model.InsuredPlans[i].Name Plan</h2>
                                 <h3>
-                                    @Model.InsuredPlans[i].PlanFee.ToString("0.00")&euro; @if (Model.InsuredPlans[i].PlanDuration == 12)
+                                    @Model.InsuredPlans[i].PlanFee.ToString("0.00", new CultureInfo("en-US"))&euro; @if (Model.InsuredPlans[i].PlanDuration == 12)
                                     {@(new HtmlString("<span>per year</span>"));
                                 }
                                 </h3>
@@ -155,7 +156,7 @@ else
                                 <div @if (i == 0) { @(new HtmlString("class=\"pricing-content general silver\""))  ; } else if (i == 1) { @(new HtmlString("class=\"pricing-content featured\""))  ; } else { @(new HtmlString("class=\"pricing-content general bronze\"")) ; }>
                                     <h2>@Model.InsuredPlans[i].Name Plan</h2>
                                     <h3>
-                                        @Model.InsuredPlans[i].PlanFee.ToString("0.00")&euro; @if (Model.InsuredPlans[i].PlanDuration == 12)
+                                        @Model.InsuredPlans[i].PlanFee.ToString("0.00", new CultureInfo("en-US"))&euro; @if (Model.InsuredPlans[i].PlanDuration == 12)
                                         {@(new HtmlString("<span>per year</span>"));
                                     }
                                     </h3>
