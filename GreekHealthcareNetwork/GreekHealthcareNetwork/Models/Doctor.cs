@@ -23,9 +23,6 @@ namespace GreekHealthcareNetwork.Models
         [Display(Name = "Medical Specialty")]
         public MedicalSpecialty? MedicalSpecialty { get; set; }
 
-        [ForeignKey("MedicalSpecialty")]
-        public virtual AppointmentCostPerSpecialty AppointmentCost { get; set; }
-
         [Required]
         [MinLength(10, ErrorMessage = "Office Address length cannot be less than 10 characters.")]
         [MaxLength(100, ErrorMessage = "Office Address length cannot be more than 100 characters.")]

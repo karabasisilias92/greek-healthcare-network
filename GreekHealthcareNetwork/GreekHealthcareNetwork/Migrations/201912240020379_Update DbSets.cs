@@ -46,7 +46,6 @@ namespace GreekHealthcareNetwork.Migrations
             AddColumn("dbo.Doctors", "MedicalSpecialty", c => c.Int(nullable: false));
             AddColumn("dbo.Doctors", "OfficeAddress", c => c.String(nullable: false));
             AddColumn("dbo.Doctors", "PaypalAccount", c => c.String(nullable: false));
-            AddColumn("dbo.Doctors", "AppointmentCost", c => c.Decimal(nullable: false, storeType: "money"));
             AddColumn("dbo.Doctors", "DoctorPlanId", c => c.Int(nullable: false));
             CreateIndex("dbo.Doctors", "DoctorPlanId");
             AddForeignKey("dbo.Doctors", "DoctorPlanId", "dbo.DoctorPlans", "Id", cascadeDelete: true);
@@ -61,7 +60,6 @@ namespace GreekHealthcareNetwork.Migrations
             DropIndex("dbo.DoctorsUnavailabilities", new[] { "DoctorId" });
             DropIndex("dbo.Doctors", new[] { "DoctorPlanId" });
             DropColumn("dbo.Doctors", "DoctorPlanId");
-            DropColumn("dbo.Doctors", "AppointmentCost");
             DropColumn("dbo.Doctors", "PaypalAccount");
             DropColumn("dbo.Doctors", "OfficeAddress");
             DropColumn("dbo.Doctors", "MedicalSpecialty");

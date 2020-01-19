@@ -49,7 +49,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                      .Include("User.Messages")
                                                                                                      .Include("User.Roles")
                                                                                                      .Include("WorkingHours")
-                                                                                                     .Include("AppointmentCost")
+                                                                                                     .Include("DoctorPlan")
                                                                                                      .OrderBy(i => i.MedicalSpecialty)
                                                                                                      .ThenBy(i => i.User.LastName)
                                                                                                      .ThenBy(i => i.User.FirstName)
@@ -68,7 +68,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                      .Include("User.Messages")
                                                                                                      .Include("User.Roles")
                                                                                                      .Include("WorkingHours")
-                                                                                                     .Include("AppointmentCost")
+                                                                                                     .Include("DoctorPlan")
                                                                                                      .OrderBy(i => i.MedicalSpecialty)
                                                                                                      .ThenBy(i => i.User.LastName)
                                                                                                      .ThenBy(i => i.User.FirstName)
@@ -84,7 +84,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                       .Include("User.Messages")
                                                                                                       .Include("User.Roles")
                                                                                                       .Include("WorkingHours")
-                                                                                                      .Include("AppointmentCost")
+                                                                                                      .Include("DoctorPlan")
                                                                                                       .OrderBy(i => i.MedicalSpecialty)
                                                                                                       .ThenBy(i => i.User.LastName)
                                                                                                       .ThenBy(i => i.User.FirstName)
@@ -97,7 +97,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                      .Include("User.Messages")
                                                                                                      .Include("User.Roles")
                                                                                                      .Include("WorkingHours")
-                                                                                                     .Include("AppointmentCost")
+                                                                                                     .Include("DoctorPlan")
                                                                                                      .OrderBy(i => i.MedicalSpecialty)
                                                                                                      .ThenBy(i => i.User.LastName)
                                                                                                      .ThenBy(i => i.User.FirstName)
@@ -153,7 +153,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                      .Include("User.Messages")
                                                                                                      .Include("User.Roles")
                                                                                                      .Include("WorkingHours")
-                                                                                                     .Include("AppointmentCost")
+                                                                                                     .Include("DoctorPlan")
                                                                                                      .OrderBy(i => i.MedicalSpecialty)
                                                                                                      .ThenBy(i => i.User.LastName)
                                                                                                      .ThenBy(i => i.User.FirstName)
@@ -174,7 +174,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                      .Include("User.Messages")
                                                                                                      .Include("User.Roles")
                                                                                                      .Include("WorkingHours")
-                                                                                                     .Include("AppointmentCost")
+                                                                                                     .Include("DoctorPlan")
                                                                                                      .OrderBy(i => i.MedicalSpecialty)
                                                                                                      .ThenBy(i => i.User.LastName)
                                                                                                      .ThenBy(i => i.User.FirstName)
@@ -190,7 +190,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                       .Include("User.Messages")
                                                                                                       .Include("User.Roles")
                                                                                                       .Include("WorkingHours")
-                                                                                                      .Include("AppointmentCost")
+                                                                                                      .Include("DoctorPlan")
                                                                                                       .OrderBy(i => i.MedicalSpecialty)
                                                                                                       .ThenBy(i => i.User.LastName)
                                                                                                       .ThenBy(i => i.User.FirstName)
@@ -203,7 +203,7 @@ namespace GreekHealthcareNetwork.Repositories
                                                                                                      .Include("User.Messages")
                                                                                                      .Include("User.Roles")
                                                                                                      .Include("WorkingHours")
-                                                                                                     .Include("AppointmentCost")
+                                                                                                     .Include("DoctorPlan")
                                                                                                      .OrderBy(i => i.MedicalSpecialty)
                                                                                                      .ThenBy(i => i.User.LastName)
                                                                                                      .ThenBy(i => i.User.FirstName)
@@ -224,7 +224,7 @@ namespace GreekHealthcareNetwork.Repositories
                                    .Include("User.Messages")
                                    .Include("User.Roles")
                                    .Include("WorkingHours")
-                                   .Include("AppointmentCost")
+                                   .Include("DoctorPlan")
                                    .SingleOrDefault(d => d.UserId.Equals(doctorId));
             }
             return doctor;
@@ -357,7 +357,7 @@ namespace GreekHealthcareNetwork.Repositories
 
             using (var db = new ApplicationDbContext())
             {
-                appointmentCost = db.AppointmentCostPerSpecialty.SingleOrDefault(appCost => appCost.MedicalSpecialty == medicalSpecialty).AppointmentCost;
+                appointmentCost = db.DoctorPlans.SingleOrDefault(appCost => appCost.MedicalSpecialty == medicalSpecialty).AppointmentCost;
             }
             return appointmentCost;
         }

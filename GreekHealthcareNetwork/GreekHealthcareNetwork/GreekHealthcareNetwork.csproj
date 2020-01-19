@@ -331,11 +331,14 @@
     <Compile Include="Migrations\202001182239241_Unique index for Medical Specialty in Doctor Plans table.Designer.cs">
       <DependentUpon>202001182239241_Unique index for Medical Specialty in Doctor Plans table.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001191034383_Drop table Appointment Cost Per Specialty. Add appointment cost to doctor plan..cs" />
+    <Compile Include="Migrations\202001191034383_Drop table Appointment Cost Per Specialty. Add appointment cost to doctor plan..Designer.cs">
+      <DependentUpon>202001191034383_Drop table Appointment Cost Per Specialty. Add appointment cost to doctor plan..cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
-    <Compile Include="Models\AppointmentCostPerSpecialty.cs" />
     <Compile Include="Models\Doctor.cs" />
     <Compile Include="Models\DoctorPlansViewModel.cs" />
     <Compile Include="Models\DoctorsUnavailability.cs" />
@@ -713,6 +716,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001182239241_Unique index for Medical Specialty in Doctor Plans table.resx">
       <DependentUpon>202001182239241_Unique index for Medical Specialty in Doctor Plans table.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001191034383_Drop table Appointment Cost Per Specialty. Add appointment cost to doctor plan..resx">
+      <DependentUpon>202001191034383_Drop table Appointment Cost Per Specialty. Add appointment cost to doctor plan..cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

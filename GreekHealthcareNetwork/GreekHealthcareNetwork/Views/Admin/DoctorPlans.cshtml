@@ -29,6 +29,9 @@
                         <th>
                             @Html.DisplayNameFor(model => model.DoctorPlans.First().Fee)
                         </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.DoctorPlans.First().AppointmentCost)
+                        </th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -52,6 +55,9 @@
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Fee) &euro;
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AppointmentCost) &euro;
                                 </td>
                                 <td>
                                     <button class="btn btn-warning table-button editButton" data-id="@item.Id">Edit</button>
@@ -104,6 +110,13 @@
                             <div class="col-md-12">
                                 <input id="Fee" name="Fee" class="form-control" data-val="true" data-val-required="The Fee field is required.">
                                 <span class="field-validation-valid text-danger" data-valmsg-for="Fee" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="AppointmentCost" class="col-md-12 control-label">Plan Fee</label>
+                            <div class="col-md-12">
+                                <input id="AppointmentCost" name="AppointmentCost" class="form-control" data-val="true" data-val-required="The Appointment Cost field is required.">
+                                <span class="field-validation-valid text-danger" data-valmsg-for="AppointmentCost" data-valmsg-replace="true"></span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -205,8 +218,11 @@
                                         if (property == 'model.MedicalSpecialty') {
                                             $('#doctorPlanForm div.validation-summary-errors > ul').append('<li>Please choose a medical specialty</li>');
                                         }
-                                        else {
+                                        else if (property == 'model.Fee') {
                                             $('#doctorPlanForm div.validation-summary-errors > ul').append('<li>The Fee must have either 0 or 2 decimal places exactly</li>');
+                                        }
+                                        else {
+                                            $('#doctorPlanForm div.validation-summary-errors > ul').append('<li>The Appointment Cost must have either 0 or 2 decimal places exactly</li>');
                                         }
                                     }
                                 }

@@ -18,7 +18,6 @@ namespace GreekHealthcareNetwork.Models
         public DbSet<Insured> Insureds { get; set; }
         public DbSet<InsuredPlan> InsuredPlans { get; set; }
         public DbSet<DoctorPlan> DoctorPlans { get; set; }
-        public DbSet<AppointmentCostPerSpecialty> AppointmentCostPerSpecialty {get; set;}
 
         public ApplicationDbContext()
             : base("GHNConnection", throwIfV1Schema: false)
