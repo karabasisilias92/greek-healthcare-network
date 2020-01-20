@@ -85,12 +85,12 @@
                 </div>
                 <div class="row mt-5">
                     <div class="col">
-                        <h6>@(User.IsInRole("Insured") ? "Your comments to Doctor:" : "Patient's comments:")</h6>
-                        <p id="patientComments"></p>
+                        <h5 class="mb-0">@(User.IsInRole("Insured") ? "Your comments to Doctor:" : "Patient's comments:")</h5>
+                        <pre class="mb-3" id="patientComments"></pre>
                         @if (User.IsInRole("Doctor"))
                         {
-                            <h6>Your Comments:</h6>
-                            <p id="doctorsComments"></p>
+                            <h5 class="mt-3 mb-0">Your Comments:</h5>
+                            <pre class="mb-3" id="doctorsComments"></pre>
                         }
                     </div>
                 </div>
@@ -241,7 +241,7 @@
                                         '<td>' + appointmentStart[0] + ':' + appointmentStart[1] + ' - ' + appointmentEnd[0] + ':' + appointmentEnd[1] + '</td>' +
                                         '<td>' + appointment.AppointmentStatus + '</td>' +
                                         '<td>' +
-                                        (isUserDoctor ? '<button type="button" class="btn btn-success showAppointmentDetails table-button" data-id="' + appointment.Id + '">View</button><button class="btn btn-secondary table-button sendMessage" data-id="' + appointment.Insured.User.Id + '">Message</button>' : '<button type="button" class="btn btn-success showAppointmentDetails table-button" data-id="' + appointment.Id + '">View</button><button class="btn btn-secondary table-button sendMessage" data-id="' + appointment.Doctor.User.Id + '">Message</button>') +
+                                        (isUserDoctor ? (appointment.InsuredComments == "" ? '<button type="button" class="btn btn-success showAppointmentDetails table-button" data-id="' + appointment.Id + '">View</button>' : '<button type="button" class="btn btn-success showAppointmentDetails table-button" style="border: 2px black solid; font-weight:900; color:black;" data-id="' + appointment.Id + '">View</button>') + '<button class="btn btn-secondary table-button sendMessage" data-id="' + appointment.Insured.User.Id + '">Message</button>' : '<button type="button" class="btn btn-success showAppointmentDetails table-button" data-id="' + appointment.Id + '">View</button><button class="btn btn-secondary table-button sendMessage" data-id="' + appointment.Doctor.User.Id + '">Message</button>') +
                                         ((appointment.AppointmentStatus == "Upcoming" && isUserInsured) ? '<button type="button" class="btn btn-warning editAppointmentDetails table-button" data-id="' + appointment.Id + '">Edit</button>' : '') +
                                         ((appointment.AppointmentStatus == "Upcoming") ? '<button class="btn btn-danger table-button cancel-appointment" data-id="' + appointment.Id + '">Cancel</button>' : '') +
                                         '</td>'
