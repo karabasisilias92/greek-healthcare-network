@@ -37,28 +37,60 @@ namespace GreekHealthcareNetwork.Controllers
             {
                 currentUser.Insured = _insuredsRepository.GetInsuredById(userId);
             }
-
+            
             return currentUser;
         }
 
         private ProfileDetailsViewModel UpdatedUser(ProfileDetailsViewModel modifiedUser)
         {
-            var updatedUser = GetCurrentUser();
-            updatedUser.User.FirstName = modifiedUser.User.FirstName;
-            updatedUser.User.LastName = modifiedUser.User.LastName;
-            updatedUser.User.DoB = modifiedUser.User.DoB;
-            updatedUser.User.AMKA = modifiedUser.User.AMKA;
-            updatedUser.User.PaypalAccount = modifiedUser.User.PaypalAccount;
-            updatedUser.User.Email = modifiedUser.User.Email;
-            updatedUser.User.PhoneNumber = modifiedUser.User.PhoneNumber;
+            var updatedUser = new ProfileDetailsViewModel();
+            if (HttpContext.User.IsInRole("Administrator"))
+            {
+                var userId = modifiedUser.User.Id;
+                updatedUser = new ProfileDetailsViewModel();
+                updatedUser.User = _usersRepository.GetUserById(userId);
+                var userRole = _usersRepository.GetRoleNameById(updatedUser.User.Id);
 
-            if (HttpContext.User.IsInRole("Doctor"))
-            {
-                updatedUser.Doctor.MedicalSpecialty = modifiedUser.Doctor.MedicalSpecialty;
+                updatedUser.User.FirstName = modifiedUser.User.FirstName;
+                updatedUser.User.LastName = modifiedUser.User.LastName;
+                updatedUser.User.AMKA = modifiedUser.User.AMKA;
+                updatedUser.User.PaypalAccount = modifiedUser.User.PaypalAccount;
+                updatedUser.User.PhoneNumber = modifiedUser.User.PhoneNumber;
+                if (userRole == "Doctor")
+                {
+                    updatedUser.Doctor.MedicalSpecialty = modifiedUser.Doctor.MedicalSpecialty;
+                    updatedUser.Doctor.OfficeAddress = modifiedUser.Doctor.OfficeAddress;
+                }
+                else if (userRole == "Insured")
+                {
+
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
+
             }
-            if (HttpContext.User.IsInRole("Insured"))
+            else
             {
-                updatedUser.Insured.HomeAddress = modifiedUser.Insured.HomeAddress;
+                updatedUser = GetCurrentUser();
+
+                updatedUser.User.FirstName = modifiedUser.User.FirstName;
+                updatedUser.User.LastName = modifiedUser.User.LastName;
+                updatedUser.User.DoB = modifiedUser.User.DoB;
+                updatedUser.User.AMKA = modifiedUser.User.AMKA;
+                updatedUser.User.PaypalAccount = modifiedUser.User.PaypalAccount;
+                updatedUser.User.Email = modifiedUser.User.Email;
+                updatedUser.User.PhoneNumber = modifiedUser.User.PhoneNumber;
+
+                if (HttpContext.User.IsInRole("Doctor"))
+                {
+                    updatedUser.Doctor.MedicalSpecialty = modifiedUser.Doctor.MedicalSpecialty;
+                }
+                if (HttpContext.User.IsInRole("Insured"))
+                {
+                    updatedUser.Insured.HomeAddress = modifiedUser.Insured.HomeAddress;
+                }
             }
 
             return updatedUser;

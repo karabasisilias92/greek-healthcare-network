@@ -78,22 +78,22 @@
                         grandParent.append('<form id="__AjaxAntiForgeryForm" action="#" method="post">@Html.AntiForgeryToken()</form>');
                         var firstName = grandParent.children('td:nth-child(2)').html();
                         grandParent.children('td:nth-child(2)').html("");
-                        grandParent.children('td:nth-child(2)').append('<input type="text" value="' + firstName + '">');
+                        grandParent.children('td:nth-child(2)').append('<input type="text" class="form-control col-6" value="' + firstName + '">');
                         var lastName = grandParent.children('td:nth-child(3)').html();
                         grandParent.children('td:nth-child(3)').html("");
-                        grandParent.children('td:nth-child(3)').append('<input type="text" value="' + lastName + '">');
+                        grandParent.children('td:nth-child(3)').append('<input type="text" class="form-control col-6" value="' + lastName + '">');
                         var address = grandParent.children('td:nth-child(5)').html();
                         grandParent.children('td:nth-child(5)').html("");
-                        grandParent.children('td:nth-child(5)').append('<input type="text" value="' + address + '">');
+                        grandParent.children('td:nth-child(5)').append('<input type="text" class="form-control col-6" value="' + address + '">');
                         var amka = grandParent.children('td:nth-child(6)').html();
                         grandParent.children('td:nth-child(6)').html("");
-                        grandParent.children('td:nth-child(6)').append('<input type="text" value="' + amka + '">');
+                        grandParent.children('td:nth-child(6)').append('<input type="text" class="form-control col-6" value="' + amka + '">');
                         var tel = grandParent.children('td:nth-child(7)').html();
                         grandParent.children('td:nth-child(7)').html("");
-                        grandParent.children('td:nth-child(7)').append('<input type="text" value="' + tel + '">');
+                        grandParent.children('td:nth-child(7)').append('<input type="text" class="form-control col-6" value="' + tel + '">');
                         var paypalAccount = grandParent.children('td:nth-child(8)').html();
                         grandParent.children('td:nth-child(8)').html("");
-                        grandParent.children('td:nth-child(8)').append('<input type="text" value="' + paypalAccount + '">');
+                        grandParent.children('td:nth-child(8)').append('<input type="text" class="form-control col-6" value="' + paypalAccount + '">');
                         var id = $(this).data('id');
                         grandParent.children('td:nth-child(9)').children().hide();
                         grandParent.children('td:nth-child(9)').append('<button class="btn btn-success updateBtn" data-id="' + id + '" >Update</button>');
@@ -121,7 +121,6 @@
                 var tel = grandParent.children('td:nth-child(7)').children('input').val();
                 var paypalAccount = grandParent.children('td:nth-child(8)').children('input').val();
                 var id = $(this).data('id');
-                debugger;
                 var modifiedUser = {
                     User: {
                         Id : id,
@@ -136,15 +135,16 @@
                         OfficeAddress: address
                     }
                 };
-
                 $.ajax({
                     url: '@Url.Action("UpdateUser", "Admin")',
-                    type: 'POST',
+                    type: 'PUT',
                     data: AddAntiForgeryToken(modifiedUser),
                     success: function (data) {
-                        alert('sucess');
+                        console.log('SUCCESS!');
+                        alert('User updated successfully!');
                     },
                     error: function (error) {
+                        console.log('ERROR!');
                         console.log(error);
                     }
                 });

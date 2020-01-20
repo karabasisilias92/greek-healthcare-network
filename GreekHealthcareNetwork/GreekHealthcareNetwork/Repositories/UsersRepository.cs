@@ -54,6 +54,10 @@ namespace GreekHealthcareNetwork.Repositories
             {
                 db.Users.Attach(updatedUser.User);
                 db.Entry(updatedUser.User).State = System.Data.Entity.EntityState.Modified;
+                if (HttpContext.Current.User.IsInRole("Admin"))
+                {
+                    var userRole = GetRoleNameById(updatedUser.User.Id); // <-- diorthosi
+                }
 
                 if (HttpContext.Current.User.IsInRole("Doctor"))
                 {
@@ -95,6 +99,21 @@ namespace GreekHealthcareNetwork.Repositories
                 roleId = db.Roles.SingleOrDefault(r => r.Name.Equals(roleName)).Id;
             }
             return roleId;
+        }
+
+        // Gets the role ID of the user and returns it's role
+        public string GetRoleNameById(string roleId)
+        {
+            string roleName;
+            if (roleId == null)
+            {
+                throw new ArgumentNullException("roleId");
+            }
+            using (var db = new ApplicationDbContext())
+            {
+                roleName = db.Roles.SingleOrDefault(r => r.Id.Equals(roleId)).Name;
+            }
+            return roleName;
         }
     }
 }
