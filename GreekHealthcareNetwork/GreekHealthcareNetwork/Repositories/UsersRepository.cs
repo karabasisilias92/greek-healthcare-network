@@ -30,6 +30,16 @@ namespace GreekHealthcareNetwork.Repositories
             }
         }
 
+        public void DeactivateUser(string userId)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var user = db.Users.Find(userId);
+                user.IsActive = false;
+                db.SaveChanges();
+            }
+        }
+
         public void UpdateSubscriptionEndDate(string userId)
         {
             using (var db = new ApplicationDbContext())
@@ -54,9 +64,21 @@ namespace GreekHealthcareNetwork.Repositories
             {
                 db.Users.Attach(updatedUser.User);
                 db.Entry(updatedUser.User).State = System.Data.Entity.EntityState.Modified;
-                if (HttpContext.Current.User.IsInRole("Admin"))
+                if (HttpContext.Current.User.IsInRole("Administrator"))
                 {
-                    var userRole = GetRoleNameById(updatedUser.User.Id); // <-- diorthosi
+                    var userRole = GetRoleNameById(updatedUser.User.Roles.ElementAt(0).RoleId);
+                    if (userRole == "Doctor")
+                    {
+                        updatedUser.Doctor.User = updatedUser.User;
+                        db.Doctors.Attach(updatedUser.Doctor);
+                        db.Entry(updatedUser.Doctor).State = System.Data.Entity.EntityState.Modified;
+                    }
+                    if (userRole == "Insured")
+                    {
+                        updatedUser.Insured.User = updatedUser.User;
+                        db.Insureds.Attach(updatedUser.Insured);
+                        db.Entry(updatedUser.Insured).State = System.Data.Entity.EntityState.Modified;
+                    }
                 }
 
                 if (HttpContext.Current.User.IsInRole("Doctor"))

@@ -43,37 +43,7 @@ namespace GreekHealthcareNetwork.Controllers
 
         private ProfileDetailsViewModel UpdatedUser(ProfileDetailsViewModel modifiedUser)
         {
-            var updatedUser = new ProfileDetailsViewModel();
-            if (HttpContext.User.IsInRole("Administrator"))
-            {
-                var userId = modifiedUser.User.Id;
-                updatedUser = new ProfileDetailsViewModel();
-                updatedUser.User = _usersRepository.GetUserById(userId);
-                var userRole = _usersRepository.GetRoleNameById(updatedUser.User.Id);
-
-                updatedUser.User.FirstName = modifiedUser.User.FirstName;
-                updatedUser.User.LastName = modifiedUser.User.LastName;
-                updatedUser.User.AMKA = modifiedUser.User.AMKA;
-                updatedUser.User.PaypalAccount = modifiedUser.User.PaypalAccount;
-                updatedUser.User.PhoneNumber = modifiedUser.User.PhoneNumber;
-                if (userRole == "Doctor")
-                {
-                    updatedUser.Doctor.MedicalSpecialty = modifiedUser.Doctor.MedicalSpecialty;
-                    updatedUser.Doctor.OfficeAddress = modifiedUser.Doctor.OfficeAddress;
-                }
-                else if (userRole == "Insured")
-                {
-
-                }
-                else
-                {
-                    throw new ArgumentException();
-                }
-
-            }
-            else
-            {
-                updatedUser = GetCurrentUser();
+                var updatedUser = GetCurrentUser();
 
                 updatedUser.User.FirstName = modifiedUser.User.FirstName;
                 updatedUser.User.LastName = modifiedUser.User.LastName;
@@ -91,10 +61,9 @@ namespace GreekHealthcareNetwork.Controllers
                 {
                     updatedUser.Insured.HomeAddress = modifiedUser.Insured.HomeAddress;
                 }
-            }
-
             return updatedUser;
         }
+
         // GET: Profile
         public ActionResult UserProfile()
         {

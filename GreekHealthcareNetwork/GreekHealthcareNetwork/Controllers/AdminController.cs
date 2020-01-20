@@ -99,7 +99,7 @@ namespace GreekHealthcareNetwork.Controllers
         {
             var messages = new MessagesRepository();
             var adminId = messages.AdminWithLessVisitorMessagesUnreplied();
-            return Json(new { adminId = adminId}, JsonRequestBehavior.AllowGet);
+            return Json(new { adminId = adminId }, JsonRequestBehavior.AllowGet);
         }
 
         [AllowAnonymous]
@@ -206,7 +206,6 @@ namespace GreekHealthcareNetwork.Controllers
             var adminUpdatedUser = new ProfileDetailsViewModel();
             if (!ModelState.IsValid)
             {
-                //return Json(new { success = false, responseText = "Something went wrong! Please try again." }, JsonRequestBehavior.AllowGet);
                 return new HttpStatusCodeResult(400, "Something went wrong! Please try again.");
             }
 
@@ -216,7 +215,6 @@ namespace GreekHealthcareNetwork.Controllers
             }
             catch (Exception)
             {
-                //return Json(new { success = false, responseText = "Something went wrong! Please try again." }, JsonRequestBehavior.AllowGet);
                 return new HttpStatusCodeResult(400, "Something went wrong! Please try again.");
             }
 
@@ -231,6 +229,35 @@ namespace GreekHealthcareNetwork.Controllers
             }
 
             return Json(new { success = true, responseText = "Updated Succesfully!" });
+        }
+
+        [HttpPut]
+        public ActionResult AdminSetUserActiveInactive(string userId, bool isUserActive)
+        {
+            if (isUserActive)
+            {
+                try
+                {
+                    _usersRepository.DeactivateUser(userId);
+                }
+                catch (Exception)
+                {
+                    return new HttpStatusCodeResult(400, "Something went wrong! Please try again.");
+                }
+            }
+            else
+            {
+                try
+                {
+                    _usersRepository.ActivateUser(userId);
+                }
+                catch (Exception)
+                {
+                    return new HttpStatusCodeResult(400, "Something went wrong! Please try again.");
+                }
+            }
+            return Json(new { success = true, responseText = "Updated Succesfully!" });
+
         }
 
         private void AddErrors(IdentityResult result)

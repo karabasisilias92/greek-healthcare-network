@@ -68,9 +68,9 @@
                             + '</td><td>' + doctor.User.PaypalAccount
                             + '</td>'                           
                             + '<td><button class="btn btn-success table-button editBtn" data-id="' + doctor.UserId + '" >Edit</button>'
-                            + ((doctor.User.IsActive == true) ? '<button class="btn btn-danger table-button setActiveBtn" data-id="' + doctor.UserId + '">Deactivate</button>' : '<button class="btn btn-danger table-button setActiveBtn" data-id="' + doctor.UserId + '">Activate</button>')
+                            + ((doctor.User.IsActive == true) ? '<button class="btn btn-danger table-button setActiveBtn" data-is-active="true" data-id="' + doctor.UserId + '">Deactivate</button>' : '<button class="btn btn-danger table-button setActiveBtn" data-is-active="false" data-id="' + doctor.UserId + '">Activate</button>')
                             + '<button class="btn btn-primary table-button sentMessageBtn" data-id="' + doctor.UserId + '" >Message</button>'
-                            + '<button class= "btn btn-secondary table-button payBtn" data - id="' + doctor.User.Id + '" >Pay</button></td>'                            
+                            + '<a class="btn btn-secondary table-button payBtn" href="https://www.sandbox.paypal.com/myaccount/transfer/homepage" target="_blank" data-id="' + doctor.UserId + '" >Pay</a>'
                             + '</tr>')
                     });
                     $('.editBtn').on('click', function (e) {
@@ -96,10 +96,29 @@
                         grandParent.children('td:nth-child(8)').append('<input type="text" class="form-control col-6" value="' + paypalAccount + '">');
                         var id = $(this).data('id');
                         grandParent.children('td:nth-child(9)').children().hide();
-                        grandParent.children('td:nth-child(9)').append('<button class="btn btn-success updateBtn" data-id="' + id + '" >Update</button>');
+                        grandParent.children('td:nth-child(9)').append('<button class="btn btn-success table-button updateBtn" data-id="' + id + '" >Update</button>');
+                        grandParent.children('td:nth-child(9)').append('<button class="btn btn-danger table-button cancelUpdateBtn" data-id="' + id + '">Cancel</button>');
                         updateButtonClicked();
+                        cancelUpdateButtonClicked()
                     });
-                    
+                    $('.setActiveBtn').on('click', function () {
+                        var id = $(this).data('id');
+                        var isActive = $(this).data('is-active');
+                        console.log(id);
+                        console.log(isActive);
+                        $.ajax({
+                            url: '@Url.Action("AdminSetUserActiveInactive", "Admin")',
+                            type: 'PUT',
+                            data: JSON.stringify({ 'userId': id, 'isUserActive': isActive }),
+                            contentType: 'application/json; charset=utf-8',
+                            success() {
+                                ListDoctors('', '', -1);
+                            },
+                            error: function () {
+                                console.log('ERROR!');
+                            }
+                        });
+                    });
                 },
                 error: function (error) {
                     console.log(error)
@@ -110,6 +129,28 @@
             data.__RequestVerificationToken = $('#__AjaxAntiForgeryForm input[name=__RequestVerificationToken]').val();
             return data;
         };
+        function cancelUpdateButtonClicked() {
+            $('.cancelUpdateBtn').on('click', function (e) {
+                var grandParent = $(this).parent().parent();
+                var firstName = grandParent.children('td:nth-child(2)').children('input').val();
+                var lastName = grandParent.children('td:nth-child(3)').children('input').val();
+                var specialty = grandParent.children('td:nth-child(4)').html();
+                var address = grandParent.children('td:nth-child(5)').children('input').val();
+                var amka = grandParent.children('td:nth-child(6)').children('input').val();
+                var tel = grandParent.children('td:nth-child(7)').children('input').val();
+                var paypalAccount = grandParent.children('td:nth-child(8)').children('input').val();
+                var id = $(this).data('id');
+                grandParent.children('td:nth-child(2)').html(firstName);
+                grandParent.children('td:nth-child(3)').html(lastName);
+                grandParent.children('td:nth-child(5)').html(address);
+                grandParent.children('td:nth-child(6)').html(amka);
+                grandParent.children('td:nth-child(7)').html(tel);
+                grandParent.children('td:nth-child(8)').html(paypalAccount);
+                grandParent.children('td:nth-child(9)').children().show();
+                grandParent.children('td:nth-child(9)').children('.updateBtn').hide();
+                grandParent.children('td:nth-child(9)').children('.cancelUpdateBtn').hide();
+            });
+        }
         function updateButtonClicked() {
             $('.updateBtn').on('click', function (e) {
                 var grandParent = $(this).parent().parent();
@@ -141,6 +182,15 @@
                     data: AddAntiForgeryToken(modifiedUser),
                     success: function (data) {
                         console.log('SUCCESS!');
+                        grandParent.children('td:nth-child(2)').html(firstName);
+                        grandParent.children('td:nth-child(3)').html(lastName);
+                        grandParent.children('td:nth-child(5)').html(address);
+                        grandParent.children('td:nth-child(6)').html(amka);
+                        grandParent.children('td:nth-child(7)').html(tel);
+                        grandParent.children('td:nth-child(8)').html(paypalAccount);
+                        grandParent.children('td:nth-child(9)').children().show();
+                        grandParent.children('td:nth-child(9)').children('.updateBtn').hide();
+                        grandParent.children('td:nth-child(9)').children('.cancelUpdateBtn').hide();
                         alert('User updated successfully!');
                     },
                     error: function (error) {
