@@ -61,7 +61,7 @@
                                 </td>
                                 <td>
                                     <button class="btn btn-warning table-button editButton" data-id="@item.Id">Edit</button>
-                                    <button class="btn btn-danger table-button deleteButton" data-id="@item.Id">Delete</button>
+                                    <button class="btn btn-danger table-button deleteButton" data-id="@item.Id" data-specialty="@item.MedicalSpecialty">Delete</button>
                                 </td>
                             </tr>
                         }
@@ -129,6 +129,27 @@
     </div>
 </div>
 
+<div class="modal fade" id="deletePlanConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deletePlanConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="deletePlanConfirmationModalLabel">Delete Doctor Plan</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p></p>
+                <p>Are you sure that you want to proceed?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" data-dismiss="modal">No</button>
+                <a id="deleteConfirmed" class="btn btn-danger" style="color:white;">Yes</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
@@ -138,6 +159,10 @@
                 $('span[data-valmsg-for="Fee"]').children().remove();                
                 $('.validation-summary-errors ul').children().remove();
                 $('#doctorPlanForm').trigger('reset');
+                $('.validation-summary-valid').addClass('validation-summary-errors').removeClass('validation-summary-valid');
+            });
+            $('#deletePlanConfirmationModal').on('hidden.bs.modal', function () {
+                $("#deletePlanConfirmationModal .modal-body").children('p:first-child').text('');
             });
             $('#createDoctorPlan').click(() => $('#doctorPlanModal').modal('show'));
             $('.editButton').click(editDoctorPlanEntry);
@@ -151,6 +176,7 @@
                     let model = new Object();
                     model.MedicalSpecialty = $('#MedicalSpecialty').val();
                     model.Fee = $('#Fee').val();
+                    model.AppointmentCost = $('#AppointmentCost').val();
                     model = JSON.stringify(model);
                     $.ajax({
                         contentType: 'application/json',
@@ -172,19 +198,24 @@
                             $(td2).html(fee.toFixed(2) + ' &euro;');
                             $(tr).append(td2);
                             const td3 = $(document.createElement('td'));
+                            let appointmentCost = parseFloat(data.AppointmentCost);
+                            $(td3).html(appointmentCost.toFixed(2) + ' &euro;');
+                            $(tr).append(td3);
+                            const td4 = $(document.createElement('td'));
                             const editButton = $(document.createElement('button'));
                             $(editButton).addClass('btn btn-warning table-button editButton');
                             $(editButton).text('Edit');
                             $(editButton).attr('data-id', data.Id);
                             $(editButton).click(editDoctorPlanEntry);
-                            $(td3).append(editButton);
+                            $(td4).append(editButton);
                             const deleteButton = $(document.createElement('button'));
                             $(deleteButton).addClass('btn btn-danger table-button deleteButton');
                             $(deleteButton).text('Delete');
                             $(deleteButton).attr('data-id', data.Id);
+                            $(deleteButton).attr('data-specialty', data.MedicalSpecialty);
                             $(deleteButton).click(deleteDoctorPlanEntry);
-                            $(td3).append(deleteButton);
-                            $(tr).append(td3);
+                            $(td4).append(deleteButton);
+                            $(tr).append(td4);
                             if (@Model.DoctorPlans.Count() == 0) {
                                 $('#doctorPlansList').append(tr);
                             }
@@ -252,17 +283,92 @@
                 }
             });
             function editDoctorPlanEntry(e) {
-                var grandParent = $(this).parent().parent();
-                var fee = grandParent.children('td:nth-child(2)').html().trim();
+                let grandParent = $(e.target).parent().parent();
+                let fee = grandParent.children('td:nth-child(2)').html().trim();
                 grandParent.children('td:nth-child(2)').html("");
-                grandParent.children('td:nth-child(2)').append('<input id="Fee" name="Fee" class="form-control col-6" data-val="true" data-val-required="The Fee field is required." value="' + fee + '">' +
-                                                                '<span class="field-validation-valid text-danger" data-valmsg-for="Fee" data-valmsg-replace="true"></span>');               
-                var id = $(this).data('id');
-                grandParent.children('td:nth-child(3)').children().hide();
-                grandParent.children('td:nth-child(3)').append('<button class="btn btn-success updateBtn" data-id="' + id + '" >Update</button>');  
-                grandParent.children('td:nth-child(2)').focus();
+                grandParent.children('td:nth-child(2)').append('<input id="Fee" name="Fee" class="form-control col-6" data-val="true" data-val-required="The Fee field is required." value="' + fee.split(' ')[0] + '">' +
+                    '<span class="field-validation-valid text-danger" data-valmsg-for="Fee" data-valmsg-replace="true"></span>');
+                let appointmentCost = grandParent.children('td:nth-child(3)').html().trim();
+                grandParent.children('td:nth-child(3)').html("");
+                grandParent.children('td:nth-child(3)').append('<input id="AppointmentCost" name="AppointmentCost" class="form-control col-6" data-val="true" data-val-required="The Appointment Cost field is required." value="' + appointmentCost.split(' ')[0] + '">' +
+                                                                '<span class="field-validation-valid text-danger" data-valmsg-for="AppointmentCost" data-valmsg-replace="true"></span>');  
+
+                const id = $(this).data('id');
+                grandParent.children('td:nth-child(4)').children().hide();
+                grandParent.children('td:nth-child(4)').append('<button class="btn btn-success updateBtn" data-id="' + id + '" >Update</button>');  
+                $('.updateBtn').on('click', function (e) {
+                    let grandParent = $(e.target).parent().parent();
+                    let fee = grandParent.children('td:nth-child(2)').children('input').val();
+                    let appointmentCost = grandParent.children('td:nth-child(3)').children('input').val();
+                    if (fee == '' && appointmentCost == '') {
+                        grandParent.children('td:nth-child(2)').children('span').removeClass('field-validation-valid');
+                        grandParent.children('td:nth-child(2)').children('span').addClass('field-validation-error');
+                        grandParent.children('td:nth-child(2)').children('span').append('<span style="color:red">Fee is required field</span>');
+                        grandParent.children('td:nth-child(3)').children('span').removeClass('field-validation-valid');
+                        grandParent.children('td:nth-child(3)').children('span').addClass('field-validation-error');
+                        grandParent.children('td:nth-child(3)').children('span').append('<span style="color:red">Appointment Cost is required field</span>');
+                    }                    
+                    else if (fee == '') {
+                        grandParent.children('td:nth-child(2)').children('span').removeClass('field-validation-valid');
+                        grandParent.children('td:nth-child(2)').children('span').addClass('field-validation-error');
+                        grandParent.children('td:nth-child(2)').children('span').append('<span style="color:red">Fee is required field</span>');
+                    }                        
+                    else if (appointmentCost == '') {
+                        grandParent.children('td:nth-child(3)').children('span').removeClass('field-validation-valid');
+                        grandParent.children('td:nth-child(3)').children('span').addClass('field-validation-error');
+                        grandParent.children('td:nth-child(3)').children('span').append('<span style="color:red">Appointment Cost is required field</span>');
+                    }
+                    else {
+                        let modifiedPlan = new Object();
+                        modifiedPlan.Id = $(e.target).data('id');
+                        modifiedPlan.MedicalSpecialty = grandParent.children('td:nth-child(1)').text();
+                        modifiedPlan.Fee = fee;
+                        modifiedPlan.AppointmentCost = appointmentCost;
+                        $.ajax({
+                            contentType: 'application/json',
+                            url: '/api/DoctorPlans',
+                            type: 'put',
+                            data: JSON.stringify(modifiedPlan),
+                            success: function (data) {
+                                grandParent.children('td:nth-child(2)').html('');
+                                let fee = parseFloat(data.Fee);
+                                grandParent.children('td:nth-child(2)').html(fee.toFixed(2) + ' &euro;');                                
+                                grandParent.children('td:nth-child(3)').html('');
+                                let appointmentCost = parseFloat(data.AppointmentCost);
+                                grandParent.children('td:nth-child(3)').html(appointmentCost.toFixed(2) + ' &euro;');
+                                grandParent.children('td:nth-child(4)').children('button:last-child').remove();
+                                grandParent.children('td:nth-child(4)').children().show();
+                            },
+                            error: function (error) {
+                                if (fee == '' && appointmentCost == '') {
+                                    grandParent.children('td:nth-child(2)').children('span').removeClass('field-validation-valid');
+                                    grandParent.children('td:nth-child(2)').children('span').addClass('field-validation-error');
+                                    grandParent.children('td:nth-child(2)').children('span').append('<span style="color:red">Fee is required field</span>');
+                                    grandParent.children('td:nth-child(3)').children('span').removeClass('field-validation-valid');
+                                    grandParent.children('td:nth-child(3)').children('span').addClass('field-validation-error');
+                                    grandParent.children('td:nth-child(3)').children('span').append('<span style="color:red">Appointment Cost is required field</span>');
+                                }                    
+                                else if (fee == '') {
+                                    grandParent.children('td:nth-child(2)').children('span').removeClass('field-validation-valid');
+                                    grandParent.children('td:nth-child(2)').children('span').addClass('field-validation-error');
+                                    grandParent.children('td:nth-child(2)').children('span').append('<span style="color:red">Fee is required field</span>');
+                                }                        
+                                else if (appointmentCost == '') {
+                                    grandParent.children('td:nth-child(3)').children('span').removeClass('field-validation-valid');
+                                    grandParent.children('td:nth-child(3)').children('span').addClass('field-validation-error');
+                                    grandParent.children('td:nth-child(3)').children('span').append('<span style="color:red">Appointment Cost is required field</span>');
+                                }
+                            }
+                        });
+                    }
+                });
             }
             function deleteDoctorPlanEntry(e) {
+                $("#deleteConfirmed").attr('data-id', $(e.target).data('id'));
+                $("#deletePlanConfirmationModal .modal-body").children('p:first-child').html('You are about to delete the doctor plan for ' + $(e.target).data('specialty') + 's. <span style="font-weight:bold;">All the corresponding doctors will be deleted!!<span>');
+                $("#deletePlanConfirmationModal").modal('show');
+            }
+            $("#deleteConfirmed").click(function(e) {
                 const id = $(e.target).data('id');
                 $.ajax({
                     type: 'delete',
@@ -271,17 +377,18 @@
                         $('button[data-id=' + id + ']').parent().parent().remove();
                         if ($('#doctorPlansList').children().length == 0) {
                             $('#doctorPlansList').append('<tr>' +
-                                                                '<td colspan="3">' +
-                                                                    'You have not created any doctor plans yet.' +
-                                                                '</td>' +
-                                                            '</tr>');
+                                '<td colspan="3">' +
+                                'You have not created any doctor plans yet.' +
+                                '</td>' +
+                                '</tr>');
                         }
+                        $("#deletePlanConfirmationModal").modal('hide');
                     },
                     error: function (error) {
                         console.log(error);
                     }
                 })
-            }
+            })
         })
     </script>    
 }

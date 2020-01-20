@@ -166,6 +166,7 @@
                 $('span[data-valmsg-for="UnavailableUntilTime"]').children().remove();
                 $('.validation-summary-errors ul').children().remove();
                 $('#unavailabilityForm').trigger('reset');
+                $('#unavailabilityForm div.validation-summary-valid').addClass('validation-summary-errors').removeClass('validation-summary-valid');
             })
             $('#declareUnavailability').click(() => $('#unavailabilityModal').modal('show'));
             const today = new Date();

@@ -401,11 +401,13 @@
             })
             $('#viewMessage').on('hidden.bs.modal', function () {
                 $('#sentmessagearea').trigger('reset');
+                $('#sentmessagearea div.validation-summary-valid').addClass('validation-summary-errors').removeClass('validation-summary-valid');
                 $('#sentmessagearea span[data-valmsg-for="Message.MessageText"]').children().remove();
                 $('#sentmessagearea div.validation-summary-errors > ul').children().remove();
             })
             $('#newMessage').on('hidden.bs.modal', function () {
                 $('#messagearea').trigger('reset');
+                $('#messagearea div.validation-summary-valid').addClass('validation-summary-errors').removeClass('validation-summary-valid');
                 $('#messagearea span[data-valmsg-for="Message.Subject"]').children().remove();
                 $('#messagearea span[data-valmsg-for="Message.MessageText"]').children().remove();
                 $('#messagearea div.validation-summary-errors > ul').children().remove();

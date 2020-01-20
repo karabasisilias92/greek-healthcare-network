@@ -36,7 +36,7 @@ namespace GreekHealthcareNetwork.Controllers
 
         [System.Web.Http.HttpPut]
         [ValidateAntiForgeryToken]
-        public IHttpActionResult EditUnavailability(DoctorPlan model)
+        public IHttpActionResult EditDoctorPlan(DoctorPlan model)
         {
             if (ModelState.IsValid)
             {
