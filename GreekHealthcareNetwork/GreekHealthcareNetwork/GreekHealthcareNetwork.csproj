@@ -336,6 +336,14 @@
     <Compile Include="Migrations\202001191034383_Drop table Appointment Cost Per Specialty. Add appointment cost to doctor plan..Designer.cs">
       <DependentUpon>202001191034383_Drop table Appointment Cost Per Specialty. Add appointment cost to doctor plan..cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001201213167_Add necessary properties to appointment and insured for payDoctor and refundInsured.cs" />
+    <Compile Include="Migrations\202001201213167_Add necessary properties to appointment and insured for payDoctor and refundInsured.Designer.cs">
+      <DependentUpon>202001201213167_Add necessary properties to appointment and insured for payDoctor and refundInsured.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001201215161_Unique index for name in insured plans.cs" />
+    <Compile Include="Migrations\202001201215161_Unique index for name in insured plans.Designer.cs">
+      <DependentUpon>202001201215161_Unique index for name in insured plans.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -721,6 +729,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001191034383_Drop table Appointment Cost Per Specialty. Add appointment cost to doctor plan..resx">
       <DependentUpon>202001191034383_Drop table Appointment Cost Per Specialty. Add appointment cost to doctor plan..cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001201213167_Add necessary properties to appointment and insured for payDoctor and refundInsured.resx">
+      <DependentUpon>202001201213167_Add necessary properties to appointment and insured for payDoctor and refundInsured.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001201215161_Unique index for name in insured plans.resx">
+      <DependentUpon>202001201215161_Unique index for name in insured plans.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

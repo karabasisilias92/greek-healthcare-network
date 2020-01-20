@@ -70,5 +70,7 @@ namespace GreekHealthcareNetwork.Models
 
         [Display(Name = "Comments for patient")]
         public string DoctorComments { get; set; }
+
+        public bool PaidByCompany { get; set; }
     }
 }
