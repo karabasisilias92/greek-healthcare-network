@@ -4,11 +4,12 @@ using GreekHealthcareNetwork.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Http;
 using System.Web.Mvc;
 
 namespace GreekHealthcareNetwork.Controllers
 {
-    [Authorize(Roles = "Insured")]
+    [System.Web.Mvc.Authorize(Roles = "Insured, Administrator")]
     public class InsuredsController : Controller
     {
         private readonly DoctorsRepository _doctors = new DoctorsRepository();
@@ -81,6 +82,22 @@ namespace GreekHealthcareNetwork.Controllers
                 searchLoginViewModel.MedicalSpecialties.Add((MedicalSpecialty)i);
             }
             return View(searchLoginViewModel);
+        }
+
+        [System.Web.Mvc.HttpPut]
+        public ActionResult SetRefundToZero(string insuredId)
+        {
+            var insured = _insureds.GetInsuredById(insuredId);
+            insured.RefundPending = 0;
+            try
+            {
+                _insureds.UpdateInsured(insured);
+                return new HttpStatusCodeResult(200);
+            }
+            catch (Exception e)
+            {
+                return new HttpStatusCodeResult(400);
+            }            
         }
     }
 }

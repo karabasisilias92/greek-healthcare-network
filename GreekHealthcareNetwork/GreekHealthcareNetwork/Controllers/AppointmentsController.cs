@@ -40,7 +40,7 @@ namespace GreekHealthcareNetwork.Controllers
             {
                 _appointmentsRespository.CancelAppointment(appointmentId);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return Json("Error");
             }
