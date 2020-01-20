@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace GreekHealthcareNetwork.Controllers
 {
-    [Authorize(Roles = "Doctor,Insured")]
+    [Authorize(Roles = "Doctor,Insured,Administrator")]
     public class AppointmentsController : Controller
     {
         private readonly AppointmentsRespository _appointmentsRespository = new AppointmentsRespository();
@@ -87,6 +87,20 @@ namespace GreekHealthcareNetwork.Controllers
             }
 
             return Json("Success");
+        }
+
+        [HttpPut]
+        public ActionResult SetAppointmentsPaid(string doctorId)
+        {
+            try
+            {
+                _appointmentsRespository.SetCompletedAppointmentsPaid(doctorId);
+                return new HttpStatusCodeResult(200);
+            }
+            catch (Exception e)
+            {
+                return new HttpStatusCodeResult(400);
+            }
         }
     }
 }

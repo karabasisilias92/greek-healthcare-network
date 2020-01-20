@@ -28,6 +28,7 @@
                     <th scope="col">AMKA</th>
                     <th scope="col">Telephone</th>
                     <th scope="col">Paypal Account</th>
+                    <th scope="col">Payment Pending</th>
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
@@ -45,18 +46,15 @@
 
     $(document).ready(function () {
         ListDoctors('', '', -1);
-        var counter = 0;
         function ListDoctors(firstName, lastName, specialty) {
             $.ajax({
                 dataType: 'json',
                 type: 'get',
                 url: '/api/Search/AdminSearchDoctorResults?doctorsFirstName=' + firstName + '&doctorsLastName=' + lastName + '&doctorsSpecialty=' + specialty + '&appointmentDate=0001-01-01',
                 success: function (data) {
-                    console.log(data);
-                    console.log(data.length);
                     $('#doctorsList tbody').empty();
-                    data.forEach(function (doctor) {
-                        console.log('counter= ' + ++counter);
+                    var counter = 0;
+                    data.doctors.forEach(function (doctor) {
                         $('#doctorsList tbody').append(
                               '<tr><td><img src="@Url.Content("~/Content/img/Doctors/")' + doctor.User.Id + '/' + doctor.User.ProfilePicture + '" alt="' + doctor.User.ProfilePicture + '"' + 'class="rounded-circle">'
                             + '</td><td>' + doctor.User.FirstName
@@ -66,34 +64,36 @@
                             + '</td><td>' + doctor.User.AMKA
                             + '</td><td>' + doctor.User.PhoneNumber
                             + '</td><td>' + doctor.User.PaypalAccount
+                            + '</td><td>' + parseFloat(data.doctorsPayments[counter]).toFixed(2) + ' &euro;'
                             + '</td>'                           
                             + '<td><button class="btn btn-success table-button editBtn" data-id="' + doctor.UserId + '" >Edit</button>'
-                            + ((doctor.User.IsActive == true) ? '<button class="btn btn-danger table-button setActiveBtn" data-is-active="true" data-id="' + doctor.UserId + '">Deactivate</button>' : '<button class="btn btn-danger table-button setActiveBtn" data-is-active="false" data-id="' + doctor.UserId + '">Activate</button>')
+                            + ((doctor.User.IsActive == true) ? '<button class="btn btn-danger table-button setActiveBtn" data-is-active="true" data-id="' + doctor.UserId + '">Deactivate</button>' : '<button class="btn btn-danger table-button setActiveBtn" data-is-active="false" style="width:101.2px; height:38px" data-id="' + doctor.UserId + '">Activate</button>')
                             + '<button class="btn btn-primary table-button sentMessageBtn" data-id="' + doctor.UserId + '" >Message</button>'
-                            + '<a class="btn btn-secondary table-button payBtn" href="https://www.sandbox.paypal.com/myaccount/transfer/homepage" target="_blank" data-id="' + doctor.UserId + '" >Pay</a>'
+                            + (data.doctorsPayments[counter] == 0 ? '<button class="btn btn-secondary table-button disabled" data-id="' + doctor.UserId + '">Pay</button>' : '<button class="btn btn-secondary table-button payBtn" data-id="' + doctor.UserId + '">Pay</button>')
                             + '</tr>')
+                        counter++;
                     });
                     $('.editBtn').on('click', function (e) {
                         var grandParent = $(this).parent().parent();
                         grandParent.append('<form id="__AjaxAntiForgeryForm" action="#" method="post">@Html.AntiForgeryToken()</form>');
                         var firstName = grandParent.children('td:nth-child(2)').html();
                         grandParent.children('td:nth-child(2)').html("");
-                        grandParent.children('td:nth-child(2)').append('<input type="text" class="form-control col-6" value="' + firstName + '"><span></span>');
+                        grandParent.children('td:nth-child(2)').append('<input type="text" class="form-control col-10" value="' + firstName + '">');
                         var lastName = grandParent.children('td:nth-child(3)').html();
                         grandParent.children('td:nth-child(3)').html("");
-                        grandParent.children('td:nth-child(3)').append('<input type="text" class="form-control col-6" value="' + lastName + '"><span></span>');
+                        grandParent.children('td:nth-child(3)').append('<input type="text" class="form-control col-10" value="' + lastName + '">');
                         var address = grandParent.children('td:nth-child(5)').html();
                         grandParent.children('td:nth-child(5)').html("");
-                        grandParent.children('td:nth-child(5)').append('<input type="text" class="form-control col-6" value="' + address + '"><span></span>');
+                        grandParent.children('td:nth-child(5)').append('<input type="text" class="form-control col-10" value="' + address + '">');
                         var amka = grandParent.children('td:nth-child(6)').html();
                         grandParent.children('td:nth-child(6)').html("");
-                        grandParent.children('td:nth-child(6)').append('<input type="text" class="form-control col-6" value="' + amka + '"><span></span>');
+                        grandParent.children('td:nth-child(6)').append('<input type="text" class="form-control col-10" value="' + amka + '">');
                         var tel = grandParent.children('td:nth-child(7)').html();
                         grandParent.children('td:nth-child(7)').html("");
-                        grandParent.children('td:nth-child(7)').append('<input type="text" class="form-control col-6" value="' + tel + '"><span></span>');
+                        grandParent.children('td:nth-child(7)').append('<input type="text" class="form-control col-10" value="' + tel + '">');
                         var paypalAccount = grandParent.children('td:nth-child(8)').html();
                         grandParent.children('td:nth-child(8)').html("");
-                        grandParent.children('td:nth-child(8)').append('<input type="text" class="form-control col-6" value="' + paypalAccount + '"><span></span>');
+                        grandParent.children('td:nth-child(8)').append('<input type="text" class="form-control col-10" value="' + paypalAccount + '">');
                         var id = $(this).data('id');
                         grandParent.children('td:nth-child(9)').children().hide();
                         grandParent.children('td:nth-child(9)').append('<button class="btn btn-success table-button updateBtn" data-id="' + id + '" >Update</button>');
@@ -119,6 +119,67 @@
                             }
                         });
                     });
+                    $('.payBtn').click(function (e) {
+                        const date = new Date();
+                        const amountValue = parseFloat($(this).parent().prev().text().split(' ')[0]).toFixed(2);
+                        const email = $(this).parent().prev().prev().text().trim();
+                        const doctorId = $(e.target).data('id');
+                        $.ajax({
+                            type: 'get',
+                            url: '/Payment/GetAccessToken',
+                            dataType: 'json',
+                            success: function (data) {                                
+                                let payment = new Object();
+                                payment.sender_batch_header = new Object();
+                                payment.sender_batch_header.sender_batch_id = 'Payouts_' + date;
+                                payment.sender_batch_header.email_subject = 'You have a payment!';
+                                payment.sender_batch_header.email_message = 'You have received a payment! Thanks for using our service!';
+                                payment.items = [];
+                                payment.items[0] = new Object();
+                                payment.items[0].recipient_type = 'EMAIL';
+                                payment.items[0].amount = new Object();
+                                payment.items[0].amount.value = amountValue;
+                                payment.items[0].amount.currency = 'EUR';
+                                payment.items[0].note = 'Thanks for your patronage';
+                                payment.items[0].sender_item_id = '' + date.getFullYear() + (date.getMonth() + 1) + date.getDate() + '0001';
+                                payment.items[0].receiver = email;
+                                $.ajax({
+                                    type: 'post',
+                                    url: 'https://api.sandbox.paypal.com/v1/payments/payouts',
+                                    dataType: 'json',
+                                    contentType: 'application/json',
+                                    beforeSend: function (xhr) {
+                                        xhr.setRequestHeader('Authorization', data);
+                                    },
+                                    data: JSON.stringify(payment),
+                                    processData: false,
+                                    success: function (data) {
+                                        console.log(data);
+                                        console.log(doctorId)
+                                        $.ajax({
+                                            type: 'put',
+                                            url: '/Appointments/SetAppointmentsPaid?doctorId=' + doctorId,
+                                            success: function () {
+                                                console.log('success');                                                
+                                                $(e.target).parent().prev().html(parseFloat('0').toFixed(2) + ' &euro;')
+                                                $(e.target).off('click');
+                                                $(e.target).removeClass('refundBtn').addClass('disabled');
+                                            },
+                                            error: function () {
+                                                console.log('error')
+                                            }
+                                        })
+                                    },
+                                    error: function (error) {
+                                        console.log(error);
+                                    }
+                                })
+                            },
+                            error: function (error) {
+                                console.log(error)
+                            }
+                        })            
+                    })
                 },
                 error: function (error) {
                     console.log(error)

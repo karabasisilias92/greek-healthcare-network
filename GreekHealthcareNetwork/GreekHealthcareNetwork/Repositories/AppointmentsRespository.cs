@@ -290,5 +290,31 @@ namespace GreekHealthcareNetwork.Repositories
             }
             return id;
         }
+
+        public List<decimal> CalculateAmountOwedToDoctor(IEnumerable<Doctor> doctors)
+        {
+            List<decimal> doctorsPayments = new List<decimal>();
+            using (var db = new ApplicationDbContext())
+            {
+                foreach (var doctor in doctors)
+                {
+                    doctorsPayments.Add(doctor.DoctorPlan.AppointmentCost * db.Appointments.Count(app => app.DoctorId.Equals(doctor.UserId) && app.AppointmentStatus == AppointmentStatus.Completed && app.PaidByCompany == false));
+                }
+            }
+            return doctorsPayments;
+        }
+
+        public void SetCompletedAppointmentsPaid(string doctorId)
+        {
+            using (var db = new ApplicationDbContext())
+            {
+                var appointments = db.Appointments.Where(app => app.DoctorId.Equals(doctorId) && app.AppointmentStatus == AppointmentStatus.Completed && app.PaidByCompany == false);
+                foreach (var appointment in appointments)
+                {
+                    appointment.PaidByCompany = true;
+                }
+                db.SaveChanges();
+            }
+        }
     }
 }
