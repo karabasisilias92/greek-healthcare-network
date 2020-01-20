@@ -315,7 +315,6 @@ h6 {
 /* Nav Meu Container */
 
 #nav-menu-container {
-    float: right;
     margin: 0;
 }
 
@@ -1027,10 +1026,6 @@ button:disabled:hover, input:disabled:hover {
         margin-bottom: 30px;
     }
 
-    #nav-menu-container {
-        display: none;
-    }
-
     #mobile-nav-toggle {
         display: inline;
     }
@@ -1039,4 +1034,14 @@ button:disabled:hover, input:disabled:hover {
         padding-top: 15px;
     }
 
+}
+
+@media (max-width: 1501px) {
+    #nav-menu-container {
+        display: none;
+    }
+
+    .d-md-block {
+        display: block !important;
+    }
 }
