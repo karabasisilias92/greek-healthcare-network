@@ -1,6 +1,7 @@
 ﻿@model GreekHealthcareNetwork.Models.PaySubcriptionViewModel
 @using GreekHealthcareNetwork.Models;
 @using GreekHealthcareNetwork.Repositories;
+@using System.Globalization;
 @{
     ViewBag.Title = "Pay Subscription Fee";
     var _users = new UsersRepository();
@@ -15,7 +16,7 @@
 </section>
 
 <section id="PaymentInfo" class="container">
-    <p> Your paypal account will be charged: @Model.PlanFee.ToString("0.00")&euro;</p>
+    <p> Your paypal account will be charged: @Model.PlanFee.ToString("0.00", new CultureInfo("en-US"))&euro;</p>
     <div id="pay_skip" class="mt-4">
         <div>
             @{
