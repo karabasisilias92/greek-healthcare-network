@@ -219,6 +219,14 @@ namespace GreekHealthcareNetwork.Repositories
 
                 var insured = db.Insureds.SingleOrDefault(m => m.User.Id == appointment.InsuredId);
                 insured.BookedAppointments--;
+                if ((int)(appointment.AppointmentDate - DateTime.Now.Date).Days < 3 && HttpContext.Current.User.IsInRole("Insured"))
+                {
+                    insured.RefundPending += appointment.InsuredAppointmentCharge * (Convert.ToDecimal(insured.InsuredPlan.CancelationRefundPercentage) / 100m);
+                }
+                else
+                {
+                    insured.RefundPending += appointment.InsuredAppointmentCharge;
+                }
 
                 db.SaveChanges();
             }

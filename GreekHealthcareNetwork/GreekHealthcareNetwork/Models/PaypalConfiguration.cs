@@ -23,7 +23,7 @@ namespace GreekHealthcareNetwork.Models
             return PayPal.Api.ConfigManager.Instance.GetProperties();
         }
 
-        private static string GetAccessToken()
+        public static string GetAccessToken()
         {
             string accessToken = new OAuthTokenCredential(ClientId, ClientSecret, GetConfig()).GetAccessToken();
             return accessToken;

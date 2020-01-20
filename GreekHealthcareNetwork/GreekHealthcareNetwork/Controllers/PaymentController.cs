@@ -48,6 +48,11 @@ namespace GreekHealthcareNetwork.Controllers
         }
         private Payment payment;
 
+        public ActionResult GetAccessToken()
+        {
+            return Json(PaypalConfiguration.GetAccessToken(), JsonRequestBehavior.AllowGet);
+        }
+
         // GET: Payment
         public ActionResult PayWithPayPal(int appointmentId)
         {
