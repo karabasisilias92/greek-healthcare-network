@@ -17,7 +17,7 @@
                 @*<h1><a href="/Admin/Index">GHN</a></h1>*@
             </div>
             <div id="profilePic">
-                <ul class="nav-menu">
+                <ul class="nav-menu" style="margin-right: 100px;">
                     <li class="nav-menu menu-has-children">
                         <a href="#">
                             <img src="@Url.Content("~/Content/img/Admins/" + userId + "/" + profilePicture)" class="rounded-circle mt-2" style="max-height:40px; max-width:40px" alt="User" title="" />
@@ -41,7 +41,7 @@
         <div class="container-fluid">
             <div class="row">
                 <nav class="col-md-2 d-none d-md-block sidebar">
-                    <div>
+                    <div id="nav-menu-container">
                         <ul class="nav nav-menu flex-column mb-2">
                             <li>
                                 @Html.ActionLink("Home", "Index", "Admin")
