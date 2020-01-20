@@ -4,11 +4,11 @@
     ViewBag.Title = "Create Admin User";
 }
 
-<section id="pageHeader" class="offset-3 container my-3">
+<section id="pageHeader" class="offset-left-messages container my-3">
     <h2>@ViewBag.Title</h2>
 </section>
 
-<section id="adminInfo" class="offset-3 container">
+<section id="adminInfo" class="offset-left-messages container">
     <hr class="thicker" />
     @using (Html.BeginForm("CreateAdminUser", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
     {

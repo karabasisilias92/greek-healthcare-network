@@ -1042,6 +1042,33 @@ button:disabled:hover, input:disabled:hover {
     }
 
     .d-md-block {
+        display: none !important;
+    }
+
+    #mobile-nav-toggle {
+        display: inline;
+    }
+
+    .offset-left {
+        margin-left: 8.333333%;
+    }
+
+    .offset-left-messages {
+        margin-left: 16.666667%
+    }
+}
+
+
+@media (min-width: 1501px) {
+    .d-md-block {
         display: block !important;
+    }
+
+    .offset-left {
+        margin-left: 16.666667%;
+    }
+
+    .offset-left-messages {
+        margin-left: 24.99999%;
     }
 }
