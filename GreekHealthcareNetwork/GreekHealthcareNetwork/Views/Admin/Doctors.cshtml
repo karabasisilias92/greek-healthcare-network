@@ -78,22 +78,22 @@
                         grandParent.append('<form id="__AjaxAntiForgeryForm" action="#" method="post">@Html.AntiForgeryToken()</form>');
                         var firstName = grandParent.children('td:nth-child(2)').html();
                         grandParent.children('td:nth-child(2)').html("");
-                        grandParent.children('td:nth-child(2)').append('<input type="text" class="form-control col-6" value="' + firstName + '">');
+                        grandParent.children('td:nth-child(2)').append('<input type="text" class="form-control col-6" value="' + firstName + '"><span></span>');
                         var lastName = grandParent.children('td:nth-child(3)').html();
                         grandParent.children('td:nth-child(3)').html("");
-                        grandParent.children('td:nth-child(3)').append('<input type="text" class="form-control col-6" value="' + lastName + '">');
+                        grandParent.children('td:nth-child(3)').append('<input type="text" class="form-control col-6" value="' + lastName + '"><span></span>');
                         var address = grandParent.children('td:nth-child(5)').html();
                         grandParent.children('td:nth-child(5)').html("");
-                        grandParent.children('td:nth-child(5)').append('<input type="text" class="form-control col-6" value="' + address + '">');
+                        grandParent.children('td:nth-child(5)').append('<input type="text" class="form-control col-6" value="' + address + '"><span></span>');
                         var amka = grandParent.children('td:nth-child(6)').html();
                         grandParent.children('td:nth-child(6)').html("");
-                        grandParent.children('td:nth-child(6)').append('<input type="text" class="form-control col-6" value="' + amka + '">');
+                        grandParent.children('td:nth-child(6)').append('<input type="text" class="form-control col-6" value="' + amka + '"><span></span>');
                         var tel = grandParent.children('td:nth-child(7)').html();
                         grandParent.children('td:nth-child(7)').html("");
-                        grandParent.children('td:nth-child(7)').append('<input type="text" class="form-control col-6" value="' + tel + '">');
+                        grandParent.children('td:nth-child(7)').append('<input type="text" class="form-control col-6" value="' + tel + '"><span></span>');
                         var paypalAccount = grandParent.children('td:nth-child(8)').html();
                         grandParent.children('td:nth-child(8)').html("");
-                        grandParent.children('td:nth-child(8)').append('<input type="text" class="form-control col-6" value="' + paypalAccount + '">');
+                        grandParent.children('td:nth-child(8)').append('<input type="text" class="form-control col-6" value="' + paypalAccount + '"><span></span>');
                         var id = $(this).data('id');
                         grandParent.children('td:nth-child(9)').children().hide();
                         grandParent.children('td:nth-child(9)').append('<button class="btn btn-success table-button updateBtn" data-id="' + id + '" >Update</button>');
@@ -131,24 +131,7 @@
         };
         function cancelUpdateButtonClicked() {
             $('.cancelUpdateBtn').on('click', function (e) {
-                var grandParent = $(this).parent().parent();
-                var firstName = grandParent.children('td:nth-child(2)').children('input').val();
-                var lastName = grandParent.children('td:nth-child(3)').children('input').val();
-                var specialty = grandParent.children('td:nth-child(4)').html();
-                var address = grandParent.children('td:nth-child(5)').children('input').val();
-                var amka = grandParent.children('td:nth-child(6)').children('input').val();
-                var tel = grandParent.children('td:nth-child(7)').children('input').val();
-                var paypalAccount = grandParent.children('td:nth-child(8)').children('input').val();
-                var id = $(this).data('id');
-                grandParent.children('td:nth-child(2)').html(firstName);
-                grandParent.children('td:nth-child(3)').html(lastName);
-                grandParent.children('td:nth-child(5)').html(address);
-                grandParent.children('td:nth-child(6)').html(amka);
-                grandParent.children('td:nth-child(7)').html(tel);
-                grandParent.children('td:nth-child(8)').html(paypalAccount);
-                grandParent.children('td:nth-child(9)').children().show();
-                grandParent.children('td:nth-child(9)').children('.updateBtn').hide();
-                grandParent.children('td:nth-child(9)').children('.cancelUpdateBtn').hide();
+                ListDoctors('', '', -1);
             });
         }
         function updateButtonClicked() {
@@ -162,43 +145,97 @@
                 var tel = grandParent.children('td:nth-child(7)').children('input').val();
                 var paypalAccount = grandParent.children('td:nth-child(8)').children('input').val();
                 var id = $(this).data('id');
-                var modifiedUser = {
-                    User: {
-                        Id : id,
-                        FirstName : firstName,
-                        LastName : lastName,
-                        AMKA : amka,
-                        PaypalAccount : paypalAccount,
-                        PhoneNumber: tel,
-                    },
-                    Doctor: {
-                        MedicalSpecialty: specialty,
-                        OfficeAddress: address
-                    }
-                };
-                $.ajax({
-                    url: '@Url.Action("UpdateUser", "Admin")',
-                    type: 'PUT',
-                    data: AddAntiForgeryToken(modifiedUser),
-                    success: function (data) {
-                        console.log('SUCCESS!');
-                        grandParent.children('td:nth-child(2)').html(firstName);
-                        grandParent.children('td:nth-child(3)').html(lastName);
-                        grandParent.children('td:nth-child(5)').html(address);
-                        grandParent.children('td:nth-child(6)').html(amka);
-                        grandParent.children('td:nth-child(7)').html(tel);
-                        grandParent.children('td:nth-child(8)').html(paypalAccount);
-                        grandParent.children('td:nth-child(9)').children().show();
-                        grandParent.children('td:nth-child(9)').children('.updateBtn').hide();
-                        grandParent.children('td:nth-child(9)').children('.cancelUpdateBtn').hide();
-                        alert('User updated successfully!');
-                    },
-                    error: function (error) {
-                        console.log('ERROR!');
-                        console.log(error);
-                    }
-                });
+                var isDataValid = dataValidation(grandParent, firstName, lastName, amka, address)
+                if (isDataValid) {
+                    var modifiedUser = {
+                        User: {
+                            Id : id,
+                            FirstName : firstName,
+                            LastName : lastName,
+                            AMKA : amka,
+                            PaypalAccount : paypalAccount,
+                            PhoneNumber: tel,
+                        },
+                        Doctor: {
+                            MedicalSpecialty: specialty,
+                            OfficeAddress: address
+                        }
+                    };
+                    $.ajax({
+                        url: '@Url.Action("UpdateUser", "Admin")',
+                        type: 'PUT',
+                        data: AddAntiForgeryToken(modifiedUser),
+                        success: function (data) {
+                            console.log('SUCCESS!');
+                            grandParent.children('td:nth-child(2)').html(firstName);
+                            grandParent.children('td:nth-child(3)').html(lastName);
+                            grandParent.children('td:nth-child(5)').html(address);
+                            grandParent.children('td:nth-child(6)').html(amka);
+                            grandParent.children('td:nth-child(7)').html(tel);
+                            grandParent.children('td:nth-child(8)').html(paypalAccount);
+                            grandParent.children('td:nth-child(9)').children().show();
+                            grandParent.children('td:nth-child(9)').children('.updateBtn').hide();
+                            grandParent.children('td:nth-child(9)').children('.cancelUpdateBtn').hide();
+                            alert('User updated successfully!');
+                        },
+                        error: function (error) {
+                            console.log('ERROR!');
+                            console.log(error);
+                        }
+                    });
+                }
             });
+        }
+        function dataValidation(grandParent, firstName, lastName, amka, address) {
+            console.log(grandParent);
+            grandParent.children('td').children('span').remove();
+            grandParent.children('td').children('br').remove();
+
+            var RGEXpassed = true;
+            var nameMinLenRGEX =  /^.{2,}$/;
+            var nameMaxLenRGEX = /^.{0,50}$/;
+            var nameRGEX = /^[A-Z][a-z]*$|^[Α-Ω][α-ωάήίόέύώϊϋΐΰ]*$ /;
+            var amkaRGEX = /^.{11}$/;
+            var addressMinLenRGEX = /^.{10,}$/;
+            var addressMaxLenRGEX = /^.{0,100}$/;
+
+            if (!nameMinLenRGEX.test(firstName)) {
+                RGEXpassed = false
+                grandParent.children('td:nth-child(2)').append('<span>First name cannot be less than 2 characters.</span><br>')
+            }
+            if (!nameMaxLenRGEX.test(firstName)) {
+                RGEXpassed = false
+                grandParent.children('td:nth-child(2)').append('<span>First name cannot be more than 50 characters.</span><br>')
+            }
+            if (!nameRGEX.test(firstName)) {
+                RGEXpassed = false
+                grandParent.children('td:nth-child(2)').append('<span>First Name must start with capital letter and then contain only small letters of the same language.</span><br>')
+            }
+            if (!nameMinLenRGEX.test(lastName)) {
+                RGEXpassed = false
+                grandParent.children('td:nth-child(3)').append('<span>Last name cannot be less than 2 characters.</span><br>')
+            }
+            if (!nameMaxLenRGEX.test(lastName)) {
+                RGEXpassed = false
+                grandParent.children('td:nth-child(3)').append('<span>Last name cannot be more than 50 characters.</span><br>')
+            }
+            if (!nameRGEX.test(lastName)) {
+                RGEXpassed = false
+                grandParent.children('td:nth-child(3)').append('<span>Last Name must start with capital letter and then contain only small letters of the same language.</span><br>')
+            }
+            if (!amkaRGEX.test(amka)) {
+                RGEXpassed = false
+                grandParent.children('td:nth-child(6)').append('<span>AMKA should be 11 digits.</span><br>')
+            }
+            if (!addressMinLenRGEX.test(address)) {
+                RGEXpassed = false
+                grandParent.children('td:nth-child(5)').append('<span>Address length cannot be less than 10 characters.</span><br>')
+            }
+            if (!addressMaxLenRGEX.test(address)) {
+                RGEXpassed = false
+                grandParent.children('td:nth-child(5)').append('<span>Address length cannot be more than 100 characters.</span><br>')
+            }
+            return RGEXpassed;
         }
     })
 
