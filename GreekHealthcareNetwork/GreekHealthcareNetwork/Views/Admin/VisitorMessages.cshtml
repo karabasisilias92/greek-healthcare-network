@@ -38,6 +38,83 @@
     </div>
 </main>
 
+<div class="modal fade" id="viewVisitorMessage" tabindex="-1" role="dialog" aria-labelledby="viewVisitorMessageLabel" aria-hidden="true">
+
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div id="errorContainerVisitorMessage" class="container">
+                <div class="modal-body">
+                    <p class="text-danger ml-3 mb-2"> Something went wrong. Please try again. </p>
+                </div>
+            </div>
+            <div id="successContainerVisitorMessage" class="container">
+                <div class="modal-header">
+                    <h3 class="mb-1" id="messageVisitorFor"></h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5 id="subject"></h5>
+                    <h5 class="mb-1"><b>Message:</b></h5>
+                    <pre class="mb-3" id="messageVisitortext"></pre>
+                    <hr />
+                    <div class="form-group">
+                        <div id="errorContainerVisitorSentMessage" class="container">
+                            <div class="form-horizontal">
+                                <p class="text-danger ml-3 mb-2"> Your message hasn't been sent. Please try again. </p>
+                            </div>
+                        </div>
+                        <div id="successContainerVisitorSentMessage" class="container">
+                            <div class="form-horizontal">
+                                <p class="text-success ml-3 mb-2"> Your message has been sent. </p>
+                            </div>
+                        </div>
+                        <div id="normalContainerVisitorSentMessage" class="container">
+                            <form id="sentVisitormessagearea" class="form-horizontal">
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="form-group">
+                                    <input value="@User.Identity.Name" class="input-validation-error" data-val="true" data-val-required="Username/Email field is Required." id="UserName1" name="UserName" type="hidden"><!--Unused, here just to supress validation error messages-->
+                                </div>
+                                <div class="form-group">
+                                    <input value="!Doctor123" class="input-validation-error" data-val="true" data-val-required="Password is Reguired." id="Password1" name="Password" type="hidden"><!--Unused, here just to supress validation error messages-->
+                                </div>
+                                <div class="form-group">
+                                    @Html.HiddenFor(m => m.Message.SenderId, new { @Value = CurrentUserId })
+                                </div>
+                                <div class="form-group">
+                                    @Html.HiddenFor(m => m.Message.RecipientId)
+                                </div>
+                                <div class="form-group">
+                                    @Html.HiddenFor(m => m.Message.ConversationId)
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-10">
+                                        @Html.HiddenFor(m => m.Message.Subject)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.Message.MessageText, new { @class = "col-md-12 control-label" })
+                                    <div class="col-md-10">
+                                        @Html.TextAreaFor(m => m.Message.MessageText, new { @class = "form-control", style = "min-width: 100%" })
+                                        @Html.ValidationMessageFor(m => m.Message.MessageText, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <input type="submit" class="btn btn-outline-dark" id="reply" value="Reply" />
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts{
     @Scripts.Render("~/bundles/jqueryval")
     <script>
@@ -48,20 +125,100 @@
                     type: 'get',
                     url: '/api/Admin/GetVisitorMessages?UserId=' + UserId,
                     success: function (data) {
-                        $('#visitorMessageList tbody').empty();
+                        $('#visitorMessageList').empty();
                         data.forEach(function (message) {
                             const datePart = message.SentDate.split('T')[0];
                             const datePartSplitted = datePart.split('-');
-                            $('#visitorMessageList').append(
-                                '<tr><td>' + message.Sender.FirstName + ' ' + message.Sender.LastName
-                                + '</td><td>' + message.Recipient.FirstName + ' ' + message.Recipient.LastName
-                                + '</td><td>' + message.Email
-                                + '</td><td>' + (datePartSplitted[2] + '-' + datePartSplitted[1] + '-' + datePartSplitted[0])
-                                + '</td><td>' + (message.SentTime.split(':')[0] + ':' + message.SentTime.split(':')[1])
-                                + '</td>'
-                                + '<td><button class="btn btn-success table-button viewBtn">View</button>'
-                                + '</tr>')
+                            const tr = $(document.createElement('tr'));
+                            $(tr).attr('id', message.Id); 
+                            const from = $(document.createElement('td'));
+                            $(from).text(message.FirstName + ' ' + message.LastName);
+                            $(tr).append(from);
+                            const to = $(document.createElement('td'));
+                            $(to).text(message.FirstName + ' ' + message.LastName);
+                            const status = $(document.createElement('td'));
+                            $(tr).append(to);
+                            if (message.Id == UserId) {
+                                        $(status).text('Sent');
+                            }
+                            else {
+                                $(status).text('Received');
+                                if (message.MessageStatus == "Unread") {
+                                    $(tr).attr('class', 'font-weight-bold')
+
+                                }
+                                else if (message.MessageStatus == "Replied") {
+                                    $(tr).attr('class', 'text-success font-italic')
+                                }
+                            }
+                            $(tr).append(status);
+                            const date = $(document.createElement('td'));
+                            $(date).text(datePartSplitted[2] + '-' + datePartSplitted[1] + '-' +datePartSplitted[0]);
+                            $(tr).append(date);
+                            const time = $(document.createElement('td'));
+                            $(time).text(message.SentTime.split(':')[0] + ':' + message.SentTime.split(':')[1]);
+                            $(tr).append(time);
+                            const action = $(document.createElement('td'));
+                            const view = $(document.createElement('button'));
+                            $(view).text('View');
+                            $(view).addClass('btn btn-success viewBtn');
+                            $(view).attr('data-id', message.Id);
+                            $(action).append(view);
+                            $(tr).append(action);
+                            $('#visitorMessageList').append(tr);
                         });
+                        $('.viewBtn').click(function (e) {
+                                let id = $(e.target).data('id');
+                                $.ajax({
+                                    dataType: 'json',
+                                    type: 'get',
+                                    url: '/api/Messages?id=' + id,
+                                    success: function (message) {
+                                        $('#viewVisitorMessage #errorContainerVisitorMessage').hide();
+                                        $('#viewVisitorMessage #successContainerVisitorMessage').show();
+                                        $('#viewVisitorMessage #successContainerVisitorSentMessage').hide();
+                                        $('#viewVisitorMessage #errorContainerVisitorSentMessage').hide();
+                                        $('#viewVisitorMessage #normalContainerVisitorSentMessage').show();
+                                        $('#viewVisitorMessage #Message_ConversationId').val(message.ConversationId);
+                                        $('#viewVisitorMessage #Message_Subject').val(message.Subject);
+                                        $('#viewVisitorMessage #reply').attr('data-id', message.Id);
+                                        $(e.target).parent().parent().removeClass('font-weight-bold');
+                                        let model = message;
+                                        model.MessageStatus = 'Read';
+                                        model = JSON.stringify(model);
+                                        $.ajax({
+                                            contentType: 'application/json',
+                                            type: 'put',
+                                            data: model,
+                                            url: '/api/Messages',
+                                            success: function () {
+                                                console.log('success')
+                                            },
+                                            error: function () {
+                                                console.log('error')
+                                            }
+                                        })
+                                        let elem = $('#viewVisitorMessage #messageVisitorFor');
+                                        if (message.SenderId == "@CurrentUserId") {
+                                            $('#viewVisitorMessage #Message_SenderId').val(message.SenderId);
+                                            $('#viewVisitorMessage #Message_RecipientId').val(message.RecipientId);
+                                            $(elem).html('<b>Message to:</b> ' + message.FirstName + ' ' + message.LastName)
+                                        }
+                                        else {
+                                            $('#viewVisitorMessage #Message_SenderId').val(message.RecipientId);
+                                            $('#viewVisitorMessage #Message_RecipientId').val(message.SenderId);
+                                            $(elem).html('<b>Message from:</b> ' + message.FirstName + ' ' + message.LastName)
+                                        }
+                                        $('#viewVisitorMessage #subject').html('<b>Subject:</b> ' + message.Subject);
+                                        $('#viewVisitorMessage #messageVisitortext').text(message.MessageText);
+                                        $('#viewVisitorMessage').modal('show');
+                                    },
+                                    error: function (error) {
+                                        $('#viewVisitorMessage #errorContainerVisitorMessage').show();
+                                        $('#viewVisitorMessage #successContainerVisitorMessage').hide();
+                                    }
+                                })
+                            });
                     },
                     error: function (error) {
                         console.log(error)

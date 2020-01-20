@@ -122,6 +122,11 @@ namespace GreekHealthcareNetwork.Controllers
             return View(model);
         }
 
+        public ActionResult InsuredPlans()
+        {
+            return View(_plans.GetInsuredPlans());
+        }
+
         public ActionResult CreateAdminUser()
         {
             return View();

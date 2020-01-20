@@ -29,6 +29,13 @@ namespace GreekHealthcareNetwork.Models
 
         public int BookedAppointments { get; set; }
 
+        [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "{0:0,0.00}")]
+        [Column(TypeName = "money")]
+        [RegularExpression(@"^(([1-9]\d+)|\d)(\.(\d{2}))?$")]
+        [Display(Name = "Refund pending")]
+        public decimal RefundPending { get; set; }
+
         [JsonIgnore]
         public virtual ICollection<Appointment> Appointments { get; set; }
 

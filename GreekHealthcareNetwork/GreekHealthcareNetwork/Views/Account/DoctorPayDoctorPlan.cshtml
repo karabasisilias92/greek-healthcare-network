@@ -48,7 +48,7 @@ else
     @if (!Request.IsAuthenticated || subscriptionEndDate.ToString("yyyy-MM-dd").Equals("0001-01-01"))
     {
         <p>
-            The subscription fee corresponding to @(Model.DoctorPlan.MedicalSpecialty)s is @Model.DoctorPlan.Fee.ToString("0.00", new CultureInfo("en-US")) &euro;.
+            The subscription fee corresponding to @(Model.DoctorPlan.MedicalSpecialty)s is @Model.DoctorPlan.Fee.ToString("0.00") &euro;.
             You can pay it off immediately or skip for now. However, if you skip payment, you will not be visible to patients so that they can book appointments.
         </p>
     }
@@ -57,14 +57,14 @@ else
         if (subscriptionEndDate >= DateTime.Now)
         {
             <p>
-                The subscription fee corresponding to @(Model.DoctorPlan.MedicalSpecialty)s is @Model.DoctorPlan.Fee.ToString("0.00", new CultureInfo("en-US")) &euro;.
+                The subscription fee corresponding to @(Model.DoctorPlan.MedicalSpecialty)s is @Model.DoctorPlan.Fee.ToString("0.00") &euro;.
                 Your subscription is ending at @subscriptionEndDate.ToString("dd-MM-yyyy"). You can extend it now for another year after the end of it.
             </p>
         }
         else
         {
             <p>
-                The subscription fee corresponding to @(Model.DoctorPlan.MedicalSpecialty)s is @Model.DoctorPlan.Fee.ToString("0.00", new CultureInfo("en-US")) &euro;.
+                The subscription fee corresponding to @(Model.DoctorPlan.MedicalSpecialty)s is @Model.DoctorPlan.Fee.ToString("0.00") &euro;.
                 Your subscription ended at @subscriptionEndDate.ToString("dd-MM-yyyy"). You can renew it now for another year starting from today.
             </p>
         }

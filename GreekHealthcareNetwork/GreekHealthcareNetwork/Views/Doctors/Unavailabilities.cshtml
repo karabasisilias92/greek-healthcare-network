@@ -166,6 +166,7 @@
                 $('span[data-valmsg-for="UnavailableUntilTime"]').children().remove();
                 $('.validation-summary-errors ul').children().remove();
                 $('#unavailabilityForm').trigger('reset');
+                $('#unavailabilityForm div.validation-summary-valid').addClass('validation-summary-errors').removeClass('validation-summary-valid');
             })
             $('#declareUnavailability').click(() => $('#unavailabilityModal').modal('show'));
             const today = new Date();
@@ -325,7 +326,9 @@
                                 $(grandparent).children('td:nth-child(1)').text(data.UnavailableFrom);
                                 $(grandparent).children('td:nth-child(2)').text(data.UnavailableUntil);
                                 const elem = grandparent;
-                                $(grandparent).remove();
+                                $(grandparent).remove();          
+                                $(elem).children('td:nth-child(3)').children('button:nth-child(1)').click(editUnavailabilityEntry);
+                                $(elem).children('td:nth-child(3)').children('button:nth-child(2)').click(deleteUnavailabilityEntry);
                                 let count = 1;
                                 const childrenNum = $('#unavailabilitiesList').children().length;
                                 let line = $('#unavailabilitiesList').children().first();
@@ -333,14 +336,10 @@
                                     line = $(line).next();
                                     count = count + 1;
                                 }
-                                if (compareDateTimes($(line).children().first().text().trim(), data.UnavailableFrom)) {                                    
-                                    $(elem).children('td:nth-child(3)').children('button:nth-child(1)').click(editUnavailabilityEntry);
-                                    $(elem).children('td:nth-child(3)').children('button:nth-child(2)').click(deleteUnavailabilityEntry);
+                                if (compareDateTimes($(line).children().first().text().trim(), data.UnavailableFrom)) {
                                     $(line).after(elem);
                                 }
-                                else {                                    
-                                    $(elem).children('td:nth-child(3)').children('button:nth-child(1)').click(editUnavailabilityEntry);
-                                    $(elem).children('td:nth-child(3)').children('button:nth-child(2)').click(deleteUnavailabilityEntry);
+                                else {
                                     $(line).before(elem);
                                 }
                                 $('#unavailabilityModal').modal('hide');

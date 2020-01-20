@@ -20,6 +20,7 @@ namespace GreekHealthcareNetwork.Models
         [Required]
         [DataType(DataType.Currency)]
         [DisplayFormat(DataFormatString = "{0:0,0.00}")]
+        [RegularExpression(@"^(([1-9]\d+)|\d)(\.(\d{2}))?$")]
         [Column(TypeName = "money")]
         [Display(Name = "Plan fee")]
         public decimal PlanFee { get; set; }

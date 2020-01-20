@@ -193,6 +193,7 @@
     <Compile Include="Controllers\DoctorsController.cs" />
     <Compile Include="Controllers\DoctorUnavailabilitiesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InsuredPlansController.cs" />
     <Compile Include="Controllers\InsuredsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
@@ -334,6 +335,14 @@
     <Compile Include="Migrations\202001191034383_Drop table Appointment Cost Per Specialty. Add appointment cost to doctor plan..cs" />
     <Compile Include="Migrations\202001191034383_Drop table Appointment Cost Per Specialty. Add appointment cost to doctor plan..Designer.cs">
       <DependentUpon>202001191034383_Drop table Appointment Cost Per Specialty. Add appointment cost to doctor plan..cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001201213167_Add necessary properties to appointment and insured for payDoctor and refundInsured.cs" />
+    <Compile Include="Migrations\202001201213167_Add necessary properties to appointment and insured for payDoctor and refundInsured.Designer.cs">
+      <DependentUpon>202001201213167_Add necessary properties to appointment and insured for payDoctor and refundInsured.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001201215161_Unique index for name in insured plans.cs" />
+    <Compile Include="Migrations\202001201215161_Unique index for name in insured plans.Designer.cs">
+      <DependentUpon>202001201215161_Unique index for name in insured plans.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -595,6 +604,7 @@
     <Content Include="Views\Admin\CreateAdminUser.cshtml" />
     <Content Include="Views\Admin\AdminUserCreatedSuccessfully.cshtml" />
     <Content Include="Views\Admin\DoctorPlans.cshtml" />
+    <Content Include="Views\Admin\InsuredPlans.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -719,6 +729,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001191034383_Drop table Appointment Cost Per Specialty. Add appointment cost to doctor plan..resx">
       <DependentUpon>202001191034383_Drop table Appointment Cost Per Specialty. Add appointment cost to doctor plan..cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001201213167_Add necessary properties to appointment and insured for payDoctor and refundInsured.resx">
+      <DependentUpon>202001201213167_Add necessary properties to appointment and insured for payDoctor and refundInsured.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001201215161_Unique index for name in insured plans.resx">
+      <DependentUpon>202001201215161_Unique index for name in insured plans.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

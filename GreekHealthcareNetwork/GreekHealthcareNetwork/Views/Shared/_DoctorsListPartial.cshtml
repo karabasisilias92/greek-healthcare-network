@@ -447,6 +447,7 @@
                         }
                         $('#newMessage').on('hidden.bs.modal', function () {
                             $('#messagearea').trigger('reset');
+                            $('#messagearea div.validation-summary-valid').addClass('validation-summary-errors').removeClass('validation-summary-valid');
                             $('#messagearea span[data-valmsg-for="Message.Subject"]').children().remove();
                             $('#messagearea span[data-valmsg-for="Message.MessageText"]').children().remove();
                             $('#messagearea div.validation-summary-errors > ul').children().remove();
