@@ -27,17 +27,17 @@ namespace GreekHealthcareNetwork.Models
 
         [Required]
         [RegularExpression(@"^(([1-9]\d+)|\d)(\.(\d+))?$")]
-        [Display(Name = "Appointment Cost Rate")]
+        [Display(Name = "Appointment Cost Rate %")]
         public double AppointmentRate { get; set; }
 
         [Required]
         [RegularExpression(@"^(([1-9]\d+)|\d)(\.(\d+))?$")]
-        [Display(Name = "Appointment Cost Rate (over limit)")]
+        [Display(Name = "Appointment Cost Rate % (over limit)")]
         public double ExceededAppointmentRate { get; set; }
 
         [Required]
         [RegularExpression(@"^(([1-9]\d+)|\d)(\.(\d+))?$")]
-        [Display(Name = "Cancellation Refund Percentage")]
+        [Display(Name = "Cancellation Refund % Percentage")]
         public double CancelationRefundPercentage { get; set; }
 
         [Required]

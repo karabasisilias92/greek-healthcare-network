@@ -5,7 +5,7 @@
     <link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
     <style> 
         body {
-            width: 146vw;   
+            width: 170vw;   
         }    
     </style>
 }
@@ -69,7 +69,7 @@
                             + '<td><button class="btn btn-success table-button editBtn" data-id="' + doctor.UserId + '" >Edit</button>'
                             + ((doctor.User.IsActive == true) ? '<button class="btn btn-danger table-button setActiveBtn" data-is-active="true" data-id="' + doctor.UserId + '">Deactivate</button>' : '<button class="btn btn-danger table-button setActiveBtn" data-is-active="false" style="width:101.2px; height:38px" data-id="' + doctor.UserId + '">Activate</button>')
                             + '<button class="btn btn-primary table-button sentMessageBtn" data-id="' + doctor.UserId + '" >Message</button>'
-                            + (data.doctorsPayments[counter] == 0 ? '<button class="btn btn-secondary table-button disabled" data-id="' + doctor.UserId + '">Pay</button>' : '<button class="btn btn-secondary table-button payBtn" data-id="' + doctor.UserId + '">Pay</button>')
+                            + (data.doctorsPayments[counter] == 0 ? '<button class="btn btn-secondary table-button disabled" data-id="' + doctor.UserId + '">Pay</button></td>' : '<button class="btn btn-secondary table-button payBtn" data-id="' + doctor.UserId + '">Pay</button></td>')
                             + '</tr>')
                         counter++;
                     });
@@ -95,9 +95,9 @@
                         grandParent.children('td:nth-child(8)').html("");
                         grandParent.children('td:nth-child(8)').append('<input type="text" class="form-control col-10" value="' + paypalAccount + '">');
                         var id = $(this).data('id');
-                        grandParent.children('td:nth-child(9)').children().hide();
-                        grandParent.children('td:nth-child(9)').append('<button class="btn btn-success table-button updateBtn" data-id="' + id + '" >Update</button>');
-                        grandParent.children('td:nth-child(9)').append('<button class="btn btn-danger table-button cancelUpdateBtn" data-id="' + id + '">Cancel</button>');
+                        grandParent.children('td:nth-child(10)').children().hide();
+                        grandParent.children('td:nth-child(10)').append('<button class="btn btn-success table-button updateBtn" data-id="' + id + '" >Update</button>');
+                        grandParent.children('td:nth-child(10)').append('<button class="btn btn-danger table-button cancelUpdateBtn" data-id="' + id + '">Cancel</button>');
                         updateButtonClicked();
                         cancelUpdateButtonClicked()
                     });
