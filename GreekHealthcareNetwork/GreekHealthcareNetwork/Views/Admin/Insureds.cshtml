@@ -92,7 +92,7 @@
                         grandParent.children('td:nth-child(8)').append('<input type="text" value="' + paypalAccount + '">');
                         var id = $(this).data('id');
                         grandParent.children('td:nth-child(10)').children().hide();
-                        grandParent.children('td:nth-child(10)').append('<button class="btn btn-success updateBtn" data-id="' + id + '" >Update</button>');
+                        grandParent.children('td:nth-child(10)').append('<button class="btn btn-success table-button updateBtn" data-id="' + id + '" >Update</button>');
                         grandParent.children('td:nth-child(10)').append('<button class="btn btn-danger table-button cancelUpdateBtn" data-id="' + id + '">Cancel</button>');
                         updateButtonClicked();
                         cancelUpdateButtonClicked()
@@ -230,9 +230,9 @@
                             grandParent.children('td:nth-child(6)').html(amka);
                             grandParent.children('td:nth-child(7)').html(tel);
                             grandParent.children('td:nth-child(8)').html(paypalAccount);
-                            grandParent.children('td:nth-child(9)').children().show();
-                            grandParent.children('td:nth-child(9)').children('.updateBtn').hide();
-                            grandParent.children('td:nth-child(9)').children('.cancelUpdateBtn').hide();
+                            grandParent.children('td:nth-child(10)').children().show();
+                            grandParent.children('td:nth-child(10)').children('.updateBtn').hide();
+                            grandParent.children('td:nth-child(10)').children('.cancelUpdateBtn').hide();
                             alert('User updated successfully!');
                         },
                         error: function (error) {
