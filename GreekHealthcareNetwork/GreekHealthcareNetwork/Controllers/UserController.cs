@@ -37,32 +37,33 @@ namespace GreekHealthcareNetwork.Controllers
             {
                 currentUser.Insured = _insuredsRepository.GetInsuredById(userId);
             }
-
+            
             return currentUser;
         }
 
         private ProfileDetailsViewModel UpdatedUser(ProfileDetailsViewModel modifiedUser)
         {
-            var updatedUser = GetCurrentUser();
-            updatedUser.User.FirstName = modifiedUser.User.FirstName;
-            updatedUser.User.LastName = modifiedUser.User.LastName;
-            updatedUser.User.DoB = modifiedUser.User.DoB;
-            updatedUser.User.AMKA = modifiedUser.User.AMKA;
-            updatedUser.User.PaypalAccount = modifiedUser.User.PaypalAccount;
-            updatedUser.User.Email = modifiedUser.User.Email;
-            updatedUser.User.PhoneNumber = modifiedUser.User.PhoneNumber;
+                var updatedUser = GetCurrentUser();
 
-            if (HttpContext.User.IsInRole("Doctor"))
-            {
-                updatedUser.Doctor.MedicalSpecialty = modifiedUser.Doctor.MedicalSpecialty;
-            }
-            if (HttpContext.User.IsInRole("Insured"))
-            {
-                updatedUser.Insured.HomeAddress = modifiedUser.Insured.HomeAddress;
-            }
+                updatedUser.User.FirstName = modifiedUser.User.FirstName;
+                updatedUser.User.LastName = modifiedUser.User.LastName;
+                updatedUser.User.DoB = modifiedUser.User.DoB;
+                updatedUser.User.AMKA = modifiedUser.User.AMKA;
+                updatedUser.User.PaypalAccount = modifiedUser.User.PaypalAccount;
+                updatedUser.User.Email = modifiedUser.User.Email;
+                updatedUser.User.PhoneNumber = modifiedUser.User.PhoneNumber;
 
+                if (HttpContext.User.IsInRole("Doctor"))
+                {
+                    updatedUser.Doctor.MedicalSpecialty = modifiedUser.Doctor.MedicalSpecialty;
+                }
+                if (HttpContext.User.IsInRole("Insured"))
+                {
+                    updatedUser.Insured.HomeAddress = modifiedUser.Insured.HomeAddress;
+                }
             return updatedUser;
         }
+
         // GET: Profile
         public ActionResult UserProfile()
         {

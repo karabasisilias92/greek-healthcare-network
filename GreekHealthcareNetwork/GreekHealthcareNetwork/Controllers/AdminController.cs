@@ -17,6 +17,8 @@ namespace GreekHealthcareNetwork.Controllers
     public class AdminController : Controller
     {
         private ApplicationUserManager _userManager;
+        private readonly UsersRepository _usersRepository = new UsersRepository();
+        private readonly DoctorsRepository _doctorsRepository = new DoctorsRepository();
         private PlansRepository _plans = new PlansRepository();
 
         public ApplicationUserManager UserManager
@@ -30,6 +32,46 @@ namespace GreekHealthcareNetwork.Controllers
                 _userManager = value;
             }
         }
+
+        private ProfileDetailsViewModel AdminUpdatedUser(ProfileDetailsViewModel modifiedUser)
+        {
+            var adminUpdatedUser = new ProfileDetailsViewModel();
+            if (HttpContext.User.IsInRole("Administrator"))
+            {
+                var userId = modifiedUser.User.Id;
+                adminUpdatedUser.User = _usersRepository.GetUserById(userId);
+
+                adminUpdatedUser.User.FirstName = modifiedUser.User.FirstName;
+                adminUpdatedUser.User.LastName = modifiedUser.User.LastName;
+                adminUpdatedUser.User.AMKA = modifiedUser.User.AMKA;
+                adminUpdatedUser.User.PaypalAccount = modifiedUser.User.PaypalAccount;
+                adminUpdatedUser.User.PhoneNumber = modifiedUser.User.PhoneNumber;
+
+                var userRole = _usersRepository.GetRoleNameById(adminUpdatedUser.User.Roles.ElementAt(0).RoleId);
+
+                if (userRole == "Doctor")
+                {
+                    adminUpdatedUser.Doctor = _doctorsRepository.GetDoctorById(userId);
+                    adminUpdatedUser.Doctor.MedicalSpecialty = modifiedUser.Doctor.MedicalSpecialty;
+                    adminUpdatedUser.Doctor.OfficeAddress = modifiedUser.Doctor.OfficeAddress;
+                }
+                else if (userRole == "Insured")
+                {
+
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
+
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+            return adminUpdatedUser;
+        }
+
         // GET: Admin
         public ActionResult Index()
         {
@@ -57,7 +99,7 @@ namespace GreekHealthcareNetwork.Controllers
         {
             var messages = new MessagesRepository();
             var adminId = messages.AdminWithLessVisitorMessagesUnreplied();
-            return Json(new { adminId = adminId}, JsonRequestBehavior.AllowGet);
+            return Json(new { adminId = adminId }, JsonRequestBehavior.AllowGet);
         }
 
         [AllowAnonymous]
@@ -155,6 +197,67 @@ namespace GreekHealthcareNetwork.Controllers
         public ActionResult AdminUserCreatedSuccessfully()
         {
             return View();
+        }
+
+        [HttpPut]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateUser(ProfileDetailsViewModel modifiedUser)
+        {
+            var adminUpdatedUser = new ProfileDetailsViewModel();
+            if (!ModelState.IsValid)
+            {
+                return new HttpStatusCodeResult(400, "Something went wrong! Please try again.");
+            }
+
+            try
+            {
+                adminUpdatedUser = AdminUpdatedUser(modifiedUser);
+            }
+            catch (Exception)
+            {
+                return new HttpStatusCodeResult(400, "Something went wrong! Please try again.");
+            }
+
+            try
+            {
+                _usersRepository.UpdateUser(adminUpdatedUser);
+            }
+            catch (Exception)
+            {
+
+                return new HttpStatusCodeResult(400, "Something went wrong! Please try again.");
+            }
+
+            return Json(new { success = true, responseText = "Updated Succesfully!" });
+        }
+
+        [HttpPut]
+        public ActionResult AdminSetUserActiveInactive(string userId, bool isUserActive)
+        {
+            if (isUserActive)
+            {
+                try
+                {
+                    _usersRepository.DeactivateUser(userId);
+                }
+                catch (Exception)
+                {
+                    return new HttpStatusCodeResult(400, "Something went wrong! Please try again.");
+                }
+            }
+            else
+            {
+                try
+                {
+                    _usersRepository.ActivateUser(userId);
+                }
+                catch (Exception)
+                {
+                    return new HttpStatusCodeResult(400, "Something went wrong! Please try again.");
+                }
+            }
+            return Json(new { success = true, responseText = "Updated Succesfully!" });
+
         }
 
         private void AddErrors(IdentityResult result)
