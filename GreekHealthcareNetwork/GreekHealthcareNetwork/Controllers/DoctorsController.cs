@@ -27,6 +27,6 @@ namespace GreekHealthcareNetwork.Controllers
         {
             IEnumerable<DoctorsUnavailability> doctorsUnavailabilities = _doctors.GetUnavailabilities(User.Identity.GetUserId());
             return View(doctorsUnavailabilities);
-        }
+        }        
     }
 }

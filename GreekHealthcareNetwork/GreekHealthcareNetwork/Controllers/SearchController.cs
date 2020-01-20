@@ -25,7 +25,9 @@ namespace GreekHealthcareNetwork.Controllers
             {
                 return NotFound();
             }
-            return Ok(doctors);
+            var doctorsPayments = new List<decimal>();
+            doctorsPayments = _appointments.CalculateAmountOwedToDoctor(doctors);
+            return Ok(new { doctors, doctorsPayments });
         }
 
         [HttpGet]

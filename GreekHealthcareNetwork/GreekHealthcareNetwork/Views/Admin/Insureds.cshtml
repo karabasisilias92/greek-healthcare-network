@@ -137,6 +137,8 @@
                                             success: function () {
                                                 console.log('success');                                                
                                                 $(e.target).parent().prev().html(parseFloat('0').toFixed(2) + ' &euro;')
+                                                $(e.target).off('click');
+                                                $(e.target).removeClass('refundBtn').addClass('disabled');
                                             },
                                             error: function () {
                                                 console.log('error')
@@ -149,7 +151,6 @@
                                 })
                             },
                             error: function (error) {
-                                3
                                 console.log(error)
                             }
                         })            
