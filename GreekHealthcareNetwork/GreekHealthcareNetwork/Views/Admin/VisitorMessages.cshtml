@@ -57,7 +57,7 @@
                 <div class="modal-body">
                     <h5 id="subject"></h5>
                     <h5 class="mb-1"><b>Message:</b></h5>
-                    <p class="mb-3" id="messageVisitortext"></p>
+                    <pre class="mb-3" id="messageVisitortext"></pre>
                     <hr />
                     <div class="form-group">
                         <div id="errorContainerVisitorSentMessage" class="container">
@@ -125,19 +125,47 @@
                     type: 'get',
                     url: '/api/Admin/GetVisitorMessages?UserId=' + UserId,
                     success: function (data) {
-                        $('#visitorMessageList tbody').empty();
+                        $('#visitorMessageList').empty();
                         data.forEach(function (message) {
                             const datePart = message.SentDate.split('T')[0];
                             const datePartSplitted = datePart.split('-');
-                            $('#visitorMessageList').append(
-                                '<tr><td>' + message.Sender.FirstName + ' ' + message.Sender.LastName
-                                + '</td><td>' + message.Recipient.FirstName + ' ' + message.Recipient.LastName
-                                + '</td><td>' + message.Email
-                                + '</td><td>' + (datePartSplitted[2] + '-' + datePartSplitted[1] + '-' + datePartSplitted[0])
-                                + '</td><td>' + (message.SentTime.split(':')[0] + ':' + message.SentTime.split(':')[1])
-                                + '</td>'
-                                + '<td><button class="btn btn-success table-button viewBtn">View</button>'
-                                + '</tr>')
+                            const tr = $(document.createElement('tr'));
+                            $(tr).attr('id', message.Id); 
+                            const from = $(document.createElement('td'));
+                            $(from).text(message.FirstName + ' ' + message.LastName);
+                            $(tr).append(from);
+                            const to = $(document.createElement('td'));
+                            $(to).text(message.FirstName + ' ' + message.LastName);
+                            const status = $(document.createElement('td'));
+                            $(tr).append(to);
+                            if (message.Id == UserId) {
+                                        $(status).text('Sent');
+                            }
+                            else {
+                                $(status).text('Received');
+                                if (message.MessageStatus == "Unread") {
+                                    $(tr).attr('class', 'font-weight-bold')
+
+                                }
+                                else if (message.MessageStatus == "Replied") {
+                                    $(tr).attr('class', 'text-success font-italic')
+                                }
+                            }
+                            $(tr).append(status);
+                            const date = $(document.createElement('td'));
+                            $(date).text(datePartSplitted[2] + '-' + datePartSplitted[1] + '-' +datePartSplitted[0]);
+                            $(tr).append(date);
+                            const time = $(document.createElement('td'));
+                            $(time).text(message.SentTime.split(':')[0] + ':' + message.SentTime.split(':')[1]);
+                            $(tr).append(time);
+                            const action = $(document.createElement('td'));
+                            const view = $(document.createElement('button'));
+                            $(view).text('View');
+                            $(view).addClass('btn btn-success viewBtn');
+                            $(view).attr('data-id', message.Id);
+                            $(action).append(view);
+                            $(tr).append(action);
+                            $('#visitorMessageList').append(tr);
                         });
                         $('.viewBtn').click(function (e) {
                                 let id = $(e.target).data('id');
@@ -162,7 +190,7 @@
                                             contentType: 'application/json',
                                             type: 'put',
                                             data: model,
-                                            url: '/api/Admin/GerVisitorMessages',
+                                            url: '/api/Messages',
                                             success: function () {
                                                 console.log('success')
                                             },
@@ -174,15 +202,15 @@
                                         if (message.SenderId == "@CurrentUserId") {
                                             $('#viewVisitorMessage #Message_SenderId').val(message.SenderId);
                                             $('#viewVisitorMessage #Message_RecipientId').val(message.RecipientId);
-                                            $(elem).html('<b>Message to:</b> ' + message.Recipient.FirstName + ' ' + message.Recipient.LastName)
+                                            $(elem).html('<b>Message to:</b> ' + message.FirstName + ' ' + message.LastName)
                                         }
                                         else {
                                             $('#viewVisitorMessage #Message_SenderId').val(message.RecipientId);
                                             $('#viewVisitorMessage #Message_RecipientId').val(message.SenderId);
-                                            $(elem).html('<b>Message from:</b> ' + message.Sender.FirstName + ' ' + message.Sender.LastName)
+                                            $(elem).html('<b>Message from:</b> ' + message.FirstName + ' ' + message.LastName)
                                         }
                                         $('#viewVisitorMessage #subject').html('<b>Subject:</b> ' + message.Subject);
-                                        $('#viewVisitorMessage #messagetext').text(message.MessageText);
+                                        $('#viewVisitorMessage #messageVisitortext').text(message.MessageText);
                                         $('#viewVisitorMessage').modal('show');
                                     },
                                     error: function (error) {
