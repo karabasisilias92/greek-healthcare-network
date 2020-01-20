@@ -196,11 +196,11 @@ namespace GreekHealthcareNetwork.Controllers
             decimal price;
             if (appointmentId == 0)
             {
-                price = Math.Floor(0.85m * Convert.ToDecimal(Session["price"]) * 100) / 100;
+                price = Math.Floor(0.85m * Convert.ToDecimal(Session["price"], new CultureInfo("el-GR")) * 100) / 100;
             }
             else
             {
-                price = Math.Floor(0.85m * Convert.ToDecimal(Session["price" + appointmentId]) * 100) / 100;
+                price = Math.Floor(0.85m * Convert.ToDecimal(Session["price" + appointmentId], new CultureInfo("el-GR")) * 100) / 100;
             }
             string priceString = price.ToString("0.00", new CultureInfo("en-US"));
             //Adding Item Details like name, currency, price etc  
