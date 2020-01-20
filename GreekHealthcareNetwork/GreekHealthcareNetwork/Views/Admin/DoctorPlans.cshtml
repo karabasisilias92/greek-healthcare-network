@@ -284,6 +284,7 @@
             });
             function editDoctorPlanEntry(e) {
                 let grandParent = $(e.target).parent().parent();
+                grandParent.append('<form id="__AjaxAntiForgeryForm" action="#" method="post">@Html.AntiForgeryToken()</form>');
                 let fee = grandParent.children('td:nth-child(2)').html().trim();
                 grandParent.children('td:nth-child(2)').html("");
                 grandParent.children('td:nth-child(2)').append('<input id="Fee" name="Fee" class="form-control col-6" data-val="true" data-val-required="The Fee field is required." value="' + fee.split(' ')[0] + '">' +
@@ -328,7 +329,7 @@
                             contentType: 'application/json',
                             url: '/api/DoctorPlans',
                             type: 'put',
-                            data: JSON.stringify(modifiedPlan),
+                            data: JSON.stringify(AddAntiForgeryToken(modifiedPlan)),
                             success: function (data) {
                                 grandParent.children('td:nth-child(2)').html('');
                                 let fee = parseFloat(data.Fee);
@@ -368,6 +369,10 @@
                 $("#deletePlanConfirmationModal .modal-body").children('p:first-child').html('You are about to delete the doctor plan for ' + $(e.target).data('specialty') + 's. <span style="font-weight:bold;">All the corresponding doctors will be deleted!!<span>');
                 $("#deletePlanConfirmationModal").modal('show');
             }
+            function AddAntiForgeryToken (data) {
+                data.__RequestVerificationToken = $('#__AjaxAntiForgeryForm input[name=__RequestVerificationToken]').val();
+                return data;
+            };
             $("#deleteConfirmed").click(function(e) {
                 const id = $(e.target).data('id');
                 $.ajax({

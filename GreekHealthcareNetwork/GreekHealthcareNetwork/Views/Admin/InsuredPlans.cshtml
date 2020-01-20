@@ -1,0 +1,593 @@
+﻿@model IEnumerable<GreekHealthcareNetwork.Models.InsuredPlan>
+
+@{
+    ViewBag.Title = "Insured Plans";
+}
+
+@section cssScripts{
+    <link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
+    <style>
+        body {
+            width: 141vw;
+        }
+    </style>
+}
+
+<main id="main" class="offset-2 mt-4">
+    <div class="page-header">
+        <h1 class="mb-0">
+            @ViewBag.Title
+        </h1>
+        <p>
+            <button id="createInsuredPlan" class="btn btn-secondary my-3">Create New Plan</button>
+        </p>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PlanAppoinments)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PlanFee)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AppointmentRate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ExceededAppointmentRate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CancelationRefundPercentage)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PlanDuration)
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody id="insuredPlansList">
+                @if (Model.Count() == 0)
+                {
+                    <tr>
+                        <td colspan="3">
+                            You have not created any insured plans yet.
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PlanAppoinments)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PlanFee) &euro;
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AppointmentRate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ExceededAppointmentRate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CancelationRefundPercentage)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PlanDuration)
+                            </td>
+                            <td>
+                                <button class="btn btn-warning table-button editButton" data-id="@item.Id">Edit</button>
+                                <button class="btn btn-danger table-button deleteButton" data-id="@item.Id" data-name="@item.Name">Delete</button>
+                            </td>
+                        </tr>
+
+                    }
+                }
+            </tbody>
+
+        </table>
+    </div>
+</main>
+
+<div class="modal fade" id="insuredPlanModal" tabindex="-1" role="dialog" aria-labelledby="insuredPlanModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="insuredPlanModalLabel">New Insured Plan</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <form id="insuredPlanForm" class="form-horizontal">
+                        @Html.AntiForgeryToken()
+                        <div class="validation-summary-errors">
+                            <ul class="text-danger">
+                            </ul>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="Name" class="col-md-12 control-label">Name</label>
+                                <div class="col-md-12">
+                                    <input id="Name" name="Name" class="form-control" data-val="true" data-val-required="The Name field is required.">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="Name" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="PlanAppoinments" class="col-md-12 control-label">Plan Appoinments</label>
+                                <div class="col-md-12">
+                                    <input id="PlanAppoinments" name="PlanAppoinments" class="form-control" data-val="true" data-val-required="The Plan Appoinments field is required.">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="PlanAppoinments" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="PlanFee" class="col-md-12 control-label">Plan Fee</label>
+                                <div class="col-md-12">
+                                    <input id="PlanFee" name="PlanFee" class="form-control" data-val="true" data-val-required="The Plan Fee field is required.">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="PlanFee" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="AppointmentRate" class="col-md-12 control-label">Appointment Rate</label>
+                                <div class="col-md-12">
+                                    <input id="AppointmentRate" name="AppointmentRate" class="form-control" data-val="true" data-val-required="The Appointment Rate field is required.">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="AppointmentRate" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="ExceededAppointmentRate" class="col-md-12 control-label">Exceeded Appointment Rate</label>
+                                <div class="col-md-12">
+                                    <input id="ExceededAppointmentRate" name="ExceededAppointmentRate" class="form-control" data-val="true" data-val-required="The Exceeded Appointment Rate field is required.">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="ExceededAppointmentRate" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="CancelationRefundPercentage" class="col-md-12 control-label">Cancelation Refund Percentage</label>
+                                <div class="col-md-12">
+                                    <input id="CancelationRefundPercentage" name="CancelationRefundPercentage" class="form-control" data-val="true" data-val-required="The Cancelation Refund Percentage field is required.">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="CancelationRefundPercentage" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="PlanDuration" class="col-md-12 control-label">Plan Duration</label>
+                                <div class="col-md-12">
+                                    <input id="PlanDuration" name="PlanDuration" class="form-control" data-val="true" data-val-required="The Plan Duration field is required.">
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="Plan Duration" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+                        </div>                             
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <button type="button" class="btn btn-success ml-3" id="submit">Submit</button>
+                            </div>                                
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deletePlanConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deletePlanConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="deletePlanConfirmationModalLabel">Delete Insured Plan</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p></p>
+                <p>Are you sure that you want to proceed?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" data-dismiss="modal">No</button>
+                <a id="deleteConfirmed" class="btn btn-danger" style="color:white;">Yes</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            $('#insuredPlanModal').on('hidden.bs.modal', function () {
+                $('span[data-valmsg-for="Name"]').children().remove();
+                $('span[data-valmsg-for="PlanAppoinments"]').children().remove();
+                $('span[data-valmsg-for="PlanFee"]').children().remove();
+                $('span[data-valmsg-for="AppointmentRate"]').children().remove();
+                $('span[data-valmsg-for="ExceededAppointmentRate"]').children().remove();
+                $('span[data-valmsg-for="CancelationRefundPercentage"]').children().remove();
+                $('span[data-valmsg-for="PlanDuration"]').children().remove();
+                $('.validation-summary-errors ul').children().remove();
+                $('#insuredPlanForm').trigger('reset');
+                $('.validation-summary-valid').addClass('validation-summary-errors').removeClass('validation-summary-valid');
+            });
+            $('#createInsuredPlan').click(() => $('#insuredPlanModal').modal('show'));
+            $('.editButton').click(editInsuredPlanEntry);
+            $('.deleteButton').click(deleteInsuredPlanEntry);
+            $('#submit').click(function (e) {
+                e.preventDefault();
+                const $form = $('#insuredPlanForm');
+                $.validator.unobtrusive.parse($form);
+                $form.validate();
+                if ($form.valid()) {
+                    let model = new Object();
+                    model.Name = $('#Name').val();
+                    model.PlanAppoinments = $('#PlanAppoinments').val();
+                    model.PlanFee = $('#PlanFee').val();
+                    model.AppointmentRate = $('#AppointmentRate').val();
+                    model.ExceededAppointmentRate = $('#ExceededAppointmentRate').val();
+                    model.CancelationRefundPercentage = $('#CancelationRefundPercentage').val();
+                    model.PlanDuration = $('#PlanDuration').val();
+                    model = JSON.stringify(model);
+                    $.ajax({
+                        contentType: 'application/json',
+                        type: 'post',
+                        url: '/api/InsuredPlans',
+                        data: model,
+                        cache: false,
+                        processData: false,
+                        success: function (data) {
+                            if (@Model.Count() == 0) {
+                                $('#insuredPlansList').children().remove();
+                            }
+                            const tr = $(document.createElement('tr'));
+                            const td1 = $(document.createElement('td'));
+                            $(td1).text(data.Name);
+                            $(tr).append(td1);
+                            const td2 = $(document.createElement('td'));
+                            $(td2).text(data.PlanAppoinments);
+                            $(tr).append(td2);
+                            const td3 = $(document.createElement('td'));
+                            let planFee = parseFloat(data.PlanFee);
+                            $(td3).html(planFee.toFixed(2) + ' &euro;');
+                            $(tr).append(td3);
+                            const td4 = $(document.createElement('td'));
+                            $(td4).text(data.AppointmentRate);
+                            $(tr).append(td4);
+                            const td5 = $(document.createElement('td'));
+                            $(td5).text(data.ExceededAppointmentRate);
+                            $(tr).append(td5);
+                            const td6 = $(document.createElement('td'));
+                            $(td6).text(data.CancelationRefundPercentage);
+                            $(tr).append(td6);
+                            const td7 = $(document.createElement('td'));
+                            $(td7).text(data.PlanDuration);
+                            $(tr).append(td7);
+                            const td8 = $(document.createElement('td'));
+                            const editButton = $(document.createElement('button'));
+                            $(editButton).addClass('btn btn-warning table-button editButton');
+                            $(editButton).text('Edit');
+                            $(editButton).attr('data-id', data.Id);
+                            $(editButton).click(editInsuredPlanEntry);
+                            $(td8).append(editButton);
+                            const deleteButton = $(document.createElement('button'));
+                            $(deleteButton).addClass('btn btn-danger table-button deleteButton');
+                            $(deleteButton).text('Delete');
+                            $(deleteButton).attr('data-id', data.Id);
+                            $(deleteButton).attr('data-name', data.Name);
+                            $(deleteButton).click(deleteInsuredPlanEntry);
+                            $(td8).append(deleteButton);
+                            $(tr).append(td8);
+                            if (@Model.Count() == 0) {
+                                $('#insuredPlansList').append(tr);
+                            }
+                            else {
+                                let count = 1;
+                                const childrenNum = $('#insuredPlansList').children().length;
+                                let line = $('#insuredPlansList').children().first();
+                                while ($(line).children().first().text().trim() < $(td1).text() && count < childrenNum) {
+                                    line = $(line).next();
+                                    count = count + 1;
+                                }
+                                if ($(line).children().first().text().trim() < $(td1).text()) {
+                                    $(line).after(tr);
+                                }
+                                else {
+                                    $(line).before(tr);
+                                }
+                            }
+                            $('#insuredPlanModal').modal('hide');
+                        },
+                        error: function (error) {
+                            const errorObject = error.responseJSON.ModelState;
+                            $('#insuredPlanForm div.validation-summary-errors > ul').children().remove();
+                            for (var property in errorObject) {
+                                if (errorObject.hasOwnProperty(property)) {
+                                    console.log(property);
+                                    if (property == '') {
+                                        $('#insuredPlanForm div.validation-summary-errors > ul').append('<li>' + errorObject[property] + '</li>');
+                                    }
+                                    else {
+                                        if (property == 'model.Name') {
+                                            $('#insuredPlanForm div.validation-summary-errors > ul').append('<li>Invalid value for field Name. The field is required</li>');
+                                        }
+                                        else if (property == 'model.PlanAppoinments') {
+                                            $('#insuredPlanForm div.validation-summary-errors > ul').append('<li>Invalid value for field Plan Appoinments. The field is required</li>');
+                                        }
+                                        else if (property == 'model.PlanFee') {
+                                            $('#insuredPlanForm div.validation-summary-errors > ul').append('<li>The Plan Fee must have either 0 or 2 decimal places exactly. The field is required</li>');
+                                        }
+                                        else if (property == 'model.AppointmentRate') {
+                                            $('#insuredPlanForm div.validation-summary-errors > ul').append('<li>Invalid value for field Appointment Rate. The field is required</li>');
+                                        }
+                                        else if (property == 'model.ExceededAppointmentRate') {
+                                            $('#insuredPlanForm div.validation-summary-errors > ul').append('<li>Invalid value for field Exceeded Appointment Rate. The field is required</li>');
+                                        }
+                                        else if (property == 'model.CancelationRefundPercentage') {
+                                            $('#insuredPlanForm div.validation-summary-errors > ul').append('<li>Invalid value for field Cancelation Refund Percentage. The field is required</li>');
+                                        }
+                                        else {
+                                            $('#insuredPlanForm div.validation-summary-errors > ul').append('<li>Invalid value for field Plan Duration Cost. The field is required</li>');
+                                        }
+                                    }
+                                }
+                            }
+                            const $form = $('#insuredPlanForm');
+                            $.validator.unobtrusive.parse($form);
+                            $form.validate();
+                            if (!$form.valid()) {
+                                $.each($form.validate().errorList, function (key, value) {
+                                    const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                                    $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                                    $errorSpan.show();
+                                });
+                            }
+                        }
+                    });
+
+                }
+                else {
+                    console.log($form.validate().errorList);
+                    $.each($form.validate().errorList, function (key, value) {
+                        console.log(value);
+                        const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                        $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                        $errorSpan.show();
+                    });
+                }
+            });
+            function editInsuredPlanEntry(e) {
+                let grandParent = $(e.target).parent().parent();
+                grandParent.append('<form id="__AjaxAntiForgeryForm" action="#" method="post">@Html.AntiForgeryToken()</form>');
+                let name = grandParent.children('td:nth-child(1)').html().trim();
+                grandParent.children('td:nth-child(1)').html("");
+                grandParent.children('td:nth-child(1)').append('<input id="Name" name="Name" class="form-control col-6" data-val="true" data-val-required="The Name field is required." value="' + name + '">' +
+                    '<span class="field-validation-valid text-danger" data-valmsg-for="Name" data-valmsg-replace="true"></span>');
+                let planAppoinments = grandParent.children('td:nth-child(2)').html().trim();
+                grandParent.children('td:nth-child(2)').html("");
+                grandParent.children('td:nth-child(2)').append('<input id="PlanAppoinments" name="PlanAppoinments" class="form-control col-6" data-val="true" data-val-required="The Plan Appoinments field is required." value="' + planAppoinments + '">' +
+                                                                '<span class="field-validation-valid text-danger" data-valmsg-for="AppointmentCost" data-valmsg-replace="true"></span>');
+                let planFee = grandParent.children('td:nth-child(3)').html().trim();
+                grandParent.children('td:nth-child(3)').html("");
+                grandParent.children('td:nth-child(3)').append('<input id="PlanFee" name="PlanFee" class="form-control col-6" data-val="true" data-val-required="The Plan Fee field is required." value="' + planFee.split(' ')[0] + '">' +
+                    '<span class="field-validation-valid text-danger" data-valmsg-for="PlanFee" data-valmsg-replace="true"></span>');
+                let appointmentRate = grandParent.children('td:nth-child(4)').html().trim();
+                grandParent.children('td:nth-child(4)').html("");
+                grandParent.children('td:nth-child(4)').append('<input id="AppointmentRate" name="AppointmentRate" class="form-control col-6" data-val="true" data-val-required="The Appointment Rate field is required." value="' + appointmentRate + '">' +
+                    '<span class="field-validation-valid text-danger" data-valmsg-for="Fee" data-valmsg-replace="true"></span>');
+                let exceededAppointmentRate = grandParent.children('td:nth-child(5)').html().trim();
+                grandParent.children('td:nth-child(5)').html("");
+                grandParent.children('td:nth-child(5)').append('<input id="ExceededAppointmentRate" name="ExceededAppointmentRate" class="form-control col-6" data-val="true" data-val-required="The Exceeded Appointment Rate field is required." value="' + exceededAppointmentRate + '">' +
+                    '<span class="field-validation-valid text-danger" data-valmsg-for="Fee" data-valmsg-replace="true"></span>');
+                let cancelationRefundPercentage = grandParent.children('td:nth-child(6)').html().trim();
+                grandParent.children('td:nth-child(6)').html("");
+                grandParent.children('td:nth-child(6)').append('<input id="CancelationRefundPercentage" name="CancelationRefundPercentage" class="form-control col-6" data-val="true" data-val-required="The Cancelation Refund Percentage field is required." value="' + cancelationRefundPercentage + '">' +
+                    '<span class="field-validation-valid text-danger" data-valmsg-for="Fee" data-valmsg-replace="true"></span>');
+                let planDuration = grandParent.children('td:nth-child(7)').html().trim();
+                grandParent.children('td:nth-child(7)').html("");
+                grandParent.children('td:nth-child(7)').append('<input id="PlanDuration" name="PlanDuration" class="form-control col-6" data-val="true" data-val-required="The Plan Duration field is required." value="' + planDuration + '">' +
+                    '<span class="field-validation-valid text-danger" data-valmsg-for="PlanDuration" data-valmsg-replace="true"></span>');
+
+                const id = $(this).data('id');
+                grandParent.children('td:nth-child(8)').children().hide();
+                grandParent.children('td:nth-child(8)').append('<button class="btn btn-success updateBtn" data-id="' + id + '" >Update</button>');
+                $('.updateBtn').on('click', function (e) {
+                    let grandParent = $(e.target).parent().parent();
+                    let name = grandParent.children('td:nth-child(1)').children('input').val();
+                    let planAppoinments = grandParent.children('td:nth-child(2)').children('input').val();
+                    let planFee = grandParent.children('td:nth-child(3)').children('input').val();
+                    let appointmentRate = grandParent.children('td:nth-child(4)').children('input').val();
+                    let exceededAppointmentRate = grandParent.children('td:nth-child(5)').children('input').val();
+                    let cancelationRefundPercentage = grandParent.children('td:nth-child(6)').children('input').val();
+                    let planDuration = grandParent.children('td:nth-child(7)').children('input').val();
+                    let valid = true;
+                    if (name == '') {
+                        valid = false;
+                        grandParent.children('td:nth-child(1)').children('span').removeClass('field-validation-valid');
+                        grandParent.children('td:nth-child(1)').children('span').addClass('field-validation-error');
+                        grandParent.children('td:nth-child(1)').children('span').append('<span style="color:red">Invalid value for field Name. The field is required</span>');
+                    }
+                    if (planAppoinments == '') {
+                        valid = false;
+                        grandParent.children('td:nth-child(2)').children('span').removeClass('field-validation-valid');
+                        grandParent.children('td:nth-child(2)').children('span').addClass('field-validation-error');
+                        grandParent.children('td:nth-child(2)').children('span').append('<span style="color:red">Invalid value for field Plan Appoinments. The field is required</span>');
+                    }
+                    if (planFee == '') {
+                        valid = false;
+                        grandParent.children('td:nth-child(3)').children('span').removeClass('field-validation-valid');
+                        grandParent.children('td:nth-child(3)').children('span').addClass('field-validation-error');
+                        grandParent.children('td:nth-child(3)').children('span').append('<span style="color:red">The Plan Fee must have either 0 or 2 decimal places exactly. The field is required</span>');
+                    }
+                    if (appointmentRate == '') {
+                        valid = false;
+                        grandParent.children('td:nth-child(4)').children('span').removeClass('field-validation-valid');
+                        grandParent.children('td:nth-child(4)').children('span').addClass('field-validation-error');
+                        grandParent.children('td:nth-child(4)').children('span').append('<span style="color:red">Invalid value for field Appointment Rate. The field is required</span>');
+                    }
+                    if (exceededAppointmentRate == '') {
+                        valid = false;
+                        grandParent.children('td:nth-child(5)').children('span').removeClass('field-validation-valid');
+                        grandParent.children('td:nth-child(5)').children('span').addClass('field-validation-error');
+                        grandParent.children('td:nth-child(5)').children('span').append('<span style="color:red">Invalid value for field Exceeded Appointment Rate. The field is required</span>');
+                    }
+                    if (cancelationRefundPercentage == '') {
+                        valid = false;
+                        grandParent.children('td:nth-child(6)').children('span').removeClass('field-validation-valid');
+                        grandParent.children('td:nth-child(6)').children('span').addClass('field-validation-error');
+                        grandParent.children('td:nth-child(6)').children('span').append('<span style="color:red">Invalid value for field Cancelation Refund Percentage. The field is required</span>');
+                    }
+                    if (planDuration == '') {
+                        valid = false;
+                        grandParent.children('td:nth-child(7)').children('span').removeClass('field-validation-valid');
+                        grandParent.children('td:nth-child(7)').children('span').addClass('field-validation-error');
+                        grandParent.children('td:nth-child(7)').children('span').append('<span style="color:red">Invalid value for field Plan Duration Cost. The field is required</span>');
+                    }
+                    if (valid == false) {
+                        return;
+                    }
+                    else {
+                        let modifiedPlan = new Object();
+                        modifiedPlan.Id = $(e.target).data('id');
+                        modifiedPlan.Name = name;
+                        modifiedPlan.PlanAppoinments = planAppoinments;
+                        modifiedPlan.PlanFee = planFee;
+                        modifiedPlan.AppointmentRate = appointmentRate;
+                        modifiedPlan.ExceededAppointmentRate = exceededAppointmentRate;
+                        modifiedPlan.CancelationRefundPercentage = cancelationRefundPercentage;
+                        modifiedPlan.PlanDuration = planDuration;
+                        $.ajax({
+                            contentType: 'application/json',
+                            url: '/api/InsuredPlans',
+                            type: 'put',
+                            data: JSON.stringify(AddAntiForgeryToken(modifiedPlan)),
+                            success: function (data) {
+                                grandParent.children('td:nth-child(1)').html('');
+                                let name = data.Name;
+                                grandParent.children('td:nth-child(1)').text(name);
+                                grandParent.children('td:nth-child(2)').html('');
+                                let planAppoinments = data.PlanAppoinments;
+                                grandParent.children('td:nth-child(2)').text(planAppoinments);
+                                grandParent.children('td:nth-child(3)').html('');
+                                let planFee = parseFloat(data.PlanFee);
+                                grandParent.children('td:nth-child(3)').html(planFee.toFixed(2) + ' &euro;');
+                                grandParent.children('td:nth-child(4)').html('');
+                                let appointmentRate = data.AppointmentRate;
+                                grandParent.children('td:nth-child(4)').text(appointmentRate);
+                                grandParent.children('td:nth-child(5)').html('');
+                                let exceededAppointmentRate = data.ExceededAppointmentRate;
+                                grandParent.children('td:nth-child(5)').text(exceededAppointmentRate);
+                                grandParent.children('td:nth-child(6)').html('');
+                                let cancelationRefundPercentage = data.CancelationRefundPercentage;
+                                grandParent.children('td:nth-child(6)').text(cancelationRefundPercentage);
+                                grandParent.children('td:nth-child(7)').html('');
+                                let planDuration = data.PlanDuration;
+                                grandParent.children('td:nth-child(7)').text(planDuration);
+                                grandParent.children('td:nth-child(8)').children('button:last-child').remove();
+                                grandParent.children('td:nth-child(8)').children().show();
+                                const elem = grandParent;
+                                $(grandParent).remove();                                
+                                $(elem).children('td:nth-child(8)').children('button:nth-child(1)').click(editInsuredPlanEntry);
+                                $(elem).children('td:nth-child(8)').children('button:nth-child(2)').click(deleteInsuredPlanEntry);
+                                let count = 1;
+                                const childrenNum = $('#insuredPlansList').children().length;
+                                let line = $('#insuredPlansList').children().first();
+                                while ($(line).children().first().text().trim() < name && count < childrenNum) {
+                                    line = $(line).next();
+                                    count = count + 1;
+                                }
+                                if ($(line).children().first().text().trim() < name) {
+                                    $(line).after(elem);
+                                }
+                                else {
+                                    $(line).before(elem);
+                                }
+                            },
+                            error: function (error) {
+                                if (name == '') {
+                                    grandParent.children('td:nth-child(1)').children('span').removeClass('field-validation-valid');
+                                    grandParent.children('td:nth-child(1)').children('span').addClass('field-validation-error');
+                                    grandParent.children('td:nth-child(1)').children('span').append('<span style="color:red">Invalid value for field Name. The field is required</span>');
+                                }
+                                if (planAppoinments == '') {
+                                    grandParent.children('td:nth-child(2)').children('span').removeClass('field-validation-valid');
+                                    grandParent.children('td:nth-child(2)').children('span').addClass('field-validation-error');
+                                    grandParent.children('td:nth-child(2)').children('span').append('<span style="color:red">Invalid value for field Plan Appoinments. The field is required</span>');
+                                }
+                                if (planFee == '') {
+                                    grandParent.children('td:nth-child(3)').children('span').removeClass('field-validation-valid');
+                                    grandParent.children('td:nth-child(3)').children('span').addClass('field-validation-error');
+                                    grandParent.children('td:nth-child(3)').children('span').append('<span style="color:red">The Plan Fee must have either 0 or 2 decimal places exactly. The field is required</span>');
+                                }
+                                if (appointmentRate == '') {
+                                    grandParent.children('td:nth-child(4)').children('span').removeClass('field-validation-valid');
+                                    grandParent.children('td:nth-child(4)').children('span').addClass('field-validation-error');
+                                    grandParent.children('td:nth-child(4)').children('span').append('<span style="color:red">Invalid value for field Appointment Rate. The field is required</span>');
+                                }
+                                if (exceededAppointmentRate == '') {
+                                    grandParent.children('td:nth-child(5)').children('span').removeClass('field-validation-valid');
+                                    grandParent.children('td:nth-child(5)').children('span').addClass('field-validation-error');
+                                    grandParent.children('td:nth-child(5)').children('span').append('<span style="color:red">Invalid value for field Exceeded Appointment Rate. The field is required</span>');
+                                }
+                                if (cancelationRefundPercentage == '') {
+                                    grandParent.children('td:nth-child(6)').children('span').removeClass('field-validation-valid');
+                                    grandParent.children('td:nth-child(6)').children('span').addClass('field-validation-error');
+                                    grandParent.children('td:nth-child(6)').children('span').append('<span style="color:red">Invalid value for field Cancelation Refund Percentage. The field is required</span>');
+                                }
+                                if (planDuration == '') {
+                                    grandParent.children('td:nth-child(7)').children('span').removeClass('field-validation-valid');
+                                    grandParent.children('td:nth-child(7)').children('span').addClass('field-validation-error');
+                                    grandParent.children('td:nth-child(7)').children('span').append('<span style="color:red">Invalid value for field Plan Duration Cost. The field is required</span>');
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+            function deleteInsuredPlanEntry(e) {
+                $("#deleteConfirmed").attr('data-id', $(e.target).data('id'));
+                $("#deletePlanConfirmationModal .modal-body").children('p:first-child').html('You are about to delete the ' + $(e.target).data('name') + '. <span style="font-weight:bold;">The plan for all the corresponding insured users will be set to null to database!!<span>');
+                $("#deletePlanConfirmationModal").modal('show');
+            }
+            function AddAntiForgeryToken (data) {
+                data.__RequestVerificationToken = $('#__AjaxAntiForgeryForm input[name=__RequestVerificationToken]').val();
+                return data;
+            };
+            $("#deleteConfirmed").click(function(e) {
+                const id = $(e.target).data('id');
+                $.ajax({
+                    type: 'delete',
+                    url: '/api/InsuredPlans/' + id,
+                    success: function () {
+                        $('button[data-id=' + id + ']').parent().parent().remove();
+                        if ($('#insuredPlansList').children().length == 0) {
+                            $('#insuredPlansList').append('<tr>' +
+                                '<td colspan="3">' +
+                                'You have not created any insured plans yet.' +
+                                '</td>' +
+                                '</tr>');
+                        }
+                        $("#deletePlanConfirmationModal").modal('hide');
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                })
+            })
+        })
+    </script>
+}

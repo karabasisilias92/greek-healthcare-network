@@ -19,6 +19,16 @@ namespace GreekHealthcareNetwork.Repositories
             return doctorPlans;
         }
 
+        public IEnumerable<InsuredPlan> GetInsuredPlans()
+        {
+            IEnumerable<InsuredPlan> insuredPlans;
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                insuredPlans = db.InsuredPlans.OrderBy(i => i.Name).ToList();
+            }
+            return insuredPlans;
+        }        
+
         public int InsertDoctorPlan(DoctorPlan doctorPlan)
         {
             if (doctorPlan == null)
@@ -34,6 +44,21 @@ namespace GreekHealthcareNetwork.Repositories
             return doctorPlan.Id;
         }
 
+        public int InsertInsuredPlan(InsuredPlan insuredPlan)
+        {
+            if (insuredPlan == null)
+            {
+                throw new ArgumentNullException("insuredPlan");
+            }
+
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                db.InsuredPlans.Add(insuredPlan);
+                db.SaveChanges();
+            }
+            return insuredPlan.Id;
+        }
+
         public void EditDoctorPlan(DoctorPlan doctorPlan) 
         {
             if (doctorPlan == null)
@@ -44,6 +69,20 @@ namespace GreekHealthcareNetwork.Repositories
             {
                 db.DoctorPlans.Attach(doctorPlan);
                 db.Entry(doctorPlan).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+
+        public void EditInsuredPlan(InsuredPlan insuredPlan)
+        {
+            if (insuredPlan == null)
+            {
+                throw new ArgumentNullException("insuredPlan");
+            }
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                db.InsuredPlans.Attach(insuredPlan);
+                db.Entry(insuredPlan).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
         }
@@ -76,6 +115,26 @@ namespace GreekHealthcareNetwork.Repositories
                         db.Users.Remove(user);
                         db.SaveChanges();
                     }
+                    result = true;
+                }
+            }
+            return result;
+        }
+
+        public bool DeleteInsuredPlan(int id)
+        {
+            bool result;
+            using (ApplicationDbContext db = new ApplicationDbContext())
+            {
+                var entry = db.InsuredPlans.Find(id);
+                if (entry == null)
+                {
+                    result = false;
+                }
+                else
+                {
+                    db.InsuredPlans.Remove(entry);
+                    db.SaveChanges();
                     result = true;
                 }
             }

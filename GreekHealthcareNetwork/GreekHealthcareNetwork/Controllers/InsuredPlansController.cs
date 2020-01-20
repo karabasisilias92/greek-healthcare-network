@@ -11,22 +11,22 @@ using System.Web.Mvc;
 namespace GreekHealthcareNetwork.Controllers
 {
     [System.Web.Mvc.Authorize(Roles = "Administrator")]
-    public class DoctorPlansController : ApiController
+    public class InsuredPlansController : ApiController
     {
         private readonly PlansRepository _plans = new PlansRepository();
         [System.Web.Http.HttpPost]
         [ValidateAntiForgeryToken]
-        public IHttpActionResult CreateDoctorPlan(DoctorPlan model)
+        public IHttpActionResult CreateInsuredPlan(InsuredPlan model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    model.Id = _plans.InsertDoctorPlan(model);
+                    model.Id = _plans.InsertInsuredPlan(model);
                 }
-                catch(Exception)
+                catch (Exception)
                 {
-                    ModelState.AddModelError("", "A plan for this medical specialty has already been created. Please choose another one.");
+                    ModelState.AddModelError("", "A plan with this name has already been created. Please choose another one.");
                     return BadRequest(ModelState);
                 }
                 return Ok(model);
@@ -36,20 +36,20 @@ namespace GreekHealthcareNetwork.Controllers
 
         [System.Web.Http.HttpPut]
         [ValidateAntiForgeryToken]
-        public IHttpActionResult EditDoctorPlan(DoctorPlan model)
+        public IHttpActionResult EditInsuredPlan(InsuredPlan model)
         {
             if (ModelState.IsValid)
             {
-                _plans.EditDoctorPlan(model);
+                _plans.EditInsuredPlan(model);
                 return Ok(model);
             }
             return BadRequest(ModelState);
         }
 
         [System.Web.Http.HttpDelete]
-        public IHttpActionResult DeleteDoctorPlan(int id)
+        public IHttpActionResult DeleteInsuredPlan(int id)
         {
-            bool result = _plans.DeleteDoctorPlan(id);
+            bool result = _plans.DeleteInsuredPlan(id);
             if (result)
             {
                 return Ok();
