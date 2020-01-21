@@ -1,0 +1,150 @@
+﻿@using Microsoft.AspNet.Identity;
+@{
+    ViewBag.Title = "Subscriptions Expired Report Page";
+}
+@section cssScripts{
+    <link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
+    <style>
+        body {
+            width: 140vw;
+        }
+    </style>
+}
+
+<main id="main" class="offset-left mt-5">
+    <div class="page-header">
+        <h1>
+            @ViewBag.Title
+        </h1>
+    </div>
+    @Html.Partial("_AdminSearchPartial")
+    <div class="">
+        <table class="table mt-4" id="usersList">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Medical Specialty</th>
+                    <th scope="col">Insured Plan</th>
+                    <th scope="col">Subscription End Date</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<div class="modal fade" id="messageSentResultModal" tabindex="-1" role="dialog" aria-labelledby="messageSentResultModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="messageSentResultModalLabel">Result</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="resultMessage"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            ListUsers('', '', -1, -1);
+            function ListUsers(firstName, lastName, specialty, insuredPlanId) {
+                $.ajax({
+                    dataType: 'json',
+                    type: 'get',
+                    url: '/api/Search/GetUsersWithNoOrExpiredSubscription?firstName=' + firstName + '&lastName=' + lastName + '&doctorSpecialty=' + specialty + '&insuredPlanId=' + insuredPlanId,
+                    success: function (data) {
+                        $('#usersList tbody').empty();
+                        data.doctors.forEach(function (doctor) {
+                            $('#usersList tbody').append(
+                                '<tr><td><img src="@Url.Content("~/Content/img/Doctors/")' + doctor.User.Id + '/' + doctor.User.ProfilePicture + '" alt="' + doctor.User.ProfilePicture + '"' + 'class="rounded-circle">'
+                                + '</td><td>' + doctor.User.FirstName
+                                + '</td><td>' + doctor.User.LastName
+                                + '</td><td>' + doctor.MedicalSpecialty
+                                + '</td><td> N/A '
+                                + (doctor.User.SubscriptionEndDate.split('T')[0] != '0001-01-01' ? '</td><td>' + doctor.User.SubscriptionEndDate.split('T')[0].split('-')[2] + '-' + doctor.User.SubscriptionEndDate.split('T')[0].split('-')[1] + '-' + doctor.User.SubscriptionEndDate.split('T')[0].split('-')[0] : '</td><td> Not paid subscription yet')
+                                + '</td>'
+                                + '<td><button class="btn btn-success table-button informBtn" data-id="' + doctor.UserId + '" >Inform User</button>'
+                                + '</tr>')
+                        });
+                        data.insureds.forEach(function (insured) {
+                            $('#usersList tbody').append(
+                                '<tr><td><img src="@Url.Content("~/Content/img/Insureds/")' + insured.User.Id + '/' + insured.User.ProfilePicture + '" alt="' + insured.User.ProfilePicture + '"' + 'class="rounded-circle">'
+                                + '</td><td>' + insured.User.FirstName
+                                + '</td><td>' + insured.User.LastName
+                                + '</td><td> N/A '
+                                + ((insured.InsuredPlan == null) ? '</td><td>No Plan' : '</td><td>' + insured.InsuredPlan.Name)
+                                + (insured.User.SubscriptionEndDate.split('T')[0] != '0001-01-01' ? '</td><td>' + insured.User.SubscriptionEndDate.split('T')[0].split('-')[2] + '-' + insured.User.SubscriptionEndDate.split('T')[0].split('-')[1] + '-' + insured.User.SubscriptionEndDate.split('T')[0].split('-')[0] : '</td><td> No plan chosen yet')
+                                + '</td>'
+                                + '<td><button class="btn btn-success table-button informBtn" data-id="' + insured.UserId + '" >Inform User</button>'
+                                + '</tr>')
+                        });
+                        if (data.insureds.length == 0 && data.doctors.length == 0) {
+                            $('#usersList tbody').append('<tr><td colspan="7"> There are no results matching the above criteria. </td></tr>');
+                        }
+                        $('.informBtn').click(function (e) {
+                            let message = new Object();
+                            message.ConversationId = 0;
+                            message.SenderId = '@(User.Identity.GetUserId())';
+                            message.RecipientId = $(e.target).data('id');
+                            const value = $(e.target).parent().prev().text().trim();
+                            if (value == 'Not paid subscription yet') {
+                                message.Subject = 'Subscription not paid yet';
+                                message.MessageText = 'Hello ' + $(e.target).parent().parent().children()[1].innerText + ' ' + $(e.target).parent().parent().children()[2].innerText + '! \nYou have not paid your subscription yet. \nConsider doing so the soonest possible in order to start using our services. \nWe are at your disposal for anything you need.';
+                            } else if (value == 'No plan chosen yet') {
+                                message.Subject = 'No plan chose yet';
+                                message.MessageText = 'Hello ' + $(e.target).parent().parent().children()[1].innerText + ' ' + $(e.target).parent().parent().children()[2].innerText + '! \nYou have not chosen any plan yet. \nConsider doing so the soonest possible in order to start using our services. \nWe are at your disposal for anything you need.';
+                            } else {
+                                message.Subject = 'Subscription Expired';
+                                message.MessageText = 'Hello ' + $(e.target).parent().parent().children()[1].innerText + ' ' + $(e.target).parent().parent().children()[2].innerText + '! \nYour subscription expired at ' + value + '. \nConsider renewing it the soonest possible in order to continue using our services. \nWe are at your disposal for anything you need.';
+                            }
+                            message = JSON.stringify(message);
+                            console.log(message);
+                            $.ajax({                                
+                                contentType: 'application/json',
+                                type: 'post',
+                                url: '/Admin/InformUserForSubscription',
+                                data: message,
+                                cache: false,
+                                processData: false,
+                                success: function () {
+                                    $('#resultMessage').text('Your message was sent successfully!');
+                                    $('#messageSentResultModal').modal('show');
+                                    setTimeout(function () {
+                                        $('#messageSentResultModal').modal("hide");
+                                    }, 4000)
+                                },
+                                error: function () {
+                                    $('#resultMessage').text('Your message was not sent successfully!');
+                                    $('#messageSentResultModal').modal('show');
+                                    setTimeout(function () {
+                                        $('#messageSentResultModal').modal("hide");
+                                    }, 4000)
+                                }
+                            })
+                        })
+                    },
+                    error: function (error) {
+                        console.log(error)
+                    }
+                })
+            }
+            $('#search').on('submit', function (e) {
+                e.preventDefault();
+                ListUsers(e.target[0].value, e.target[1].value, e.target[2].value, e.target[3].value);
+            })
+        })
+    </script>
+}
+

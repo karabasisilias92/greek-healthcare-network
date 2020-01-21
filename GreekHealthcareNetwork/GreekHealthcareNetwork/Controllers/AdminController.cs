@@ -19,6 +19,7 @@ namespace GreekHealthcareNetwork.Controllers
         private ApplicationUserManager _userManager;
         private readonly UsersRepository _usersRepository = new UsersRepository();
         private readonly DoctorsRepository _doctorsRepository = new DoctorsRepository();
+        private readonly MessagesRepository _messagesRepository = new MessagesRepository();
         private PlansRepository _plans = new PlansRepository();
 
         public ApplicationUserManager UserManager
@@ -258,6 +259,44 @@ namespace GreekHealthcareNetwork.Controllers
             }
             return Json(new { success = true, responseText = "Updated Succesfully!" });
 
+        }
+
+        public ActionResult SubscriptionsExpiredReportPage()
+        {
+            var model = new AdminSearchViewModel
+            {
+                MedicalSpecialties = new List<MedicalSpecialty>(),
+                InsuredPlans = new List<InsuredPlan>()
+            };
+            for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
+            {
+                model.MedicalSpecialties.Add((MedicalSpecialty)i);
+            }
+            model.InsuredPlans = _plans.GetInsuredPlans().ToList();
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult InformUserForSubscription(Message message)
+        {
+            if (ModelState.IsValid)
+            {
+                message.SentDate = DateTime.Now.Date;
+                message.SentTime = DateTime.Now.TimeOfDay;
+                message.MessageStatus = MessageStatus.Unread;
+                message.ConversationId = _messagesRepository.NewConversationId() + 1;
+                try
+                {
+                    _messagesRepository.Add(message);
+                }
+                catch (Exception)
+                {
+                    return new HttpStatusCodeResult(400, "An error has occured, please try again.");
+                }
+
+                return new HttpStatusCodeResult(200);
+            }
+            return View(message);
         }
 
         private void AddErrors(IdentityResult result)

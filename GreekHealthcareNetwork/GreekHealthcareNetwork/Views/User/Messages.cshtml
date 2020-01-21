@@ -309,7 +309,7 @@
                     model.VisitorMessage = null;
                     model = JSON.stringify(model)
                     $.ajax({
-                    contentType: 'application/json',
+                        contentType: 'application/json',
                         type: 'post',
                         url: '/api/Messages',
                         data: model,

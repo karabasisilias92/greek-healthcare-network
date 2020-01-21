@@ -1,0 +1,49 @@
+﻿@model GreekHealthcareNetwork.Models.AdminSearchViewModel
+
+    <form id="search" class="form-inline my-3 px-2" method="get" action="@Url.Action("SearchResults", "Search")">
+        @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control mr-sm-2 my-2", type = "search", placeholder = "First Name", aria_label = "Search" })
+        @Html.TextBoxFor(m => m.LastName, new { @class = "form-control mr-sm-2 my-2", type = "search", placeholder = "Last Name", aria_label = "Search" })
+        @if (ViewBag.Title.Contains("Doctors"))
+        {
+            <select name="DoctorSpecialty" class="form-control mr-2">
+                <option value="-1"> All </option>
+                @foreach (var item in Model.MedicalSpecialties)
+                {
+                    <option value="@((int)item)">@item</option>
+                }
+            </select>
+        }
+        else if (ViewBag.Title.Contains("Insureds"))
+        {
+            <select name="InsuredPlan" class="form-control mr-2">
+                <option value="-1"> All </option>
+                <option value="-3"> No Plan </option>
+                @foreach (var item in Model.InsuredPlans)
+                {
+                    <option value="@(item.Id)">@item.Name</option>
+                }
+            </select>
+        }
+        else
+        {
+            <select name="DoctorSpecialty" class="form-control mr-2">
+                <option value="-1"> All </option>
+                <option value="-2"> None </option>
+                @foreach (var item in Model.MedicalSpecialties)
+                {
+                    <option value="@((int)item)">@item</option>
+                }
+            </select>
+
+            <select name="InsuredPlan" class="form-control mr-2">
+                <option value="-1"> All </option>
+                <option value="-2"> None </option>
+                <option value="-3"> No Plan </option>
+                @foreach (var item in Model.InsuredPlans)
+                {
+                    <option value="@(item.Id)">@item.Name</option>
+                }
+            </select>
+        }
+        <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
+    </form>

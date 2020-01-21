@@ -18,9 +18,9 @@ namespace GreekHealthcareNetwork.Controllers
         [HttpGet]
         [Route("api/Search/AdminSearchDoctorResults")]
         [Authorize(Roles = "Administrator")]
-        public IHttpActionResult AdminSearchResults(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty, DateTime appointmentDate)
+        public IHttpActionResult AdminSearchResults(string doctorsFirstName, string doctorsLastName, int doctorsSpecialty)
         {
-            var doctors = _doctors.AdminGetFilteredDoctors(doctorsFirstName, doctorsLastName, doctorsSpecialty, appointmentDate);
+            var doctors = _doctors.AdminGetFilteredDoctors(doctorsFirstName, doctorsLastName, doctorsSpecialty);
             if (doctors == null)
             {
                 return NotFound();
@@ -168,6 +168,53 @@ namespace GreekHealthcareNetwork.Controllers
                 }
             }
             return Ok(appointmentSlots);
+        }
+
+        [HttpGet]
+        [Route("api/Search/GetUsersWithNoOrExpiredSubscription")]
+        [Authorize(Roles = "Administrator")]
+        public IHttpActionResult GetUsersWithNoOrExpiredSubscription(string firstName, string lastName, int doctorSpecialty, int insuredPlanId)
+        {
+            IEnumerable<Doctor> doctors;
+            IEnumerable<Insured> insureds;
+            if (doctorSpecialty == -2)
+            {
+                doctors = new List<Doctor>();
+            }
+            else
+            {
+                doctors = _doctors.AdminGetFilteredDoctors(firstName, lastName, doctorSpecialty);
+            }
+
+            if (insuredPlanId == -2)
+            {
+                insureds = new List<Insured>();
+            }
+            else
+            {
+                insureds = _insureds.GetFilteredInsureds(firstName, lastName, insuredPlanId);
+            }
+
+            if (doctors == null && insureds == null)
+            {
+                return NotFound();
+            }
+            else if (doctors == null)
+            {
+                insureds = insureds.Where(i => i.User.SubscriptionEndDate.Date < DateTime.Now.Date);
+                return Ok(new { doctors = new List<Doctor>(), insureds });
+            }
+            else if (insureds == null)
+            {
+                doctors = doctors.Where(i => i.User.SubscriptionEndDate.Date < DateTime.Now.Date);
+                return Ok(new { doctors , insureds = new List<Insured>() });
+            }
+            else
+            {
+                doctors = doctors.Where(i => i.User.SubscriptionEndDate.Date < DateTime.Now.Date);
+                insureds = insureds.Where(i => i.User.SubscriptionEndDate.Date < DateTime.Now.Date);
+                return Ok(new { doctors, insureds});
+            }            
         }
     }
 }

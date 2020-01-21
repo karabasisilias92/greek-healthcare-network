@@ -50,7 +50,7 @@
             $.ajax({
                 dataType: 'json',
                 type: 'get',
-                url: '/api/Search/AdminSearchDoctorResults?doctorsFirstName=' + firstName + '&doctorsLastName=' + lastName + '&doctorsSpecialty=' + specialty + '&appointmentDate=0001-01-01',
+                url: '/api/Search/AdminSearchDoctorResults?doctorsFirstName=' + firstName + '&doctorsLastName=' + lastName + '&doctorsSpecialty=' + specialty,
                 success: function (data) {
                     $('#doctorsList tbody').empty();
                     var counter = 0;
