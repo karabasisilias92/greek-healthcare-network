@@ -23,6 +23,24 @@ namespace GreekHealthcareNetwork.Controllers
             return PartialView("_ModalCancelAppointmentPartial", appointment);
         }
 
+        [HttpPut]
+        public ActionResult UpdateDoctorComments(Appointment appointment)
+        {
+            if (appointment == null)
+            {
+                return new HttpStatusCodeResult(400);
+            }
+            try
+            {
+                _appointmentsRespository.UpdateAppointment(appointment);
+                return new HttpStatusCodeResult(200);
+            }
+            catch (Exception e)
+            {
+                return new HttpStatusCodeResult(400);
+            }
+        }
+
         public ActionResult EditAppointmentDetails(int appointmentId)
         {
             var appointment = _appointmentsRespository.GetAppointmentById(appointmentId);

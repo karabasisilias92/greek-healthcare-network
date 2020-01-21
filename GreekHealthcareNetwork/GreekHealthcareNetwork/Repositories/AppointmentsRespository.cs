@@ -185,9 +185,9 @@ namespace GreekHealthcareNetwork.Repositories
                                              .Include("Insured.User")
                                              .Include("Insured.InsuredPlan")
                                              .Include("Insured.User.Roles")
-                                             .SingleOrDefault(d => d.Id.Equals(appointmentId));
-                return appointment;
+                                             .SingleOrDefault(d => d.Id.Equals(appointmentId));                
             }
+            return appointment;
         }
 
         public IEnumerable<Appointment> GetDoctorAppointmentsOnDate(DateTime date, string doctorId)
@@ -261,7 +261,7 @@ namespace GreekHealthcareNetwork.Repositories
         {
             if (appointment == null)
             {
-                throw new ArgumentNullException("insured");
+                throw new ArgumentNullException("appointment");
             }
             using (var db = new ApplicationDbContext())
             {

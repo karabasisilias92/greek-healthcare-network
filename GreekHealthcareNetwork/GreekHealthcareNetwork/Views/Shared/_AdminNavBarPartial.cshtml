@@ -3,7 +3,10 @@
 @{
     var userId = @User.Identity.GetUserId();
     var users = new UsersRepository();
+    var messages = new MessagesRepository();
     var profilePicture = users.GetUserById(userId).ProfilePicture;
+    long unreadMessages = messages.CountUnreadMessagesOfUser(userId);
+    long unreadVisitorMessages = messages.CountUnreadVisitorMessagesOfUser(userId);
 }
 @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
 {
@@ -52,11 +55,11 @@
                             <li>
                                 @Html.ActionLink("Insureds", "Insureds", "Admin")
                             </li>
-                            <li>
-                                @Html.ActionLink("Messages", "Messages", "User")
+                            <li style="display: flex; align-items: center;">
+                                @Html.ActionLink("Messages", "Messages", "User") <span id="unreadMessagesCount" style="font-weight:900;">@(unreadMessages != 0 ? "(" + unreadMessages + ")" : "")</span>
                             </li>
-                            <li>
-                                @Html.ActionLink("Visitor Messages", "VisitorMessages", "Admin")
+                            <li style="display: flex; align-items: center;">
+                                @Html.ActionLink("Visitor Messages", "VisitorMessages", "Admin") <span id="unreadVisitorMessagesCount" style="font-weight:900;">@(unreadVisitorMessages != 0 ? "(" + unreadVisitorMessages + ")" : "")</span>
                             </li>
                             <li>
                                 @Html.ActionLink("Insured Plans", "InsuredPlans", "Admin")

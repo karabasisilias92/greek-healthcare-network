@@ -90,7 +90,8 @@
                         @if (User.IsInRole("Doctor"))
                         {
                             <h5 class="mt-3 mb-0">Your Comments:</h5>
-                            <pre class="mb-3" id="doctorsComments"></pre>
+                            <pre class="mb-3" id="doctorComments"></pre>
+                            <button id="addComments" class="btn btn-outline-dark mt-3">Add comments</button>
                         }
                     </div>
                 </div>
@@ -345,12 +346,13 @@
                             $('.showAppointmentDetails').click(function (e) {
                                 console.log('view button clicked');
                                 let id = $(e.target).data('id');
+                                $('#addComments').attr('data-id', id);                                
                                 console.log('id is:' + id)
                                 $.ajax({
                                     url: '/api/Search/SearchAppointmentById/' + id,
                                     type: 'get',
                                     dataType: 'json',
-                                    success: function (appointment) {
+                                    success: function (appointment) {                                        
                                         console.log('Into modal')
                                         const appointmentStart = appointment.AppointmentStartTime.split(":");
                                         const appointmentEnd = appointment.AppointmentEndTime.split(":");
@@ -370,6 +372,63 @@
                                         }
 
                                         if (isUserDoctor) {
+                                            if (appointment.AppointmentStatus == 'Canceled') {
+                                                $('#addComments').off('click');
+                                                $('#addComments').addClass('disabled');
+                                            }
+                                            else {
+                                                $('#addComments').removeClass('disabled');
+                                                $('#addComments').off('click');
+                                                $('#addComments').click(function (e) {
+                                                    doctorComments = $(e.target).prev().html();
+                                                    $(e.target).prev().remove();
+                                                    const textarea = $(document.createElement('textarea'));
+                                                    $(textarea).attr('id', 'doctorComments');
+                                                    $(textarea).addClass('form-control');
+                                                    $(textarea).val(doctorComments);
+                                                    $(e.target).before(textarea);
+                                                    const submit = $(document.createElement('button'));
+                                                    $(submit).text('Submit');
+                                                    $(submit).addClass('btn btn-outline-dark mt-3');
+                                                    $(submit).attr('data-id', $(e.target).data('id'));
+                                                    $(e.target).before(submit);
+                                                    $(submit).click(function (c) {
+                                                        const id = $(c.target).data('id');
+                                                        $.ajax({
+                                                            type: 'get',
+                                                            dataType: 'json',
+                                                            url: '/api/Search/SearchAppointmentById/' + id,
+                                                            success: function (data) {
+                                                                data.DoctorComments = $('#doctorComments').val();
+                                                                $.ajax({
+                                                                    type: 'put',
+                                                                    url: '/Appointments/UpdateDoctorComments',
+                                                                    contentType: 'application/json',
+                                                                    data: JSON.stringify(data),
+                                                                    processData: false,
+                                                                    success: function () {
+                                                                        const pre = $(document.createElement('pre'));
+                                                                        $(pre).html($('#doctorComments').val());                                    
+                                                                        $(pre).addClass('mb-3');
+                                                                        $('#doctorComments').remove();
+                                                                        $(pre).attr('id', 'doctorComments');                                    
+                                                                        $(c.target).remove();
+                                                                        $(e.target).before(pre);
+                                                                        $(e.target).show();
+                                                                    },
+                                                                    error: function (error) {
+                                                                        console.log(error);
+                                                                    }
+                                                                })
+                                                            },
+                                                            error: function (error) {
+                                                                console.log(error);
+                                                            }
+                                                        })
+                                                    })
+                                                    $(e.target).hide();
+                                                })
+                                            }
                                             const dOB = appointment.Insured.User.DoB.split("T");
                                             $('#insuredsPicture img').attr('src', '@Url.Content("~/Content/img/Insureds/")' + appointment.Insured.User.Id + '/' + appointment.Insured.User.ProfilePicture);
                                             $('#insuredsFirstName').text(appointment.Insured.User.FirstName);
@@ -587,7 +646,14 @@
                         }
                     })
             }
-
+            $('#appointmentDetailsModal').on('hidden.bs.modal', function () {
+                if ($('#appointmentDetailsModal textarea').length) {
+                    $('#appointmentDetailsModal textarea').next().remove();
+                    $('#appointmentDetailsModal textarea').remove();
+                    $('#addComments').show();
+                    $('#addComments').before('<pre class="mb-3" id="doctorComments"></pre>')
+                }
+            })
             console.log('@CurrentUserId');
 
             ListAppointments('', '', -1, '0001-01-01', '@CurrentUserId');

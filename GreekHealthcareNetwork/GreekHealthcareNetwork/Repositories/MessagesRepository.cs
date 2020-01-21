@@ -26,6 +26,35 @@ namespace GreekHealthcareNetwork.Repositories
             }
             return message;
         }
+
+        public long CountUnreadMessagesOfUser(string userId)
+        {
+            if (userId == null)
+            {
+                throw new ArgumentNullException("userId");
+            }
+            long count;
+            using (var db = new ApplicationDbContext())
+            {
+                count = db.Messages.Count(m => m.RecipientId.Equals(userId) && m.MessageStatus == MessageStatus.Unread && !m.SenderId.Equals(db.Users.FirstOrDefault(u => u.Email.Equals("visitor@ghn.gr")).Id));
+            }
+            return count;
+        }
+
+        public long CountUnreadVisitorMessagesOfUser(string userId)
+        {
+            if (userId == null)
+            {
+                throw new ArgumentNullException("userId");
+            }
+            long count;
+            using (var db = new ApplicationDbContext())
+            {
+                count = db.Messages.Count(m => m.RecipientId.Equals(userId) && m.MessageStatus == MessageStatus.Unread && m.SenderId.Equals(db.Users.FirstOrDefault(u => u.Email.Equals("visitor@ghn.gr")).Id));
+            }
+            return count;
+        }
+
         public void Add(Message message)
         {
             using (ApplicationDbContext db = new ApplicationDbContext())

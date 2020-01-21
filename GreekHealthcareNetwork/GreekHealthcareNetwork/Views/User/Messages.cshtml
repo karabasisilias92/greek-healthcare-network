@@ -209,6 +209,17 @@
                                     type: 'get',
                                     url: '/api/Messages?&id=' + id,
                                     success: function (message) {
+                                        if (message.MessageStatus == "Unread") {
+                                            const count = $('#unreadMessagesCount').text();
+                                            const substring = count.substring(1, count.length - 1);
+                                            const num = parseInt(substring);
+                                            if (num == 1) {
+                                                $('#unreadMessagesCount').text('');
+                                            }
+                                            else {                                                
+                                                $('#unreadMessagesCount').text('(' + (num - 1) + ')');
+                                            }
+                                        }
                                         $('#viewMessage #errorContainerMessage').hide();
                                         $('#viewMessage #successContainerMessage').show();
                                         $('#viewMessage #successContainerSentMessage').hide();
