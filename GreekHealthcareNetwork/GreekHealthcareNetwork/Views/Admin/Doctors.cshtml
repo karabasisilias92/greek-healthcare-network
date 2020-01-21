@@ -38,6 +38,23 @@
     </div>
 </main>
 
+<div class="modal fade" id="updatedUserModal" tabindex="-1" role="dialog" aria-labelledby="updatedUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="updatedUserModalLabel">Success</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>User updated successfully!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="paymentResultModal" tabindex="-1" role="dialog" aria-labelledby="paymentResultModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -364,7 +381,10 @@
                             grandParent.children('td:nth-child(10)').children().show();
                             grandParent.children('td:nth-child(10)').children('.updateBtn').hide();
                             grandParent.children('td:nth-child(10)').children('.cancelUpdateBtn').hide();
-                            alert('User updated successfully!');
+                            $('#updatedUserModal').modal('show');
+                            setTimeout(function () {
+                                $('#updatedUserModal').modal('hide');
+                            }, 1500);
                         },
                         error: function (error) {
                             console.log('ERROR!');
