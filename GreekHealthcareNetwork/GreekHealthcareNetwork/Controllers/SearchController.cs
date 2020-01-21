@@ -219,5 +219,18 @@ namespace GreekHealthcareNetwork.Controllers
                 return Ok(new { doctors, insureds});
             }            
         }
+
+        [HttpGet]
+        [Route("api/Search/AdminAppointmentsSearchResults")]
+        [Authorize(Roles = "Administrator")]
+        public IHttpActionResult SearchResults(string firstName, string lastName, int doctorsSpecialty, int insuredPlanId, DateTime fromDate, DateTime untilDate)
+        {
+            var appointments = _appointments.AdminGetFilteredAppointments(firstName, lastName, doctorsSpecialty, insuredPlanId, fromDate, untilDate);
+            if (appointments == null)
+            {
+                return NotFound();
+            }
+            return Ok(appointments);
+        }
     }
 }

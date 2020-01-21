@@ -342,7 +342,6 @@
                                     }, 4000);
                                 }
                             })
-                            //fixFooterPosition(data.length);
                             $('.showAppointmentDetails').click(function (e) {
                                 console.log('view button clicked');
                                 let id = $(e.target).data('id');
@@ -642,7 +641,6 @@
                             console.log(error);
                             $('#appointmentsList').empty();
                             $("#appointmentsList").append('<tr><td colspan="7"> Something went wrong. Please try again later. </td></tr>')
-                            fixFooterPosition(0);
                         }
                     })
             }
@@ -667,15 +665,15 @@
                     ListAppointments(e.target[0].value, e.target[1].value, -1, e.target[2].value, '@CurrentUserId');
                 }
             })       
-            $('#search').on('submit', function (e) {
-                e.preventDefault();
-                if (e.target[3].type == 'date') {
-                    ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value, e.target[3].value);
-                }
-                else {
-                    ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value, '0001-01-01');
-                }
-            })
+            //$('#search').on('submit', function (e) {
+            //    e.preventDefault();
+            //    if (e.target[3].type == 'date') {
+            //        ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value, e.target[3].value);
+            //    }
+            //    else {
+            //        ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value, '0001-01-01');
+            //    }
+            //})
             $('#edit-modal').on('hidden.bs.modal', function () {
                 $('#myEditModalContent #NoAvailableAppointments').hide();
                 $('#myEditModalContent #NoWorkingDay').hide();

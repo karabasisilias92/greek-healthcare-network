@@ -167,7 +167,535 @@ namespace GreekHealthcareNetwork.Repositories
 
             return appointments;
 
-        }        
+        }
+
+        public IEnumerable<Appointment> AdminGetFilteredAppointments(string firstName, string lastName, int doctorsSpecialty, int insuredPlanId, DateTime fromDate, DateTime untilDate)
+        {
+            IEnumerable<Appointment> appointments = new List<Appointment>();
+            IEnumerable<ApplicationUser> users;
+
+            using (var db = new ApplicationDbContext())
+            {
+                if (!string.IsNullOrWhiteSpace(firstName) && !string.IsNullOrWhiteSpace(lastName))
+                {
+                    users = db.Users.Where(user => user.FirstName.Contains(firstName) && user.LastName.Contains(lastName));
+                }
+                else if (!string.IsNullOrWhiteSpace(firstName))
+                {
+                    users = db.Users.Where(user => user.FirstName.Contains(firstName));
+                }
+                else if (!string.IsNullOrWhiteSpace(lastName))
+                {
+                    users = db.Users.Where(user => user.LastName.Contains(lastName));
+                }
+                else
+                {
+                    users = db.Users;
+                }
+                var fromDateString = fromDate.Date.ToString("yyyy-MM-dd");
+                var untilDateString = untilDate.Date.ToString("yyyy-MM-dd");
+                
+                if (fromDateString != "0001-01-01" && untilDateString != "0001-01-01")
+                {
+                    if (doctorsSpecialty != -2 && insuredPlanId != -2 && insuredPlanId != -3)
+                    {
+                        if (doctorsSpecialty != -1 && insuredPlanId != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId || user.Id == appointment.DoctorId) && (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty && appointment.Insured.InsuredPlanId == insuredPlanId && appointment.AppointmentDate >= fromDate && appointment.AppointmentDate <= untilDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else if (doctorsSpecialty != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId || user.Id == appointment.DoctorId) && (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty && appointment.AppointmentDate >= fromDate && appointment.AppointmentDate <= untilDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else if (insuredPlanId != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId || user.Id == appointment.DoctorId) && appointment.Insured.InsuredPlanId == insuredPlanId && appointment.AppointmentDate >= fromDate && appointment.AppointmentDate <= untilDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId || user.Id == appointment.DoctorId) && appointment.AppointmentDate >= fromDate && appointment.AppointmentDate <= untilDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                    }
+                    else if (doctorsSpecialty != -2)
+                    {
+                        if (doctorsSpecialty != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.DoctorId) && (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty && appointment.AppointmentDate >= fromDate && appointment.AppointmentDate <= untilDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.DoctorId) && appointment.AppointmentDate >= fromDate && appointment.AppointmentDate <= untilDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                    }
+                    else if (insuredPlanId != -2 && insuredPlanId != -3)
+                    {
+                        if (insuredPlanId != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.Insured.InsuredPlanId == insuredPlanId && appointment.AppointmentDate >= fromDate && appointment.AppointmentDate <= untilDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.AppointmentDate >= fromDate && appointment.AppointmentDate <= untilDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                    }
+                }
+                else if (fromDateString != "0001-01-01")
+                {
+                    if (doctorsSpecialty != -2 && insuredPlanId != -2 && insuredPlanId != -3)
+                    {
+                        if (doctorsSpecialty != -1 && insuredPlanId != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId || user.Id == appointment.DoctorId) && (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty && appointment.Insured.InsuredPlanId == insuredPlanId && appointment.AppointmentDate >= fromDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else if (doctorsSpecialty != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId || user.Id == appointment.DoctorId) && (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty && appointment.AppointmentDate >= fromDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else if (insuredPlanId != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId || user.Id == appointment.DoctorId) && appointment.Insured.InsuredPlanId == insuredPlanId && appointment.AppointmentDate >= fromDate  && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId || user.Id == appointment.DoctorId) && appointment.AppointmentDate >= fromDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                    }
+                    else if (doctorsSpecialty != -2)
+                    {
+                        if (doctorsSpecialty != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.DoctorId) && (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty && appointment.AppointmentDate >= fromDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.DoctorId) && appointment.AppointmentDate >= fromDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                    }
+                    else if (insuredPlanId != -2 && insuredPlanId != -3)
+                    {
+                        if (insuredPlanId != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.Insured.InsuredPlanId == insuredPlanId && appointment.AppointmentDate >= fromDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.AppointmentDate >= fromDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                    }
+                }
+                else if (untilDateString != "0001-01-01")
+                {
+                    if (doctorsSpecialty != -2 && insuredPlanId != -2 && insuredPlanId != -3)
+                    {
+                        if (doctorsSpecialty != -1 && insuredPlanId != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId || user.Id == appointment.DoctorId) && (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty && appointment.Insured.InsuredPlanId == insuredPlanId && appointment.AppointmentDate <= untilDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else if (doctorsSpecialty != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId || user.Id == appointment.DoctorId) && (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty && appointment.AppointmentDate <= untilDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else if (insuredPlanId != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId || user.Id == appointment.DoctorId) && appointment.Insured.InsuredPlanId == insuredPlanId && appointment.AppointmentDate <= untilDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId || user.Id == appointment.DoctorId) && appointment.AppointmentDate <= untilDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                    }
+                    else if (doctorsSpecialty != -2)
+                    {
+                        if (doctorsSpecialty != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.DoctorId) && (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty && appointment.AppointmentDate <= untilDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.DoctorId) && appointment.AppointmentDate <= untilDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                    }
+                    else if (insuredPlanId != -2 && insuredPlanId != -3)
+                    {
+                        if (insuredPlanId != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.Insured.InsuredPlanId == insuredPlanId && appointment.AppointmentDate <= untilDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.AppointmentDate <= untilDate && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                    }
+                }
+                else
+                {
+                    if (doctorsSpecialty != -2 && insuredPlanId != -2 && insuredPlanId != -3)
+                    {
+                        if (doctorsSpecialty != -1 && insuredPlanId != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId || user.Id == appointment.DoctorId) && (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty && appointment.Insured.InsuredPlanId == insuredPlanId && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else if (doctorsSpecialty != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId || user.Id == appointment.DoctorId) && (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else if (insuredPlanId != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId || user.Id == appointment.DoctorId) && appointment.Insured.InsuredPlanId == insuredPlanId && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId || user.Id == appointment.DoctorId) && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                    }
+                    else if (doctorsSpecialty != -2)
+                    {
+                        if (doctorsSpecialty != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.DoctorId) && (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.DoctorId) && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                    }
+                    else if (insuredPlanId != -2 && insuredPlanId != -3)
+                    {
+                        if (insuredPlanId != -1)
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.Insured.InsuredPlanId == insuredPlanId && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                        else
+                        {
+                            appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.AppointmentChargePaid == true)
+                                                                                                                        .Include("Doctor")
+                                                                                                                        .Include("Doctor.WorkingHours")
+                                                                                                                        .Include("Doctor.DoctorPlan")
+                                                                                                                        .Include("Doctor.User")
+                                                                                                                        .Include("Doctor.User.Roles")
+                                                                                                                        .Include("Insured")
+                                                                                                                        .Include("Insured.InsuredPlan")
+                                                                                                                        .Include("Insured.User")
+                                                                                                                        .Include("Insured.User.Roles")
+                                                                                                                        .ToList();
+                        }
+                    }
+                }
+            }
+            appointments = appointments.OrderByDescending(i => i.AppointmentDate).ThenByDescending(i => i.AppointmentStartTime);
+
+            return appointments;
+        }
 
         public Appointment GetAppointmentById(int appointmentId)
         {

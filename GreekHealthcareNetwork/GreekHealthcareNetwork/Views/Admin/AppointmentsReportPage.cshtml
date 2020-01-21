@@ -23,7 +23,6 @@
         <table class="table mt-4">
             <thead>
                 <tr>
-                    <th scope="col"></th>
                     <th scope="col">Doctor</th>
                     <th scope="col">Specialty</th>
                     <th scope="col">Patient</th>
@@ -37,3 +36,67 @@
         </table>
     </div>
 </main>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            function ListAppointments(firstName, lastName, specialty, insuredPlanId, fromDate, untilDate) {
+                if (fromDate == "") {
+                    fromDate = "0001-01-01";
+                }
+                if (untilDate == "") {
+                    untilDate = "0001-01-01";
+                }
+                $.ajax({
+                    dataType: 'json',
+                    type: 'get',
+                    url: '/api/Search/AdminAppointmentsSearchResults?firstName=' + firstName +
+                                                                    '&lastName=' + lastName +
+                                                                    '&doctorsSpecialty=' + specialty +
+                                                                    '&insuredPlanId=' + insuredPlanId +
+                                                                    '&fromDate=' + fromDate +
+                                                                    '&untilDate=' + untilDate,
+                    success: function (data) {
+                        $('#appointmentsList').empty();
+                        console.log('Step1');
+                        console.log(data.length);
+                        if (data.length == 0) {
+                            $("#appointmentsList").append('<tr><td colspan="6">There are no appointments matching these criteria.</td></tr>');
+                        }
+                        else {
+                            console.log('Step2')
+                            console.log(data.length);
+                            console.log(data)
+                            data.forEach(function (appointment) {
+                                console.log('Step3');
+                                const appointmentStart = appointment.AppointmentStartTime.split(":");
+                                const appointmentEnd = appointment.AppointmentEndTime.split(":");
+                                const appointmentUnformatedDate = appointment.AppointmentDate.split("T");
+                                const appointmentDate = appointmentUnformatedDate[0].split("-");
+                                const tr = $(document.createElement('tr'));
+                                $(tr).append(
+                                    '<td>' + appointment.Doctor.User.FirstName + ' ' + appointment.Doctor.User.LastName + '</td>' +
+                                    '<td>' + appointment.Doctor.MedicalSpecialty + '</td>' +
+                                    '<td>' + appointment.Insured.User.FirstName + ' ' + appointment.Insured.User.LastName + '</td>' +
+                                    '<td>' + appointmentDate[2] + "-" + appointmentDate[1] + "-" + appointmentDate[0] + '</td>' +
+                                    '<td>' + appointmentStart[0] + ':' + appointmentStart[1] + ' - ' + appointmentEnd[0] + ':' + appointmentEnd[1] + '</td>' +
+                                    '<td>' + appointment.AppointmentStatus + '</td>'
+                                );
+                                $('#appointmentsList').append(tr);
+                            });
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        $('#appointmentsList').empty();
+                        $("#appointmentsList").append('<tr><td colspan="6"> Something went wrong. Please try again later. </td></tr>')
+                    }
+                })
+            }
+            $('#search').on('submit', function (e) {
+                e.preventDefault();
+                ListAppointments(e.target[0].value, e.target[1].value, e.target[2].value, e.target[3].value, e.target[4].value, e.target[5].value);
+            })
+        })
+    </script>
+}
