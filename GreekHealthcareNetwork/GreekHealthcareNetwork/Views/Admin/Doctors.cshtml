@@ -38,6 +38,23 @@
     </div>
 </main>
 
+<div class="modal fade" id="updatedUserModal" tabindex="-1" role="dialog" aria-labelledby="updatedUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="updatedUserModalLabel">Success</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>User updated successfully!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="paymentResultModal" tabindex="-1" role="dialog" aria-labelledby="paymentResultModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -54,6 +71,8 @@
         </div>
     </div>
 </div>
+
+@Html.Partial("_NewMessage")
 
 @section scripts{
     @Scripts.Render("~/bundles/jqueryval")
@@ -84,7 +103,7 @@
                             + '</td>'                           
                             + '<td><button class="btn btn-success table-button editBtn" data-id="' + doctor.UserId + '" >Edit</button>'
                             + ((doctor.User.IsActive == true) ? '<button class="btn btn-danger table-button setActiveBtn" data-is-active="true" data-id="' + doctor.UserId + '">Deactivate</button>' : '<button class="btn btn-danger table-button setActiveBtn" data-is-active="false" style="width:101.2px; height:38px" data-id="' + doctor.UserId + '">Activate</button>')
-                            + '<button class="btn btn-primary table-button sentMessageBtn" data-id="' + doctor.UserId + '" >Message</button>'
+                            + '<button class="btn btn-primary table-button sendMessageBtn" data-id="' + doctor.UserId + '" >Message</button>'
                             + (data.doctorsPayments[counter] == 0 ? '<button class="btn btn-secondary table-button disabled" data-id="' + doctor.UserId + '">Pay</button></td>' : '<button class="btn btn-secondary table-button payBtn" data-id="' + doctor.UserId + '">Pay</button></td>')
                             + '</tr>')
                         counter++;
@@ -135,6 +154,105 @@
                             }
                         });
                     });
+                    $('#send').click(function (e) {
+                        if ($('#send').hasClass("noClick")) {
+                            e.preventDefault();
+                        }
+                        else {
+                            $('#send').addClass("noClick");
+                            const $form = $('#messagearea');
+                            $.validator.unobtrusive.parse($form);
+                            $form.validate();
+                            if ($form.valid()) {
+                                let model = new Object();
+                                model.Message = new Object();
+                                model.Message.ConversationId = 0;
+                                model.Message.SenderId = $('#Message_SenderId').val();
+                                model.Message.RecipientId = $('#Message_RecipientId').val();
+                                model.Message.Subject = $('#Message_Subject').val();
+                                model.Message.MessageText = $('#Message_MessageText').val();
+                                model.FirstName = "";
+                                model.LastName = "";
+                                model.InsuredPlans = [];
+                                model.DoctorSpecialty = -1;
+                                model.MedicalSpecialties = [];
+                                model.AppointmentDate = null;
+                                model.UserName = $('#UserName1').val();
+                                model.Password = $('#Password1').val();
+                                model.RememberMe = false;
+                                model.VisitorMessage = null;
+                                model = JSON.stringify(model)
+                                $.ajax({
+                                    contentType: 'application/json',
+                                    type: 'post',
+                                    url: '/api/Messages',
+                                    data: model,
+                                    cache: false,
+                                    processData: false,
+                                    success: function () {
+                                        $('#Message_Subject').val("");
+                                        $('#Message_MessageText').val("");
+                                        $('#normalContainerMessage').hide();
+                                        $('#errorContainerMessage').hide();
+                                        $('#successContainerMessage').show();
+                                        setTimeout(function () {
+                                            $('#newMessage').modal("hide");
+                                        }, 3000)
+                                    },
+                                    error: function (error) {
+                                        $('#errorContainerMessage').show();
+                                        const errorObject = error.responseJSON.ModelState;
+                                        $('#messagearea div.validation-summary-errors > ul').children().remove();
+                                        for (var property in errorObject) {
+                                            if (errorObject.hasOwnProperty(property)) {
+                                                if (property == '') {
+                                                    $('#messagearea div.validation-summary-errors > ul').append('<li>' + errorObject[property] + '</li>')
+                                                }
+                                            }
+                                        }
+                                        const $form = $('#messagearea');
+                                        $.validator.unobtrusive.parse($form);
+                                        $form.validate();
+                                        if (!$form.valid()) {
+                                            $.each($form.validate().errorList, function (key, value) {
+                                                const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                                                $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                                                $errorSpan.show();
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                            else {
+                                $('#errorContainerMessage').show();
+                                console.log($form.validate().errorList);
+                                $.each($form.validate().errorList, function (key, value) {
+                                    console.log(value);
+                                    const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                                    $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                                    $errorSpan.show();
+                                });
+                            }
+                            setTimeout(function() {
+                                $('#send').removeClass("noClick");
+                            }, 4000);
+                        }
+                    })
+                    $('.sendMessageBtn').click(function (e) {
+                        let id = $(e.target).data('id');
+                        $('#errorContainerMessage').hide();
+                        $('#successContainerMessage').hide();
+                        $('#Message_RecipientId').val(id);
+                        $('#normalContainerMessage').show();
+                        $('#newMessage').modal('show');
+                    })
+                    $('#newMessage').on('hidden.bs.modal', function () {
+                        $('#messagearea').trigger('reset');
+                        $('#messagearea div.validation-summary-valid').addClass('validation-summary-errors').removeClass('validation-summary-valid');
+                        $('#messagearea span[data-valmsg-for="Message.Subject"]').children().remove();
+                        $('#messagearea span[data-valmsg-for="Message.MessageText"]').children().remove();
+                        $('#messagearea div.validation-summary-errors > ul').children().remove();
+                    })
                     $('.payBtn').click(function (e) {
                         const date = new Date();
                         const amountValue = parseFloat($(this).parent().prev().text().split(' ')[0]).toFixed(2);
@@ -263,7 +381,10 @@
                             grandParent.children('td:nth-child(10)').children().show();
                             grandParent.children('td:nth-child(10)').children('.updateBtn').hide();
                             grandParent.children('td:nth-child(10)').children('.cancelUpdateBtn').hide();
-                            alert('User updated successfully!');
+                            $('#updatedUserModal').modal('show');
+                            setTimeout(function () {
+                                $('#updatedUserModal').modal('hide');
+                            }, 1500);
                         },
                         error: function (error) {
                             console.log('ERROR!');
@@ -288,39 +409,39 @@
 
             if (!nameMinLenRGEX.test(firstName)) {
                 RGEXpassed = false
-                grandParent.children('td:nth-child(2)').append('<span>First name cannot be less than 2 characters.</span><br>')
+                grandParent.children('td:nth-child(2)').append('<span>&#8226;First name cannot be less than 2 characters.</span><br>')
             }
             if (!nameMaxLenRGEX.test(firstName)) {
                 RGEXpassed = false
-                grandParent.children('td:nth-child(2)').append('<span>First name cannot be more than 50 characters.</span><br>')
+                grandParent.children('td:nth-child(2)').append('<span>&#8226;First name cannot be more than 50 characters.</span><br>')
             }
             if (!nameRGEX.test(firstName)) {
                 RGEXpassed = false
-                grandParent.children('td:nth-child(2)').append('<span>First Name must start with capital letter and then contain only small letters of the same language.</span><br>')
+                grandParent.children('td:nth-child(2)').append('<span>&#8226;First Name must start with capital letter and then contain only small letters of the same language.</span><br>')
             }
             if (!nameMinLenRGEX.test(lastName)) {
                 RGEXpassed = false
-                grandParent.children('td:nth-child(3)').append('<span>Last name cannot be less than 2 characters.</span><br>')
+                grandParent.children('td:nth-child(3)').append('<span>&#8226;Last name cannot be less than 2 characters.</span><br>')
             }
             if (!nameMaxLenRGEX.test(lastName)) {
                 RGEXpassed = false
-                grandParent.children('td:nth-child(3)').append('<span>Last name cannot be more than 50 characters.</span><br>')
+                grandParent.children('td:nth-child(3)').append('<span>&#8226;Last name cannot be more than 50 characters.</span><br>')
             }
             if (!nameRGEX.test(lastName)) {
                 RGEXpassed = false
-                grandParent.children('td:nth-child(3)').append('<span>Last Name must start with capital letter and then contain only small letters of the same language.</span><br>')
+                grandParent.children('td:nth-child(3)').append('<span>&#8226;Last Name must start with capital letter and then contain only small letters of the same language.</span><br>')
             }
             if (!amkaRGEX.test(amka)) {
                 RGEXpassed = false
-                grandParent.children('td:nth-child(6)').append('<span>AMKA should be 11 digits.</span><br>')
+                grandParent.children('td:nth-child(6)').append('<span>&#8226;AMKA should be 11 digits.</span><br>')
             }
             if (!addressMinLenRGEX.test(address)) {
                 RGEXpassed = false
-                grandParent.children('td:nth-child(5)').append('<span>Address length cannot be less than 10 characters.</span><br>')
+                grandParent.children('td:nth-child(5)').append('<span>&#8226;Address length cannot be less than 10 characters.</span><br>')
             }
             if (!addressMaxLenRGEX.test(address)) {
                 RGEXpassed = false
-                grandParent.children('td:nth-child(5)').append('<span>Address length cannot be more than 100 characters.</span><br>')
+                grandParent.children('td:nth-child(5)').append('<span>&#8226;Address length cannot be more than 100 characters.</span><br>')
             }
             return RGEXpassed;
         }

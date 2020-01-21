@@ -19,6 +19,7 @@ namespace GreekHealthcareNetwork.Controllers
         private ApplicationUserManager _userManager;
         private readonly UsersRepository _usersRepository = new UsersRepository();
         private readonly DoctorsRepository _doctorsRepository = new DoctorsRepository();
+        private readonly InsuredsRepository _insuredsRepository = new InsuredsRepository();
         private readonly MessagesRepository _messagesRepository = new MessagesRepository();
         private PlansRepository _plans = new PlansRepository();
 
@@ -58,7 +59,8 @@ namespace GreekHealthcareNetwork.Controllers
                 }
                 else if (userRole == "Insured")
                 {
-
+                    adminUpdatedUser.Insured = _insuredsRepository.GetInsuredById(userId);
+                    adminUpdatedUser.Insured.HomeAddress = modifiedUser.Insured.HomeAddress;
                 }
                 else
                 {
