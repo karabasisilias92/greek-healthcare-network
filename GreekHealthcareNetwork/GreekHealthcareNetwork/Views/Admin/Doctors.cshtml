@@ -409,39 +409,39 @@
 
             if (!nameMinLenRGEX.test(firstName)) {
                 RGEXpassed = false
-                grandParent.children('td:nth-child(2)').append('<span>First name cannot be less than 2 characters.</span><br>')
+                grandParent.children('td:nth-child(2)').append('<span>&#8226;First name cannot be less than 2 characters.</span><br>')
             }
             if (!nameMaxLenRGEX.test(firstName)) {
                 RGEXpassed = false
-                grandParent.children('td:nth-child(2)').append('<span>First name cannot be more than 50 characters.</span><br>')
+                grandParent.children('td:nth-child(2)').append('<span>&#8226;First name cannot be more than 50 characters.</span><br>')
             }
             if (!nameRGEX.test(firstName)) {
                 RGEXpassed = false
-                grandParent.children('td:nth-child(2)').append('<span>First Name must start with capital letter and then contain only small letters of the same language.</span><br>')
+                grandParent.children('td:nth-child(2)').append('<span>&#8226;First Name must start with capital letter and then contain only small letters of the same language.</span><br>')
             }
             if (!nameMinLenRGEX.test(lastName)) {
                 RGEXpassed = false
-                grandParent.children('td:nth-child(3)').append('<span>Last name cannot be less than 2 characters.</span><br>')
+                grandParent.children('td:nth-child(3)').append('<span>&#8226;Last name cannot be less than 2 characters.</span><br>')
             }
             if (!nameMaxLenRGEX.test(lastName)) {
                 RGEXpassed = false
-                grandParent.children('td:nth-child(3)').append('<span>Last name cannot be more than 50 characters.</span><br>')
+                grandParent.children('td:nth-child(3)').append('<span>&#8226;Last name cannot be more than 50 characters.</span><br>')
             }
             if (!nameRGEX.test(lastName)) {
                 RGEXpassed = false
-                grandParent.children('td:nth-child(3)').append('<span>Last Name must start with capital letter and then contain only small letters of the same language.</span><br>')
+                grandParent.children('td:nth-child(3)').append('<span>&#8226;Last Name must start with capital letter and then contain only small letters of the same language.</span><br>')
             }
             if (!amkaRGEX.test(amka)) {
                 RGEXpassed = false
-                grandParent.children('td:nth-child(6)').append('<span>AMKA should be 11 digits.</span><br>')
+                grandParent.children('td:nth-child(6)').append('<span>&#8226;AMKA should be 11 digits.</span><br>')
             }
             if (!addressMinLenRGEX.test(address)) {
                 RGEXpassed = false
-                grandParent.children('td:nth-child(5)').append('<span>Address length cannot be less than 10 characters.</span><br>')
+                grandParent.children('td:nth-child(5)').append('<span>&#8226;Address length cannot be less than 10 characters.</span><br>')
             }
             if (!addressMaxLenRGEX.test(address)) {
                 RGEXpassed = false
-                grandParent.children('td:nth-child(5)').append('<span>Address length cannot be more than 100 characters.</span><br>')
+                grandParent.children('td:nth-child(5)').append('<span>&#8226;Address length cannot be more than 100 characters.</span><br>')
             }
             return RGEXpassed;
         }
