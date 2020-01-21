@@ -391,13 +391,68 @@
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\img\Admins\adfd277d-f446-4216-9437-361bcab0c452\download.png" />
+    <Content Include="Content\img\Admins\c0c59e7b-4e90-42bd-922b-ffc699dd6305\Admin-icon.png" />
+    <Content Include="Content\img\Admins\f3dafad2-acc6-4892-8a3c-c3be59f0c225\defaultUserImage.png" />
     <Content Include="Content\img\apple-touch-icon.png" />
     <Content Include="Content\img\defaultUserImage.png" />
+    <Content Include="Content\img\Doctors\0618d0d9-7fff-49ac-9ac5-6f1c87cb8d53\0618d0d9-7fff-49ac-9ac5-6f1c87cb8d53.jpg" />
+    <Content Include="Content\img\Doctors\08e6d3e4-9526-4e40-97fb-52ca512a26ef\08e6d3e4-9526-4e40-97fb-52ca512a26ef.jpg" />
+    <Content Include="Content\img\Doctors\1bc3d525-e422-4dfd-847a-7abc45deabbb\defaultUserImage.png" />
+    <Content Include="Content\img\Doctors\1da08700-e71c-4cbe-8b59-650070bc6fc2\1da08700-e71c-4cbe-8b59-650070bc6fc2.jpg" />
+    <Content Include="Content\img\Doctors\220ac205-2f01-47d4-8ce2-feff2a93476f\220ac205-2f01-47d4-8ce2-feff2a93476f.jpg" />
+    <Content Include="Content\img\Doctors\275c6e39-71d7-4d61-96a3-5a9bcb0c566e\defaultUserImage.png" />
+    <Content Include="Content\img\Doctors\2a2063a9-0bad-46af-820b-a2f4a47b2a81\2a2063a9-0bad-46af-820b-a2f4a47b2a81.jpg" />
+    <Content Include="Content\img\Doctors\34e9674c-61d8-49be-a4a9-f8e1a6b77c95\34e9674c-61d8-49be-a4a9-f8e1a6b77c95.jpg" />
+    <Content Include="Content\img\Doctors\3b4d5d50-664f-4979-8353-99147fe645ce\3b4d5d50-664f-4979-8353-99147fe645ce.jpg" />
+    <Content Include="Content\img\Doctors\42e5bc78-54a2-4a23-82d5-ed097687e132\42e5bc78-54a2-4a23-82d5-ed097687e132.jpg" />
+    <Content Include="Content\img\Doctors\467e1e78-f5b7-4d0a-b709-58a3a2efb312\defaultUserImage.png" />
+    <Content Include="Content\img\Doctors\5cbc67c5-94e7-4724-bad9-33a030bf899b\5cbc67c5-94e7-4724-bad9-33a030bf899b.jpg" />
+    <Content Include="Content\img\Doctors\63e2d557-dc7c-467e-9b89-d6794e4a3876\63e2d557-dc7c-467e-9b89-d6794e4a3876.jpg" />
+    <Content Include="Content\img\Doctors\6a3a8f9d-8679-4a52-aba0-f66fa66de334\6a3a8f9d-8679-4a52-aba0-f66fa66de334.jpg" />
+    <Content Include="Content\img\Doctors\772a7123-99c8-4ac8-b26e-838579a69db4\772a7123-99c8-4ac8-b26e-838579a69db4.jpg" />
+    <Content Include="Content\img\Doctors\7aed8e31-7ddb-48f9-a64d-b2710a1f3e30\7aed8e31-7ddb-48f9-a64d-b2710a1f3e30.jpg" />
+    <Content Include="Content\img\Doctors\830c1a32-2056-4f94-84d6-34a3c45edd11\830c1a32-2056-4f94-84d6-34a3c45edd11.jpg" />
+    <Content Include="Content\img\Doctors\830c1a32-2056-4f94-84d6-34a3c45edd11\830c1a32-2056-4f94-84d6-34a3c45edd11.png" />
+    <Content Include="Content\img\Doctors\84caf07c-51b7-42d0-984a-495924f3babe\84caf07c-51b7-42d0-984a-495924f3babe.jpg" />
+    <Content Include="Content\img\Doctors\87a196bf-dc9a-4495-b388-53ca6e01e14c\87a196bf-dc9a-4495-b388-53ca6e01e14c.jpg" />
+    <Content Include="Content\img\Doctors\8cb05f95-5cd1-48cf-a234-b9636aefd2d9\8cb05f95-5cd1-48cf-a234-b9636aefd2d9.jpg" />
+    <Content Include="Content\img\Doctors\9651bf28-e38a-4f6d-abd5-e4bb93fd7ce6\defaultUserImage.png" />
+    <Content Include="Content\img\Doctors\98b5ebbc-4d1c-4beb-a434-19aaed83c61f\98b5ebbc-4d1c-4beb-a434-19aaed83c61f.jpg" />
+    <Content Include="Content\img\Doctors\99d54f1a-e5af-4fa7-994a-4136f2ca3e88\99d54f1a-e5af-4fa7-994a-4136f2ca3e88.png" />
+    <Content Include="Content\img\Doctors\a6d9542d-2f28-46e2-a20e-d3b5ee6616be\a6d9542d-2f28-46e2-a20e-d3b5ee6616be.png" />
+    <Content Include="Content\img\Doctors\a8a6b84b-de26-4639-a002-b0179bd8bb2d\a8a6b84b-de26-4639-a002-b0179bd8bb2d.jpg" />
+    <Content Include="Content\img\Doctors\b80cc753-c3cb-434d-9471-0feffd3af4d5\b80cc753-c3cb-434d-9471-0feffd3af4d5.jpg" />
+    <Content Include="Content\img\Doctors\b9211f10-5322-4b83-808c-72a9a67d2937\Untitled-7.jpg" />
+    <Content Include="Content\img\Doctors\c360ad03-06a7-4c59-b300-c9d2971c088f\defaultUserImage.png" />
+    <Content Include="Content\img\Doctors\d5512e86-088d-44a3-b22d-3fdabf5bfb22\d5512e86-088d-44a3-b22d-3fdabf5bfb22.jpg" />
+    <Content Include="Content\img\Doctors\d7d7b4fa-77b1-4488-9682-18c10b90c582\d7d7b4fa-77b1-4488-9682-18c10b90c582.jpg" />
+    <Content Include="Content\img\Doctors\edce88fb-f5bd-4964-97e4-c0f19a4d4743\edce88fb-f5bd-4964-97e4-c0f19a4d4743.jpg" />
+    <Content Include="Content\img\Doctors\eeaa21c3-7575-4ffb-9b7a-f667fd25be82\eeaa21c3-7575-4ffb-9b7a-f667fd25be82.jpg" />
+    <Content Include="Content\img\Doctors\eeaa21c3-7575-4ffb-9b7a-f667fd25be82\eeaa21c3-7575-4ffb-9b7a-f667fd25be82.png" />
     <Content Include="Content\img\employees-885338_1920-e1565727877609-1500x630.jpg" />
     <Content Include="Content\img\favicon.png" />
     <Content Include="Content\img\GHN_Logo.png" />
     <Content Include="Content\img\GHN_Logo_dark.png" />
     <Content Include="Content\img\Healthcare-Background-Pics.jpg" />
+    <Content Include="Content\img\Insureds\0dab4c84-7af0-4544-afd1-d2e5711d094a\0dab4c84-7af0-4544-afd1-d2e5711d094a.png" />
+    <Content Include="Content\img\Insureds\101fc999-416c-4759-9cd9-948e7822c853\一人·一张_NO.146_高以翔.jpg" />
+    <Content Include="Content\img\Insureds\1402b2f6-7af8-4ce6-8a6b-8192fdbc65d8\1402b2f6-7af8-4ce6-8a6b-8192fdbc65d8.jpg" />
+    <Content Include="Content\img\Insureds\14aa13a5-4b97-40e1-8866-e44045e1083e\14aa13a5-4b97-40e1-8866-e44045e1083e.png" />
+    <Content Include="Content\img\Insureds\3f9c073c-3a4e-4f32-9ace-d4c80db05709\defaultUserImage.png" />
+    <Content Include="Content\img\Insureds\498d3f78-a770-4a3b-afd3-942e72db29cd\498d3f78-a770-4a3b-afd3-942e72db29cd.jpg" />
+    <Content Include="Content\img\Insureds\4e20264c-9f52-4e7c-bab5-a15b47df49a2\defaultUserImage.png" />
+    <Content Include="Content\img\Insureds\7f9b35f1-c167-45ea-8990-bdac5b8926b9\7f9b35f1-c167-45ea-8990-bdac5b8926b9.jpg" />
+    <Content Include="Content\img\Insureds\9b62f3b7-59ea-479b-8270-4eca13a55b48\9b62f3b7-59ea-479b-8270-4eca13a55b48.jpg" />
+    <Content Include="Content\img\Insureds\9c3706d4-5d77-4444-97bf-099c09ef9c00\9c3706d4-5d77-4444-97bf-099c09ef9c00.jpg" />
+    <Content Include="Content\img\Insureds\ad9d669d-882c-462f-b004-5fd1b435de6b\ad9d669d-882c-462f-b004-5fd1b435de6b.png" />
+    <Content Include="Content\img\Insureds\bb747805-84f8-4866-a1ee-86ca474044c4\defaultUserImage.png" />
+    <Content Include="Content\img\Insureds\bb8a21db-4b60-4b71-9907-1d626e314325\bb8a21db-4b60-4b71-9907-1d626e314325.jpg" />
+    <Content Include="Content\img\Insureds\bc7df4c8-2c05-405b-99a6-1af2e421ab0a\defaultUserImage.png" />
+    <Content Include="Content\img\Insureds\c2a38610-dc77-4ef2-a483-d44019b54c86\c2a38610-dc77-4ef2-a483-d44019b54c86.jpg" />
+    <Content Include="Content\img\Insureds\cc235c7b-59b2-4235-b431-34fab629198f\defaultUserImage.png" />
+    <Content Include="Content\img\Insureds\d7b82bba-1c57-4515-aeb9-3cd67017a282\Christian-Acuña-hn.jpg" />
+    <Content Include="Content\img\Insureds\e326ebc4-6dd4-4390-9ced-a2676cf399ef\一人·一张_NO.146_高以翔.jpg" />
     <Content Include="Content\insuredsNavbar.css" />
     <Content Include="Content\mdb.css" />
     <Content Include="Content\messages.css" />
@@ -434,6 +489,7 @@
     <Content Include="Content\fonts\fontawesome-webfont.woff" />
     <Content Include="Content\fonts\fontawesome-webfont.woff2" />
     <Content Include="Content\fonts\FontAwesome.otf" />
+    <None Include="Properties\PublishProfiles\greekhealthcarenetwork - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -608,6 +664,7 @@
     <Content Include="Views\Admin\InsuredPlans.cshtml" />
     <Content Include="Views\Admin\SubscriptionsExpiredReportPage.cshtml" />
     <Content Include="Views\Shared\_AdminSearchPartial.cshtml" />
+    <Content Include="Views\Admin\AppointmentsReportPage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -617,9 +674,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\img\Admins\" />
-    <Folder Include="Content\img\Doctors\" />
-    <Folder Include="Content\img\Insureds\" />
+    <Folder Include="Content\img\Doctors\7b8c58c6-8a20-4d89-af61-4f1c46a555a1\" />
+    <Folder Include="Content\img\Doctors\a967020e-535c-4042-8755-60e75510c10b\" />
+    <Folder Include="Content\img\Doctors\ba6c3d36-18e5-45ed-bd40-56473d663745\" />
     <Folder Include="Views\Appointments\" />
   </ItemGroup>
   <ItemGroup>

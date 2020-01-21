@@ -395,10 +395,10 @@
                         $('#DoctorId').val(data.DoctorId);
                         let dateSplitted = data.UnavailableFromDate.split('T');
                         $('#UnavailableFromDate').val(dateSplitted[0]);
-                        $('#UnavailableFromTime').val(data.UnavailableFromTime);
+                        $('#UnavailableFromTime').val(data.UnavailableFromTime.split(':')[0] + ':' + data.UnavailableFromTime.split(':')[1]);
                         dateSplitted = data.UnavailableUntilDate.split('T');
                         $('#UnavailableUntilDate').val(dateSplitted[0]);
-                        $('#UnavailableUntilTime').val(data.UnavailableUntilTime);
+                        $('#UnavailableUntilTime').val(data.UnavailableUntilTime.split(':')[0] + ':' + data.UnavailableUntilTime.split(':')[1]);
                         $('#unavailabilityModal').modal('show');
                     },
                     error: function (error) {

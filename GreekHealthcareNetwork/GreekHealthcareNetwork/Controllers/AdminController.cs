@@ -276,6 +276,21 @@ namespace GreekHealthcareNetwork.Controllers
             return View(model);
         }
 
+        public ActionResult AppointmentsReportPage()
+        {
+            var model = new AdminSearchViewModel
+            {
+                MedicalSpecialties = new List<MedicalSpecialty>(),
+                InsuredPlans = new List<InsuredPlan>()
+            };
+            for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
+            {
+                model.MedicalSpecialties.Add((MedicalSpecialty)i);
+            }
+            model.InsuredPlans = _plans.GetInsuredPlans().ToList();
+            return View(model);
+        }
+
         [HttpPost]
         public ActionResult InformUserForSubscription(Message message)
         {

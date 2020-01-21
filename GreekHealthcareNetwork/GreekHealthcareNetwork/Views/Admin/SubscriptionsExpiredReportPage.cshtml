@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNet.Identity;
+﻿@model GreekHealthcareNetwork.Models.AdminSearchViewModel
+@using Microsoft.AspNet.Identity;
 @{
     ViewBag.Title = "Subscriptions Expired Report Page";
 }
@@ -18,7 +19,7 @@
         </h1>
     </div>
     @Html.Partial("_AdminSearchPartial")
-    <div class="">
+    <div class="table-responsive">
         <table class="table mt-4" id="usersList">
             <thead>
                 <tr>
@@ -111,7 +112,7 @@
                             }
                             message = JSON.stringify(message);
                             console.log(message);
-                            $.ajax({                                
+                            $.ajax({
                                 contentType: 'application/json',
                                 type: 'post',
                                 url: '/Admin/InformUserForSubscription',

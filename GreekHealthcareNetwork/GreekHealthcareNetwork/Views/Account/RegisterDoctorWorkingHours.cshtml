@@ -27,9 +27,9 @@
             {
                 <div class="form-row">
                     @Html.HiddenFor(m => m.WorkingHours[i].DoctorId, new { @Value = Model.DoctorId })
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         @Html.LabelFor(m => m.WorkingHours[i].Day, new { @class = "col-md-12 control-label" })
-                        <div class="col-md-10">
+                        <div class="col-md-12">
                             <select id="@("WorkingHours_" + i + "__Day")" name="@("WorkingHours[" + i + "].Day")" class="form-control mr-2" data-val="true" data-val-required="The Day field is required." required>
                                 <option>Choose day</option>
                                 @foreach (var item in Model.Days)
@@ -47,23 +47,23 @@
                             @Html.ValidationMessageFor(m => m.WorkingHours[i].Day, "", new { @class = "text-danger" })
                         </div>
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         @Html.LabelFor(m => m.WorkingHours[i].WorkStartTime, new { @class = "col-md-12 control-label" })
-                        <div class="col-md-10">
+                        <div class="col-md-9">
                             @Html.TextBoxFor(m => m.WorkingHours[i].WorkStartTime, new { @class = "form-control", type = "time" })
                             @Html.ValidationMessageFor(m => m.WorkingHours[i].WorkStartTime, "", new { @class = "text-danger" })
                         </div>
                     </div>
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-3">
                         @Html.LabelFor(m => m.WorkingHours[i].WorkEndTime, new { @class = "col-md-12 control-label" })
-                        <div class="col-md-10">
+                        <div class="col-md-9">
                             @Html.TextBoxFor(m => m.WorkingHours[i].WorkEndTime, new { @class = "form-control", type = "time" })
                             @Html.ValidationMessageFor(m => m.WorkingHours[i].WorkStartTime, "", new { @class = "text-danger" })
                         </div>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         @Html.LabelFor(m => m.WorkingHours[i].AppointmentDuration, new { @class = "col-md-12 control-label" })
-                        <div class="col-md-10">
+                        <div class="col-md-12">
                             <select id="@("WorkingHours_" + i + "__AppointmentDuration")" name="@("WorkingHours[" + i + "].AppointmentDuration")" class="form-control mr-2" data-val="true" data-val-required="The Appointment Duration field is required." required>
                                 @{
                                     switch (Model.WorkingHours[i].AppointmentDuration)
@@ -166,9 +166,9 @@
                 $('#entriesList').append(                        
                     '<div class= "form-row">' +
                                 '<input Value="' + '@Model.DoctorId' + '" id="WorkingHours_' + (count-1) + '__DoctorId" name="WorkingHours[' + (count-1) + '].DoctorId" type="hidden" value="" />' +
-                                '<div class="form-group col-md-3">' +
+                                '<div class="form-group col-md-2">' +
                                     '<label class="col-md-12 control-label" for="WorkingHours_' + (count-1) + '__Day">Day</label>' +
-                                    '<div class="col-md-10">' +
+                                    '<div class="col-md-12">' +
                                         '<select id="WorkingHours_' + (count-1) + '__Day" name="WorkingHours[' + (count-1) + '].Day" class="form-control mr-2" data-val="true" data-val-required="The Day field is required." required>' +
                                             '<option>Choose day</option>' +
                                             '<option value="1">Monday</option>' +
@@ -182,23 +182,23 @@
                                         '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + (count-1) + '].Day" data-valmsg-replace="true"></span>' +
                                     '</div>' +
                                 '</div>' +
-                                '<div class="form-group col-md-2">' +
+                                '<div class="form-group col-md-3">' +
                                     '<label class="col-md-12 control-label" for="WorkingHours_' + (count-1) + '__WorkStartTime">Work Start Time</label>' +
-                                    '<div class="col-md-10">' +
+                                    '<div class="col-md-9">' +
                                         '<input class="form-control" data-val="true" data-val-required="The Work Start Time field is required." id="WorkingHours_' + (count-1) + '__WorkStartTime" name="WorkingHours[' + (count-1) + '].WorkStartTime" type="time" value="" />' +
                                         '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + (count-1) + '].WorkStartTime" data-valmsg-replace="true"></span>' +
                                     '</div>' +
                                 '</div>' +
-                                '<div class="form-group col-md-2">' +
+                                '<div class="form-group col-md-3">' +
                                     '<label class="col-md-12 control-label" for="WorkingHours_' + (count-1) + '__WorkEndTime">Work End Time</label>' +
-                                    '<div class="col-md-10">' +
+                                    '<div class="col-md-9">' +
                                         '<input class="form-control" data-val="true" data-val-required="The Work End Time field is required." id="WorkingHours_' + (count-1) + '__WorkEndTime" name="WorkingHours[' + (count-1) + '].WorkEndTime" type="time" value="" />' +
                                         '<span class="field-validation-valid text-danger" data-valmsg-for="WorkingHours[' + (count-1) + '].WorkEndTime" data-valmsg-replace="true"></span>' +
                                     '</div>' +
                                 '</div>' +
-                                '<div class="form-group col-md-3">' +
+                                '<div class="form-group col-md-2">' +
                                     '<label class="col-md-12 control-label" for="WorkingHours_' + (count-1) + '__AppointmentDuration">Appointment Duration</label>' +
-                                    '<div class="col-md-10">' +
+                                    '<div class="col-md-12">' +
                                         '<select id="WorkingHours_' + (count-1) + '__AppointmentDuration" name="WorkingHours[' + (count-1) + '].AppointmentDuration" class="form-control mr-2" data-val="true" data-val-required="The Appointment Duration field is required." required>' +
                                             '<option>Choose duration</option>' +
                                             '<option value="15">15 minutes</option>' +
