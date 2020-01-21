@@ -69,6 +69,6 @@
     text-align: center;
 }
 
-#doctorsList tbody span {
+#doctorsList tbody span, #insuredsList tbody span {
     color: red;
 }
