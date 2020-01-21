@@ -38,7 +38,7 @@ namespace GreekHealthcareNetwork.Repositories
                 {
                     if (appDay != "0001-01-01" && HttpContext.Current.Request.UrlReferrer.ToString().EndsWith("Appointments"))
                     {
-                        appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.DoctorId == userId && appointment.AppointmentDate == appointmentDay)
+                        appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.DoctorId == userId && appointment.AppointmentDate == appointmentDay && appointment.AppointmentChargePaid == true)
                                                                                                                  .Include("Doctor")
                                                                                                                  .Include("Doctor.WorkingHours")
                                                                                                                  .Include("Doctor.DoctorPlan")
@@ -52,7 +52,7 @@ namespace GreekHealthcareNetwork.Repositories
                     }
                     else if (HttpContext.Current.Request.UrlReferrer.ToString().EndsWith("Appointments"))
                     {
-                        appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.DoctorId == userId && appointment.AppointmentDate >= DateTime.Today)
+                        appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.DoctorId == userId && appointment.AppointmentDate >= DateTime.Today && appointment.AppointmentChargePaid == true)
                                                                                                                  .Include("Doctor")
                                                                                                                  .Include("Doctor.WorkingHours")
                                                                                                                  .Include("Doctor.DoctorPlan")
@@ -66,7 +66,7 @@ namespace GreekHealthcareNetwork.Repositories
                     }
                     else if (appDay != "0001-01-01")
                     {
-                        appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.DoctorId == userId && appointment.AppointmentDate == appointmentDay)
+                        appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.DoctorId == userId && appointment.AppointmentDate == appointmentDay && appointment.AppointmentChargePaid == true)
                                                                                                                  .Include("Doctor")
                                                                                                                  .Include("Doctor.WorkingHours")
                                                                                                                  .Include("Doctor.DoctorPlan")
@@ -80,7 +80,7 @@ namespace GreekHealthcareNetwork.Repositories
                     }
                     else
                     {
-                        appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.DoctorId == userId)
+                        appointments = db.Appointments.Where(appointment => users.Any(user => user.Id == appointment.InsuredId) && appointment.DoctorId == userId && appointment.AppointmentChargePaid == true)
                                                                                                                  .Include("Doctor")
                                                                                                                  .Include("Doctor.WorkingHours")
                                                                                                                  .Include("Doctor.DoctorPlan")
@@ -98,7 +98,7 @@ namespace GreekHealthcareNetwork.Repositories
                 {
                     if (appDay != "0001-01-01" && doctorsSpecialty >= 0 && doctorsSpecialty < Enum.GetNames(typeof(MedicalSpecialty)).Length)
                     {
-                        appointments = db.Appointments.Where(appointment => appointment.InsuredId == userId && users.Any(user => user.Id == appointment.DoctorId) && appointment.AppointmentDate == appointmentDay && (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty)
+                        appointments = db.Appointments.Where(appointment => appointment.InsuredId == userId && users.Any(user => user.Id == appointment.DoctorId) && appointment.AppointmentDate == appointmentDay && (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty && appointment.AppointmentChargePaid == true)
                                                   .Include("Doctor")
                                                   .Include("Doctor.User")
                                                   .Include("Doctor.User.Roles")
@@ -112,7 +112,7 @@ namespace GreekHealthcareNetwork.Repositories
                     }
                     else if (appDay != "0001-01-01")
                     {
-                        appointments = db.Appointments.Where(appointment => appointment.InsuredId == userId && users.Any(user => user.Id == appointment.DoctorId) && appointment.AppointmentDate == appointmentDay)
+                        appointments = db.Appointments.Where(appointment => appointment.InsuredId == userId && users.Any(user => user.Id == appointment.DoctorId) && appointment.AppointmentDate == appointmentDay && appointment.AppointmentChargePaid == true)
                                                   .Include("Doctor")
                                                   .Include("Doctor.User")
                                                   .Include("Doctor.User.Roles")
@@ -126,7 +126,7 @@ namespace GreekHealthcareNetwork.Repositories
                     }
                     else if (doctorsSpecialty >= 0 && doctorsSpecialty < Enum.GetNames(typeof(MedicalSpecialty)).Length)
                     {
-                        appointments = db.Appointments.Where(appointment => appointment.InsuredId == userId && users.Any(user => user.Id == appointment.DoctorId) && (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty)
+                        appointments = db.Appointments.Where(appointment => appointment.InsuredId == userId && users.Any(user => user.Id == appointment.DoctorId) && (int)appointment.Doctor.MedicalSpecialty == doctorsSpecialty && appointment.AppointmentChargePaid == true)
                                                   .Include("Doctor")
                                                   .Include("Doctor.User")
                                                   .Include("Doctor.User.Roles")
@@ -140,7 +140,7 @@ namespace GreekHealthcareNetwork.Repositories
                     }
                     else
                     {
-                        appointments = db.Appointments.Where(appointment => appointment.InsuredId == userId && users.Any(user => user.Id == appointment.DoctorId))
+                        appointments = db.Appointments.Where(appointment => appointment.InsuredId == userId && users.Any(user => user.Id == appointment.DoctorId) && appointment.AppointmentChargePaid == true)
                                                   .Include("Doctor")
                                                   .Include("Doctor.User")
                                                   .Include("Doctor.User.Roles")
