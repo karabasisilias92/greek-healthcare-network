@@ -5,7 +5,8 @@
         @Html.TextBoxFor(m => m.LastName, new { @class = "form-control mr-sm-2 my-2", type = "search", placeholder = "Last Name", aria_label = "Search" })
         @if (ViewBag.Title.Contains("Doctors"))
         {
-            <select name="DoctorSpecialty" class="form-control mr-2">
+            <label for="DoctorSpecialty" class="control-label ml-2 mr-2">Medical Specialty:</label>
+            <select id="DoctorSpecialty" name="DoctorSpecialty" class="form-control mr-2">
                 <option value="-1"> All </option>
                 @foreach (var item in Model.MedicalSpecialties)
                 {
@@ -15,7 +16,8 @@
         }
         else if (ViewBag.Title.Contains("Insureds"))
         {
-            <select name="InsuredPlan" class="form-control mr-2">
+            <label for="InsuredPlan" class="control-label ml-2 mr-2">Insured Plan:</label>
+            <select id="InsuredPlan" name="InsuredPlan" class="form-control mr-2">
                 <option value="-1"> All </option>
                 <option value="-3"> No Plan </option>
                 @foreach (var item in Model.InsuredPlans)
@@ -26,7 +28,8 @@
         }
         else
         {
-            <select name="DoctorSpecialty" class="form-control mr-2">
+            <label for="DoctorSpecialty" class="control-label ml-2 mr-2">Medical Specialty:</label>
+            <select id="DoctorSpecialty" name="DoctorSpecialty" class="form-control mr-2">
                 <option value="-1"> All </option>
                 <option value="-2"> None </option>
                 @foreach (var item in Model.MedicalSpecialties)
@@ -35,7 +38,8 @@
                 }
             </select>
 
-            <select name="InsuredPlan" class="form-control mr-2">
+            <label for="InsuredPlan" class="control-label ml-2 mr-2">Insured Plan:</label>
+            <select id="InsuredPlan" name="InsuredPlan" class="form-control mr-2">
                 <option value="-1"> All </option>
                 <option value="-2"> None </option>
                 <option value="-3"> No Plan </option>
@@ -44,6 +48,15 @@
                     <option value="@(item.Id)">@item.Name</option>
                 }
             </select>
+
+            if (ViewBag.Title.Contains("Appointments Report"))
+            {
+                <label for="FromDate" class="control-label ml-2 mr-2">From:</label>
+                <input id="FromDate" name="FromDate" class="form-control mr-sm-2 my-2 mr-2" type="date" />
+
+                <label for="UntilDate" class="control-label ml-2 mr-2">From:</label>
+                <input id="UntilDate" name="UntilDate" class="form-control mr-sm-2 my-2 mr-2" type="date" />
+            }
         }
         <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
     </form>

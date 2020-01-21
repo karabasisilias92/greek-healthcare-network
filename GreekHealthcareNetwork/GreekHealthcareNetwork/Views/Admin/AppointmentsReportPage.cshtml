@@ -1,0 +1,39 @@
+﻿@model GreekHealthcareNetwork.Models.AdminSearchViewModel
+@{
+    ViewBag.Title = "Appointments Report Page";
+}
+
+@section cssScripts{
+    <link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
+    <style>
+        body {
+            width: 140vw;
+        }
+    </style>
+}
+
+<main id="main" class="offset-left mt-5">
+    <div class="page-header">
+        <h1>
+            @ViewBag.Title
+        </h1>
+    </div>
+    @Html.Partial("_AdminSearchPartial")
+    <div class="table-responsive">
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Doctor</th>
+                    <th scope="col">Specialty</th>
+                    <th scope="col">Patient</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Time</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody id="appointmentsList">
+            </tbody>
+        </table>
+    </div>
+</main>
