@@ -950,6 +950,10 @@ doctors section
 # Footer
 --------------------------------------------------------------*/
 
+.btn.disabled {
+    cursor: default !important;
+}
+
 #footer {
     background: #343b40;
     padding: 30px 0;

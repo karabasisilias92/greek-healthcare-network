@@ -38,6 +38,22 @@
     </div>
 </main>
 
+<div class="modal fade" id="paymentResultModal" tabindex="-1" role="dialog" aria-labelledby="paymentResultModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="paymentResultModalLabel">Result</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="resultMessage"></p>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section scripts{
     @Scripts.Render("~/bundles/jqueryval")
@@ -50,7 +66,7 @@
             $.ajax({
                 dataType: 'json',
                 type: 'get',
-                url: '/api/Search/AdminSearchDoctorResults?doctorsFirstName=' + firstName + '&doctorsLastName=' + lastName + '&doctorsSpecialty=' + specialty + '&appointmentDate=0001-01-01',
+                url: '/api/Search/AdminSearchDoctorResults?doctorsFirstName=' + firstName + '&doctorsLastName=' + lastName + '&doctorsSpecialty=' + specialty,
                 success: function (data) {
                     $('#doctorsList tbody').empty();
                     var counter = 0;
@@ -164,9 +180,19 @@
                                                 $(e.target).parent().prev().html(parseFloat('0').toFixed(2) + ' &euro;')
                                                 $(e.target).off('click');
                                                 $(e.target).removeClass('refundBtn').addClass('disabled');
+                                                $('#resultMessage').text('Payment was completed successfully!');
+                                                $('#paymentResultModal').modal('show');
+                                                setTimeout(function () {
+                                                    $('#paymentResultModal').modal("hide");
+                                                }, 4000)
                                             },
                                             error: function () {
                                                 console.log('error')
+                                                $('#resultMessage').text('Payment was not completed successfully!');
+                                                $('#paymentResultModal').modal('show');
+                                                setTimeout(function () {
+                                                    $('#paymentResultModal').modal("hide");
+                                                }, 4000)
                                             }
                                         })
                                     },

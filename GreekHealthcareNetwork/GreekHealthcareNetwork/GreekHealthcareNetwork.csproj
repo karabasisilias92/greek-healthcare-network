@@ -346,6 +346,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AdminSearchViewModel.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\Doctor.cs" />
@@ -605,6 +606,8 @@
     <Content Include="Views\Admin\AdminUserCreatedSuccessfully.cshtml" />
     <Content Include="Views\Admin\DoctorPlans.cshtml" />
     <Content Include="Views\Admin\InsuredPlans.cshtml" />
+    <Content Include="Views\Admin\SubscriptionsExpiredReportPage.cshtml" />
+    <Content Include="Views\Shared\_AdminSearchPartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

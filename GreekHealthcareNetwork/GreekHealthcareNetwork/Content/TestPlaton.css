@@ -10,7 +10,7 @@
     vertical-align: middle;
 }
 
-#appointmentsList img, #doctorsList img, #insuredsList img {
+#appointmentsList img, #doctorsList img, #insuredsList img, #usersList img {
     max-width: 80px;
     max-height: 80px;
 }
