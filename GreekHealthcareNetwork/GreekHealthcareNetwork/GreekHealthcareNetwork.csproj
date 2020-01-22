@@ -395,6 +395,9 @@
     <Content Include="Content\img\Admins\f3dafad2-acc6-4892-8a3c-c3be59f0c225\defaultUserImage.png" />
     <Content Include="Content\img\apple-touch-icon.png" />
     <Content Include="Content\img\defaultUserImage.png" />
+    <Content Include="Content\img\Doctors\01cbcc2a-7f9b-4de4-a649-3a8748dcaeda\defaultUserImage.png" />
+    <Content Include="Content\img\Doctors\047a2972-e4be-4c09-9112-29f61f5a08e4\defaultUserImage.png" />
+    <Content Include="Content\img\Doctors\04bdd970-37a0-43fc-ac85-df86a01442c3\defaultUserImage.png" />
     <Content Include="Content\img\Doctors\0618d0d9-7fff-49ac-9ac5-6f1c87cb8d53\0618d0d9-7fff-49ac-9ac5-6f1c87cb8d53.jpg" />
     <Content Include="Content\img\Doctors\08e6d3e4-9526-4e40-97fb-52ca512a26ef\08e6d3e4-9526-4e40-97fb-52ca512a26ef.jpg" />
     <Content Include="Content\img\Doctors\1bc3d525-e422-4dfd-847a-7abc45deabbb\defaultUserImage.png" />
@@ -402,12 +405,17 @@
     <Content Include="Content\img\Doctors\220ac205-2f01-47d4-8ce2-feff2a93476f\220ac205-2f01-47d4-8ce2-feff2a93476f.jpg" />
     <Content Include="Content\img\Doctors\275c6e39-71d7-4d61-96a3-5a9bcb0c566e\defaultUserImage.png" />
     <Content Include="Content\img\Doctors\2a2063a9-0bad-46af-820b-a2f4a47b2a81\2a2063a9-0bad-46af-820b-a2f4a47b2a81.jpg" />
+    <Content Include="Content\img\Doctors\2b0f3887-4588-4b40-af9e-e8e275d15e20\defaultUserImage.png" />
     <Content Include="Content\img\Doctors\34e9674c-61d8-49be-a4a9-f8e1a6b77c95\34e9674c-61d8-49be-a4a9-f8e1a6b77c95.jpg" />
+    <Content Include="Content\img\Doctors\3a26d28f-09e7-432b-96a9-98e557e04aa8\defaultUserImage.png" />
     <Content Include="Content\img\Doctors\3b4d5d50-664f-4979-8353-99147fe645ce\3b4d5d50-664f-4979-8353-99147fe645ce.jpg" />
     <Content Include="Content\img\Doctors\42e5bc78-54a2-4a23-82d5-ed097687e132\42e5bc78-54a2-4a23-82d5-ed097687e132.jpg" />
+    <Content Include="Content\img\Doctors\4421d57c-1f55-4137-99b9-08b015fab3fd\DSC_0275-1.jpg" />
     <Content Include="Content\img\Doctors\467e1e78-f5b7-4d0a-b709-58a3a2efb312\defaultUserImage.png" />
+    <Content Include="Content\img\Doctors\5356ff92-36b5-4e9b-ae6d-35937d206f7d\defaultUserImage.png" />
     <Content Include="Content\img\Doctors\5cbc67c5-94e7-4724-bad9-33a030bf899b\5cbc67c5-94e7-4724-bad9-33a030bf899b.jpg" />
     <Content Include="Content\img\Doctors\63e2d557-dc7c-467e-9b89-d6794e4a3876\63e2d557-dc7c-467e-9b89-d6794e4a3876.jpg" />
+    <Content Include="Content\img\Doctors\64928a2e-8190-4a21-8d90-828da2653971\defaultUserImage.png" />
     <Content Include="Content\img\Doctors\6a3a8f9d-8679-4a52-aba0-f66fa66de334\6a3a8f9d-8679-4a52-aba0-f66fa66de334.jpg" />
     <Content Include="Content\img\Doctors\772a7123-99c8-4ac8-b26e-838579a69db4\772a7123-99c8-4ac8-b26e-838579a69db4.jpg" />
     <Content Include="Content\img\Doctors\7aed8e31-7ddb-48f9-a64d-b2710a1f3e30\7aed8e31-7ddb-48f9-a64d-b2710a1f3e30.jpg" />
@@ -416,19 +424,28 @@
     <Content Include="Content\img\Doctors\84caf07c-51b7-42d0-984a-495924f3babe\84caf07c-51b7-42d0-984a-495924f3babe.jpg" />
     <Content Include="Content\img\Doctors\87a196bf-dc9a-4495-b388-53ca6e01e14c\87a196bf-dc9a-4495-b388-53ca6e01e14c.jpg" />
     <Content Include="Content\img\Doctors\8cb05f95-5cd1-48cf-a234-b9636aefd2d9\8cb05f95-5cd1-48cf-a234-b9636aefd2d9.jpg" />
+    <Content Include="Content\img\Doctors\8fb0e105-4c62-4c51-84a9-8b705a3d0cd8\defaultUserImage.png" />
+    <Content Include="Content\img\Doctors\9392b240-e8dc-40c9-9311-e271ba807593\defaultUserImage.png" />
+    <Content Include="Content\img\Doctors\944d05f6-f241-40ee-8557-b8eac79aeacd\defaultUserImage.png" />
     <Content Include="Content\img\Doctors\9651bf28-e38a-4f6d-abd5-e4bb93fd7ce6\defaultUserImage.png" />
+    <Content Include="Content\img\Doctors\9722df7e-fd9d-473a-9dfe-e4fa4f996075\defaultUserImage.png" />
+    <Content Include="Content\img\Doctors\98a3213b-3655-4f5c-a44d-7f7e1b80493a\defaultUserImage.png" />
     <Content Include="Content\img\Doctors\98b5ebbc-4d1c-4beb-a434-19aaed83c61f\98b5ebbc-4d1c-4beb-a434-19aaed83c61f.jpg" />
     <Content Include="Content\img\Doctors\99d54f1a-e5af-4fa7-994a-4136f2ca3e88\99d54f1a-e5af-4fa7-994a-4136f2ca3e88.png" />
     <Content Include="Content\img\Doctors\a6d9542d-2f28-46e2-a20e-d3b5ee6616be\a6d9542d-2f28-46e2-a20e-d3b5ee6616be.png" />
     <Content Include="Content\img\Doctors\a8a6b84b-de26-4639-a002-b0179bd8bb2d\a8a6b84b-de26-4639-a002-b0179bd8bb2d.jpg" />
     <Content Include="Content\img\Doctors\b80cc753-c3cb-434d-9471-0feffd3af4d5\b80cc753-c3cb-434d-9471-0feffd3af4d5.jpg" />
     <Content Include="Content\img\Doctors\b9211f10-5322-4b83-808c-72a9a67d2937\Untitled-7.jpg" />
+    <Content Include="Content\img\Doctors\c07934f7-feea-40de-97ee-b59431b25035\defaultUserImage.png" />
     <Content Include="Content\img\Doctors\c360ad03-06a7-4c59-b300-c9d2971c088f\defaultUserImage.png" />
+    <Content Include="Content\img\Doctors\c377cb89-09fd-4003-b693-aa1303c8cd77\happydoctorresized.jpg" />
     <Content Include="Content\img\Doctors\d5512e86-088d-44a3-b22d-3fdabf5bfb22\d5512e86-088d-44a3-b22d-3fdabf5bfb22.jpg" />
     <Content Include="Content\img\Doctors\d7d7b4fa-77b1-4488-9682-18c10b90c582\d7d7b4fa-77b1-4488-9682-18c10b90c582.jpg" />
+    <Content Include="Content\img\Doctors\dc1faa40-ed14-43d2-986b-e1c8561f0d68\defaultUserImage.png" />
     <Content Include="Content\img\Doctors\edce88fb-f5bd-4964-97e4-c0f19a4d4743\edce88fb-f5bd-4964-97e4-c0f19a4d4743.jpg" />
     <Content Include="Content\img\Doctors\eeaa21c3-7575-4ffb-9b7a-f667fd25be82\eeaa21c3-7575-4ffb-9b7a-f667fd25be82.jpg" />
     <Content Include="Content\img\Doctors\eeaa21c3-7575-4ffb-9b7a-f667fd25be82\eeaa21c3-7575-4ffb-9b7a-f667fd25be82.png" />
+    <Content Include="Content\img\Doctors\fb179e79-4144-40f4-bb31-0a6e246d0ad6\defaultUserImage.png" />
     <Content Include="Content\img\employees-885338_1920-e1565727877609-1500x630.jpg" />
     <Content Include="Content\img\favicon.png" />
     <Content Include="Content\img\GHN_Logo.png" />
@@ -673,9 +690,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\img\Doctors\7b8c58c6-8a20-4d89-af61-4f1c46a555a1\" />
-    <Folder Include="Content\img\Doctors\a967020e-535c-4042-8755-60e75510c10b\" />
-    <Folder Include="Content\img\Doctors\ba6c3d36-18e5-45ed-bd40-56473d663745\" />
     <Folder Include="Views\Appointments\" />
   </ItemGroup>
   <ItemGroup>

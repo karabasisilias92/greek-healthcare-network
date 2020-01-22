@@ -254,7 +254,7 @@ namespace GreekHealthcareNetwork.Controllers
                         //_users.UpdateUser(user);
                         _doctors.InsertDoctor(doctor);
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
                         model.MedicalSpecialties = new List<MedicalSpecialty>();
                         for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
