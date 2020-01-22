@@ -183,6 +183,7 @@
     </script>
     <script>
         $(document).ready(function () {
+            counter = @Model.Count();
             $('#unavailabilityModal').on('hidden.bs.modal', function () {
                 $('#Id').val('');
                 $('span[data-valmsg-for="UnavailableFromDate"]').children().remove();
@@ -250,7 +251,7 @@
                     cache: false,
                     processData: false,
                     success: function (data) {
-                        if (@Model.Count() == 0) {
+                        if (counter == 0) {
                             $('#unavailabilitiesList').children().remove();
                         }
                         const tr = $(document.createElement('tr'));
@@ -274,8 +275,9 @@
                         $(deleteButton).click(deleteUnavailabilityEntry);
                         $(td3).append(deleteButton);
                         $(tr).append(td3);
-                        if (@Model.Count() == 0) {
+                        if (counter == 0) {
                             $('#unavailabilitiesList').append(tr);
+                            counter++;
                         }
                         else {
                             let count = 1;
@@ -291,6 +293,7 @@
                             else {
                                 $(line).before(tr);
                             }
+                            counter++;
                         }
                         $('#unavailabilityModal').modal('hide');
                     },
@@ -350,16 +353,21 @@
                         $(elem).children('td:nth-child(3)').children('button:nth-child(2)').click(deleteUnavailabilityEntry);
                         let count = 1;
                         const childrenNum = $('#unavailabilitiesList').children().length;
-                        let line = $('#unavailabilitiesList').children().first();
-                        while (compareDateTimes($(line).children().first().text().trim(),data.UnavailableFrom) && count < childrenNum) {
-                            line = $(line).next();
-                            count = count + 1;
+                        if (childrenNum == 0) {
+                            $('#unavailabilitiesList').append(elem);
                         }
-                        if (compareDateTimes($(line).children().first().text().trim(), data.UnavailableFrom)) {
-                            $(line).after(elem);
-                        }
-                        else {
-                            $(line).before(elem);
+                        else {                            
+                            let line = $('#unavailabilitiesList').children().first();
+                            while (compareDateTimes($(line).children().first().text().trim(),data.UnavailableFrom) && count < childrenNum) {
+                                line = $(line).next();
+                                count = count + 1;
+                            }
+                            if (compareDateTimes($(line).children().first().text().trim(), data.UnavailableFrom)) {
+                                $(line).after(elem);
+                            }
+                            else {
+                                $(line).before(elem);
+                            }
                         }
                         $('#unavailabilityModal').modal('hide');
                     },
@@ -502,6 +510,7 @@
                                                                 '</td>' +
                                                             '</tr>');
                         }
+                        counter--;
                     },
                     error: function (error) {
                         console.log(error);

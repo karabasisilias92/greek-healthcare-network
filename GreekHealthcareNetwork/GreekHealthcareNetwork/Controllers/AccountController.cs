@@ -728,6 +728,11 @@ namespace GreekHealthcareNetwork.Controllers
             return View(model);
         }
 
+        public ActionResult LogOff(int? i)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+
         //
         // POST: /Account/LogOff
         [HttpPost]
