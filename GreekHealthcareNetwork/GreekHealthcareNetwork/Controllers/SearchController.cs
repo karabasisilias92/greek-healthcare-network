@@ -50,9 +50,9 @@ namespace GreekHealthcareNetwork.Controllers
         [HttpGet]
         [Route("api/Search/SearchInsuredResults")]
         [Authorize(Roles = "Administrator")]
-        public IHttpActionResult SearchResultsInsureds(string insuredsFirstName, string insuredsLastName)
+        public IHttpActionResult SearchResultsInsureds(string insuredsFirstName, string insuredsLastName, int insuredPlanId)
         {
-            var insureds = _insureds.GetFilteredInsureds(insuredsFirstName, insuredsLastName);
+            var insureds = _insureds.GetFilteredInsureds(insuredsFirstName, insuredsLastName, insuredPlanId);
             if (insureds == null)
             {
                 return NotFound();

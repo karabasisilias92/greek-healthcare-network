@@ -12,7 +12,9 @@ namespace GreekHealthcareNetwork.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int DoctorSpecialty { get; set; }
+        public int InsuredPlanId { get; set; }
         public List<MedicalSpecialty> MedicalSpecialties { get; set; }
+        public List<InsuredPlan> InsuredPlans { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
@@ -32,8 +34,6 @@ namespace GreekHealthcareNetwork.Models
         public bool RememberMe { get; set; }
 
         public Message Message { get; set; }
-
-        public List<InsuredPlan> InsuredPlans { get; set; }
 
         public VisitorMessage VisitorMessage { get; set; }
 

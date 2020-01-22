@@ -85,11 +85,26 @@ namespace GreekHealthcareNetwork.Controllers
         }
         public ActionResult Doctors()
         {
-            return View();
+            var model = new SearchLoginViewModel
+            {
+                MedicalSpecialties = new List<MedicalSpecialty>(),
+                InsuredPlans = new List<InsuredPlan>()
+            };
+            for (int i = 0; i < Enum.GetNames(typeof(MedicalSpecialty)).Length; i++)
+            {
+                model.MedicalSpecialties.Add((MedicalSpecialty)i);
+            }
+            return View(model);
         }
         public ActionResult Insureds()
         {
-            return View();
+            var model = new SearchLoginViewModel
+            {
+                MedicalSpecialties = new List<MedicalSpecialty>(),
+                InsuredPlans = new List<InsuredPlan>()
+            };
+            model.InsuredPlans = _plans.GetInsuredPlans().ToList();
+            return View(model);
         }
 
         public ActionResult VisitorMessages()
@@ -265,7 +280,7 @@ namespace GreekHealthcareNetwork.Controllers
 
         public ActionResult SubscriptionsExpiredReportPage()
         {
-            var model = new AdminSearchViewModel
+            var model = new SearchLoginViewModel
             {
                 MedicalSpecialties = new List<MedicalSpecialty>(),
                 InsuredPlans = new List<InsuredPlan>()
@@ -280,7 +295,7 @@ namespace GreekHealthcareNetwork.Controllers
 
         public ActionResult AppointmentsReportPage()
         {
-            var model = new AdminSearchViewModel
+            var model = new SearchLoginViewModel
             {
                 MedicalSpecialties = new List<MedicalSpecialty>(),
                 InsuredPlans = new List<InsuredPlan>()

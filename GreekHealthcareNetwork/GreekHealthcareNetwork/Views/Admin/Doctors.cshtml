@@ -16,6 +16,7 @@
             Doctors
         </h1>
     </div>
+    @Html.Partial("_AdminSearchPartial")
     <div class="table-responsive">
         <table class="table mt-4" id="doctorsList">
             <thead>
@@ -147,7 +148,7 @@
                             data: JSON.stringify({ 'userId': id, 'isUserActive': isActive }),
                             contentType: 'application/json; charset=utf-8',
                             success() {
-                                ListDoctors('', '', -1);
+                                ListDoctors($('#search').children()[0].value, $('#search').children()[1].value, $('#search').children()[3].value);
                             },
                             error: function () {
                                 console.log('ERROR!');
@@ -330,13 +331,17 @@
                 }
             })
         }
+        $('#search').on('submit', function (e) {
+            e.preventDefault();
+            ListDoctors(e.target[0].value, e.target[1].value, e.target[2].value);
+        })
         function AddAntiForgeryToken (data) {
             data.__RequestVerificationToken = $('#__AjaxAntiForgeryForm input[name=__RequestVerificationToken]').val();
             return data;
         };
         function cancelUpdateButtonClicked() {
             $('.cancelUpdateBtn').on('click', function (e) {
-                ListDoctors('', '', -1);
+                ListDoctors($('#search').children()[0].value, $('#search').children()[1].value, $('#search').children()[3].value);
             });
         }
         function updateButtonClicked() {

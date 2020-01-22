@@ -1,4 +1,4 @@
-﻿@model GreekHealthcareNetwork.Models.AdminSearchViewModel
+﻿@model GreekHealthcareNetwork.Models.SearchLoginViewModel
 
     <form id="search" class="form-inline my-3 px-2" method="get" action="@Url.Action("SearchResults", "Search")">
         @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control mr-sm-2 my-2", type = "search", placeholder = "First Name", aria_label = "Search" })

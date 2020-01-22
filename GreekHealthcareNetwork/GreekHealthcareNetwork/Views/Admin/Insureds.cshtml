@@ -5,7 +5,7 @@
     <link href="@Url.Content("~/Content/TestPlaton.css")" type="text/css" rel="stylesheet" />
     <style>
         body {
-            width: 160vw;
+            width: 170vw;
         }
     </style>
 }
@@ -16,6 +16,7 @@
             Insureds
         </h1>
     </div>
+    @Html.Partial("_AdminSearchPartial")
     <div class="table-responsive">
         <table class="table mt-4" id="insuredsList">
             <thead>
@@ -78,13 +79,12 @@
     @Scripts.Render("~/bundles/jqueryval")
     <script>
     $(document).ready(function () {
-        ListInsureds('', '');
-        var counter = 0;
-        function ListInsureds(firstName, lastName) {
+        ListInsureds('', '', -1);
+        function ListInsureds(firstName, lastName, insuredPlanId) {
             $.ajax({
                 dataType: 'json',
                 type: 'get',
-                url: '/api/Search/SearchInsuredResults?insuredsFirstName=' + firstName + '&insuredsLastName=' + lastName ,
+                url: '/api/Search/SearchInsuredResults?insuredsFirstName=' + firstName + '&insuredsLastName=' + lastName + '&insuredPlanId=' + insuredPlanId,
                 success: function (data) {
                     $('#insuredsList tbody').empty();
                     data.forEach(function (insured) {
@@ -145,7 +145,7 @@
                             data: JSON.stringify({ 'userId': id, 'isUserActive': isActive }),
                             contentType: 'application/json; charset=utf-8',
                             success() {
-                                ListInsureds('', '');
+                                ListInsureds($('#search').children()[0].value, $('#search').children()[1].value, $('#search').children()[3].value);
                             },
                             error: function () {
                                 console.log('ERROR!');
@@ -328,13 +328,17 @@
                 }
             })
         }
+        $('#search').on('submit', function (e) {
+            e.preventDefault();
+            ListInsureds(e.target[0].value, e.target[1].value, e.target[2].value);
+        })
         function AddAntiForgeryToken (data) {
             data.__RequestVerificationToken = $('#__AjaxAntiForgeryForm input[name=__RequestVerificationToken]').val();
             return data;
         };
         function cancelUpdateButtonClicked() {
             $('.cancelUpdateBtn').on('click', function (e) {
-                ListInsureds('', '');
+                ListInsureds($('#search').children()[0].value, $('#search').children()[1].value, $('#search').children()[3].value);
             });
         }
         function updateButtonClicked() {
