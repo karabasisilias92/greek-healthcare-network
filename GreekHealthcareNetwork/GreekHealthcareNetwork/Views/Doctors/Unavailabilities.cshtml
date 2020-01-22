@@ -133,6 +133,31 @@
     </div>
 </div>
 
+<div class="modal fade" id="AppointmentsCancellationWarningModal" tabindex="-1" role="dialog" aria-labelledby="AppointmentsCancellationWarningModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="AppointmentsCancellationWarningModalLabel">Appointments Cancellation Warning</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <h5 id="notification"></h5>
+                    <h5>They are going to be cancelled.</h5>
+                    <h5>Do you want to proceed?</h5>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">No</button>
+                <a class="btn btn-danger btn-ok" style="color:white;">Yes</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
@@ -209,170 +234,227 @@
             });
             $('.editButton').click(editUnavailabilityEntry);
             $('.deleteButton').click(deleteUnavailabilityEntry);
+            function createUnavailability() {
+                let model = new Object();
+                model.DoctorId = $('#DoctorId').val();
+                model.UnavailableFromDate = $('#UnavailableFromDate').val();
+                model.UnavailableFromTime = $('#UnavailableFromTime').val();
+                model.UnavailableUntilDate = $('#UnavailableUntilDate').val();
+                model.UnavailableUntilTime = $('#UnavailableUntilTime').val();
+                model = JSON.stringify(model);
+                $.ajax({
+                    contentType: 'application/json',
+                    type: 'post',
+                    url: '/api/DoctorUnavailabilities',
+                    data: model,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        if (@Model.Count() == 0) {
+                            $('#unavailabilitiesList').children().remove();
+                        }
+                        const tr = $(document.createElement('tr'));
+                        const td1 = $(document.createElement('td'));
+                        $(td1).text(data.UnavailableFrom);
+                        $(tr).append(td1);
+                        const td2 = $(document.createElement('td'));
+                        $(td2).text(data.UnavailableUntil);
+                        $(tr).append(td2);
+                        const td3 = $(document.createElement('td'));
+                        const editButton = $(document.createElement('button'));
+                        $(editButton).addClass('btn btn-warning table-button editButton');
+                        $(editButton).text('Edit');
+                        $(editButton).attr('data-id', data.Id);
+                        $(editButton).click(editUnavailabilityEntry);
+                        $(td3).append(editButton);
+                        const deleteButton = $(document.createElement('button'));
+                        $(deleteButton).addClass('btn btn-danger table-button deleteButton');
+                        $(deleteButton).text('Delete');
+                        $(deleteButton).attr('data-id', data.Id);
+                        $(deleteButton).click(deleteUnavailabilityEntry);
+                        $(td3).append(deleteButton);
+                        $(tr).append(td3);
+                        if (@Model.Count() == 0) {
+                            $('#unavailabilitiesList').append(tr);
+                        }
+                        else {
+                            let count = 1;
+                            const childrenNum = $('#unavailabilitiesList').children().length;
+                            let line = $('#unavailabilitiesList').children().first();
+                            while (compareDateTimes($(line).children().first().text().trim(),$(td1).text()) && count < childrenNum) {
+                                line = $(line).next();
+                                count = count + 1;
+                            }
+                            if (compareDateTimes($(line).children().first().text().trim(),$(td1).text())) {
+                                $(line).after(tr);
+                            }
+                            else {
+                                $(line).before(tr);
+                            }
+                        }
+                        $('#unavailabilityModal').modal('hide');
+                    },
+                    error: function (error) {
+                        const errorObject = error.responseJSON.ModelState;
+                        $('#unavailabilityForm div.validation-summary-errors > ul').children().remove();
+                        for (var property in errorObject) {
+                            if (errorObject.hasOwnProperty(property)) {
+                                console.log(property);
+                                if (property == '') {
+                                    $('#unavailabilityForm div.validation-summary-errors > ul').append('<li>' + errorObject[property] + '</li>')
+                                }
+                                else {
+                                    for (let i = 0; i < errorObject[property].length; i++) {
+                                        $('#unavailabilityForm div.validation-summary-errors > ul').append('<li>' + errorObject[property][i] + '</li>')
+                                    }
+                                }
+                            }
+                        }
+                        const $form = $('#unavailabilityForm');
+                        $.validator.unobtrusive.parse($form);
+                        $form.validate();
+                        if (!$form.valid()) {
+                            $.each($form.validate().errorList, function (key, value) {
+                                const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                                $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                                $errorSpan.show();
+                            });
+                        }
+                    }
+                });
+            }
+
+            function editUnavailability() {
+                let model = new Object();
+                model.Id = $('#Id').val();
+                model.DoctorId = $('#DoctorId').val();
+                model.UnavailableFromDate = $('#UnavailableFromDate').val();
+                model.UnavailableFromTime = $('#UnavailableFromTime').val();
+                model.UnavailableUntilDate = $('#UnavailableUntilDate').val();
+                model.UnavailableUntilTime = $('#UnavailableUntilTime').val();
+                model = JSON.stringify(model);
+                $.ajax({
+                    contentType: 'application/json',
+                    type: 'put',
+                    url: '/api/DoctorUnavailabilities',
+                    data: model,
+                    cache: false,
+                    processData: false,
+                    success: function (data) {
+                        const grandparent = $('button[data-id=' + data.Id + ']').parent().parent();
+                        $(grandparent).children('td:nth-child(1)').text(data.UnavailableFrom);
+                        $(grandparent).children('td:nth-child(2)').text(data.UnavailableUntil);
+                        const elem = grandparent;
+                        $(grandparent).remove();          
+                        $(elem).children('td:nth-child(3)').children('button:nth-child(1)').click(editUnavailabilityEntry);
+                        $(elem).children('td:nth-child(3)').children('button:nth-child(2)').click(deleteUnavailabilityEntry);
+                        let count = 1;
+                        const childrenNum = $('#unavailabilitiesList').children().length;
+                        let line = $('#unavailabilitiesList').children().first();
+                        while (compareDateTimes($(line).children().first().text().trim(),data.UnavailableFrom) && count < childrenNum) {
+                            line = $(line).next();
+                            count = count + 1;
+                        }
+                        if (compareDateTimes($(line).children().first().text().trim(), data.UnavailableFrom)) {
+                            $(line).after(elem);
+                        }
+                        else {
+                            $(line).before(elem);
+                        }
+                        $('#unavailabilityModal').modal('hide');
+                    },
+                    error: function (error) {
+                        const errorObject = error.responseJSON.ModelState;
+                        $('#unavailabilityForm div.validation-summary-errors > ul').children().remove();
+                        for (var property in errorObject) {
+                            if (errorObject.hasOwnProperty(property)) {
+                                console.log(property);
+                                if (property == '') {
+                                    $('#unavailabilityForm div.validation-summary-errors > ul').append('<li>' + errorObject[property] + '</li>')
+                                }
+                                else {
+                                    for (let i = 0; i < errorObject[property].length; i++) {
+                                        $('#unavailabilityForm div.validation-summary-errors > ul').append('<li>' + errorObject[property][i] + '</li>')
+                                    }
+                                }
+                            }
+                        }
+                        const $form = $('#unavailabilityForm');
+                        $.validator.unobtrusive.parse($form);
+                        $form.validate();
+                        if (!$form.valid()) {
+                            $.each($form.validate().errorList, function (key, value) {
+                                const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
+                                $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
+                                $errorSpan.show();
+                            });
+                        }
+                    }
+                });
+            }
+            $('#AppointmentsCancellationWarningModal div.modal-footer > button').click(function () {
+                $('#unavailabilityModal').modal('hide');
+            })
+            $('#AppointmentsCancellationWarningModal div.modal-footer > a').click(function () {
+                $.ajax({
+                    type: 'get',
+                    dataType: 'json',
+                    url: '/api/Search/GetAppointmentsForPeriod?unavailableFromDate=' + $('#UnavailableFromDate').val() + '&unavailableFromTime=' + $('#UnavailableFromTime').val() + '&unavailableUntilDate=' + $('#UnavailableUntilDate').val() + '&unavailableUntilTime=' + $('#UnavailableFromTime').val() + '&doctorId=' + '@(User.Identity.GetUserId())',
+                    success: function (appointments) {
+                        appointments.forEach(function (appointment) {
+                            $.ajax({
+                                type: 'post',
+                                data: { appointmentId: appointment.Id },
+                                url: '/Appointments/CancelAppointment',
+                                success: function () {
+                                    console.log('success');
+                                },
+                                error: function () {
+                                    console.log('error');
+                                }
+                            })
+                        })                        
+                        $('#AppointmentsCancellationWarningModal').modal('hide');
+                        if ($('#Id').val() == '') {
+                            createUnavailability();
+                        }
+                        else {
+                            editUnavailability();
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error)
+                    }
+                })
+            });
             $('#submit').click(function (e) {
                 e.preventDefault();
                 const $form = $('#unavailabilityForm');
                 $.validator.unobtrusive.parse($form);
                 $form.validate();
                 if ($form.valid()) {
-                    const id = $('#Id').val();
-                    if (id == '') {
-                        let model = new Object();
-                        model.DoctorId = $('#DoctorId').val();
-                        model.UnavailableFromDate = $('#UnavailableFromDate').val();
-                        model.UnavailableFromTime = $('#UnavailableFromTime').val();
-                        model.UnavailableUntilDate = $('#UnavailableUntilDate').val();
-                        model.UnavailableUntilTime = $('#UnavailableUntilTime').val();
-                        model = JSON.stringify(model);
-                        $.ajax({
-                            contentType: 'application/json',
-                            type: 'post',
-                            url: '/api/DoctorUnavailabilities',
-                            data: model,
-                            cache: false,
-                            processData: false,
+                    $.ajax({
+                            type: 'get',
+                            dataType: 'json',
+                            url: '/api/Search/GetAppointmentsForPeriod?unavailableFromDate=' + $('#UnavailableFromDate').val() + '&unavailableFromTime=' + $('#UnavailableFromTime').val() + '&unavailableUntilDate=' + $('#UnavailableUntilDate').val() + '&unavailableUntilTime=' + $('#UnavailableFromTime').val() + '&doctorId=' + '@(User.Identity.GetUserId())',
                             success: function (data) {
-                                if (@Model.Count() == 0) {
-                                    $('#unavailabilitiesList').children().remove();
-                                }
-                                const tr = $(document.createElement('tr'));
-                                const td1 = $(document.createElement('td'));
-                                $(td1).text(data.UnavailableFrom);
-                                $(tr).append(td1);
-                                const td2 = $(document.createElement('td'));
-                                $(td2).text(data.UnavailableUntil);
-                                $(tr).append(td2);
-                                const td3 = $(document.createElement('td'));
-                                const editButton = $(document.createElement('button'));
-                                $(editButton).addClass('btn btn-warning table-button editButton');
-                                $(editButton).text('Edit');
-                                $(editButton).attr('data-id', data.Id);
-                                $(editButton).click(editUnavailabilityEntry);
-                                $(td3).append(editButton);
-                                const deleteButton = $(document.createElement('button'));
-                                $(deleteButton).addClass('btn btn-danger table-button deleteButton');
-                                $(deleteButton).text('Delete');
-                                $(deleteButton).attr('data-id', data.Id);
-                                $(deleteButton).click(deleteUnavailabilityEntry);
-                                $(td3).append(deleteButton);
-                                $(tr).append(td3);
-                                if (@Model.Count() == 0) {
-                                    $('#unavailabilitiesList').append(tr);
-                                }
-                                else {
-                                    let count = 1;
-                                    const childrenNum = $('#unavailabilitiesList').children().length;
-                                    let line = $('#unavailabilitiesList').children().first();
-                                    while (compareDateTimes($(line).children().first().text().trim(),$(td1).text()) && count < childrenNum) {
-                                        line = $(line).next();
-                                        count = count + 1;
-                                    }
-                                    if (compareDateTimes($(line).children().first().text().trim(),$(td1).text())) {
-                                        $(line).after(tr);
+                                if (data.length == 0) {
+                                    if ($('#Id').val() == '') {
+                                        createUnavailability();
                                     }
                                     else {
-                                        $(line).before(tr);
+                                        editUnavailability();
                                     }
-                                }
-                                $('#unavailabilityModal').modal('hide');
-                            },
-                            error: function (error) {
-                                const errorObject = error.responseJSON.ModelState;
-                                $('#unavailabilityForm div.validation-summary-errors > ul').children().remove();
-                                for (var property in errorObject) {
-                                    if (errorObject.hasOwnProperty(property)) {
-                                        console.log(property);
-                                        if (property == '') {
-                                            $('#unavailabilityForm div.validation-summary-errors > ul').append('<li>' + errorObject[property] + '</li>')
-                                        }
-                                        else {
-                                            for (let i = 0; i < errorObject[property].length; i++) {
-                                                $('#unavailabilityForm div.validation-summary-errors > ul').append('<li>' + errorObject[property][i] + '</li>')
-                                            }
-                                        }
-                                    }
-                                }
-                                const $form = $('#unavailabilityForm');
-                                $.validator.unobtrusive.parse($form);
-                                $form.validate();
-                                if (!$form.valid()) {
-                                    $.each($form.validate().errorList, function (key, value) {
-                                        const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
-                                        $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
-                                        $errorSpan.show();
-                                    });
-                                }
-                            }
-                        });
-                    }
-                    else {
-                        let model = new Object();
-                        model.Id = id;
-                        model.DoctorId = $('#DoctorId').val();
-                        model.UnavailableFromDate = $('#UnavailableFromDate').val();
-                        model.UnavailableFromTime = $('#UnavailableFromTime').val();
-                        model.UnavailableUntilDate = $('#UnavailableUntilDate').val();
-                        model.UnavailableUntilTime = $('#UnavailableUntilTime').val();
-                        model = JSON.stringify(model);
-                        $.ajax({
-                            contentType: 'application/json',
-                            type: 'put',
-                            url: '/api/DoctorUnavailabilities',
-                            data: model,
-                            cache: false,
-                            processData: false,
-                            success: function (data) {
-                                const grandparent = $('button[data-id=' + data.Id + ']').parent().parent();
-                                $(grandparent).children('td:nth-child(1)').text(data.UnavailableFrom);
-                                $(grandparent).children('td:nth-child(2)').text(data.UnavailableUntil);
-                                const elem = grandparent;
-                                $(grandparent).remove();          
-                                $(elem).children('td:nth-child(3)').children('button:nth-child(1)').click(editUnavailabilityEntry);
-                                $(elem).children('td:nth-child(3)').children('button:nth-child(2)').click(deleteUnavailabilityEntry);
-                                let count = 1;
-                                const childrenNum = $('#unavailabilitiesList').children().length;
-                                let line = $('#unavailabilitiesList').children().first();
-                                while (compareDateTimes($(line).children().first().text().trim(),data.UnavailableFrom) && count < childrenNum) {
-                                    line = $(line).next();
-                                    count = count + 1;
-                                }
-                                if (compareDateTimes($(line).children().first().text().trim(), data.UnavailableFrom)) {
-                                    $(line).after(elem);
                                 }
                                 else {
-                                    $(line).before(elem);
+                                    $('#AppointmentsCancellationWarningModal #notification').text('You have ' + data.length + ' appointment(s) scheduled during the period that you want to declare unavailability.');
+                                    $('#AppointmentsCancellationWarningModal').modal('show');
                                 }
-                                $('#unavailabilityModal').modal('hide');
                             },
                             error: function (error) {
-                                const errorObject = error.responseJSON.ModelState;
-                                $('#unavailabilityForm div.validation-summary-errors > ul').children().remove();
-                                for (var property in errorObject) {
-                                    if (errorObject.hasOwnProperty(property)) {
-                                        console.log(property);
-                                        if (property == '') {
-                                            $('#unavailabilityForm div.validation-summary-errors > ul').append('<li>' + errorObject[property] + '</li>')
-                                        }
-                                        else {
-                                            for (let i = 0; i < errorObject[property].length; i++) {
-                                                $('#unavailabilityForm div.validation-summary-errors > ul').append('<li>' + errorObject[property][i] + '</li>')
-                                            }
-                                        }
-                                    }
-                                }
-                                const $form = $('#unavailabilityForm');
-                                $.validator.unobtrusive.parse($form);
-                                $form.validate();
-                                if (!$form.valid()) {
-                                    $.each($form.validate().errorList, function (key, value) {
-                                        const $errorSpan = $("span[data-valmsg-for='" + value.element.id + "']");
-                                        $errorSpan.html("<span style='color:red'>" + value.message + "</span>");
-                                        $errorSpan.show();
-                                    });
-                                }
+                                console.log(error)
                             }
-                        });
-                    }
+                        })
                 }
                 else {
                     console.log($form.validate().errorList);

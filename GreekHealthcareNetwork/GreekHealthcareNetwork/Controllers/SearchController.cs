@@ -232,5 +232,14 @@ namespace GreekHealthcareNetwork.Controllers
             }
             return Ok(appointments);
         }
+
+        [HttpGet]
+        [Route("api/Search/GetAppointmentsForPeriod")]
+        [Authorize(Roles = "Doctor")]
+        public IHttpActionResult GetAppointmentsForPeriod(DateTime unavailableFromDate, TimeSpan unavailableFromTime, DateTime unavailableUntilDate, TimeSpan unavailableUntilTime, string doctorId)
+        {
+            var appointments = _appointments.GetAppointmentsForPeriod(unavailableFromDate, unavailableFromTime, unavailableUntilDate, unavailableUntilTime, doctorId);
+            return Ok(appointments);
+        }
     }
 }

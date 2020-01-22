@@ -119,6 +119,6 @@ namespace GreekHealthcareNetwork.Controllers
             {
                 return new HttpStatusCodeResult(400);
             }
-        }
+        }        
     }
 }

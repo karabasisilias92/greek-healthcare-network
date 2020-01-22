@@ -844,5 +844,24 @@ namespace GreekHealthcareNetwork.Repositories
                 db.SaveChanges();
             }
         }
+
+        public IEnumerable<Appointment> GetAppointmentsForPeriod(DateTime unavailableFromDate, TimeSpan unavailableFromTime, DateTime unavailableUntilDate, TimeSpan unavailableUntilTime, string doctorId)
+        {
+            IEnumerable<Appointment> appointments;
+            using (var db = new ApplicationDbContext())
+            {
+                appointments = db.Appointments.Include("Doctor")
+                                              .Include("Doctor.WorkingHours")
+                                              .Include("Doctor.DoctorPlan")
+                                              .Include("Doctor.User")
+                                              .Include("Doctor.User.Roles")
+                                              .Include("Insured")
+                                              .Include("Insured.InsuredPlan")
+                                              .Include("Insured.User")
+                                              .Include("Insured.User.Roles")
+                                              .Where(app => (app.DoctorId.Equals(doctorId) && app.AppointmentStatus == AppointmentStatus.Upcoming && ((DbFunctions.DiffDays(unavailableFromDate, app.AppointmentDate) == 0 && DbFunctions.DiffMinutes(unavailableFromTime, app.AppointmentStartTime) >= 0) || (DbFunctions.DiffDays(unavailableFromDate, app.AppointmentDate) > 0 && DbFunctions.DiffDays(unavailableUntilDate, app.AppointmentDate) < 0) ||  (DbFunctions.DiffDays(unavailableUntilDate, app.AppointmentDate) == 0 && DbFunctions.DiffMinutes(app.AppointmentStartTime, unavailableUntilTime) > 0)))).ToList();
+            }
+            return appointments;
+        }
     }
 }
