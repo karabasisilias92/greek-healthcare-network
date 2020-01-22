@@ -56,6 +56,7 @@ namespace GreekHealthcareNetwork.Controllers
                 if (HttpContext.User.IsInRole("Doctor"))
                 {
                     updatedUser.Doctor.MedicalSpecialty = modifiedUser.Doctor.MedicalSpecialty;
+                    updatedUser.Doctor.OfficeAddress = modifiedUser.Doctor.OfficeAddress;
                 }
                 if (HttpContext.User.IsInRole("Insured"))
                 {
