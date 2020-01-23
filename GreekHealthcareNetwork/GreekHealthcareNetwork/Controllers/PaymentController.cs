@@ -231,7 +231,7 @@ namespace GreekHealthcareNetwork.Controllers
             else
             {
                 string insuredId = (string)Session["insuredId"];
-                cancelUrl = Request.Url.Scheme + "://" + Request.Url.Authority + "/ Insureds/CancelledBooking?appointmentId=" + appointmentId + "&insuredId=" + insuredId;
+                cancelUrl = Request.Url.Scheme + "://" + Request.Url.Authority + "/Insureds/CancelledBooking?appointmentId=" + appointmentId + "&insuredId=" + insuredId;
             }
             var redirUrls = new RedirectUrls()
             { 
@@ -298,7 +298,7 @@ namespace GreekHealthcareNetwork.Controllers
             return View(model);
         }
 
-        public async Task<ActionResult> PaymentFailed()
+        public ActionResult PaymentFailed()
         {
             string userId = (string)Session["userId"];
             if (userId == null)
@@ -316,31 +316,21 @@ namespace GreekHealthcareNetwork.Controllers
             if (!Request.IsAuthenticated)
             {
                 var user = _users.GetUserById(userId);
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                SignInManager.SignIn(user, isPersistent: false, rememberBrowser: false);
                 return RedirectToAction("PaymentFailed");
             }
             return View();
         }
 
-        public async Task<ActionResult> PaySubscriptionCancelled()
+        public ActionResult PaySubscriptionCancelled()
         {
             string userId = (string)Session["userId"];
             if (!Request.IsAuthenticated)
             {
                 var user = _users.GetUserById(userId);
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                SignInManager.SignIn(user, isPersistent: false, rememberBrowser: false);
                 return RedirectToAction("PaySubscriptionCancelled");
             } 
-            return View();
-        }
-
-        public ActionResult PayDoctor()
-        {
-            return View();
-        }
-
-        public ActionResult RefundPatient()
-        {
             return View();
         }
     }
