@@ -136,22 +136,16 @@
                             $(tr).append(from);
                             const to = $(document.createElement('td'));
                             $(to).text(message.FirstName + ' ' + message.LastName);
-                            const status = $(document.createElement('td'));
-                            $(tr).append(to);
-                            if (message.Id == UserId) {
-                                        $(status).text('Sent');
+                            $(tr).append(to);                            
+                            const email = $(document.createElement('td'));
+                            if (message.MessageStatus == "Unread") {
+                                $(tr).attr('class', 'font-weight-bold')
                             }
-                            else {
-                                $(status).text('Received');
-                                if (message.MessageStatus == "Unread") {
-                                    $(tr).attr('class', 'font-weight-bold')
-
-                                }
-                                else if (message.MessageStatus == "Replied") {
-                                    $(tr).attr('class', 'text-success font-italic')
-                                }
+                            else if (message.MessageStatus == "Replied") {
+                                $(tr).attr('class', 'text-success font-italic')
                             }
-                            $(tr).append(status);
+                            $(email).text(message.Email);
+                            $(tr).append(email);
                             const date = $(document.createElement('td'));
                             $(date).text(datePartSplitted[2] + '-' + datePartSplitted[1] + '-' +datePartSplitted[0]);
                             $(tr).append(date);
