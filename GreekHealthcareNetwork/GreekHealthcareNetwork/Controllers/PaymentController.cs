@@ -226,12 +226,12 @@ namespace GreekHealthcareNetwork.Controllers
             string cancelUrl;
             if (paymentFor.Equals("Subscription"))
             {
-                cancelUrl = "https://localhost:44310/Payment/PaySubscriptionCancelled";
+                cancelUrl = Request.Url.Scheme + "://" + Request.Url.Authority + "/Payment/PaySubscriptionCancelled";
             }
             else
             {
                 string insuredId = (string)Session["insuredId"];
-                cancelUrl = "https://localhost:44310/Insureds/CancelledBooking?appointmentId=" + appointmentId + "&insuredId=" + insuredId;
+                cancelUrl = Request.Url.Scheme + "://" + Request.Url.Authority + "/ Insureds/CancelledBooking?appointmentId=" + appointmentId + "&insuredId=" + insuredId;
             }
             var redirUrls = new RedirectUrls()
             { 
