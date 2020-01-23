@@ -8,7 +8,8 @@
 
     <section id="PaymentInfo" class="container">
         <h2 class="my-3">@ViewBag.Title</h2>
-        <p> Your paypal account will be charged: @Model.AppointmentCharge.ToString("0.00")&euro;</p>
+        <p class="mb-3"> Your paypal account will be charged: @Model.AppointmentCharge.ToString("0.00")&euro;</p>
+        <p class="mb-3" style="color:red"> You have 10 minutes to complete the payment. After that time your booking will be cancelled automaticatically.</p>
         @{
             Session["paymentFor"] = "Appointment Booking";
             Session["timestamp" + Model.AppointmentId] = DateTime.Now;
