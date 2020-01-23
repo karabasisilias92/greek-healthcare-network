@@ -80,12 +80,23 @@
             })
         </script>
     }
-    @if (User.IsInRole("Doctor") || User.IsInRole("Insured"))
+    @if (User.IsInRole("Insured"))
     {
         <script>
             $(document).ready(function () {
                 if (@(number) > 0) {
                     $('#AppointmentsCancellationInformModal #information').text('You have ' + @(number) + ' unread messages regarding cancellation of appointment with a doctor!');
+                    $('#AppointmentsCancellationInformModal').modal('show');
+                }
+            })
+        </script>
+    }
+    @if (User.IsInRole("Doctor"))
+    {
+        <script>
+            $(document).ready(function () {
+                if (@(number) > 0) {
+                    $('#AppointmentsCancellationInformModal #information').text('You have ' + @(number) + ' unread messages regarding cancellation of appointment with a patient!');
                     $('#AppointmentsCancellationInformModal').modal('show');
                 }
             })
@@ -194,7 +205,7 @@
                             error: function (error) {
                                 console.log(error);
                             }
-                        })                        
+                        })
                     }
                     else {
                         $('#errorContainerMessage').show();
@@ -206,7 +217,7 @@
                             $errorSpan.show();
                         });
                     }
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $('#sendContactForm').removeClass("noClick");
                     }, 4000);
                 }
